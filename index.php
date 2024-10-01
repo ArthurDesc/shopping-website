@@ -6,8 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <main>
 <header></header>
+
+    <main>
     </main>
     <footer></footer>
 </body>
