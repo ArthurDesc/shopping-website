@@ -13,11 +13,13 @@ if ($connexion->connect_error) {
     die("La connexion a échoué : " . $connexion->connect_error);
 }
 
+$erreurs = [];
+$inscription_reussie = false;
+
 // Traitement du formulaire d'inscription
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérification que tous les champs sont remplis
     $champs_requis = ['nom', 'prenom', 'email', 'motdepasse', 'confirmer_motdepasse'];
-    $erreurs = [];
 
     foreach ($champs_requis as $champ) {
         if (empty($_POST[$champ])) {
@@ -50,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Exécution de la requête
             if ($stmt->execute()) {
-                echo "Inscription réussie !";
+                $inscription_reussie = true;
             } else {
                 $erreurs[] = "Erreur lors de l'inscription : " . $stmt->error;
             }
@@ -59,15 +61,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Affichage des erreurs
-    if (!empty($erreurs)) {
-        foreach ($erreurs as $erreur) {
-            echo $erreur . "<br>";
-        }
+    // Assurez-vous de renvoyer une réponse JSON
+    header('Content-Type: application/json');
+    if ($inscription_reussie) {
+        echo json_encode(['status' => 'success', 'message' => 'Inscription réussie']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Erreur lors de l\'inscription', 'errors' => $erreurs]);
     }
+    exit;
 }
 
-$connexion->close();
+// Si ce n'est pas une requête POST, affichez le formulaire HTML normalement
 ?>
 
 <!DOCTYPE html>
@@ -79,6 +83,15 @@ $connexion->close();
 </head>
 <body>
     <h2>Inscription</h2>
+    
+    <?php
+    if (!empty($erreurs)) {
+        foreach ($erreurs as $erreur) {
+            echo "<p style='color: red;'>" . htmlspecialchars($erreur) . "</p>";
+        }
+    }
+    ?>
+
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" required><br><br>
