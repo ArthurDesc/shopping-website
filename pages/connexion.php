@@ -41,9 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Veuillez remplir tous les champs.";
     }
-} else {
-    echo "Formulaire non soumis.";
-}
+} 
 
 // Fermer la connexion
 $conn->close();
