@@ -1,51 +1,51 @@
 <?php
-session_start(); // Ajout du point-virgule manquant
-include '../includes/_db.php';
+ob_start();
+session_start();
+include '../includes/_db.php';  // Ajustez ce chemin si nécessaire
+
+// Définir l'URL de base
+define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+
+$error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Vérifier que les champs 'email' et 'password' existent
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        // Récupérer les données du formulaire et les sécuriser
-        $user = htmlspecialchars(trim($_POST['email'])); // Échapper les caractères spéciaux
-        $pass = $_POST['password']; // Garder le mot de passe tel quel
+        $user = htmlspecialchars(trim($_POST['email']));
+        $pass = $_POST['password'];
 
-        $sql = "SELECT * FROM utilisateurs WHERE email = ?"; // Correction de la requête SQL
+        $sql = "SELECT * FROM utilisateurs WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $user);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Vérifier si l'utilisateur est trouvé
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-
-            // Vérifier le mot de passe haché avec password_verify
-            if (password_verify($pass, $row['password'])) {
-                // Connexion réussie
-                echo "Connexion réussie ! Bienvenue, " . $row['email'];
-
-                // Stocker les informations de l'utilisateur dans la session
+            if (password_verify($pass, $row['motdepasse'])) {
                 $_SESSION['id_utilisateur'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
 
-                // Rediriger vers la page d'accueil
-                header('Location: ../index.php');
-                exit(); // Arrêter l'exécution du script après la redirection
+                // Nettoyage du buffer de sortie
+                ob_end_clean();
+
+                // Redirection vers la racine du projet
+                header('Location: ' . BASE_URL . 'index.php');
+                exit();
             } else {
-                echo "Mot de passe incorrect.";
+                $error_message = "Mot de passe incorrect.";
             }
         } else {
-            echo "Aucun utilisateur trouvé avec cet email.";
+            $error_message = "Aucun utilisateur trouvé avec cet email.";
         }
     } else {
-        echo "Veuillez remplir tous les champs.";
+        $error_message = "Veuillez remplir tous les champs.";
     }
-} 
+}
 
 // Fermer la connexion
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -94,7 +94,12 @@ $conn->close();
 
 <div class="login-form">
     <h2>Connexion</h2>
-    <form action="/connexion.php" method="POST"> <!-- Correction du formulaire -->
+    <?php
+    if (!empty($error_message)) {
+        echo "<p style='color: red;'>" . htmlspecialchars($error_message) . "</p>";
+    }
+    ?>
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
         <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Mot de passe" required>
         <button type="submit">Se connecter</button>
