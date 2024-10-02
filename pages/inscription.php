@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $inscription_reussie = true;
                     $_SESSION['message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
                     // Voici la redirection
-                    header("Location: connexion.php");
+                    header("Location: profil.php");
                     exit();
                 } else {
                     $erreurs[] = "Erreur lors de l'inscription : " . $stmt->error;
