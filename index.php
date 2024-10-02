@@ -17,8 +17,8 @@
     <?php include './includes/_header.php'; ?>
 
     <div class="user-actions">
-        <a href="connexion.php" class="btn btn-primary">Connexion</a>
-        <a href="inscription.php" class="btn btn-secondary">Inscription</a>
+        <a href="pages/connexion.php" class="btn btn-primary">Connexion</a>
+        <a href="pages/inscription.php" class="btn btn-secondary">Inscription</a>
     </div>
 
     <div class="search-container">
