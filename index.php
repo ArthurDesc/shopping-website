@@ -6,9 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-<header></header>
-
+    <?php include './includes/_header.php'; ?>
     <main>
+<header></header>
     </main>
     <footer></footer>
 </body>
