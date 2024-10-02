@@ -14,6 +14,6 @@ if ($conn->connect_error) {
     die("Échec de la connexion : " . $conn->connect_error);
 }
 
-// On retourne une réponse pour valider que la connexion est réussie
-echo json_encode(['status' => 'connected']);
+// Supprimez ou commentez cette ligne
+// echo json_encode(['status' => 'connected']);
 ?>

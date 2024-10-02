@@ -1,17 +1,8 @@
 <?php
-// Paramètres de connexion à la base de données
-$serveur = "localhost";
-$utilisateur = "root";
-$motdepasse = "";
-$basededonnees = "boutique";
+session_start();
+require_once dirname(__FILE__) . '/../includes/_db.php';
 
-// Connexion à la base de données
-$connexion = new mysqli($serveur, $utilisateur, $motdepasse, $basededonnees);
-
-// Vérification de la connexion
-if ($connexion->connect_error) {
-    die("La connexion a échoué : " . $connexion->connect_error);
-}
+// La connexion est déjà vérifiée dans _db.php, pas besoin de le refaire ici
 
 $erreurs = [];
 $inscription_reussie = false;
@@ -34,44 +25,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $motdepasse = $_POST['motdepasse'];
         $confirmer_motdepasse = $_POST['confirmer_motdepasse'];
 
-        // Validation du mot de passe
-        $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
-        
-        if (!preg_match($regex_mdp, $motdepasse)) {
-            $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
-        } elseif ($motdepasse !== $confirmer_motdepasse) {
-            $erreurs[] = "Les mots de passe ne correspondent pas.";
+        // Vérifier si l'email existe déjà
+        $sql_check_email = "SELECT * FROM utilisateurs WHERE email = ?";
+        $stmt_check_email = $conn->prepare($sql_check_email);
+        $stmt_check_email->bind_param("s", $email);
+        $stmt_check_email->execute();
+        $result_check_email = $stmt_check_email->get_result();
+
+        if ($result_check_email->num_rows > 0) {
+            $erreurs[] = "Cet email est déjà utilisé. Veuillez en choisir un autre.";
         } else {
-            // Hachage du mot de passe
-            $motdepasse_hache = password_hash($motdepasse, PASSWORD_DEFAULT);
-
-            // Préparation de la requête SQL
-            $sql = "INSERT INTO utilisateurs (nom, prenom, email, motdepasse) VALUES (?, ?, ?, ?)";
-            $stmt = $connexion->prepare($sql);
-            $stmt->bind_param("ssss", $nom, $prenom, $email, $motdepasse_hache);
-
-            // Exécution de la requête
-            if ($stmt->execute()) {
-                $inscription_reussie = true;
+            // Validation du mot de passe
+            $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+            
+            if (!preg_match($regex_mdp, $motdepasse)) {
+                $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
+            } elseif ($motdepasse !== $confirmer_motdepasse) {
+                $erreurs[] = "Les mots de passe ne correspondent pas.";
             } else {
-                $erreurs[] = "Erreur lors de l'inscription : " . $stmt->error;
+                // Hachage du mot de passe
+                $motdepasse_hache = password_hash($motdepasse, PASSWORD_DEFAULT);
+
+                // Préparation de la requête SQL
+                $sql = "INSERT INTO utilisateurs (nom, prenom, email, motdepasse) VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssss", $nom, $prenom, $email, $motdepasse_hache);
+
+                // Exécution de la requête
+                if ($stmt->execute()) {
+                    $inscription_reussie = true;
+                    $_SESSION['message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
+                    // Voici la redirection
+                    header("Location: connexion.php");
+                    exit();
+                } else {
+                    $erreurs[] = "Erreur lors de l'inscription : " . $stmt->error;
+                }
+
+                $stmt->close();
             }
-
-            $stmt->close();
         }
+        $stmt_check_email->close();
     }
-
-    // Assurez-vous de renvoyer une réponse JSON
-    header('Content-Type: application/json');
-    if ($inscription_reussie) {
-        echo json_encode(['status' => 'success', 'message' => 'Inscription réussie']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Erreur lors de l\'inscription', 'errors' => $erreurs]);
-    }
-    exit;
 }
 
-// Si ce n'est pas une requête POST, affichez le formulaire HTML normalement
+// Ne fermez pas la connexion ici, car le fichier _db.php s'en charge déjà
 ?>
 
 <!DOCTYPE html>
