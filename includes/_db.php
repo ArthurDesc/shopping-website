@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "";
+$dbname = "boutique";
 
 // Créer la connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
