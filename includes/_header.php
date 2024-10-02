@@ -12,10 +12,10 @@
     
     <!-- Icônes à droite -->
     <div class="d-flex">
-      <a href="/pages/panier.php" class="nav-link px-2">
+      <a href="/shopping-website/pages/inscription.php" class="nav-link px-2">
         <i class="bi bi-bag"></i>
       </a>
-      <a href="/pages/inscription.php" class="nav-link px-2">
+      <a href="/shopping-website/pages/inscription.php" class="nav-link px-2">
         <i class="bi bi-person"></i>
       </a>
     </div>
