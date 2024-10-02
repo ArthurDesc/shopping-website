@@ -18,7 +18,7 @@
 
     <div class="user-actions">
         <a href="pages/connexion.php" class="btn btn-primary">Connexion</a>
-        <a href="inscription.php" class="btn btn-secondary">Inscription</a>
+        <a href="pages/inscription.php" class="btn btn-secondary">Inscription</a>
     </div>
 
     <div class="search-container">
