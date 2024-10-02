@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (password_verify($pass, $row['motdepasse'])) {
                 $_SESSION['id_utilisateur'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
+                $_SESSION['nom'] = $row['nom'];
+                $_SESSION['prenom'] = $row['prenom'];
 
                 // Nettoyage du buffer de sortie
                 ob_end_clean();
