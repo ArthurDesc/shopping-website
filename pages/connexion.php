@@ -1,16 +1,16 @@
 <?php
-session_start()
+session_start(); // Ajout du point-virgule manquant
 include '../includes/_db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Vérifier que les champs 'username' et 'password' existent
-    if (isset($_POST['email ']) && isset($_POST['password'])) {
+    // Vérifier que les champs 'email' et 'password' existent
+    if (isset($_POST['email']) && isset($_POST['password'])) {
         // Récupérer les données du formulaire et les sécuriser
-        $user = htmlspecialchars($_POST['email']); // Échapper les caractères spéciaux
+        $user = htmlspecialchars(trim($_POST['email'])); // Échapper les caractères spéciaux
         $pass = $_POST['password']; // Garder le mot de passe tel quel
 
-        $sql = "SELECT * FROM utilisateurs WHERE 'email' = ?";
+        $sql = "SELECT * FROM utilisateurs WHERE email = ?"; // Correction de la requête SQL
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $user);
         $stmt->execute();
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "Mot de passe incorrect.";
             }
         } else {
-            echo "Aucun utilisateur trouvé avec ce nom d'utilisateur.";
+            echo "Aucun utilisateur trouvé avec cet email.";
         }
     } else {
         echo "Veuillez remplir tous les champs.";
@@ -96,8 +96,8 @@ $conn->close();
 
 <div class="login-form">
     <h2>Connexion</h2>
-    <form action="/connexion.php" method="POST">
-        <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+    <form action="/connexion.php" method="POST"> <!-- Correction du formulaire -->
+        <input type="email" name="email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Mot de passe" required>
         <button type="submit">Se connecter</button>
     </form>
