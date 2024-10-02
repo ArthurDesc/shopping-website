@@ -28,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Stocker les informations de l'utilisateur dans la session
                 $_SESSION['id_utilisateur'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
-
-                // Rediriger vers la page d'accueil
-                header('Location: ../index.php');
-                exit(); // Arrêter l'exécution du script après la redirection
+                if (!isset($_SESSION['id_utilisateur'])) {
+                    header("Location: connexion.php");
+                    exit();
+                }
             } else {
                 echo "Mot de passe incorrect.";
             }
