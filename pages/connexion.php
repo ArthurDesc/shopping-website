@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if (password_verify($pass, $row['motdepasse'])) {
-                // Stocker les informations de l'utilisateur dans la session
                 $_SESSION['id_utilisateur'] = $row['id_utilisateur'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['nom'] = $row['nom'];
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Nettoyage du buffer de sortie
                 ob_end_clean();
 
-                // Redirection vers la racine du projet
+                // Redirection vers la page de profil
                 header('Location: ' . BASE_URL . 'index.php');
                 exit();
             } else {
