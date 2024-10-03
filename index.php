@@ -61,7 +61,7 @@ session_start();
                 <div class="col-md-3 col-6 mb-3">
                     <a href="#" class="category-link">
                         <img src="images/enfants.jpg" alt="Enfants" class="img-fluid">
-                        <h3>Enfants</h3>
+                        <h3>Enfant</h3>
                     </a>
                 </div>
                 <div class="col-md-3 col-6 mb-3">
