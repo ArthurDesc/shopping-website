@@ -7,6 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FitMode - Votre boutique de mode en ligne</title>
+<<<<<<< Updated upstream
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -60,7 +61,7 @@ session_start();
                 <div class="col-md-3 col-6 mb-3">
                     <a href="#" class="category-link">
                         <img src="images/enfants.jpg" alt="Enfants" class="img-fluid">
-                        <h3>Enfants</h3>
+                        <h3>Enfant</h3>
                     </a>
                 </div>
                 <div class="col-md-3 col-6 mb-3">
@@ -162,6 +163,62 @@ session_start();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     
     <!-- Votre fichier JavaScript personnalisé -->
+=======
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <?php include 'includes/_header.php'; ?>
+
+    <main>
+        <section class="hero">
+            <h1>Bienvenue chez FitMode</h1>
+            <p>Découvrez les dernières tendances de la mode</p>
+            <a href="#nouveautes" class="cta-button">Voir les nouveautés</a>
+        </section>
+
+        <section id="categories" class="categories">
+            <h2>Nos catégories</h2>
+            <div class="category-grid">
+                <a href="#" class="category-item">
+                    <img src="images/homme.jpg" alt="Mode Homme">
+                    <h3>Homme</h3>
+                </a>
+                <a href="#" class="category-item">
+                    <img src="images/femme.jpg" alt="Mode Femme">
+                    <h3>Femme</h3>
+                </a>
+                <a href="#" class="category-item">
+                    <img src="images/enfants.jpg" alt="Mode Enfants">
+                    <h3>Enfants</h3>
+                </a>
+                <a href="#" class="category-item">
+                    <img src="images/sports.jpg" alt="Vêtements de sport">
+                    <h3>Sports</h3>
+                </a>
+            </div>
+        </section>
+
+        <section id="nouveautes" class="featured-products">
+            <h2>Nouveautés</h2>
+            <div class="product-grid">
+                <!-- Ajoutez ici vos produits vedettes -->
+            </div>
+        </section>
+
+        <section class="newsletter">
+            <h2>Restez informé</h2>
+            <p>Inscrivez-vous à notre newsletter pour recevoir nos offres exclusives</p>
+            <form action="newsletter-signup.php" method="post">
+                <input type="email" name="email" placeholder="Votre adresse e-mail" required>
+                <button type="submit">S'inscrire</button>
+            </form>
+        </section>
+    </main>
+
+    <?php include 'includes/_footer.php'; ?>
+
+>>>>>>> Stashed changes
     <script src="js/main.js"></script>
 </body>
 </html>
