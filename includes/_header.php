@@ -1,21 +1,24 @@
-<header class="bg-white shadow-sm !important">
-  <nav class="container mx-auto px-4 py-3 flex items-center justify-between bg-white !important">
-    <!-- Menu hamburger à l'extrême gauche -->
-    <button id="menuToggle" class="text-gray-800" type="button" aria-label="Toggle navigation">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
-
-    <!-- Liens de navigation (visibles sur desktop) -->
-    <div class="hidden md:flex space-x-4">
-      <a href="<?php echo BASE_URL; ?>pages/homme.php" class="text-gray-800 hover:text-black no-underline">Homme</a>
-      <a href="<?php echo BASE_URL; ?>pages/femme.php" class="text-gray-800 hover:text-black no-underline">Femme</a>
-      <a href="<?php echo BASE_URL; ?>pages/enfants.php" class="text-gray-800 hover:text-black no-underline">Enfants</a>
+<header class="bg-white shadow-sm">
+  <nav class="container mx-auto px-4 py-3 flex items-center justify-between bg-white">
+    <!-- Partie gauche : Menu burger et liens de navigation -->
+    <div class="flex items-center space-x-4">
+      <!-- Menu hamburger -->
+      <button id="menuToggle" class="text-gray-800" type="button" aria-label="Toggle navigation">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+      
+      <!-- Liens de navigation -->
+      <div class="flex space-x-4">
+        <a href="<?php echo BASE_URL; ?>pages/homme.php" class="text-gray-800 hover:text-black no-underline">Homme</a>
+        <a href="<?php echo BASE_URL; ?>pages/femme.php" class="text-gray-800 hover:text-black no-underline">Femme</a>
+        <a href="<?php echo BASE_URL; ?>pages/enfants.php" class="text-gray-800 hover:text-black no-underline">Enfants</a>
+      </div>
     </div>
 
     <!-- Logo au centre -->
-    <a href="<?php echo BASE_URL; ?>" class="flex-shrink-0">
+    <a href="<?php echo BASE_URL; ?>" class="absolute left-1/2 transform -translate-x-1/2">
       <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode Logo" class="h-11 w-auto">
     </a>
 
