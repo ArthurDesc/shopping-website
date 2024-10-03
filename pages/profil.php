@@ -1,24 +1,10 @@
 <?php
 require_once '../includes/session.php';
-
+require_once '../includes/_db.php';
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
     header("Location: connexion.php");
     exit();
-}
-
-// Paramètres de connexion à la base de données
-$serveur = "localhost";
-$utilisateur = "root";
-$motdepasse = "";
-$basededonnees = "boutique";
-
-// Connexion à la base de données
-$connexion = new mysqli($serveur, $utilisateur, $motdepasse, $basededonnees);
-
-// Vérification de la connexion
-if ($connexion->connect_error) {
-    die("La connexion a échoué : " . $connexion->connect_error);
 }
 
 $id_utilisateur = $_SESSION['id_utilisateur'];

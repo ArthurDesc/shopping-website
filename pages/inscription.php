@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Vérifier si l'email existe déjà
         $sql_check_email = "SELECT * FROM utilisateurs WHERE email = ?";
-        $stmt_check_email = $conn->prepare($sql_check_email);
+        $stmt_check_email = $connexion->prepare($sql_check_email);
         $stmt_check_email->bind_param("s", $email);
         $stmt_check_email->execute();
         $result_check_email = $stmt_check_email->get_result();
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Préparation de la requête SQL
                 $sql = "INSERT INTO utilisateurs (nom, prenom, email, motdepasse) VALUES (?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
+                $stmt = $connexion->prepare($sql);
                 $stmt->bind_param("ssss", $nom, $prenom, $email, $motdepasse_hache);
 
                 // Exécution de la requête
