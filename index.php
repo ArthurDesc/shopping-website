@@ -145,6 +145,7 @@ session_start();
                     echo '</div>';
                 }
                 ?> <!-- Marques populaires -->
+                <!-- Marques populaires -->
             </div>
         </section>
     </main>
