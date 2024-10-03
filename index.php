@@ -85,6 +85,7 @@ session_start();
                     ['nom' => 'Sneakers', 'prix' => '59.99', 'image' => 'sneakers.jpg'],
                 ];
 
+<<<<<<< Updated upstream
                 foreach ($nouveautes as $produit) {
                     echo '<div class="col-md-3 col-6 mb-3">';
                     echo '<div class="card">';
@@ -150,6 +151,89 @@ session_start();
             </div>
         </section>
     </main>
+=======
+                <section class="categories mt-5">
+                    <h2>Explorez nos catégories</h2>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="#" class="category-link">
+                                <img src="path/to/homme-image.jpg" alt="Homme" class="img-fluid">
+                                <h3>Homme</h3>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="category-link">
+                                <img src="path/to/femme-image.jpg" alt="Femme" class="img-fluid">
+                                <h3>Femme</h3>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="category-link">
+                                <img src="path/to/enfants-image.jpg" alt="Enfants" class="img-fluid">
+                                <h3>Enfants</h3>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="category-link">
+                                <img src="path/to/sports-image.jpg" alt="Sports" class="img-fluid">
+                                <h3>Sports</h3>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Nouvelle section Start -->
+                <section class="start mt-5">
+                    <h2>Start</h2>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="path/to/start-image1.jpg" alt="Start 1">
+                                    <span class="card-title">Start 1</span>
+                                </div>
+                                <div class="card-content">
+                                    <p>Description du produit Start 1.</p>
+                                </div>
+                                <div class="card-action">
+                                    <a href="#">En savoir plus</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="path/to/start-image2.jpg" alt="Start 2">
+                                    <span class="card-title">Start 2</span>
+                                </div>
+                                <div class="card-content">
+                                    <p>Description du produit Start 2.</p>
+                                </div>
+                                <div class="card-action">
+                                    <a href="#">En savoir plus</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="path/to/start-image3.jpg" alt="Start 3">
+                                    <span class="card-title">Start 3</span>
+                                </div>
+                                <div class="card-content">
+                                    <p>Description du produit Start 3.</p>
+                                </div>
+                                <div class="card-action">
+                                    <a href="#">En savoir plus</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+>>>>>>> Stashed changes
 
     <?php include './includes/_footer.php'; ?>
 
