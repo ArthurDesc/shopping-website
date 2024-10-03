@@ -2,6 +2,7 @@
 ob_start();
 session_start();
 include '../includes/_db.php';  // Ajustez ce chemin si nécessaire
+include '../includes/_header.php'; // Ajouté selon les instructions
 
 // Définir l'URL de base
 define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet

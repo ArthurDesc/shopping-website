@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once dirname(__FILE__) . '/../includes/_db.php';
+include '../includes/_header.php';
 
 // La connexion est déjà vérifiée dans _db.php, pas besoin de le refaire ici
 
