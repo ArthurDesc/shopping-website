@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Stocker les informations de l'utilisateur dans la session
                 $_SESSION['id_utilisateur'] = $row['id_utilisateur'];
                 $_SESSION['email'] = $row['email'];
+                $_SESSION['nom'] = $row['nom'];
+                $_SESSION['prenom'] = $row['prenom'];
 
                 // Nettoyage du buffer de sortie
                 ob_end_clean();

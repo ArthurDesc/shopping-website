@@ -14,7 +14,7 @@ function is_logged_in() {
 }
 
 // Fonction pour obtenir l'ID de l'utilisateur connecté
-function get_user_id() {
+function get_id_utilisateur() {
     return $_SESSION['id_utilisateur'] ?? null;
 }
 
