@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pass = $_POST['password'];
 
         $sql = "SELECT * FROM utilisateurs WHERE email = ?";
-        $stmt = $conn->prepare($sql);
+        $stmt = $connexion->prepare($sql);
         $stmt->bind_param("s", $user);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fermer la connexion
-$conn->close();
+$connexion->close();
 ?>
 
 <!DOCTYPE html>
