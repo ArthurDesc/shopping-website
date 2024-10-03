@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+<?php include './includes/session.php'; ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -14,7 +12,6 @@ session_start();
 </head>
 <body class="bg-gray-100">
     <?php include './includes/_header.php'; ?>
-    <?php include './includes/session.php'; ?>
 
     
 
