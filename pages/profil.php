@@ -2,21 +2,15 @@
 session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
-<<<<<<< HEAD
-=======
 
->>>>>>> main
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
     header("Location: connexion.php");
     exit();
 }
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> main
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
