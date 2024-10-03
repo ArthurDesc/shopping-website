@@ -1,12 +1,22 @@
 <?php
+session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
     header("Location: connexion.php");
     exit();
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> main
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
@@ -44,6 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Mise à jour des informations de base
             $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id_utilisateur = ?";
+            $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id_utilisateur = ?";
             $stmt = $connexion->prepare($sql);
             $stmt->bind_param("sssi", $nom, $prenom, $email, $id_utilisateur);
             $stmt->execute();
@@ -60,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $erreurs[] = "Le nouveau mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
                     } else {
                         $motdepasse_hache = password_hash($nouveau_motdepasse, PASSWORD_DEFAULT);
+                        $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id_utilisateur = ?";
                         $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id_utilisateur = ?";
                         $stmt = $connexion->prepare($sql);
                         $stmt->bind_param("si", $motdepasse_hache, $id_utilisateur);
@@ -81,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
 
 $connexion->close();
 ?>
