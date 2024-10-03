@@ -21,7 +21,11 @@ if ($connexion->connect_error) {
     die("La connexion a échoué : " . $connexion->connect_error);
 }
 
+<<<<<<< HEAD
+$user_id = $_SESSION['id_utilisateur'];
+=======
 $id_utilisateur = $_SESSION['id_utilisateur'];
+>>>>>>> main
 $erreurs = [];
 $success_message = "";
 
