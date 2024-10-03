@@ -1,0 +1,6 @@
+#sidebar {
+  transition: transform 0.3s ease;
+  z-index: 10; /* Assurez-vous que le menu est en dessous de l'icône */
+}
+
+
