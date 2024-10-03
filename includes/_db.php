@@ -7,10 +7,10 @@ $password = "";
 $dbname = "boutique";
 
 // Créer la connexion
-$connexion = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Vérifier la connexion
-if ($connexion->connect_error) {
+if ($conn->connect_error) {
     die("Échec de la connexion : " . $conn->connect_error);
 }
 

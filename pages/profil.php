@@ -17,7 +17,7 @@ $success_message = "";
 
 // Récupérer les informations actuelles de l'utilisateur
 $sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id_utilisateur = ?";
-$stmt = $connexion->prepare($sql);
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_utilisateur);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Mise à jour des informations de base
             $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id_utilisateur = ?";
             $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id_utilisateur = ?";
-            $stmt = $connexion->prepare($sql);
+            $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssi", $nom, $prenom, $email, $id_utilisateur);
             $stmt->execute();
             $stmt->close();
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $motdepasse_hache = password_hash($nouveau_motdepasse, PASSWORD_DEFAULT);
                         $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id_utilisateur = ?";
                         $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id_utilisateur = ?";
-                        $stmt = $connexion->prepare($sql);
+                        $stmt = $conn->prepare($sql);
                         $stmt->bind_param("si", $motdepasse_hache, $id_utilisateur);
                         $stmt->execute();
                         $stmt->close();
@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-$connexion->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
