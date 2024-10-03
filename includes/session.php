@@ -13,6 +13,8 @@ function is_logged_in() {
     return isset($_SESSION['id_utilisateur']) && isset($_SESSION['email']);
 }
 
+//tes
+
 // Fonction pour obtenir l'ID de l'utilisateur connecté
 function get_id_utilisateur() {
     return $_SESSION['id_utilisateur'] ?? null;
