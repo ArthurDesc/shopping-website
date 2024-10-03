@@ -1,28 +1,34 @@
-<header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+<header class="navbar navbar-expand-lg navbar-light bg-white">
   <div class="container-fluid">
-    <!-- Menu hamburger pour mobile -->
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     
-    <!-- Logo -->
-    <a class="navbar-brand mx-auto" href="#">
-      <img src="chemin/vers/votre/logo.png" alt="Fitmode" height="30">
+    <a class="navbar-brand mx-auto" href="index.php">
+      <img src="images/fitmode-logo.png" alt="Fitmode" height="30">
     </a>
     
-    <!-- Icônes à droite -->
-    <div class="d-flex">
-      <a href="/shopping-website/pages/panier.php" class="nav-link px-2">
-        <i class="bi bi-bag"></i>
-      </a>
-      <a href="/shopping-website/pages/inscription.php" class="nav-link px-2">
-        <i class="bi bi-person"></i>
-      </a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Homme</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Femme</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Enfants</a>
+        </li>
+      </ul>
     </div>
     
-    <!-- Menu de navigation (caché sur mobile) -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Ajoutez ici vos éléments de menu si nécessaire -->
+    <div class="d-flex">
+      <a href="profil.php" class="btn btn-link">
+        <i class="bi bi-person"></i>
+      </a>
+      <a href="#" class="btn btn-link">
+        <i class="bi bi-bag"></i>
+      </a>
     </div>
   </div>
 </header>
