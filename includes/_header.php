@@ -46,7 +46,7 @@
   <nav class="p-4">
     <ul class="space-y-2">
       <li>
-        <a href="#" class="flex items-center justify-between py-2 border-b">
+        <a href="<?php echo BASE_URL; ?>pages/produit.php" class="flex items-center justify-between py-2 border-b">
           Tout les articles
         </a>
       </li>
