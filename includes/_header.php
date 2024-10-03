@@ -30,7 +30,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
           </svg>
         </a>
-        <a href="<?php echo BASE_URL; ?>profile.php">
+        <a href="<?php echo BASE_URL; ?>pages/profil.php">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
           </svg>
@@ -40,12 +40,83 @@
   </header>
 
 <!-- Barre de navigation latérale -->
-<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-gray-800 text-white transform -translate-x-full transition-transform">
+<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform">
   <nav class="p-4">
-    <ul>
-      <li><a href="<?php echo BASE_URL; ?>index.php" class="block py-2">Accueil</a></li>
-      <li><a href="<?php echo BASE_URL; ?>pages/produits.php" class="block py-2">Produits</a></li>
-      <li><a href="<?php echo BASE_URL; ?>pages/contact.php" class="block py-2">Contact</a></li>
+    <ul class="space-y-2">
+      <li>
+        <a href="#" class="flex items-center justify-between py-2 border-b">
+          Tout les articles
+        </a>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
+          Homme
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </a>
+        <ul class="hidden pl-4" id="menu-homme">
+          <li><a href="#" class="block py-2">T-shirts</a></li>
+          <li><a href="#" class="block py-2">Shorts</a></li>
+          <li><a href="#" class="block py-2">Joggings</a></li>
+          <li><a href="#" class="block py-2">Chaussures</a></li>
+          <li><a href="#" class="block py-2">Accessoires</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
+          Femme
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </a>
+        <ul class="hidden pl-4" id="menu-femme">
+          <li><a href="#" class="block py-2">T-shirts</a></li>
+          <li><a href="#" class="block py-2">Joggings</a></li>
+          <li><a href="#" class="block py-2">Leggings</a></li>
+          <li><a href="#" class="block py-2">Chaussures</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
+          Enfants
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </a>
+        <ul class="hidden pl-4" id="menu-enfants">
+          <li><a href="#" class="block py-2">T-shirts</a></li>
+          <li><a href="#" class="block py-2">Shorts</a></li>
+          <li><a href="#" class="block py-2">Chaussures</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
+          Sports
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+          </svg>
+        </a>
+        <ul class="hidden pl-4" id="menu-sports">
+          <li><a href="#" class="block py-2">Football</a></li>
+          <li><a href="#" class="block py-2">Basketball</a></li>
+          <li><a href="#" class="block py-2">Running</a></li>
+          <li><a href="#" class="block py-2">Rugby</a></li>
+          <li><a href="#" class="block py-2">Handball</a></li>
+        </ul>
+      </li>
     </ul>
   </nav>
 </div>
+
+<script>
+  const toggles = ['menu-homme', 'menu-femme', 'menu-enfants', 'menu-sports'];
+
+  toggles.forEach(toggle => {
+    document.getElementById(`${toggle}-toggle`).addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById(toggle).classList.toggle('hidden');
+      this.querySelector('svg').classList.toggle('rotate-180');
+    });
+  });
+</script>
