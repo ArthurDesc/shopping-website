@@ -26,7 +26,7 @@ $erreurs = [];
 $success_message = "";
 
 // Récupérer les informations actuelles de l'utilisateur
-$sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id_utlisateur = ?";
+$sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id_utilisateur = ?";
 $stmt = $connexion->prepare($sql);
 $stmt->bind_param("i", $id_utilisateur);
 $stmt->execute();
