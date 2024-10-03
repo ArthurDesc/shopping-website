@@ -1,89 +1,51 @@
-<header class="bg-white shadow-sm">
-  <nav class="container mx-auto px-4 py-6 flex items-center justify-between bg-white h-24">
-    <!-- Partie gauche : Menu burger et liens de navigation -->
-    <div class="flex items-center space-x-4">
-      <!-- Menu hamburger -->
-      <button id="menuToggle" class="text-gray-800" type="button" aria-label="Toggle navigation">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitmode</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body>
+  <header class="flex justify-center items-center p-4 bg-white shadow-md">
+    <div class="flex justify-between items-center w-full max-w-screen-lg">
+      <div class="menu-icon cursor-pointer" id="menu-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
-      </button>
-      
-      <!-- Liens de navigation -->
-      <div class="flex space-x-6">
-        <a href="<?php echo BASE_URL; ?>pages/homme.php" class="text-gray-800 hover:text-black no-underline text-lg">Homme</a>
-        <a href="<?php echo BASE_URL; ?>pages/femme.php" class="text-gray-800 hover:text-black no-underline text-lg">Femme</a>
-        <a href="<?php echo BASE_URL; ?>pages/enfants.php" class="text-gray-800 hover:text-black no-underline text-lg">Enfants</a>
+      </div>
+      <div class="logo">
+        <a href="<?php echo BASE_URL; ?>index.php">
+          <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="h-8 w-auto">
+        </a>
+      </div>
+      <div class="flex space-x-4">
+        <a href="<?php echo BASE_URL; ?>pages/panier.php">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+          </svg>
+        </a>
+        <a href="<?php echo BASE_URL; ?>profile.php">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </a>
       </div>
     </div>
+  </header>
 
-    <!-- Logo au centre -->
-    <a href="<?php echo BASE_URL; ?>" class="absolute left-1/2 transform -translate-x-1/2">
-      <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode Logo" class="h-16 w-auto">
-    </a>
-
-    <!-- Icônes à droite -->
-    <div class="flex items-center space-x-6">
-      <a href="<?php echo BASE_URL; ?>pages/panier.php" class="text-gray-800 hover:text-black">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-        </svg>
-      </a>
-      <?php if (is_logged_in()): ?>
-        <a href="<?php echo BASE_URL; ?>pages/profil.php" class="text-gray-800 hover:text-black">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
-        </a>
-      <?php else: ?>
-        <a href="<?php echo BASE_URL; ?>pages/auth.php" class="text-gray-800 hover:text-black">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
-        </a>
-      <?php endif; ?>
-    </div>
+<!-- Barre de navigation latérale -->
+<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-gray-800 text-white transform -translate-x-full transition-transform">
+  <nav class="p-4">
+    <ul>
+      <li><a href="<?php echo BASE_URL; ?>index.php" class="block py-2">Accueil</a></li>
+      <li><a href="<?php echo BASE_URL; ?>pages/produits.php" class="block py-2">Produits</a></li>
+      <li><a href="<?php echo BASE_URL; ?>pages/contact.php" class="block py-2">Contact</a></li>
+    </ul>
   </nav>
-
-  <!-- Menu burger (caché par défaut) -->
-  <div id="burgerMenu" class="fixed inset-0 bg-gray-800 bg-opacity-75 z-50 hidden">
-    <div class="bg-white w-64 h-full overflow-y-auto">
-      <div class="p-4">
-        <button id="closeMenu" class="text-gray-800 hover:text-black">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-        <ul class="mt-4">
-          <li><a href="<?php echo BASE_URL; ?>pages/homme.php" class="block py-2 text-gray-800 hover:text-black">Homme</a></li>
-          <li><a href="<?php echo BASE_URL; ?>pages/femme.php" class="block py-2 text-gray-800 hover:text-black">Femme</a></li>
-          <li><a href="<?php echo BASE_URL; ?>pages/enfants.php" class="block py-2 text-gray-800 hover:text-black">Enfants</a></li>
-          <!-- Ajoutez d'autres liens de menu ici -->
-        </ul>
-      </div>
-    </div>
-  </div>
-</header>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const menuToggle = document.getElementById('menuToggle');
-  const closeMenu = document.getElementById('closeMenu');
-  const burgerMenu = document.getElementById('burgerMenu');
-
-  menuToggle.addEventListener('click', function() {
-    burgerMenu.classList.remove('hidden');
-  });
-
-  closeMenu.addEventListener('click', function() {
-    burgerMenu.classList.add('hidden');
-  });
-
-  // Fermer le menu si on clique en dehors
-  burgerMenu.addEventListener('click', function(e) {
-    if (e.target === burgerMenu) {
-      burgerMenu.classList.add('hidden');
-    }
-  });
-});
-</script>
+</div>
