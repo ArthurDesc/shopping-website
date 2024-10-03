@@ -1,3 +1,4 @@
+<?php include './includes/session.php'; ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,7 +17,6 @@
 </head>
 <body>
     <?php include './includes/_header.php'; ?>
-    <?php include './includes/session.php'; ?>
 
     <div class="container-fluid">
         <div class="row">

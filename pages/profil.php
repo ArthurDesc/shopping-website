@@ -1,5 +1,7 @@
 <?php
+session_start();
 require_once '../includes/session.php';
+require_once '../includes/_db.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
@@ -7,26 +9,14 @@ if (!is_logged_in()) {
     exit();
 }
 
-// Paramètres de connexion à la base de données
-$serveur = "localhost";
-$utilisateur = "root";
-$motdepasse = "";
-$basededonnees = "boutique";
 
-// Connexion à la base de données
-$connexion = new mysqli($serveur, $utilisateur, $motdepasse, $basededonnees);
-
-// Vérification de la connexion
-if ($connexion->connect_error) {
-    die("La connexion a échoué : " . $connexion->connect_error);
-}
 
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
 
 // Récupérer les informations actuelles de l'utilisateur
-$sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id = ?";
+$sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id_utilisateur = ?";
 $stmt = $connexion->prepare($sql);
 $stmt->bind_param("i", $id_utilisateur);
 $stmt->execute();
@@ -57,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $erreurs[] = "Le mot de passe actuel est incorrect.";
         } else {
             // Mise à jour des informations de base
-            $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id = ?";
+            $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id_utilisateur = ?";
             $stmt = $connexion->prepare($sql);
             $stmt->bind_param("sssi", $nom, $prenom, $email, $id_utilisateur);
             $stmt->execute();
@@ -74,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $erreurs[] = "Le nouveau mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
                     } else {
                         $motdepasse_hache = password_hash($nouveau_motdepasse, PASSWORD_DEFAULT);
-                        $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id = ?";
+                        $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id_utilisateur = ?";
                         $stmt = $connexion->prepare($sql);
                         $stmt->bind_param("si", $motdepasse_hache, $id_utilisateur);
                         $stmt->execute();
@@ -93,6 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
+var_dump($_SESSION);
 
 $connexion->close();
 ?>
