@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($nouveau_motdepasse !== $confirmer_nouveau_motdepasse) {
                     $erreurs[] = "Le nouveau mot de passe et sa confirmation ne correspondent pas.";
                 } else {
-                    $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+                    $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-,])[A-Za-z\d@$!%*?&._-,]{8,}$/";
                     
                     if (!preg_match($regex_mdp, $nouveau_motdepasse)) {
                         $erreurs[] = "Le nouveau mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
@@ -81,6 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['nom'] = $nom;
                 $_SESSION['prenom'] = $prenom;
                 $_SESSION['email'] = $email;
+                $_SESSION['motdepasse'] = $nouveau_motdepasse;
+                $_SESSION['motdepasse'] = $confirmer_nouveau_motdepasse;
             }
         }
     }
