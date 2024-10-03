@@ -144,7 +144,7 @@ session_start();
                     echo '<img src="images/logos/' . $marque['logo'] . '" alt="' . $marque['nom'] . '" class="img-fluid brand-logo">';
                     echo '</div>';
                 }
-                ?>
+                ?> <!-- Marques populaires -->
             </div>
         </section>
     </main>
