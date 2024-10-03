@@ -26,7 +26,7 @@
       <a href="profil.php" class="btn btn-link">
         <i class="bi bi-person"></i>
       </a>
-      <a href="#" class="btn btn-link">
+      <a href="pages/panier.php" class="btn btn-link">
         <i class="bi bi-bag"></i>
       </a>
     </div>

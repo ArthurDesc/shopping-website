@@ -5,7 +5,7 @@ include '../includes/_db.php';  // Ajustez ce chemin si nécessaire
 
 // Définir l'URL de base
 define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-
+// Ajustez selon le nom de votre dossier de projet
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
