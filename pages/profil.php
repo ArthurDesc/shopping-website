@@ -21,7 +21,7 @@ if ($connexion->connect_error) {
     die("La connexion a échoué : " . $connexion->connect_error);
 }
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
 

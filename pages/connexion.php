@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if (password_verify($pass, $row['motdepasse'])) {
-                $_SESSION['id_utilisateur'] = $row['id'];
+                // Stocker les informations de l'utilisateur dans la session
+                $_SESSION['id_utilisateur'] = $row['id_utilisateur'];
                 $_SESSION['email'] = $row['email'];
 
                 // Nettoyage du buffer de sortie
