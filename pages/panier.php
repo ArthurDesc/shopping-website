@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Supprimer un produit produitproduit
+    // Supprimer un produit 
     if (isset($_POST['supprimer_produit'])) {
         $produit_id = $_POST['produit_id'];
         unset($_SESSION['panier'][$produit_id]);
