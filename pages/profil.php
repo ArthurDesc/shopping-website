@@ -21,16 +21,12 @@ if ($connexion->connect_error) {
     die("La connexion a échoué : " . $connexion->connect_error);
 }
 
-<<<<<<< HEAD
-$user_id = $_SESSION['id_utilisateur'];
-=======
 $id_utilisateur = $_SESSION['id_utilisateur'];
->>>>>>> main
 $erreurs = [];
 $success_message = "";
 
 // Récupérer les informations actuelles de l'utilisateur
-$sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id = ?";
+$sql = "SELECT nom, prenom, email, motdepasse FROM utilisateurs WHERE id_utlisateur = ?";
 $stmt = $connexion->prepare($sql);
 $stmt->bind_param("i", $id_utilisateur);
 $stmt->execute();
@@ -61,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $erreurs[] = "Le mot de passe actuel est incorrect.";
         } else {
             // Mise à jour des informations de base
-            $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id = ?";
+            $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ? WHERE id_utilisateur = ?";
             $stmt = $connexion->prepare($sql);
             $stmt->bind_param("sssi", $nom, $prenom, $email, $id_utilisateur);
             $stmt->execute();
@@ -78,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $erreurs[] = "Le nouveau mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
                     } else {
                         $motdepasse_hache = password_hash($nouveau_motdepasse, PASSWORD_DEFAULT);
-                        $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id = ?";
+                        $sql = "UPDATE utilisateurs SET motdepasse = ? WHERE id_utilisateur = ?";
                         $stmt = $connexion->prepare($sql);
                         $stmt->bind_param("si", $motdepasse_hache, $id_utilisateur);
                         $stmt->execute();

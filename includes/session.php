@@ -26,7 +26,7 @@ function get_user_email() {
 // Fonction pour obtenir toutes les informations de l'utilisateur
 function get_user_info() {
     return [
-        'id' => $_SESSION['id_utilisateur'] ?? null,
+        'id_utilisateur' => $_SESSION['id_utilisateur'] ?? null,
         'email' => $_SESSION['email'] ?? null,
         'nom' => $_SESSION['nom'] ?? null,
         'prenom' => $_SESSION['prenom'] ?? null,
@@ -35,7 +35,7 @@ function get_user_info() {
 
 // Fonction pour définir les informations de l'utilisateur lors de la connexion
 function set_user_session($user_data) {
-    $_SESSION['id_utilisateur'] = $user_data['id'];
+    $_SESSION['id_utilisateur'] = $user_data['id_utilisateur'];
     $_SESSION['email'] = $user_data['email'];
     $_SESSION['nom'] = $user_data['nom'];
     $_SESSION['prenom'] = $user_data['prenom'];
