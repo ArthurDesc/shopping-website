@@ -49,21 +49,9 @@ $produits = $articleManager->getAllArticles();
 $categories = $categoryManager->getAllCategories();
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de la boutique</title>
-    <style>
-        .section {
-            margin-bottom: 30px;
-            border: 1px solid #ccc;
-            padding: 20px;
-        }
-    </style>
-</head>
-<body>
+
+
+    <?php include '../includes/_header.php'; ?>
     <h1>Gestion de la boutique</h1>
 
     <div class="section">
@@ -71,17 +59,75 @@ $categories = $categoryManager->getAllCategories();
 
         <!-- Formulaire d'ajout de produit -->
         <h3>Ajouter un produit</h3>
-        <form method="POST">
-            <input type="hidden" name="action" value="add_product">
-            <input type="text" name="nom" placeholder="Nom du produit" required>
-            <textarea name="description" placeholder="Description du produit"></textarea>
-            <input type="number" name="prix" step="0.01" placeholder="Prix" required>
-            <input type="number" name="stock" placeholder="Stock" required>
-            <input type="text" name="taille" placeholder="Taille">
-            <input type="text" name="marque" placeholder="Marque">
-            <input type="text" name="collection" placeholder="Collection">
-            
-            <fieldset>
+        <div class="max-w-md mx-auto p-4">
+  <!-- Nom Input -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Nom</label>
+    <input type="text" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" placeholder="Nom">
+  </div>
+
+  <!-- Prenom Input -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Prenom</label>
+    <input type="text" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" placeholder="Prenom">
+  </div>
+
+  <!-- Taille 1 (Shoes Size) -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Taille</label>
+    <select class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+      <option>45</option>
+      <option>44</option>
+      <option>43</option>
+      <option>42</option>
+      <option>41</option>
+      <option>40</option>
+    </select>
+  </div>
+
+  <!-- Taille 2 (Clothes Size) -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Taille</label>
+    <select class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+      <option>XXL</option>
+      <option>XL</option>
+      <option>L</option>
+      <option>M</option>
+      <option>S</option>
+    </select>
+  </div>
+
+  <!-- Sports Checkbox -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Sports</label>
+    <div class="flex flex-wrap">
+      <label class="mr-2">
+        <input type="checkbox" class="mr-1"> Football
+      </label>
+      <label class="mr-2">
+        <input type="checkbox" class="mr-1"> Rugby
+      </label>
+      <label class="mr-2">
+        <input type="checkbox" class="mr-1"> Handball
+      </label>
+      <label class="mr-2">
+        <input type="checkbox" class="mr-1"> Basketball
+      </label>
+    </div>
+  </div>
+
+  <!-- Prix Input -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Prix</label>
+    <input type="text" class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" placeholder="Prix">
+  </div>
+
+  <!-- Description Input -->
+  <div class="mb-4">
+    <label class="block text-gray-700">Description</label>
+    <textarea class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300" placeholder="Description"></textarea>
+  </div>
+  <fieldset>
                 <legend>Catégories</legend>
                 <?php foreach ($categories as $category): ?>
                     <label>
@@ -91,8 +137,14 @@ $categories = $categoryManager->getAllCategories();
                 <?php endforeach; ?>
             </fieldset>
 
-            <button type="submit">Ajouter le produit</button>
-        </form>
+  <!-- Ajouter Button -->
+  <div class="mb-4">
+    <button class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
+      Ajouter l'article
+    </button>
+  </div>
+</div>
+
 
         <!-- Liste des produits -->
         <h3>Liste des produits</h3>
@@ -202,5 +254,5 @@ $categories = $categoryManager->getAllCategories();
             <?php endforeach; ?>
         </table>
     </div>
-</body>
+
 </html>
