@@ -1,5 +1,6 @@
 <?php
-session_start();
+define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
 require_once '../classe/AdminManager.php';
