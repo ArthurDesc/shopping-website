@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../includes/session.php'; // Assurez-vous que ce fichier existe et est correctement configuré
-require_once '../includes/_db.php'; // Le fichier de connexion à la base de données
+require_once '../includes/session.php';
+require_once '../includes/_db.php'; // Assurez-vous que ce fichier contient la connexion à la base de données
 
 if (!is_logged_in()) {
     header("Location: connexion.php");
@@ -11,6 +11,7 @@ if (!is_logged_in()) {
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
+// Initialiser un tableau pour stocker les produits du panier
 
 // Initialiser un tableau pour stocker les produits du panier
 $panier = [];
@@ -20,26 +21,14 @@ $query = "SELECT cp.id_produit, p.nom, cp.quantite, p.prix
           FROM commande_produit cp
           INNER JOIN produits p ON cp.id_produit = p.id_produit
           INNER JOIN commandes c ON cp.id_commande = c.id_commande
-          WHERE c.id_utilisateur = :id_utilisateur AND c.statut = 'panier'"; // statut 'panier' pour récupérer seulement les commandes non finalisées
+          WHERE c.id_utilisateur = ? AND c.statut = 'panier'"; // statut 'panier' pour récupérer seulement les commandes non finalisées
 
 $stmt = $conn->prepare($query);
-$stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
+$stmt->bind_param('i', $id_utilisateur);
 $stmt->execute();
-
-$panier = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$query = "SELECT commande_produit.id_produit, produits.nom, commande_produit.quantite, produits.prix 
-          FROM commande_produit 
-          INNER JOIN produits  ON commande_produit.id_produit = produits.id_produit
-          INNER JOIN commandes ON commande_produit.id_commande = commandes.id_commande
-          WHERE commandes.id_utilisateur = ? AND commandes.statut = 'panier'";
-
-if ($stmt = $conn->prepare($query)) {
-    $stmt->bind_param('i', $id_utilisateur);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $panier = $result->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-}
+$result = $stmt->get_result();
+$panier = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 
 // Calcul du total
 $total = 0;
@@ -55,23 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nouvelle_quantite = $_POST['quantite'];
 
         // Mettre à jour la quantité dans la base de données
-        $update_query = "UPDATE commande_produit SET quantite = :quantite 
-                         WHERE id_produit = :id_produit AND id_commande = (
-                             SELECT id_commande FROM commandes WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
         $update_query = "UPDATE commande_produit SET quantite = ? 
                          WHERE id_produit = ? AND id_commande = (
                              SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier'
                          )";
         $update_stmt = $conn->prepare($update_query);
-        $update_stmt->bindParam(':quantite', $nouvelle_quantite, PDO::PARAM_INT);
-        $update_stmt->bindParam(':id_produit', $produit_id, PDO::PARAM_INT);
-        $update_stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
+        $update_stmt->bind_param('iii', $nouvelle_quantite, $produit_id, $id_utilisateur);
         $update_stmt->execute();
-        if ($update_stmt = $conn->prepare($update_query)) {
-            $update_stmt->bind_param('iii', $nouvelle_quantite, $produit_id, $id_utilisateur);
-            $update_stmt->execute();
-            $update_stmt->close();
-        }
+        $update_stmt->close();
     }
 
     // Supprimer un produit du panier
@@ -79,21 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $produit_id = $_POST['produit_id'];
 
         // Supprimer l'élément de la table commande_produit
-        $delete_query = "DELETE FROM commande_produit WHERE id_produit = :id_produit 
+        $delete_query = "DELETE FROM commande_produit WHERE id_produit = ? 
                          AND id_commande = (
-                             SELECT id_commande FROM commandes WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
+                             SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier'
                          )";
         $delete_stmt = $conn->prepare($delete_query);
-        $delete_stmt->bindParam(':id_produit', $produit_id, PDO::PARAM_INT);
-        $delete_stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
+        $delete_stmt->bind_param('ii', $produit_id, $id_utilisateur);
         $delete_stmt->execute();
-        $delete_query = "DELETE FROM commande_produit WHERE id_produit = ? 
-                         AND id_commande = (SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier')";
-        if ($delete_stmt = $conn->prepare($delete_query)) {
-            $delete_stmt->bind_param('ii', $produit_id, $id_utilisateur);
-            $delete_stmt->execute();
-            $delete_stmt->close();
-        }
+        $delete_stmt->close();
     }
 
     // Redirection pour éviter les doubles soumissions de formulaire
