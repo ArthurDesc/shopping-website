@@ -5,9 +5,13 @@ require_once '../includes/session.php'; // Assurez-vous que ce fichier existe et
 require_once '../includes/_db.php'; // Le fichier de connexion à la base de données
 =======
 require_once '../includes/session.php';
+<<<<<<< HEAD
 require_once '../includes/_db.php';
 include '../includes/_header.php';
 >>>>>>> 7c27aee7d6742709e5f12ef0cdb6bd4d0c9730fd
+=======
+require_once '../includes/_db.php'; // Assurez-vous que ce fichier contient la connexion à la base de données
+>>>>>>> hachim
 
 if (!is_logged_in()) {
     header("Location: connexion.php");
@@ -22,6 +26,7 @@ $success_message = "";
 $panier = [];
 
 // Récupérer les produits du panier depuis la base de données
+<<<<<<< HEAD
 $query = "SELECT commande_produit.id_produit, produits.nom, commande_produit.quantite, produits.prix 
           FROM commande_produit 
           INNER JOIN produits  ON commande_produit.id_produit = produits.id_produit
@@ -35,6 +40,20 @@ if ($stmt = $conn->prepare($query)) {
     $panier = $result->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
 }
+=======
+$query = "SELECT cp.id_produit, p.nom, cp.quantite, p.prix 
+          FROM commande_produit cp
+          INNER JOIN produits p ON cp.id_produit = p.id_produit
+          INNER JOIN commandes c ON cp.id_commande = c.id_commande
+          WHERE c.id_utilisateur = ? AND c.statut = 'panier'"; // statut 'panier' pour récupérer seulement les commandes non finalisées
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $id_utilisateur);
+$stmt->execute();
+$result = $stmt->get_result();
+$panier = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+>>>>>>> hachim
 
 // Calcul du total
 $total = 0;
@@ -54,11 +73,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          WHERE id_produit = ? AND id_commande = (
                              SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier'
                          )";
+<<<<<<< HEAD
         if ($update_stmt = $conn->prepare($update_query)) {
             $update_stmt->bind_param('iii', $nouvelle_quantite, $produit_id, $id_utilisateur);
             $update_stmt->execute();
             $update_stmt->close();
         }
+=======
+        $update_stmt = $conn->prepare($update_query);
+        $update_stmt->bind_param('iii', $nouvelle_quantite, $produit_id, $id_utilisateur);
+        $update_stmt->execute();
+        $update_stmt->close();
+>>>>>>> hachim
     }
 
     // Supprimer un produit du panier
@@ -67,12 +93,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Supprimer l'élément de la table commande_produit
         $delete_query = "DELETE FROM commande_produit WHERE id_produit = ? 
+<<<<<<< HEAD
                          AND id_commande = (SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier')";
         if ($delete_stmt = $conn->prepare($delete_query)) {
             $delete_stmt->bind_param('ii', $produit_id, $id_utilisateur);
             $delete_stmt->execute();
             $delete_stmt->close();
         }
+=======
+                         AND id_commande = (
+                             SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier'
+                         )";
+        $delete_stmt = $db->prepare($delete_query);
+        $delete_stmt->bind_param('ii', $produit_id, $id_utilisateur);
+        $delete_stmt->execute();
+        $delete_stmt->close();
+>>>>>>> hachim
     }
 
     // Redirection pour éviter les doubles soumissions de formulaire
