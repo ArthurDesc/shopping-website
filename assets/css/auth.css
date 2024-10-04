@@ -1,0 +1,13 @@
+body {
+    background-image: url('../images/background.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+.btn-custom {
+    background-color: white;
+    color: #3B82F6; /* Bleu clair, ajustez si nécessaire */
+}
+.btn-custom:hover {
+    background-color: #F3F4F6; /* Gris très clair pour l'effet hover */
+}
