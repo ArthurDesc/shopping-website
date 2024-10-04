@@ -2,6 +2,7 @@
 session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
+include '../includes/_header.php';
 
 if (!is_logged_in()) {
     header("Location: connexion.php");
@@ -18,8 +19,8 @@ $panier = [];
 // Récupérer les produits du panier depuis la base de données
 $query = "SELECT cp.id_produit, p.nom, cp.quantite, p.prix 
           FROM commande_produit cp
-          INNER JOIN produit p ON cp.id_produit = p.id_produit
-          INNER JOIN commande c ON cp.id_commande = c.id_commande
+          INNER JOIN produits p ON cp.id_produit = p.id_produit
+          INNER JOIN commandes c ON cp.id_commande = c.id_commande
           WHERE c.id_utilisateur = :id_utilisateur AND c.statut = 'panier'"; // statut 'panier' pour récupérer seulement les commandes non finalisées
 
 $stmt = $conn->prepare($query);
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Mettre à jour la quantité dans la base de données
         $update_query = "UPDATE commande_produit SET quantite = :quantite 
                          WHERE id_produit = :id_produit AND id_commande = (
-                             SELECT id_commande FROM commande WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
+                             SELECT id_commande FROM commandes WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
                          )";
         $update_stmt = $conn->prepare($update_query);
         $update_stmt->bindParam(':quantite', $nouvelle_quantite, PDO::PARAM_INT);
@@ -60,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Supprimer l'élément de la table commande_produit
         $delete_query = "DELETE FROM commande_produit WHERE id_produit = :id_produit 
                          AND id_commande = (
-                             SELECT id_commande FROM commande WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
+                             SELECT id_commande FROM commandes WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
                          )";
         $delete_stmt = $conn->prepare($delete_query);
         $delete_stmt->bindParam(':id_produit', $produit_id, PDO::PARAM_INT);

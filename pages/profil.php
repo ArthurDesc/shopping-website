@@ -2,6 +2,7 @@
 session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
+include '../includes/_header.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
