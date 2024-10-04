@@ -1,3 +1,12 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+if (!defined('BASE_URL')) {
+    die('BASE_URL is not defined');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 

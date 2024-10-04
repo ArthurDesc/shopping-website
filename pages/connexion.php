@@ -1,12 +1,15 @@
 <?php
+// Commentez temporairement ces lignes pour le débogage
 ob_start();
 session_start();
-include '../includes/_db.php';  // Ajustez ce chemin si nécessaire
-include '../includes/_header.php'; // Ajouté selon les instructions
+include '../includes/_db.php';
+include '../includes/session.php';
 
-// Définir l'URL de base
-define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-// Ajustez selon le nom de votre dossier de projet
+// Définir BASE_URL seulement s'il n'est pas déjà défini
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+}
+
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -55,45 +58,11 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire de Connexion</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-form {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-form h2 {
-            margin-bottom: 20px;
-        }
-        .login-form input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .login-form button {
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .login-form button:hover {
-            background-color: #218838;
-        }
-    </style>
+ 
 </head>
 <body>
+ <?php include '../includes/_header.php'; ?> 
+
 
 <div class="login-form">
     <h2>Connexion</h2>
