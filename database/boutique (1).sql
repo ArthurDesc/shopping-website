@@ -149,6 +149,9 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user');
 
+INSERT INTO `utilisateurs` (`nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) 
+VALUES ('Test', 'Utilisateur', 'test@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user');
+
 --
 -- Indexes for dumped tables
 --
