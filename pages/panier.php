@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          AND id_commande = (
                              SELECT id_commande FROM commandes WHERE id_utilisateur = :id_utilisateur AND statut = 'panier'
                          )";
-        $delete_stmt = $db->prepare($delete_query);
+        $delete_stmt = $conn->prepare($delete_query);
         $delete_stmt->bindParam(':id_produit', $produit_id, PDO::PARAM_INT);
         $delete_stmt->bindParam(':id_utilisateur', $id_utilisateur, PDO::PARAM_INT);
         $delete_stmt->execute();
