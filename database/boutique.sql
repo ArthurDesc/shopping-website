@@ -27,14 +27,17 @@ SET time_zone = "+00:00";
 -- Table structure for table `avis`
 --
 
-CREATE TABLE `avis` (
-  `id_avis` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `avis` (
+  `id_avis` int NOT NULL AUTO_INCREMENT,
   `note` int DEFAULT NULL,
   `commentaire` text,
   `date_avis` datetime DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
-  `id_produit` int DEFAULT NULL
-) ;
+  `id_produit` int DEFAULT NULL,
+  PRIMARY KEY (`id_avis`),
+  KEY `id_utilisateur` (`id_utilisateur`),
+  KEY `idx_avis_produit` (`id_produit`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -42,10 +45,11 @@ CREATE TABLE `avis` (
 -- Table structure for table `categories`
 --
 
-CREATE TABLE `categories` (
-  `id_categorie` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id_categorie` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(100) DEFAULT NULL,
-  `description` text
+  `description` text,
+  PRIMARY KEY (`id_categorie`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -54,13 +58,36 @@ CREATE TABLE `categories` (
 -- Table structure for table `commandes`
 --
 
-CREATE TABLE `commandes` (
-  `id_commande` int NOT NULL,
+-- ... (autres parties du script inchangées)
+
+-- Table structure for table `commandes`
+CREATE TABLE IF NOT EXISTS `commandes` (
+  `id_commande` int NOT NULL AUTO_INCREMENT,
   `date_commande` datetime DEFAULT NULL,
   `montant_total` decimal(10,2) DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
-  `statut` ENUM('panier', 'validé', 'expédié', 'annulé') DEFAULT 'panier' -- Ajout du champ statut
+  PRIMARY KEY (`id_commande`),
+  KEY `idx_commande_utilisateur` (`id_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Add statut column if not exists
+SET @dbname = DATABASE();
+SET @tablename = "commandes";
+SET @columnname = "statut";
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE
+      (table_name = @tablename)
+      AND (table_schema = @dbname)
+      AND (column_name = @columnname)
+  ) > 0,
+  "SELECT 1",
+  CONCAT("ALTER TABLE ", @tablename, " ADD COLUMN ", @columnname, " ENUM('panier', 'validé', 'expédié', 'annulé') DEFAULT 'panier'")
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
 -- --------------------------------------------------------
 
@@ -68,11 +95,13 @@ CREATE TABLE `commandes` (
 -- Table structure for table `commande_produit`
 --
 
-CREATE TABLE `commande_produit` (
+CREATE TABLE IF NOT EXISTS `commande_produit` (
   `id_commande` int NOT NULL,
   `id_produit` int NOT NULL,
   `quantite` int DEFAULT NULL,
-  `prix_unitaire` decimal(10,2) DEFAULT NULL
+  `prix_unitaire` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id_commande`,`id_produit`),
+  KEY `id_produit` (`id_produit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -81,15 +110,18 @@ CREATE TABLE `commande_produit` (
 -- Table structure for table `paiements`
 --
 
-CREATE TABLE `paiements` (
-  `id_paiement` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `paiements` (
+  `id_paiement` int NOT NULL AUTO_INCREMENT,
   `montant` decimal(10,2) DEFAULT NULL,
   `date_paiement` datetime DEFAULT NULL,
   `methode_paiement` varchar(50) DEFAULT NULL,
   `statut_paiement` enum('réussi','échoué','en attente') DEFAULT NULL,
   `transaction_id` varchar(100) DEFAULT NULL,
   `id_commande` int DEFAULT NULL,
-  `id_utilisateur` int DEFAULT NULL
+  `id_utilisateur` int DEFAULT NULL,
+  PRIMARY KEY (`id_paiement`),
+  KEY `idx_paiement_commande` (`id_commande`),
+  KEY `idx_paiement_utilisateur` (`id_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -98,8 +130,8 @@ CREATE TABLE `paiements` (
 -- Table structure for table `produits`
 --
 
-CREATE TABLE `produits` (
-  `id_produit` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `produits` (
+  `id_produit` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(100) DEFAULT NULL,
   `description` text,
   `prix` decimal(10,2) DEFAULT NULL,
@@ -107,7 +139,8 @@ CREATE TABLE `produits` (
   `taille` varchar(50) DEFAULT NULL,
   `marque` varchar(100) DEFAULT NULL,
   `date_ajout` date DEFAULT NULL,
-  `collection` varchar(100) DEFAULT NULL
+  `collection` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id_produit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -116,9 +149,11 @@ CREATE TABLE `produits` (
 -- Table structure for table `produit_categorie`
 --
 
-CREATE TABLE `produit_categorie` (
+CREATE TABLE IF NOT EXISTS `produit_categorie` (
   `id_produit` int NOT NULL,
-  `id_categorie` int NOT NULL
+  `id_categorie` int NOT NULL,
+  PRIMARY KEY (`id_produit`,`id_categorie`),
+  KEY `id_categorie` (`id_categorie`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -127,27 +162,32 @@ CREATE TABLE `produit_categorie` (
 -- Table structure for table `utilisateurs`
 --
 
-CREATE TABLE `utilisateurs` (
-  `id_utilisateur` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `utilisateurs` (
+  `id_utilisateur` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(100) DEFAULT NULL,
   `prenom` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `adresse` varchar(255) DEFAULT NULL,
   `motdepasse` varchar(255) NOT NULL,
-  `role` varchar(20) NOT NULL DEFAULT 'user'
+  `role` varchar(20) NOT NULL DEFAULT 'user',
+  PRIMARY KEY (`id_utilisateur`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
+INSERT IGNORE INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
 (1, 'Baileche', 'Hamza', 'hamza1301@outlook.fr', NULL, '$2y$10$pPfTCUGDooaXAzpmVAZFc.v1HxQTxoxQNsRbm7t0tQO0BrwYCc.mu', 'user'),
 (3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'user'),
 (4, 'as', 'as', 'jhzdjhed@gmail.fr', NULL, '$2y$10$hiUtprh65P3qAj29c.JmU.jgRmmZpU7.e0uikjf4rHbxd15jynzTW', 'user'),
 (5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user'),
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user');
+
+INSERT IGNORE INTO `utilisateurs` (`nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) 
+VALUES ('Test', 'Utilisateur', 'test@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user');
 
 --
 -- Indexes for dumped tables

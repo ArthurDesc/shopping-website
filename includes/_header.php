@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (!defined('BASE_URL')) {
-    die('BASE_URL is not defined');
+    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
 }
 ?>
 
