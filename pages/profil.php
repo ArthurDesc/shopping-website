@@ -2,10 +2,21 @@
 session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
+require_once '../classe/AdminManager.php'; // Ajoutez cette ligne
 
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
     header("Location: " . BASE_URL . "pages/auth.php");
+    exit();
+}
+
+// Créer une instance de AdminManager
+$adminManager = new AdminManager($conn);
+
+// Vérifier si l'utilisateur est un admin
+if ($adminManager->isAdmin($id_utilisateur)) {
+    // Rediriger vers la page backoffice.php
+    header("Location: " . BASE_URL . "admin/backoffice.php");
     exit();
 }
 
