@@ -58,7 +58,8 @@ CREATE TABLE `commandes` (
   `id_commande` int NOT NULL,
   `date_commande` datetime DEFAULT NULL,
   `montant_total` decimal(10,2) DEFAULT NULL,
-  `id_utilisateur` int DEFAULT NULL
+  `id_utilisateur` int DEFAULT NULL,
+  `statut` ENUM('panier', 'validé', 'expédié', 'annulé') DEFAULT 'panier' -- Ajout du champ statut
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
