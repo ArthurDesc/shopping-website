@@ -13,12 +13,6 @@ if (!is_logged_in()) {
 // Créer une instance de AdminManager
 $adminManager = new AdminManager($conn);
 
-// Vérifier si l'utilisateur est un admin
-if ($adminManager->isAdmin($id_utilisateur)) {
-    // Rediriger vers la page backoffice.php
-    header("Location: " . BASE_URL . "admin/backoffice.php");
-    exit();
-}
 
 // Inclure le header seulement après la vérification de connexion
 
@@ -34,6 +28,14 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $stmt->close();
+
+
+// Vérifier si l'utilisateur est un admin
+if ($adminManager->isAdmin($id_utilisateur)) {
+    // Rediriger vers la page backoffice.php
+    header("Location: " . BASE_URL . "admin/backoffice.php");
+    exit();
+}
 
 // Traitement du formulaire de mise à jour
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
