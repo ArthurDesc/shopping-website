@@ -1,7 +1,13 @@
 <?php
 session_start();
+<<<<<<< HEAD
 require_once '../includes/session.php'; // Assurez-vous que ce fichier existe et est correctement configuré
 require_once '../includes/_db.php'; // Le fichier de connexion à la base de données
+=======
+require_once '../includes/session.php';
+require_once '../includes/_db.php';
+include '../includes/_header.php';
+>>>>>>> 7c27aee7d6742709e5f12ef0cdb6bd4d0c9730fd
 
 if (!is_logged_in()) {
     header("Location: connexion.php");
