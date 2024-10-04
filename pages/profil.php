@@ -2,15 +2,15 @@
 session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php';
-include '../includes/_header.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!is_logged_in()) {
-    header("Location: connexion.php");
+    header("Location: " . BASE_URL . "pages/auth.php");
     exit();
 }
 
-
+// Inclure le header seulement après la vérification de connexion
+include '../includes/_header.php';
 
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
@@ -99,20 +99,22 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h2>Profil de <?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?></h2>
-    
-    <?php
-    if (!empty($erreurs)) {
-        foreach ($erreurs as $erreur) {
-            echo "<p style='color: red;'>" . htmlspecialchars($erreur) . "</p>";
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Profil de <?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?></h2>
+        
+        <?php
+        if (!empty($erreurs)) {
+            foreach ($erreurs as $erreur) {
+                echo "<p class='text-red-500 mb-4'>" . htmlspecialchars($erreur) . "</p>";
+            }
         }
-    }
-    if (!empty($success_message)) {
-        echo "<p style='color: green;'>" . htmlspecialchars($success_message) . "</p>";
-    }
-    ?>
+        if (!empty($success_message)) {
+            echo "<p class='text-green-500 mb-4'>" . htmlspecialchars($success_message) . "</p>";
+        }
+        ?>
 
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <label for="nom">Nom :</label>
