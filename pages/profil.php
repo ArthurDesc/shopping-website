@@ -114,11 +114,12 @@ include '../includes/_header.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ajout des liens CDN pour Materialize CSS et JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
 <body class="bg-gray-100">
     <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
-       
-
         <div class="p-4">
             <div class="flex justify-center mb-4">
                 <div class="relative">
@@ -127,11 +128,10 @@ include '../includes/_header.php';
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                         </svg>
                     </div>
-                  
                 </div>
             </div>
 
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="space-y-8">
+            <form id="profile-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="space-y-8">
                 <div>
                     <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
                     <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($user['prenom']); ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
@@ -157,22 +157,51 @@ include '../includes/_header.php';
                     <input type="text" id="adresse" name="adresse" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
 
-             
-
                 <div>
-                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">
+                    <button type="button" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4 modal-trigger" data-target="modal-confirmation">
                         Valider les modifications
                     </button>
                 </div>
             </form>
             
-            <!-- Bouton de déconnexion ajouté ici, en dehors du formulaire -->
+            <!-- Bouton de déconnexion -->
             <div>
-                <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                <a href="#modal-deconnexion" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center modal-trigger">
                     Me déconnecter
                 </a>
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmation des modifications -->
+    <div id="modal-confirmation" class="modal">
+        <div class="modal-content">
+            <h4>Confirmation des modifications</h4>
+            <p>Êtes-vous sûr de vouloir valider ces modifications ?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Annuler</a>
+            <a href="#!" class="modal-close waves-effect waves-blue btn-flat" onclick="document.getElementById('profile-form').submit();">Confirmer</a>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de déconnexion -->
+    <div id="modal-deconnexion" class="modal">
+        <div class="modal-content">
+            <h4>Confirmation de déconnexion</h4>
+            <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Annuler</a>
+            <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="modal-close waves-effect waves-red btn-flat">Confirmer</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+        });
+    </script>
 </body>
 </html>

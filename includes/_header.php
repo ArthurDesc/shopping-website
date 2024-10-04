@@ -51,7 +51,7 @@ if (!defined('BASE_URL')) {
   </header>
 
 <!-- Barre de navigation latérale -->
-<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform">
+<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform z-50">
   <nav class="p-4">
     <ul class="space-y-2">
       <li>
