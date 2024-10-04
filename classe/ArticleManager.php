@@ -6,31 +6,101 @@ class ArticleManager {
         $this->db = $db;
     }
 
-    public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection) {
-        $sql = "INSERT INTO produits (nom, description, prix, stock, taille, marque, date_ajout, collection) 
-                VALUES (?, ?, ?, ?, ?, ?, CURDATE(), ?)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssdiisss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
-        
-        if ($stmt->execute()) {
-            return $stmt->insert_id;
+    public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
+        $this->db->begin_transaction();
+
+        try {
+            $sql = "INSERT INTO produits (nom, description, prix, stock, taille, marque, date_ajout, collection) 
+                    VALUES (?, ?, ?, ?, ?, ?, CURDATE(), ?)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssdiisss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
+            
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur lors de l'ajout du produit");
+            }
+
+            $article_id = $stmt->insert_id;
+
+            $this->updateArticleCategories($article_id, $categories);
+
+            $this->db->commit();
+            return $article_id;
+        } catch (Exception $e) {
+            $this->db->rollback();
+            error_log($e->getMessage());
+            return false;
         }
-        return false;
     }
 
-    public function updateArticle($id, $nom, $description, $prix, $stock, $taille, $marque, $collection) {
-        $sql = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, 
-                taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
+    public function updateArticle($id, $nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
+        $this->db->begin_transaction();
+
+        try {
+            $sql = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
+            
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur lors de la mise à jour du produit");
+            }
+
+            $this->updateArticleCategories($id, $categories);
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollback();
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+
+    private function updateArticleCategories($article_id, $categories) {
+        // Supprimer toutes les anciennes relations
+        $sql = "DELETE FROM produit_categorie WHERE id_produit = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
-        return $stmt->execute();
+        $stmt->bind_param("i", $article_id);
+        $stmt->execute();
+
+        // Ajouter les nouvelles relations
+        if (!empty($categories)) {
+            $sql = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
+            $stmt = $this->db->prepare($sql);
+            
+            foreach ($categories as $category_id) {
+                $stmt->bind_param("ii", $article_id, $category_id);
+                if (!$stmt->execute()) {
+                    throw new Exception("Erreur lors de l'ajout d'une catégorie au produit");
+                }
+            }
+        }
     }
 
     public function deleteArticle($id) {
-        $sql = "DELETE FROM produits WHERE id_produit = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
+        $this->db->begin_transaction();
+
+        try {
+            // Supprimer d'abord les relations avec les catégories
+            $sql = "DELETE FROM produit_categorie WHERE id_produit = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            // Ensuite, supprimer le produit
+            $sql = "DELETE FROM produits WHERE id_produit = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $id);
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur lors de la suppression du produit");
+            }
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollback();
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
     public function getArticle($id) {
