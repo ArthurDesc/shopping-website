@@ -11,6 +11,7 @@ if (!is_logged_in()) {
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
+// Initialiser un tableau pour stocker les produits du panier
 
 // Initialiser un tableau pour stocker les produits du panier
 $panier = [];
