@@ -10,7 +10,6 @@ if (!is_logged_in()) {
 }
 
 // Inclure le header seulement après la vérification de connexion
-include '../includes/_header.php';
 
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
@@ -91,6 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 $conn->close();
+include '../includes/_header.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -98,44 +99,67 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil</title>
+    <title>Edit Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">Profil de <?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?></h2>
-        
-        <?php
-        if (!empty($erreurs)) {
-            foreach ($erreurs as $erreur) {
-                echo "<p class='text-red-500 mb-4'>" . htmlspecialchars($erreur) . "</p>";
-            }
-        }
-        if (!empty($success_message)) {
-            echo "<p class='text-green-500 mb-4'>" . htmlspecialchars($success_message) . "</p>";
-        }
-        ?>
+    <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
+       
 
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="nom">Nom :</label>
-        <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($user['nom']); ?>" required><br><br>
+        <div class="p-4">
+            <div class="flex justify-center mb-4">
+                <div class="relative">
+                    <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                  
+                </div>
+            </div>
 
-        <label for="prenom">Prénom :</label>
-        <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($user['prenom']); ?>" required><br><br>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="space-y-8">
+                <div>
+                    <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($user['prenom']); ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
 
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required><br><br>
+                <div>
+                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+                    <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($user['nom']); ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
 
-        <label for="motdepasse_actuel">Mot de passe actuel :</label>
-        <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" required><br><br>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
 
-        <label for="nouveau_motdepasse">Nouveau mot de passe (laissez vide pour ne pas changer) :</label>
-        <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse"><br><br>
+                <div>
+                    <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
 
-        <label for="confirmer_nouveau_motdepasse">Confirmer le nouveau mot de passe :</label>
-        <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse"><br><br>
+                <div>
+                    <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse domicile</label>
+                    <input type="text" id="adresse" name="adresse" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
 
-        <input type="submit" value="Mettre à jour le profil">
-    </form>
+             
+
+                <div>
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">
+                        Valider les modifications
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Bouton de déconnexion ajouté ici, en dehors du formulaire -->
+            <div>
+                <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                    Me déconnecter
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
