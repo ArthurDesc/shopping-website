@@ -2,9 +2,17 @@
 session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php'; // Assurez-vous que ce fichier contient la connexion à la base de données
+require_once '../includes/_header.php';
 
 if (!is_logged_in()) {
-    header("Location: connexion.php");
+    echo '<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+            <a href="' . BASE_URL . 'connexion.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                Connexion
+            </a>
+            <a href="' . BASE_URL . 'inscription.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                Inscription
+            </a>
+        </div>';
     exit();
 }
 
@@ -63,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          AND id_commande = (
                              SELECT id_commande FROM commandes WHERE id_utilisateur = ? AND statut = 'panier'
                          )";
-        $delete_stmt = $db->prepare($delete_query);
+        $delete_stmt = $conn->prepare($delete_query);
         $delete_stmt->bind_param('ii', $produit_id, $id_utilisateur);
         $delete_stmt->execute();
         $delete_stmt->close();
