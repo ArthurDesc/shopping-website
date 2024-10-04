@@ -3,8 +3,17 @@ session_start();
 require_once '../includes/session.php';
 require_once '../includes/_db.php'; // Assurez-vous que ce fichier contient la connexion à la base de données
 require_once '../includes/_header.php';
+require_once '../includes/_header.php';
 
 if (!is_logged_in()) {
+    echo '<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+            <a href="' . BASE_URL . 'connexion.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                Connexion
+            </a>
+            <a href="' . BASE_URL . 'inscription.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                Inscription
+            </a>
+        </div>';
     echo '<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
             <a href="' . BASE_URL . 'pages/connexion.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
                 Connexion
