@@ -94,7 +94,9 @@ if (!defined('BASE_URL')) {
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <div class="container mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-            <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="w-32 mx-auto mb-8">
+            <a href="<?php echo BASE_URL; ?>" class="block mb-8">
+                <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="w-32 mx-auto hover:opacity-80 transition-opacity duration-300">
+            </a>
             
             <h1 class="text-2xl font-bold mb-6 text-center">Entre tes coordonnées pour nous rejoindre.</h1>
             
