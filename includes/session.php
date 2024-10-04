@@ -1,4 +1,7 @@
 <?php
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+}
 // includes/session.php
 
 // Démarrer la session si elle n'est pas déjà démarrée
