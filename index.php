@@ -211,6 +211,38 @@
     </div>
   </div>
 
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Promotions</h2>
+  <div class="custom-scroll">
+    <div class="flex space-x-8 p-4 w-max">
+      <div class="flex-shrink-0 w-80 relative">
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/camp.jpeg" alt="Homme" class="w-full h-44 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+          </div>
+        </a>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/promo.jpg" alt="Femme" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/balenciaga.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/jaune1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 <?php include './includes/_footer.php'; ?>
 
