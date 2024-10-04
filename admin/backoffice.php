@@ -1,20 +1,20 @@
 <?php
-require_once 'classe/ArticleManager.php';
-require_once 'classe/CategoryManager.php';
-require_once 'classe/AdminManager.php';
-require_once 'config/database.php';
+require_once '../classe/ArticleManager.php';
+require_once '../classe/CategoryManager.php';
+require_once '../classe/AdminManager.php';
+require_once '../includes/_db.php';
 
 session_start();
 
 // Vérifier si l'utilisateur est connecté et est un admin
-$adminManager = new AdminManager($db);
-if (!isset($_SESSION['user_id']) || !$adminManager->isAdmin($_SESSION['user_id'])) {
-    header('Location: login.php');
+$adminManager = new AdminManager($conn);
+if (!isset($_SESSION['id_utilisateur']) || !$adminManager->isAdmin($_SESSION['id_utilisateur'])) {
+    header('Location: connexion.php');
     exit();
 }
 
-$articleManager = new ArticleManager($db);
-$categoryManager = new CategoryManager($db);
+$articleManager = new ArticleManager($conn);
+$categoryManager = new CategoryManager($conn);
 
 // Traitement des formulaires
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

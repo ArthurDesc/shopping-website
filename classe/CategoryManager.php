@@ -1,14 +1,14 @@
 <?php
 class CategoryManager {
-    private $db;
+    private $conn;
 
-    public function __construct($db) {
-        $this->db = $db;
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
     public function addCategory($nom, $description) {
         $sql = "INSERT INTO categories (nom, description) VALUES (?, ?)";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $nom, $description);
         
         if ($stmt->execute()) {
@@ -19,7 +19,7 @@ class CategoryManager {
 
     public function updateCategory($id, $nom, $description) {
         $sql = "UPDATE categories SET nom = ?, description = ? WHERE id_categorie = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $nom, $description, $id);
         return $stmt->execute();
     }
@@ -27,7 +27,7 @@ class CategoryManager {
     public function deleteCategory($id) {
         // Vérifier d'abord s'il y a des produits associés à cette catégorie
         $sql = "SELECT COUNT(*) FROM produit_categorie WHERE id_categorie = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -39,20 +39,20 @@ class CategoryManager {
 
         // Si aucun produit n'est associé, supprimer la catégorie
         $sql = "DELETE FROM categories WHERE id_categorie = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 
     public function getAllCategories() {
         $sql = "SELECT * FROM categories";
-        $result = $this->db->query($sql);
+        $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function getCategory($id) {
         $sql = "SELECT * FROM categories WHERE id_categorie = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -63,7 +63,7 @@ class CategoryManager {
         $sql = "SELECT p.* FROM produits p 
                 JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
                 WHERE pc.id_categorie = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $category_id);
         $stmt->execute();
         $result = $stmt->get_result();
