@@ -1,3 +1,15 @@
+footer, footer .font-sans {
+
+
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 230;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 1;
+
+}
+
 #sidebar {
   transition: transform 0.3s ease;
   z-index: 1000; /* Augmenté significativement pour être au-dessus de tous les autres éléments */

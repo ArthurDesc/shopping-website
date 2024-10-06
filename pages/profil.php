@@ -37,7 +37,10 @@ $conn->close();
 include '../includes/_header.php';
 ?>
 
-<div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
+<main>
+
+    
+    <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
     <div class="p-4">
         <div class="flex justify-center mb-4">
             <div class="relative">
@@ -90,6 +93,11 @@ include '../includes/_header.php';
         </div>
     </div>
 </div>
+</main>
 
+<?php include '../includes/_footer.php'; ?>
+
+<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
 </html>
