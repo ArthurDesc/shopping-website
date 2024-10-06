@@ -2,8 +2,10 @@
 
 
 <?php include './includes/_header.php'; ?>
+<main class="flex-grow">
 
-<div class="swiper-container relative max-w-screen-xl mx-auto">
+  
+  <div class="swiper-container relative max-w-screen-xl mx-auto">
   <div class="swiper-wrapper">
     <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide1.png" alt="Image 1" class="w-full h-auto"></div>
     <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide2.png" alt="Image 2" class="w-full h-auto"></div>
@@ -22,28 +24,13 @@
 
 
 
+</main>
 <?php include './includes/_footer.php'; ?>
 
 <!-- Scripts -->
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-      new Swiper('.swiper-container', {
-        loop: true,
-        autoplay: {
-          delay: 3000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-      });
-    }, 100);
-  });
-</script>
+
 </body>
 
 </html>

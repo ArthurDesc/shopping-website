@@ -42,9 +42,10 @@ if (is_logged_in()) {
 require_once '../includes/_header.php';
 ?>
 
+<main>
 
-<div class="flex items-start justify-center min-h-screen pt-20">
-    <div class="container max-w-md mx-auto px-4">
+    <div class="flex items-start justify-center min-h-screen pt-20">
+        <div class="container max-w-md mx-auto px-4">
         <?php if (empty($panier)) : ?>
             <div class="text-center">
                 <h2 class="text-xl font-semibold mb-4 ">Panier vide !</h2>
@@ -87,6 +88,10 @@ require_once '../includes/_header.php';
         <?php endif; ?>
     </div>
 </div>
+</main>
+
+<?php include '../includes/_footer.php'; ?>
+
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
