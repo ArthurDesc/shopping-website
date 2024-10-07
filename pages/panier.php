@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require_once '../includes/session.php';
@@ -31,8 +32,37 @@ $stmt->close();
 
 // Calcul du total
 $total = 0;
-foreach ($panier as $produit) {
-    $total += $produit['prix'] * $produit['quantite'];
+
+// Vérifier si l'utilisateur est connecté
+if (is_logged_in()) {
+    $id_utilisateur = $_SESSION['id_utilisateur'];
+
+    // Récupérer les produits du panier depuis la base de données
+    $query = "SELECT cp.id_produit, p.nom, cp.quantite, p.prix 
+              FROM commande_produit cp
+              INNER JOIN produits p ON cp.id_produit = p.id_produit
+              INNER JOIN commandes c ON cp.id_commande = c.id_commande
+              WHERE c.id_utilisateur = ? AND c.statut = 'panier'";
+
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $id_utilisateur);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $panier = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
+
+    // Calcul du total panier
+    foreach ($panier as $produit) {
+        $total += $produit['prix'] * $produit['quantite'];
+    }
+
+    // Traitement des actions POST (modifier quantité, supprimer produit)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // ... (le code pour modifier la quantité et supprimer un produit reste inchangé)
+        
+        header("Location: panier.php");
+        exit();
+    }
 }
 
 // Gestion de la modification des quantités et suppression
