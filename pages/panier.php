@@ -48,10 +48,13 @@ require_once '../includes/_header.php';
         <div class="container max-w-md mx-auto px-4">
         <?php if (empty($panier)) : ?>
             <div class="text-center">
-                <h2 class="text-xl font-semibold mb-4 ">Panier vide !</h2>
+                <h2 class="text-xl font-semibold mb-4">Panier vide !</h2>
                 <img src="<?php echo BASE_URL; ?>assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">
                 <p class="text-gray-600 mb-6">Votre panier est actuellement vide.</p>
-                <a href="<?php echo BASE_URL; ?>pages/produit.php" class="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 inline-block">Continuer vos achats</a>
+                <div class="flex flex-col space-y-4">
+                    <a href="<?php echo BASE_URL; ?>pages/produit.php" class="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 inline-block">Continuer vos achats</a>
+                    <a href="<?php echo BASE_URL; ?>pages/auth.php" class="text-blue-500 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez vous pour récupérer votre panier</a>
+                </div>
             </div>
         <?php else : ?>
             <div class="space-y-6">
