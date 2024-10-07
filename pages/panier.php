@@ -14,21 +14,12 @@ if (!is_logged_in()) {
                 Inscription
             </a>
         </div>';
-    echo '<div class="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-            <a href="' . BASE_URL . 'pages/connexion.php" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
-                Connexion
-            </a>
-            <a href="' . BASE_URL . 'pages/inscription.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
-                Inscription
-            </a>
-        </div>';
     exit();
 }
 
 $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
-// Initialiser un tableau pour stocker les produits du panier
 
 // Initialiser un tableau pour stocker les produits du panier
 $panier = [];
