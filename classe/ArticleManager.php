@@ -47,27 +47,45 @@ class ArticleManager {
     }
 
     public function updateArticle($id, $nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
-        // Mise à jour des informations de base de l'article
-        $query = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
-        $stmt->execute();
+        $this->conn->begin_transaction();
+        try {
+            $sql = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
+            $stmt->execute();
 
-        // Mise à jour des catégories
-        $this->updateArticleCategories($id, $categories);
+            // Vérifiez si $categories est une chaîne et convertissez-la en tableau si nécessaire
+            if (is_string($categories)) {
+                $categories = explode(',', $categories);
+            }
+
+            // Assurez-vous que $categories est un tableau
+            if (is_array($categories)) {
+                $this->updateArticleCategories($id, $categories);
+            } else {
+                throw new Exception("Les catégories doivent être un tableau ou une chaîne séparée par des virgules.");
+            }
+
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollback();
+            error_log("Erreur lors de la mise à jour de l'article : " . $e->getMessage());
+            return false;
+        }
     }
 
-    private function updateArticleCategories($articleId, $newCategories) {
+    private function updateArticleCategories($articleId, array $newCategories) {
         // Supprimer toutes les anciennes catégories
-        $query = "DELETE FROM produit_categorie WHERE id_produit = ?";
-        $stmt = $this->conn->prepare($query);
+        $sql = "DELETE FROM produit_categorie WHERE id_produit = ?";
+        $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $articleId);
         $stmt->execute();
 
         // Ajouter les nouvelles catégories
         if (!empty($newCategories)) {
-            $query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
-            $stmt = $this->conn->prepare($query);
+            $sql = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($sql);
             foreach ($newCategories as $categoryId) {
                 $stmt->bind_param("ii", $articleId, $categoryId);
                 $stmt->execute();

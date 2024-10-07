@@ -26,7 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             case 'edit_product':
                 $categories = isset($_POST['categories']) ? $_POST['categories'] : [];
-                $articleManager->updateArticle($_POST['id'], $_POST['nom'], $_POST['description'], $_POST['prix'], $_POST['stock'], $_POST['taille'], $_POST['marque'], $_POST['collection'], $categories);
+                if ($articleManager->updateArticle(
+                    $_POST['id'],
+                    $_POST['nom'],
+                    $_POST['description'],
+                    $_POST['prix'],
+                    $_POST['stock'],
+                    $_POST['taille'],
+                    $_POST['marque'],
+                    $_POST['collection'],
+                    $categories
+                )) {
+                    echo "Article mis à jour avec succès.";
+                } else {
+                    echo "Erreur lors de la mise à jour de l'article.";
+                }
                 break;
             case 'delete_product':
                 $articleManager->deleteArticle($_POST['id']);
@@ -61,6 +75,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "Erreur lors de la mise à jour de l'article.";
                 }
                 break;
+            case 'update_item':
+                $itemId = $_POST['item_id'];
+                $nom = $_POST['nom'];
+                $description = $_POST['description'];
+                // Récupérez d'autres champs si nécessaire
+                
+                // Appelez votre méthode de mise à jour ici
+                if ($itemManager->updateItem($itemId, $nom, $description /*, autres champs */)) {
+                    echo "Item mis à jour avec succès.";
+                } else {
+                    echo "Erreur lors de la mise à jour de l'item.";
+                }
+                break;
         }
     }
 }
@@ -70,9 +97,30 @@ $produits = $articleManager->getAllArticles();
 $categories = $categoryManager->getAllCategories();
 ?>
 
+<<<<<<< HEAD
 
 
     <?php include '../includes/_header.php'; ?>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de la boutique</title>
+    <style>
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .edit-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+>>>>>>> edit-fini
     <h1>Gestion de la boutique</h1>
 
     <div class="section">
@@ -182,7 +230,7 @@ $categories = $categoryManager->getAllCategories();
                 <th>Actions</th>
             </tr>
             <?php foreach ($produits as $produit): ?>
-                <tr>
+                <tr id="product-row-<?php echo $produit['id_produit']; ?>">
                     <td><?php echo htmlspecialchars($produit['id_produit']); ?></td>
                     <td><?php echo htmlspecialchars($produit['nom']); ?></td>
                     <td><?php echo htmlspecialchars($produit['description']); ?></td>
@@ -192,7 +240,17 @@ $categories = $categoryManager->getAllCategories();
                     <td><?php echo htmlspecialchars($produit['marque']); ?></td>
                     <td><?php echo htmlspecialchars($produit['collection']); ?></td>
                     <td>
+                        <button onclick="toggleEditProduct(<?php echo $produit['id_produit']; ?>)">Edit</button>
                         <form method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="delete_product">
+                            <input type="hidden" name="id" value="<?php echo $produit['id_produit']; ?>">
+                            <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr id="edit-product-form-<?php echo $produit['id_produit']; ?>" style="display:none;">
+                    <td colspan="9">
+                        <form method="POST">
                             <input type="hidden" name="action" value="edit_product">
                             <input type="hidden" name="id" value="<?php echo $produit['id_produit']; ?>">
                             <input type="text" name="nom" value="<?php echo htmlspecialchars($produit['nom']); ?>" required>
@@ -218,12 +276,8 @@ $categories = $categoryManager->getAllCategories();
                                 <?php endforeach; ?>
                             </fieldset>
 
-                            <button type="submit">Modifier</button>
-                        </form>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="action" value="delete_product">
-                            <input type="hidden" name="id" value="<?php echo $produit['id_produit']; ?>">
-                            <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">Supprimer</button>
+                            <button type="submit">Enregistrer</button>
+                            <button type="button" onclick="toggleEditProduct(<?php echo $produit['id_produit']; ?>)">Annuler</button>
                         </form>
                     </td>
                 </tr>
@@ -255,15 +309,17 @@ $categories = $categoryManager->getAllCategories();
             <?php foreach ($categories as $category): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($category['id_categorie']); ?></td>
-                    <td><?php echo htmlspecialchars($category['nom']); ?></td>
-                    <td><?php echo htmlspecialchars($category['description']); ?></td>
+                    <td id="nom-<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></td>
+                    <td id="description-<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['description']); ?></td>
                     <td>
-                        <form method="POST" style="display:inline;">
+                        <button onclick="toggleEditCategory(<?php echo $category['id_categorie']; ?>)">Edit</button>
+                        <form method="POST" style="display:none;" id="edit-category-form-<?php echo $category['id_categorie']; ?>">
                             <input type="hidden" name="action" value="edit_category">
                             <input type="hidden" name="id" value="<?php echo $category['id_categorie']; ?>">
-                            <input type="text" name="nom" value="<?php echo htmlspecialchars($category['nom']); ?>" required>
-                            <textarea name="description"><?php echo htmlspecialchars($category['description']); ?></textarea>
-                            <button type="submit">Modifier</button>
+                            <input type="text" name="nom" id="edit-nom-<?php echo $category['id_categorie']; ?>" value="<?php echo htmlspecialchars($category['nom']); ?>" required>
+                            <textarea name="description" id="edit-description-<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['description']); ?></textarea>
+                            <button type="submit">Enregistrer</button>
+                            <button type="button" onclick="toggleEditCategory(<?php echo $category['id_categorie']; ?>)">Annuler</button>
                         </form>
                         <form method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="delete_category">
@@ -275,5 +331,90 @@ $categories = $categoryManager->getAllCategories();
             <?php endforeach; ?>
         </table>
     </div>
+<<<<<<< HEAD
 
 </html>
+=======
+</body>
+</html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const items = document.querySelectorAll('.item');
+    
+    items.forEach(item => {
+        const editButton = item.querySelector('.edit-button');
+        const cancelButton = item.querySelector('.cancel-edit');
+        const itemInfo = item.querySelector('.item-info');
+        const itemEdit = item.querySelector('.item-edit');
+        
+        editButton.addEventListener('click', function() {
+            itemInfo.style.display = 'none';
+            itemEdit.style.display = 'block';
+            editButton.style.display = 'none';
+        });
+        
+        cancelButton.addEventListener('click', function() {
+            itemInfo.style.display = 'block';
+            itemEdit.style.display = 'none';
+            editButton.style.display = 'block';
+        });
+    });
+});
+
+function editArticle(articleId) {
+    document.getElementById('edit-form-' + articleId).style.display = 'table-row';
+}
+
+function cancelEdit(articleId) {
+    document.getElementById('edit-form-' + articleId).style.display = 'none';
+}
+
+function toggleEditForm(productId) {
+    var form = document.getElementById('edit-form-' + productId);
+    if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+
+function toggleEditCategory(categoryId) {
+    var form = document.getElementById('edit-category-form-' + categoryId);
+    var nomCell = document.getElementById('nom-' + categoryId);
+    var descriptionCell = document.getElementById('description-' + categoryId);
+    var editNomInput = document.getElementById('edit-nom-' + categoryId);
+    var editDescriptionInput = document.getElementById('edit-description-' + categoryId);
+
+    if (form.style.display === 'none' || form.style.display === '') {
+        // Afficher le formulaire d'édition
+        form.style.display = 'block';
+        nomCell.style.display = 'none';
+        descriptionCell.style.display = 'none';
+    } else {
+        // Cacher le formulaire d'édition et réafficher les valeurs originales
+        form.style.display = 'none';
+        nomCell.style.display = '';
+        descriptionCell.style.display = '';
+        // Réinitialiser les valeurs du formulaire
+        editNomInput.value = nomCell.textContent;
+        editDescriptionInput.value = descriptionCell.textContent;
+    }
+}
+
+function toggleEditProduct(productId) {
+    var productRow = document.getElementById('product-row-' + productId);
+    var editForm = document.getElementById('edit-product-form-' + productId);
+    
+    if (editForm.style.display === 'none' || editForm.style.display === '') {
+        // Afficher le formulaire d'édition
+        editForm.style.display = 'table-row';
+        productRow.style.display = 'none';
+    } else {
+        // Cacher le formulaire d'édition et réafficher la ligne du produit
+        editForm.style.display = 'none';
+        productRow.style.display = 'table-row';
+    }
+}
+</script>
+>>>>>>> edit-fini
