@@ -7,27 +7,32 @@ class ArticleManager {
     }
 
     public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
-        $this->conn->begin_transaction();
-
-        try {
-            $sql = "INSERT INTO produits (nom, description, prix, stock, taille, marque, date_ajout, collection) 
-                    VALUES (?, ?, ?, ?, ?, ?, CURDATE(), ?)";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("ssdiisss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
-            
-            if (!$stmt->execute()) {
-                throw new Exception("Erreur lors de l'ajout du produit");
-            }
-
+        // Préparer la requête d'insertion de l'article
+        $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssdiiss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
+        
+        // Exécuter la requête
+        if ($stmt->execute()) {
             $article_id = $stmt->insert_id;
-
-            $this->updateArticleCategories($article_id, $categories);
-
-            $this->conn->commit();
-            return $article_id;
-        } catch (Exception $e) {
-            $this->conn->rollback();
-            error_log($e->getMessage());
+            
+            // Insérer les catégories pour cet article
+            if (!empty($categories)) {
+                $category_query = "INSERT INTO article_categorie (id_article, id_categorie) VALUES (?, ?)";
+                $category_stmt = $this->conn->prepare($category_query);
+                
+                foreach ($categories as $category_id) {
+                    $category_stmt->bind_param("ii", $article_id, $category_id);
+                    $category_stmt->execute();
+                }
+                
+                $category_stmt->close();
+            }
+            
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
             return false;
         }
     }
