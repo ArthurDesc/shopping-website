@@ -5,10 +5,7 @@ require_once '../includes/session.php';
 require_once '../includes/_db.php';
 require_once '../classe/AdminManager.php';
 
-if (!is_logged_in()) {
-    header("Location: " . BASE_URL . "pages/auth.php");
-    exit();
-}
+
 
 $adminManager = new AdminManager($conn);
 
