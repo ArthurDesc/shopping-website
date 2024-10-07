@@ -40,6 +40,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'delete_category':
                 $categoryManager->deleteCategory($_POST['id']);
                 break;
+            case 'update_article_categories':
+                $articleId = $_POST['article_id'];
+                $selectedCategories = isset($_POST['categories']) ? $_POST['categories'] : [];
+                if ($articleManager->updateArticleCategories($articleId, $selectedCategories)) {
+                    echo "Catégories mises à jour avec succès.";
+                } else {
+                    echo "Erreur lors de la mise à jour des catégories.";
+                }
+                break;
+            case 'update_article':
+                $articleId = $_POST['article_id'];
+                $nom = $_POST['nom'];
+                $description = $_POST['description'];
+                $prix = $_POST['prix'];
+                $selectedCategories = isset($_POST['categories']) ? $_POST['categories'] : [];
+                if ($articleManager->updateArticle($articleId, $nom, $description, $prix, $selectedCategories)) {
+                    echo "Article mis à jour avec succès.";
+                } else {
+                    echo "Erreur lors de la mise à jour de l'article.";
+                }
+                break;
         }
     }
 }

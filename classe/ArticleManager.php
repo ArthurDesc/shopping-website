@@ -10,6 +10,14 @@ class ArticleManager {
         // Préparer la requête d'insertion de l'article
         $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
+        if (!$stmt) {
+            die("Erreur de préparation de la requête : " . $this->conn->error);
+        }
+        
+        // Convertir les valeurs numériques en nombres
+        $prix = floatval($prix);
+        $stock = intval($stock);
+        
         $stmt->bind_param("ssdiiss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
         
         // Exécuter la requête
@@ -18,7 +26,7 @@ class ArticleManager {
             
             // Insérer les catégories pour cet article
             if (!empty($categories)) {
-                $category_query = "INSERT INTO article_categorie (id_article, id_categorie) VALUES (?, ?)";
+                $category_query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
                 $category_stmt = $this->conn->prepare($category_query);
                 
                 foreach ($categories as $category_id) {
@@ -32,51 +40,37 @@ class ArticleManager {
             $stmt->close();
             return true;
         } else {
+            error_log("Erreur lors de l'ajout de l'article : " . $stmt->error);
             $stmt->close();
             return false;
         }
     }
 
     public function updateArticle($id, $nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
-        $this->conn->begin_transaction();
-
-        try {
-            $sql = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
-            
-            if (!$stmt->execute()) {
-                throw new Exception("Erreur lors de la mise à jour du produit");
-            }
-
-            $this->updateArticleCategories($id, $categories);
-
-            $this->conn->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->conn->rollback();
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
-    private function updateArticleCategories($article_id, $categories) {
-        // Supprimer toutes les anciennes relations
-        $sql = "DELETE FROM produit_categorie WHERE id_produit = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $article_id);
+        // Mise à jour des informations de base de l'article
+        $query = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
         $stmt->execute();
 
-        // Ajouter les nouvelles relations
-        if (!empty($categories)) {
-            $sql = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
-            $stmt = $this->conn->prepare($sql);
-            
-            foreach ($categories as $category_id) {
-                $stmt->bind_param("ii", $article_id, $category_id);
-                if (!$stmt->execute()) {
-                    throw new Exception("Erreur lors de l'ajout d'une catégorie au produit");
-                }
+        // Mise à jour des catégories
+        $this->updateArticleCategories($id, $categories);
+    }
+
+    private function updateArticleCategories($articleId, $newCategories) {
+        // Supprimer toutes les anciennes catégories
+        $query = "DELETE FROM produit_categorie WHERE id_produit = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $articleId);
+        $stmt->execute();
+
+        // Ajouter les nouvelles catégories
+        if (!empty($newCategories)) {
+            $query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($query);
+            foreach ($newCategories as $categoryId) {
+                $stmt->bind_param("ii", $articleId, $categoryId);
+                $stmt->execute();
             }
         }
     }
@@ -123,12 +117,13 @@ class ArticleManager {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getArticleCategories($article_id) {
-        $sql = "SELECT c.* FROM categories c 
-                JOIN produit_categorie pc ON c.id_categorie = pc.id_categorie 
+    public function getArticleCategories($articleId) {
+        $sql = "SELECT c.id_categorie, c.nom 
+                FROM categories c
+                JOIN produit_categorie pc ON c.id_categorie = pc.id_categorie
                 WHERE pc.id_produit = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $article_id);
+        $stmt->bind_param("i", $articleId);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);

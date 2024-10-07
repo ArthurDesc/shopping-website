@@ -20,8 +20,17 @@ class CategoryManager {
     public function updateCategory($id, $nom, $description) {
         $sql = "UPDATE categories SET nom = ?, description = ? WHERE id_categorie = ?";
         $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            error_log("Erreur de préparation de la requête : " . $this->conn->error);
+            return false;
+        }
         $stmt->bind_param("ssi", $nom, $description, $id);
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            error_log("Erreur lors de l'exécution de la requête : " . $stmt->error);
+            return false;
+        }
     }
 
     public function deleteCategory($id) {
