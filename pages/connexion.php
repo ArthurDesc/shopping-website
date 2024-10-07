@@ -1,5 +1,4 @@
 <?php
-// Commentez temporairement ces lignes pour le débogage
 ob_start();
 session_start();
 include '../includes/_db.php';
@@ -58,48 +57,51 @@ $conn->close();
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitmode</title>
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Fitmode</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('../assets/css/main.css'); ?>">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
-    <div class="flex-grow flex items-center justify-center px-4 py-8">
-        <div class="w-full max-w-sm bg-white rounded-lg shadow-md p-6 sm:p-8">
-            <a href="<?php echo BASE_URL; ?>index.php">
-                <img src="../assets/images/logo.png" alt="Logo" class="mx-auto h-10 sm:h-12 mb-6 cursor-pointer">
+
+
+    <div class="container mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+            <a href="<?php echo BASE_URL; ?>index.php" class="block mb-8">
+                <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="w-32 mx-auto">
             </a>
-            <h2 class="text-2xl sm:text-3xl text-center mb-6 font-bold">Connectez-vous à votre compte</h2>
             
-            <?php
-            if (!empty($error_message)) {
-                echo "<p class='text-red-500 text-center mb-4'>" . htmlspecialchars($error_message) . "</p>";
-            }
-            ?>
+            <h1 class="text-2xl font-bold mb-6 text-center">Connectez-vous à votre compte</h1>
             
-            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="space-y-6">
-                <div>
-                    <input type="email" name="email" placeholder="Email" required
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <?php if (!empty($error_message)): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <p><?php echo htmlspecialchars($error_message); ?></p>
                 </div>
+            <?php endif; ?>
+
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="space-y-4">
                 <div>
-                    <input type="password" name="password" placeholder="Mot de passe" required
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
-                <button type="submit" 
-                        class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300">
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                    <input type="password" id="password" name="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     Se connecter
                 </button>
             </form>
-            
-            <div class="mt-6 text-center">
-                <a href="#" class="text-blue-500 hover:underline">Vous n'êtes pas encore inscrit ? Cliquez ici</a>
-            </div>
+
+            <p class="mt-4 text-center text-sm">
+                <a href="<?php echo BASE_URL; ?>pages/inscription.php" class="text-blue-500 hover:text-blue-600">
+                    Pas encore inscrit ? Créez un compte
+                </a>
+            </p>
         </div>
     </div>
 </body>

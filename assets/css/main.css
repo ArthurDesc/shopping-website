@@ -1,6 +1,18 @@
+footer, footer .font-sans {
+
+
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 230;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 1;
+
+}
+
 #sidebar {
   transition: transform 0.3s ease;
-  z-index: 10; /* Assurez-vous que le menu est en dessous de l'icône */
+  z-index: 1000; /* Augmenté significativement pour être au-dessus de tous les autres éléments */
 }
 
 .swiper-container {
@@ -31,7 +43,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: 2; /* Réduit pour être en dessous du sidebar */
 }
 
 .swiper-button-next {
@@ -42,4 +54,26 @@
   left: 10px;
 }
 
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  background: #000;
+  opacity: 0.2;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #007aff;
+}
+
+.swiper-container-horizontal > .swiper-pagination-bullets {
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+}
+
+
+  
 
