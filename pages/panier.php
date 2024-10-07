@@ -13,7 +13,7 @@ $id_utilisateur = $_SESSION['id_utilisateur'];
 $erreurs = [];
 $success_message = "";
 
-// Initialiser un tableau pour stocker les produits du panier
+// Initialiser un tableau pour stocker les produits du du du panier
 $panier = [];
 
 // Récupérer les produits du panier depuis la base de données
