@@ -132,7 +132,11 @@ class ArticleManager {
     }
 
     public function getAllArticles() {
-        $sql = "SELECT * FROM produits";
+        $sql = "SELECT p.*, GROUP_CONCAT(c.nom SEPARATOR ', ') as categories
+                FROM produits p
+                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit
+                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie
+                GROUP BY p.id_produit";
         $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }

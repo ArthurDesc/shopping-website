@@ -159,6 +159,7 @@ $categories = $categoryManager->getAllCategories();
                 <th>Taille</th>
                 <th>Marque</th>
                 <th>Collection</th>
+                <th>Catégories</th>
                 <th>Actions</th>
             </tr>
             <?php foreach ($produits as $produit): ?>
@@ -171,6 +172,7 @@ $categories = $categoryManager->getAllCategories();
                     <td><?php echo htmlspecialchars($produit['taille']); ?></td>
                     <td><?php echo htmlspecialchars($produit['marque']); ?></td>
                     <td><?php echo htmlspecialchars($produit['collection']); ?></td>
+                    <td><?php echo htmlspecialchars($produit['categories']); ?></td>
                     <td>
                         <button onclick="toggleEditProduct(<?php echo $produit['id_produit']; ?>)">Edit</button>
                         <form method="POST" style="display:inline;">
