@@ -80,6 +80,21 @@ footer, footer .font-sans {
   width: 100%;
 }
 
+.nouveautes .swiper-slide {
+  transition: transform 0.3s ease;
+}
 
-  
+.nouveautes .swiper-slide:hover {
+  transform: scale(1.05);
+}
+
+.nouveautes .swiper-slide img {
+  border-radius: 8px;
+}
+
+.nouveautes button {
+  font-weight: 600;
+}
+
+
 

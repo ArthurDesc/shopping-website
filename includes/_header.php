@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+  define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
 }
 ?>
 
@@ -14,6 +14,7 @@ if (!defined('BASE_URL')) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
@@ -50,84 +51,84 @@ if (!defined('BASE_URL')) {
     </div>
   </header>
 
-<!-- Barre de navigation latérale -->
-<div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform z-50">
-  <!-- Ajout de la barre de recherche -->
-  <div class="p-4 border-b">
-    <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex items-center">
-      <input type="text" name="q" placeholder="Rechercher..." class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-        </svg>
-      </button>
-    </form>
+  <!-- Barre de navigation latérale -->
+  <div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform z-50">
+    <!-- Ajout de la barre de recherche -->
+    <div class="p-4 border-b">
+      <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex items-center">
+        <input type="text" name="q" placeholder="Rechercher..." class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <nav class="p-4">
+      <ul class="space-y-2">
+        <li>
+          <a href="<?php echo BASE_URL; ?>pages/produit.php" class="flex items-center justify-between py-2 border-b">
+            Tout les articles
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
+            Homme
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </a>
+          <ul class="hidden pl-4" id="menu-homme">
+            <li><a href="#" class="block py-2">T-shirts</a></li>
+            <li><a href="#" class="block py-2">Shorts</a></li>
+            <li><a href="#" class="block py-2">Joggings</a></li>
+            <li><a href="#" class="block py-2">Chaussures</a></li>
+            <li><a href="#" class="block py-2">Accessoires</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
+            Femme
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </a>
+          <ul class="hidden pl-4" id="menu-femme">
+            <li><a href="#" class="block py-2">T-shirts</a></li>
+            <li><a href="#" class="block py-2">Joggings</a></li>
+            <li><a href="#" class="block py-2">Leggings</a></li>
+            <li><a href="#" class="block py-2">Chaussures</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
+            Enfants
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </a>
+          <ul class="hidden pl-4" id="menu-enfants">
+            <li><a href="#" class="block py-2">T-shirts</a></li>
+            <li><a href="#" class="block py-2">Shorts</a></li>
+            <li><a href="#" class="block py-2">Chaussures</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
+            Sports
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </a>
+          <ul class="hidden pl-4" id="menu-sports">
+            <li><a href="#" class="block py-2">Football</a></li>
+            <li><a href="#" class="block py-2">Basketball</a></li>
+            <li><a href="#" class="block py-2">Running</a></li>
+            <li><a href="#" class="block py-2">Rugby</a></li>
+            <li><a href="#" class="block py-2">Handball</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
   </div>
-  
-  <nav class="p-4">
-    <ul class="space-y-2">
-      <li>
-        <a href="<?php echo BASE_URL; ?>pages/produit.php" class="flex items-center justify-between py-2 border-b">
-          Tout les articles
-        </a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
-          Homme
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-          </svg>
-        </a>
-        <ul class="hidden pl-4" id="menu-homme">
-          <li><a href="#" class="block py-2">T-shirts</a></li>
-          <li><a href="#" class="block py-2">Shorts</a></li>
-          <li><a href="#" class="block py-2">Joggings</a></li>
-          <li><a href="#" class="block py-2">Chaussures</a></li>
-          <li><a href="#" class="block py-2">Accessoires</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
-          Femme
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-          </svg>
-        </a>
-        <ul class="hidden pl-4" id="menu-femme">
-          <li><a href="#" class="block py-2">T-shirts</a></li>
-          <li><a href="#" class="block py-2">Joggings</a></li>
-          <li><a href="#" class="block py-2">Leggings</a></li>
-          <li><a href="#" class="block py-2">Chaussures</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
-          Enfants
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-          </svg>
-        </a>
-        <ul class="hidden pl-4" id="menu-enfants">
-          <li><a href="#" class="block py-2">T-shirts</a></li>
-          <li><a href="#" class="block py-2">Shorts</a></li>
-          <li><a href="#" class="block py-2">Chaussures</a></li>
-        </ul>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
-          Sports
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-          </svg>
-        </a>
-        <ul class="hidden pl-4" id="menu-sports">
-          <li><a href="#" class="block py-2">Football</a></li>
-          <li><a href="#" class="block py-2">Basketball</a></li>
-          <li><a href="#" class="block py-2">Running</a></li>
-          <li><a href="#" class="block py-2">Rugby</a></li>
-          <li><a href="#" class="block py-2">Handball</a></li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-</div>
