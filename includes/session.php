@@ -1,4 +1,5 @@
 <?php
+
 // includes/session.php
 
 // Démarrer la session si elle n'est pas déjà démarrée

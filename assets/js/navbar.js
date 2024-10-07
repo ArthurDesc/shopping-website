@@ -27,3 +27,13 @@ document.addEventListener('click', function(event) {
       },
     });
   });
+
+  const toggles = ['menu-homme', 'menu-femme', 'menu-enfants', 'menu-sports'];
+
+  toggles.forEach(toggle => {
+    document.getElementById(`${toggle}-toggle`).addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById(toggle).classList.toggle('hidden');
+      this.querySelector('svg').classList.toggle('rotate-180');
+    });
+  });
