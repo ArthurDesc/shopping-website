@@ -61,6 +61,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo "Erreur lors de la mise à jour de l'article.";
                 }
                 break;
+            case 'update_item':
+                $itemId = $_POST['item_id'];
+                $nom = $_POST['nom'];
+                $description = $_POST['description'];
+                // Récupérez d'autres champs si nécessaire
+                
+                // Appelez votre méthode de mise à jour ici
+                if ($itemManager->updateItem($itemId, $nom, $description /*, autres champs */)) {
+                    echo "Item mis à jour avec succès.";
+                } else {
+                    echo "Erreur lors de la mise à jour de l'item.";
+                }
+                break;
         }
     }
 }
@@ -225,3 +238,28 @@ $categories = $categoryManager->getAllCategories();
     </div>
 </body>
 </html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const items = document.querySelectorAll('.item');
+    
+    items.forEach(item => {
+        const editButton = item.querySelector('.edit-button');
+        const cancelButton = item.querySelector('.cancel-edit');
+        const itemInfo = item.querySelector('.item-info');
+        const itemEdit = item.querySelector('.item-edit');
+        
+        editButton.addEventListener('click', function() {
+            itemInfo.style.display = 'none';
+            itemEdit.style.display = 'block';
+            editButton.style.display = 'none';
+        });
+        
+        cancelButton.addEventListener('click', function() {
+            itemInfo.style.display = 'block';
+            itemEdit.style.display = 'none';
+            editButton.style.display = 'block';
+        });
+    });
+});
+</script>
