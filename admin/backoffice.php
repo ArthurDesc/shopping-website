@@ -26,6 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             case 'edit_product':
                 $categories = isset($_POST['categories']) ? $_POST['categories'] : [];
+                // Filtrer les catégories pour ne garder que celles qui sont sélectionnées
+                $categories = array_filter($categories, function($value) { return !empty($value); });
                 if ($articleManager->updateArticle(
                     $_POST['id'],
                     $_POST['nom'],

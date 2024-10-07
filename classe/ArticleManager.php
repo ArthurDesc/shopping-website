@@ -87,8 +87,10 @@ class ArticleManager {
             $sql = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
             $stmt = $this->conn->prepare($sql);
             foreach ($newCategories as $categoryId) {
-                $stmt->bind_param("ii", $articleId, $categoryId);
-                $stmt->execute();
+                if (!empty($categoryId)) { // Vérifier que l'ID de catégorie n'est pas vide
+                    $stmt->bind_param("ii", $articleId, $categoryId);
+                    $stmt->execute();
+                }
             }
         }
     }
