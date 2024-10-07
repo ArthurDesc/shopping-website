@@ -8,8 +8,8 @@
   <div class="swiper-container relative max-w-screen-xl mx-auto">
   <div class="swiper-wrapper">
     <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide1.png" alt="Image 1" class="w-full h-auto"></div>
-    <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide2.png" alt="Image 2" class="w-full h-auto"></div>
-    <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide3.png" alt="Image 3" class="w-full h-auto"></div>
+    <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide1.png" alt="Image 2" class="w-full h-auto"></div>
+    <div class="swiper-slide"><img src="<?php echo BASE_URL; ?>assets/images/slide1.png" alt="Image 3" class="w-full h-auto"></div>
   </div>
   <div class="swiper-pagination"></div>
 </div>
@@ -30,6 +30,8 @@
 <!-- Scripts -->
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 
 </body>
 
