@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 02, 2024 at 12:39 PM
+-- Generation Time: Oct 07, 2024 at 10:00 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -34,7 +34,7 @@ CREATE TABLE `avis` (
   `date_avis` datetime DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
   `id_produit` int DEFAULT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -48,6 +48,15 @@ CREATE TABLE `categories` (
   `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id_categorie`, `nom`, `description`) VALUES
+(2, 'hrfhr', 'hrfjh'),
+(3, 'UAEYGY', 'IUEGYED'),
+(4, 'TYUY', 'FDYRD');
+
 -- --------------------------------------------------------
 
 --
@@ -59,7 +68,7 @@ CREATE TABLE `commandes` (
   `date_commande` datetime DEFAULT NULL,
   `montant_total` decimal(10,2) DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
-  `statut` ENUM('panier', 'validé', 'expédié', 'annulé') DEFAULT 'panier' -- Ajout du champ statut
+  `statut` enum('panier','validé','expédié','annulé') DEFAULT 'panier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -110,6 +119,15 @@ CREATE TABLE `produits` (
   `collection` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `produits`
+--
+
+INSERT INTO `produits` (`id_produit`, `nom`, `description`, `prix`, `stock`, `taille`, `marque`, `date_ajout`, `collection`) VALUES
+(3, 'g', 'RFZQZ', '23.00', 45, '345', 'UIEDE', NULL, 'HE2UY'),
+(4, 'sxojhsjUZDI1U', '2EH2F3YU', '23.00', 34, '33', 'HZEEYH', NULL, 'HGY'),
+(5, 'sxojhsjUZDI1U', '2EH2F3YU', '23.00', 34, '33', 'HZEEYH', NULL, 'HGY');
+
 -- --------------------------------------------------------
 
 --
@@ -120,6 +138,17 @@ CREATE TABLE `produit_categorie` (
   `id_produit` int NOT NULL,
   `id_categorie` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `produit_categorie`
+--
+
+INSERT INTO `produit_categorie` (`id_produit`, `id_categorie`) VALUES
+(3, 2),
+(4, 2),
+(5, 2),
+(4, 4),
+(5, 4);
 
 -- --------------------------------------------------------
 
@@ -143,7 +172,7 @@ CREATE TABLE `utilisateurs` (
 
 INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
 (1, 'Baileche', 'Hamza', 'hamza1301@outlook.fr', NULL, '$2y$10$pPfTCUGDooaXAzpmVAZFc.v1HxQTxoxQNsRbm7t0tQO0BrwYCc.mu', 'user'),
-(3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'user'),
+(3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'admin'),
 (4, 'as', 'as', 'jhzdjhed@gmail.fr', NULL, '$2y$10$hiUtprh65P3qAj29c.JmU.jgRmmZpU7.e0uikjf4rHbxd15jynzTW', 'user'),
 (5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user'),
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
@@ -223,7 +252,7 @@ ALTER TABLE `avis`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `commandes`
@@ -241,7 +270,7 @@ ALTER TABLE `paiements`
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`
