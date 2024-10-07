@@ -46,12 +46,12 @@ class ArticleManager {
         }
     }
 
-    public function updateArticle($id, $nom, $description, $prix, $categories) {
+    public function updateArticle($id, $nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
         $this->conn->begin_transaction();
         try {
-            $sql = "UPDATE produits SET nom = ?, description = ?, prix = ? WHERE id_produit = ?";
+            $sql = "UPDATE produits SET nom = ?, description = ?, prix = ?, stock = ?, taille = ?, marque = ?, collection = ? WHERE id_produit = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("ssdi", $nom, $description, $prix, $id);
+            $stmt->bind_param("ssdiissi", $nom, $description, $prix, $stock, $taille, $marque, $collection, $id);
             $stmt->execute();
 
             // Vérifiez si $categories est une chaîne et convertissez-la en tableau si nécessaire
