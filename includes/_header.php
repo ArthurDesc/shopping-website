@@ -22,7 +22,7 @@ if (!defined('BASE_URL')) {
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 </head>
 
-<body>
+<body class="bg-gray-100">
   <header class="flex justify-center items-center p-4 bg-white shadow-md">
     <div class="flex justify-between items-center w-full max-w-screen-lg">
       <div class="menu-icon cursor-pointer" id="menu-toggle">
