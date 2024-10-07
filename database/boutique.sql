@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 02, 2024 at 12:39 PM
+-- Generation Time: Oct 07, 2024 at 09:15 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -27,16 +27,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `avis`
 --
 
-CREATE TABLE IF NOT EXISTS `avis` (
-  `id_avis` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `avis` (
+  `id_avis` int NOT NULL,
   `note` int DEFAULT NULL,
   `commentaire` text,
   `date_avis` datetime DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
-  `id_produit` int DEFAULT NULL,
-  PRIMARY KEY (`id_avis`),
-  KEY `id_utilisateur` (`id_utilisateur`),
-  KEY `idx_avis_produit` (`id_produit`)
+  `id_produit` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -45,11 +42,10 @@ CREATE TABLE IF NOT EXISTS `avis` (
 -- Table structure for table `categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
-  `id_categorie` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `categories` (
+  `id_categorie` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id_categorie`)
+  `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -58,36 +54,13 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Table structure for table `commandes`
 --
 
--- ... (autres parties du script inchangées)
-
--- Table structure for table `commandes`
-CREATE TABLE IF NOT EXISTS `commandes` (
-  `id_commande` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `commandes` (
+  `id_commande` int NOT NULL,
   `date_commande` datetime DEFAULT NULL,
   `montant_total` decimal(10,2) DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
-  PRIMARY KEY (`id_commande`),
-  KEY `idx_commande_utilisateur` (`id_utilisateur`)
+  `statut` enum('panier','validé','expédié','annulé') DEFAULT 'panier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Add statut column if not exists
-SET @dbname = DATABASE();
-SET @tablename = "commandes";
-SET @columnname = "statut";
-SET @preparedStatement = (SELECT IF(
-  (
-    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
-    WHERE
-      (table_name = @tablename)
-      AND (table_schema = @dbname)
-      AND (column_name = @columnname)
-  ) > 0,
-  "SELECT 1",
-  CONCAT("ALTER TABLE ", @tablename, " ADD COLUMN ", @columnname, " ENUM('panier', 'validé', 'expédié', 'annulé') DEFAULT 'panier'")
-));
-PREPARE alterIfNotExists FROM @preparedStatement;
-EXECUTE alterIfNotExists;
-DEALLOCATE PREPARE alterIfNotExists;
 
 -- --------------------------------------------------------
 
@@ -95,13 +68,11 @@ DEALLOCATE PREPARE alterIfNotExists;
 -- Table structure for table `commande_produit`
 --
 
-CREATE TABLE IF NOT EXISTS `commande_produit` (
+CREATE TABLE `commande_produit` (
   `id_commande` int NOT NULL,
   `id_produit` int NOT NULL,
   `quantite` int DEFAULT NULL,
-  `prix_unitaire` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id_commande`,`id_produit`),
-  KEY `id_produit` (`id_produit`)
+  `prix_unitaire` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -110,18 +81,15 @@ CREATE TABLE IF NOT EXISTS `commande_produit` (
 -- Table structure for table `paiements`
 --
 
-CREATE TABLE IF NOT EXISTS `paiements` (
-  `id_paiement` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `paiements` (
+  `id_paiement` int NOT NULL,
   `montant` decimal(10,2) DEFAULT NULL,
   `date_paiement` datetime DEFAULT NULL,
   `methode_paiement` varchar(50) DEFAULT NULL,
   `statut_paiement` enum('réussi','échoué','en attente') DEFAULT NULL,
   `transaction_id` varchar(100) DEFAULT NULL,
   `id_commande` int DEFAULT NULL,
-  `id_utilisateur` int DEFAULT NULL,
-  PRIMARY KEY (`id_paiement`),
-  KEY `idx_paiement_commande` (`id_commande`),
-  KEY `idx_paiement_utilisateur` (`id_utilisateur`)
+  `id_utilisateur` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -130,8 +98,8 @@ CREATE TABLE IF NOT EXISTS `paiements` (
 -- Table structure for table `produits`
 --
 
-CREATE TABLE IF NOT EXISTS `produits` (
-  `id_produit` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `produits` (
+  `id_produit` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
   `description` text,
   `prix` decimal(10,2) DEFAULT NULL,
@@ -139,8 +107,7 @@ CREATE TABLE IF NOT EXISTS `produits` (
   `taille` varchar(50) DEFAULT NULL,
   `marque` varchar(100) DEFAULT NULL,
   `date_ajout` date DEFAULT NULL,
-  `collection` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id_produit`)
+  `collection` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -149,11 +116,9 @@ CREATE TABLE IF NOT EXISTS `produits` (
 -- Table structure for table `produit_categorie`
 --
 
-CREATE TABLE IF NOT EXISTS `produit_categorie` (
+CREATE TABLE `produit_categorie` (
   `id_produit` int NOT NULL,
-  `id_categorie` int NOT NULL,
-  PRIMARY KEY (`id_produit`,`id_categorie`),
-  KEY `id_categorie` (`id_categorie`)
+  `id_categorie` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -162,32 +127,31 @@ CREATE TABLE IF NOT EXISTS `produit_categorie` (
 -- Table structure for table `utilisateurs`
 --
 
-CREATE TABLE IF NOT EXISTS `utilisateurs` (
-  `id_utilisateur` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `utilisateurs` (
+  `id_utilisateur` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
   `prenom` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `adresse` varchar(255) DEFAULT NULL,
   `motdepasse` varchar(255) NOT NULL,
-  `role` varchar(20) NOT NULL DEFAULT 'user',
-  PRIMARY KEY (`id_utilisateur`),
-  UNIQUE KEY `email` (`email`)
+  `role` varchar(20) NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `utilisateurs`
 --
 
-INSERT IGNORE INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
+INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
 (1, 'Baileche', 'Hamza', 'hamza1301@outlook.fr', NULL, '$2y$10$pPfTCUGDooaXAzpmVAZFc.v1HxQTxoxQNsRbm7t0tQO0BrwYCc.mu', 'user'),
 (3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'user'),
 (4, 'as', 'as', 'jhzdjhed@gmail.fr', NULL, '$2y$10$hiUtprh65P3qAj29c.JmU.jgRmmZpU7.e0uikjf4rHbxd15jynzTW', 'user'),
 (5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user'),
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
-(7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user');
-
-INSERT IGNORE INTO `utilisateurs` (`nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) 
-VALUES ('Test', 'Utilisateur', 'test@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user');
+(7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
+(8, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$xFusA/RgllIA4xdQkOFveeDWyNHt1134.Q2AIuKuTqnQrtHLjGzFK', 'user'),
+(9, 'derroce', 'derroce', 'derroce@gmail.com', NULL, '$2y$10$n9FNCsL.6egtOYsrEKMr2OdcMvrl84uXOnyNk0w5nAN2BRxSCsPhy', 'user'),
+(10, 'Test', 'Utilisateur', 'test@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user'),
+(12, 'Test2', 'Utilisateur', 'test2@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user');
 
 --
 -- Indexes for dumped tables
@@ -287,7 +251,7 @@ ALTER TABLE `produits`
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
