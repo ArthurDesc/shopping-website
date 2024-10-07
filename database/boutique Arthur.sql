@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 07, 2024 at 09:15 AM
+-- Generation Time: Oct 07, 2024 at 09:49 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -291,12 +291,6 @@ ALTER TABLE `produit_categorie`
   ADD CONSTRAINT `produit_categorie_ibfk_1` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`) ON DELETE CASCADE,
   ADD CONSTRAINT `produit_categorie_ibfk_2` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id_categorie`) ON DELETE CASCADE;
 COMMIT;
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- Vos instructions CREATE TABLE et INSERT ici
-
-SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
