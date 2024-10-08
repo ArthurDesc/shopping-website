@@ -89,21 +89,21 @@
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit (2).jpeg" alt="Image 1" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Running</h2>
+          <h2 class="text-3xl font-bold mb-2"></h2>
         </div>
       </div>
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit(3).jpeg" alt="Image 2" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Gilets femme</h2>
+          <h2 class="text-3xl font-bold mb-2"></h2>
         </div>
       </div>
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 60%;">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Oui</h2>
+          <h2 class="text-3xl font-bold mb-2"></h2>
         </div>
       </div>
     </div>
@@ -185,7 +185,7 @@
     </div>
   </div>
 
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Collection</h2>
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Collections</h2>
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative">
