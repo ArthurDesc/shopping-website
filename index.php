@@ -32,50 +32,95 @@
   <div class="swiper-pagination"></div>
 </div>
 
-<h2 class="text-2xl font-bold mb-8 mt-12">Les nouveautés</h2>
+<h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
 
-  <!-- Nouveau carousel avec des blocs cliquables -->
-  <div class="swiper-container-blocks relative max-w-screen-xl mx-auto mt-8">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="relative w-52 h-auto"> <!-- Réduit la hauteur de 64 à 48 -->
-          <img src="<?php echo BASE_URL; ?>assets/images/nocta.png" alt="Nocta" class="w-full h-full object-cover">
-          <div class="absolute bottom-2 right-2"> <!-- Réduit l'espacement de 4 à 2 -->
-            <button class="bg-white text-black text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition duration-300">Découvrir Nocta</button> <!-- Réduit la taille du texte et le padding -->
-          </div>
+  <div class="overflow-x-auto">
+    <div class="flex space-x-8 p-4 w-max">
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/nocta.png" alt="Nocta" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Nocta</button>
         </div>
       </div>
-      <!-- Ajoutez d'autres slides ici avec la même structure -->
-      <div class="swiper-slide">
-        <div class="relative w-full h-48"> <!-- Réduit la hauteur de 64 à 48 -->
-          <img src="<?php echo BASE_URL; ?>assets/images/autre_collection.jpg" alt="Autre Collection" class="w-full h-full object-cover">
-          <div class="absolute bottom-2 right-2"> <!-- Réduit l'espacement de 4 à 2 -->
-            <button class="bg-white text-black text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition duration-300">Voir la collection</button> <!-- Réduit la taille du texte et le padding -->
-          </div>
+      <!-- Répétez ce bloc pour chaque nouveauté -->
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/jordan.jpg" alt="Jordan" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Jordan</button>
         </div>
       </div>
-      <!-- Répétez pour d'autres collections -->
-    </div>
-    <div class="swiper-pagination"></div>
-  </div>
-
-<section class="nouveautes py-8 max-w-screen-xl mx-auto">
-  <div class="swiper-container-nouveautes">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class="relative group">
-          <img src="<?php echo BASE_URL; ?>assets/images/nocta_nouveaute.jpg" alt="Nocta" class="w-full h-auto rounded-lg shadow-md">
-          <div class="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button class="bg-white text-black px-6 py-2 rounded-full shadow-lg hover:bg-gray-100 transition duration-300">
-              Nocta
-            </button>
-          </div>
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/nike.jpg" alt="Nike" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Nike</button>
         </div>
       </div>
-      <!-- Ajoutez d'autres slides ici avec la même structure -->
+      <!-- Ajoutez d'autres nouveautés ici -->
     </div>
   </div>
-</section>
+
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Sports</h2>
+  <div class="overflow-x-auto">
+    <div class="flex space-x-8 p-4 w-max">
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/football.jpg" alt="Football" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Football</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/basketball.jpg" alt="Basketball" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Basketball</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/running.jpg" alt="Running" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Running</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/handball.jpg" alt="Handball" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Handball</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-64 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/rugby.jpg" alt="Rugby" class="w-full h-64 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Rugby</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Collection</h2>
+  <div class="overflow-x-auto">
+    <div class="flex space-x-8 p-4 w-max">
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/homme.png" alt="Homme" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Homme</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/femme_paysage.jpg" alt="Femme" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Femme</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/enfant_paysage.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Enfant</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 
 
 
@@ -87,4 +132,5 @@
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
 
+</html>
 </html>

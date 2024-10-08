@@ -1,4 +1,4 @@
-<footer class="bg-blue-600 text-white py-6 px-4 mt-auto font-sans">
+<footer class="bg-gradient-to-b from-blue-400 to-blue-600 text-white py-6 px-4 mt-auto font-sans">
   <div class="container mx-auto max-w-4xl">
     <div class="flex flex-col items-center md:flex-row md:justify-between md:items-start mb-6">
       <div class="mb-4 md:mb-0 text-center md:text-left">
