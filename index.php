@@ -37,23 +37,29 @@
   <div class="overflow-x-auto">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/nocta.png" alt="Nocta" class="w-full h-64 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Nocta</button>
-        </div>
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/nocta.png" alt="Nocta" class="w-full h-64 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Nocta</button>
+          </div>
+        </a>
       </div>
       <!-- Répétez ce bloc pour chaque nouveauté -->
       <div class="flex-shrink-0 w-64 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/jordan.jpg" alt="Jordan" class="w-full h-64 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Jordan</button>
-        </div>
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/jordan.jpg" alt="Jordan" class="w-full h-64 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Jordan</button>
+          </div>
+        </a>
       </div>
       <div class="flex-shrink-0 w-64 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/nike.jpg" alt="Nike" class="w-full h-64 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Nike</button>
-        </div>
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/nike.jpg" alt="Nike" class="w-full h-64 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Nike</button>
+          </div>
+        </a>
       </div>
       <!-- Ajoutez d'autres nouveautés ici -->
     </div>
@@ -63,10 +69,12 @@
   <div class="overflow-x-auto">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/football.jpg" alt="Football" class="w-full h-64 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Football</button>
-        </div>
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/football.jpg" alt="Football" class="w-full h-64 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Football</button>
+          </div>
+        </a>
       </div>
       <div class="flex-shrink-0 w-64 relative">
         <img src="<?php echo BASE_URL; ?>assets/images/basketball.jpg" alt="Basketball" class="w-full h-64 object-cover rounded-lg">
@@ -99,10 +107,12 @@
   <div class="overflow-x-auto">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/homme.png" alt="Homme" class="w-full h-44 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Homme</button>
-        </div>
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/homme.png" alt="Homme" class="w-full h-44 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Homme</button>
+          </div>
+        </a>
       </div>
       <div class="flex-shrink-0 w-80 relative">
         <img src="<?php echo BASE_URL; ?>assets/images/femme_paysage.jpg" alt="Femme" class="w-full h-44 object-cover rounded-lg">
@@ -132,5 +142,4 @@
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
 
-</html>
 </html>
