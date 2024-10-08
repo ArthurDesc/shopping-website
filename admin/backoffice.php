@@ -1,4 +1,8 @@
 <?php
+if (!defined('BASE_URL')) {
+  define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+}
+
 require_once '../classe/ArticleManager.php';
 require_once '../classe/CategoryManager.php';
 require_once '../classe/AdminManager.php';
@@ -105,7 +109,6 @@ $categories = $categoryManager->getAllCategories();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de la boutique</title>
-    <?php require_once '../includes/_header.php'; ?>
     <style>
         .section {
             margin-bottom: 30px;
