@@ -39,7 +39,7 @@ if (is_logged_in()) {
         exit();
     }
 }
-require_once '../includes/_header.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +49,7 @@ require_once '../includes/_header.php';
         <title>Panier</title>
     </head>
     <body>
-    
+        <?php require_once '../includes/_header.php';?>
         <main>
 
             <div class="flex items-start justify-center min-h-screen pt-20">
