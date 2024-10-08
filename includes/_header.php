@@ -24,8 +24,8 @@ if (!defined('BASE_URL')) {
 </head>
 
 <body class="bg-gray-100">
-  <header class="flex justify-center items-center p-4 bg-white shadow-md">
-    <div class="flex justify-between items-center w-full max-w-screen-lg">
+  <header class="flex justify-center items-center py-3 px-2 bg-white shadow-md">
+    <div class="flex justify-between items-center w-full max-w-full px-2 sm:px-4 md:px-6 lg:px-8">
       <div class="menu-icon cursor-pointer" id="menu-toggle">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
