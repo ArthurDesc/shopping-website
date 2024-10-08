@@ -126,7 +126,6 @@
           </div>
         </a>
       </div>
-      <!-- Répétez ce bloc pour chaque nouveauté -->
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg">
         <a href="#" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/adidas.png" alt="Adidas" class="w-full h-64 object-cover rounded-lg">
@@ -143,7 +142,6 @@
           </div>
         </a>
       </div>
-      <!-- Ajoutez d'autres nouveautés ici -->
     </div>
   </div>
 
@@ -206,6 +204,12 @@
         <img src="<?php echo BASE_URL; ?>assets/images/enfant.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
         <div class="absolute bottom-2 right-2">
           <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Enfant</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/NB1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Baskets</button>
         </div>
       </div>
     </div>
