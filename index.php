@@ -8,21 +8,21 @@
   <div class="swiper-container relative max-w-screen-xl mx-auto">
   <div class="swiper-wrapper">
     <div class="swiper-slide relative">
-      <img src="<?php echo BASE_URL; ?>assets/images/slide1.png" alt="Image 1" class="w-full h-full object-cover object-top">
+      <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit (2).jpeg" alt="Image 1" class="w-full h-full object-cover object-top">
       <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
       <div class="absolute bottom-8 left-8 text-white">
         <h2 class="text-3xl font-bold mb-2">T-shirts homme</h2>
       </div>
     </div>
     <div class="swiper-slide relative">
-      <img src="<?php echo BASE_URL; ?>assets/images/slide2.jpg" alt="Image 2" class="w-full h-full object-cover object-top">
+      <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit(3).jpeg" alt="Image 2" class="w-full h-full object-cover object-top">
       <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
       <div class="absolute bottom-8 left-8 text-white">
         <h2 class="text-3xl font-bold mb-2">Gilets femme</h2>
       </div>
     </div>
     <div class="swiper-slide relative">
-      <img src="<?php echo BASE_URL; ?>assets/images/slide3.jpg" alt="Image 3" class="w-full h-full object-cover object-top">
+      <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit.png" alt="Image 3" class="w-full h-full object-cover object-top">
       <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
       <div class="absolute bottom-8 left-8 text-white">
         <h2 class="text-3xl font-bold mb-2">Oui</h2>
