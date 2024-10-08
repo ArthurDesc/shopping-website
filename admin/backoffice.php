@@ -121,6 +121,7 @@ $categories = $categoryManager->getAllCategories();
     </style>
 </head>
 <body>
+    <a href="./backofficeV2.php">BackofficeV2</a>
     <h1>Gestion de la boutique</h1>
 
     <div class="section">
