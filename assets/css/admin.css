@@ -1,0 +1,63 @@
+.alata-font {
+    font-family: 'Alata', sans-serif;
+}
+
+@media (max-width: 640px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .main-content {
+        margin-top: 80px;
+        /* Ajustez selon la hauteur de votre barre latérale mobile */
+    }
+}
+
+@media (min-width: 641px) {
+    .sidebar {
+        width: 64px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+
+    .main-content {
+        margin-left: 64px;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.group-open\:animate-fadeIn {
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
+.group-open\:rotate-180 {
+    transform: rotate(180deg);
+}
+
+details>summary {
+    list-style: none;
+}
+
+details>summary::-webkit-details-marker {
+    display: none;
+}
+
+.gradient-blue {
+    background: linear-gradient(to top right, #1E40AF, #60A5FA);
+}

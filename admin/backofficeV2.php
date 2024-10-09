@@ -10,84 +10,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
     <title>BackOffice</title>
-    <style>
-        .alata-font {
-            font-family: 'Alata', sans-serif;
-        }
-        @media (max-width: 640px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 1000;
-            }
-            .main-content {
-                margin-top: 80px; /* Ajustez selon la hauteur de votre barre latérale mobile */
-            }
-        }
-        @media (min-width: 641px) {
-            .sidebar {
-                width: 64px;
-                height: 100vh;
-                position: fixed;
-                left: 0;
-                top: 0;
-            }
-            .main-content {
-                margin-left: 64px;
-            }
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        .group-open\:animate-fadeIn {
-            animation: fadeIn 0.2s ease-in-out forwards;
-        }
-
-        .group-open\:rotate-180 {
-            transform: rotate(180deg);
-        }
-
-        details > summary {
-            list-style: none;
-        }
-
-        details > summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .gradient-blue {
-            background: linear-gradient(to bottom left, #1E40AF, #60A5FA);
-        }
-    </style>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/admin.css">
 </head>
 
 <body class="bg-gray-100">
     <!-- Sidebar -->
     <div class="sidebar bg-white shadow-md">
-    <div class="flex justify-between items-center sm:flex-col h-full px-4 sm:px-0">
-        <a id="articles-link" class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16 hover:bg-gray-100" href="#" onclick="loadContent('articles')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-            </svg>
-            <span class="text-[10px] sm:text-xs">Articles</span>
-        </a>
-        <a class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16" href="../index.php">
-            <img src="<?php echo BASE_URL; ?>assets/images/logoF.png" alt="Logo F" class="w-6 h-6 sm:w-8 sm:h-8 object-contain mb-1 sm:mb-0">
-            <span class="text-[10px] sm:text-xs">Accueil</span>
-        </a>
-        <a id="categories-link" class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16 hover:bg-gray-100" href="#" onclick="loadContent('categories')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-0">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
-            </svg>
-            <span class="text-[10px] sm:text-xs">Catégories</span>
-        </a>
+        <div class="flex justify-between items-center sm:flex-col h-full px-4 sm:px-0">
+            <a id="articles-link" class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16 hover:bg-gray-100" href="#" onclick="loadContent('articles')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                </svg>
+                <span class="text-[10px] sm:text-xs">Articles</span>
+            </a>
+            <a class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16" href="../index.php">
+                <img src="<?php echo BASE_URL; ?>assets/images/logoF.png" alt="Logo F" class="w-6 h-6 sm:w-8 sm:h-8 object-contain mb-1 sm:mb-0">
+                <span class="text-[10px] sm:text-xs">Accueil</span>
+            </a>
+            <a id="categories-link" class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16 hover:bg-gray-100" href="#" onclick="loadContent('categories')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
+                </svg>
+                <span class="text-[10px] sm:text-xs">Catégories</span>
+            </a>
+        </div>
     </div>
-</div>
 
     <!-- Contenu principal -->
     <main class="main-content p-4">
@@ -95,8 +42,59 @@
             <!-- Le contenu sera chargé ici dynamiquement -->
         </div>
     </main>
-
+    <script src="https://cdn.jsdelivr.net/npm/pagedone@1.2.2/src/js/pagedone.js"></script>
     <script>
+        <!-- Ajoutez ce script à la fin de votre fichier, juste avant la fermeture de la balise </body> -->
+document.addEventListener('DOMContentLoaded', function () {
+    const accordionElement = document.getElementById('accordion-color');
+
+    // create an array of objects with the id, trigger element (eg. button), and the content element
+    const accordionItems = [
+        {
+            id: 'accordion-color-heading-1',
+            triggerEl: document.querySelector('#accordion-color-heading-1 button'),
+            targetEl: document.querySelector('#accordion-color-body-1'),
+            active: true
+        },
+        {
+            id: 'accordion-color-heading-2',
+            triggerEl: document.querySelector('#accordion-color-heading-2 button'),
+            targetEl: document.querySelector('#accordion-color-body-2'),
+            active: false
+        }
+    ];
+
+    // options with default values
+    const options = {
+        alwaysOpen: false,
+        activeClasses: 'bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white',
+        inactiveClasses: 'text-gray-500 dark:text-gray-400',
+        onOpen: (item) => {
+            console.log('accordion item has been shown');
+            console.log(item);
+        },
+        onClose: (item) => {
+            console.log('accordion item has been hidden');
+            console.log(item);
+        },
+        onToggle: (item) => {
+            console.log('accordion item has been toggled');
+            console.log(item);
+        },
+    };
+
+    // instance options object
+    const instanceOptions = {
+        id: 'accordion-color',
+        override: true
+    };
+
+    // create an instance of the Accordion
+    const accordion = new Accordion(accordionElement, accordionItems, options, instanceOptions);
+
+    // you can use the instance's methods
+    accordion.open(1); // opens the second accordion item
+});
         function loadContent(section) {
             const contentArea = document.getElementById('content-area');
             const articlesLink = document.getElementById('articles-link');
@@ -179,9 +177,9 @@
             });
             clickedTab.classList.remove('text-gray-500', 'hover:text-gray-600', 'hover:bg-gray-50', 'border-transparent');
             clickedTab.classList.add('text-blue-600', 'bg-gray-100', 'border-blue-600', 'active');
-            
+
             const tabContent = document.getElementById('tab-content');
-            switch(tabId) {
+            switch (tabId) {
                 case 'modifier':
                     tabContent.innerHTML = `
                         <div class="mb-4">
@@ -253,9 +251,9 @@
             });
             clickedTab.classList.remove('text-gray-500', 'hover:text-gray-600', 'hover:bg-gray-50', 'border-transparent');
             clickedTab.classList.add('text-blue-600', 'bg-gray-100', 'border-blue-600', 'active');
-            
+
             const tabContent = document.getElementById('category-tab-content');
-            switch(tabId) {
+            switch (tabId) {
                 case 'modifier':
                     tabContent.innerHTML = `
                         <div class="mb-4">
@@ -277,42 +275,51 @@
                     break;
                 case 'ajouter':
                     tabContent.innerHTML = `
-                        <div class="max-w-screen-xl mx-auto px-5 bg-white min-h-sceen">
-                            <div class="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
-                                <div class="py-5">
-                                    <details class="group">
-                                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
-                                            <span>Nouvelle catégorie</span>
-                                            <span class="transition group-open:rotate-180">
-                                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                                            </span>
-                                        </summary>
-                                        <div class="text-neutral-600 mt-3 group-open:animate-fadeIn">
-                                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Nouvelle catégorie">
-                                            <button class="mt-2 gradient-blue text-white px-4 py-2 rounded-md hover:opacity-90">Valider</button>
-                                        </div>
-                                    </details>
-                                </div>
-                                <div class="py-5">
-                                    <details class="group">
-                                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
-                                            <span>Nouvelle sous catégorie</span>
-                                            <span class="transition group-open:rotate-180">
-                                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                                            </span>
-                                        </summary>
-                                        <div class="text-neutral-600 mt-3 group-open:animate-fadeIn">
-                                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2">
-                                                <option value="" disabled selected>Grande catégorie</option>
-                                                <!-- Les options seront ajoutées dynamiquement -->
-                                            </select>
-                                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Nouvelle sous catégorie">
-                                            <button class="mt-2 gradient-blue text-white px-4 py-2 rounded-md hover:opacity-90">Valider</button>
-                                        </div>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="max-w-screen-xl mx-auto px-5 bg-white min-h-screen">
+  <div class="flex flex-col items-center">
+    <h2 class="font-bold text-3xl mt-5 tracking-tight">
+      Gestion des catégories
+    </h2>
+  </div>
+  <div class="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
+    <div class="py-5">
+      <details class="group">
+        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
+          <span class="text-gray-900 transition duration-500 group-open:text-[#007AFF]">Nouvelle catégorie</span>
+          <span class="transition-transform duration-300">
+  <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
+    <path d="M6 9l6 6 6-6"></path>
+  </svg>
+</span>
+        </summary>
+        <div class="group-open:animate-fadeIn mt-3 text-neutral-600">
+          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" placeholder="Nouvelle catégorie">
+          <button class="bg-[#007AFF] text-white px-4 py-2 rounded-md hover:bg-[#007AFF] transition duration-300">Valider</button>
+        </div>
+      </details>
+    </div>
+    <div class="py-5">
+      <details class="group">
+        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
+          <span class="text-gray-900 transition duration-500 group-open:text-[#007AFF]">Nouvelle sous catégorie</span>
+          <span class="transition-transform duration-300">
+  <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
+    <path d="M6 9l6 6 6-6"></path>
+  </svg>
+</span>
+        </summary>
+        <div class="group-open:animate-fadeIn mt-3 text-neutral-600">
+          <select class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2">
+            <option value="" disabled selected>Grande catégorie</option>
+            <!-- Les options seront ajoutées dynamiquement -->
+          </select>
+          <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" placeholder="Nouvelle sous catégorie">
+          <button class="bg-[#007AFF] text-white px-4 py-2 rounded-md hover:bg-[#007AFF] transition duration-300">Valider</button>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
                     `;
                     loadParentCategories();
                     break;
@@ -323,12 +330,26 @@
 
         function loadParentCategories() {
             // Simulons le chargement des catégories parentes
-            const parentCategories = [
-                { id: 1, name: 'Électronique' },
-                { id: 2, name: 'Vêtements' },
-                { id: 3, name: 'Livres' },
-                { id: 4, name: 'Maison' },
-                { id: 5, name: 'Sports' }
+            const parentCategories = [{
+                    id: 1,
+                    name: 'Électronique'
+                },
+                {
+                    id: 2,
+                    name: 'Vêtements'
+                },
+                {
+                    id: 3,
+                    name: 'Livres'
+                },
+                {
+                    id: 4,
+                    name: 'Maison'
+                },
+                {
+                    id: 5,
+                    name: 'Sports'
+                }
             ];
 
             const parentCategoriesContainer = document.getElementById('parent-categorie-desktop');
@@ -351,6 +372,30 @@
 
         // Chargez le contenu initial (par exemple, les articles)
         loadContent('articles');
+    </script>
+    <!-- Ajoutez ce script à la fin de votre fichier, juste avant la fermeture de la balise </body> -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accordionElement = document.querySelector('[data-accordion="categories-accordion"]');
+        const accordionOptions = {
+            alwaysOpen: false,
+            activeClasses: 'bg-indigo-50',
+            inactiveClasses: 'bg-[#007AFF]',
+            onOpen: (item) => {
+                const icon = item.el.querySelector('svg');
+                icon.classList.add('rotate-180');
+            },
+            onClose: (item) => {
+                const icon = item.el.querySelector('svg');
+                icon.classList.remove('rotate-180');
+            },
+            onToggle: (item) => {
+                console.log('accordion item has been toggled');
+                console.log(item);
+            },
+        };
+        const accordion = new Accordion(accordionElement, accordionOptions);
+    });
     </script>
 </body>
 
