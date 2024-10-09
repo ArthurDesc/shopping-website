@@ -90,21 +90,21 @@
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit (2).jpeg" alt="Image 1" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2"></h2>
+          <h2 class="text-3xl font-bold mb-2">Élasticité</h2>
         </div>
       </div>
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit(3).jpeg" alt="Image 2" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2"></h2>
+          <h2 class="text-3xl font-bold mb-2">Confort</h2>
         </div>
       </div>
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 60%;">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2"></h2>
+          <h2 class="text-3xl font-bold mb-2">Performance</h2>
         </div>
       </div>
     </div>
@@ -207,12 +207,7 @@
           <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Enfant</button>
         </div>
       </div>
-      <div class="flex-shrink-0 w-80 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/NB1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Baskets</button>
-        </div>
-      </div>
+    
     </div>
   </div>
 
