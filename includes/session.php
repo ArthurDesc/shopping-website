@@ -7,7 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-define('BASE_URL', '/shopping-website/');
 
 // Fonction pour vérifier si l'utilisateur est connecté
 function is_logged_in() {
