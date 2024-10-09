@@ -1,4 +1,5 @@
 <?php include './includes/session.php'; ?>
+<?php include './includes/_header.php'; ?>
 
 <style>
   .swiper-button-next,
