@@ -28,12 +28,13 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `avis` (
-  `id_avis` int NOT NULL,
-  `note` int DEFAULT NULL,
-  `commentaire` text,
-  `date_avis` datetime DEFAULT NULL,
-  `id_utilisateur` int DEFAULT NULL,
-  `id_produit` int DEFAULT NULL
+  `id_avis` int NOT NULL AUTO_INCREMENT,  -- Identifiant unique de l'avis (auto-incrémenté)
+  `note` int DEFAULT NULL,                 -- Note donnée à un produit (peut être nulle)
+  `commentaire` text,                      -- Commentaire laissé par l'utilisateur
+  `date_avis` datetime DEFAULT NULL,       -- Date à laquelle l'avis a été laissé (peut être nulle)
+  `id_utilisateur` int DEFAULT NULL,       -- Identifiant de l'utilisateur qui a laissé l'avis (peut être nul)
+  `id_produit` int DEFAULT NULL,           -- Identifiant du produit concerné par l'avis (peut être nul)
+  PRIMARY KEY (`id_avis`)                  -- Définir `id_avis` comme clé primaire
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
