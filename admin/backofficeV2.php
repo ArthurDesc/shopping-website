@@ -39,6 +39,30 @@
                 margin-left: 64px;
             }
         }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .group-open\:animate-fadeIn {
+            animation: fadeIn 0.2s ease-in-out forwards;
+        }
+
+        .group-open\:rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        details > summary {
+            list-style: none;
+        }
+
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .gradient-blue {
+            background: linear-gradient(to bottom left, #1E40AF, #60A5FA);
+        }
     </style>
 </head>
 
@@ -179,7 +203,7 @@
                     break;
                 case 'ajouter':
                     tabContent.innerHTML = `
-                        <form class="bg-blue-500 p-4 sm:p-6 rounded-lg shadow-md w-full mx-auto max-w-4xl">
+                        <form class="gradient-blue p-4 sm:p-6 rounded-lg shadow-md w-full mx-auto max-w-4xl">
                             <div class="mb-4 sm:mb-5">
                                 <label for="titre" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Titre</label>
                                 <input type="text" id="titre" name="titre" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez le titre">
@@ -253,32 +277,43 @@
                     break;
                 case 'ajouter':
                     tabContent.innerHTML = `
-                        <form class="bg-blue-500 p-4 sm:p-6 rounded-lg shadow-md w-full mx-auto max-w-4xl">
-                            <div class="mb-4 sm:mb-5">
-                                <label for="nom-categorie" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Nom de la catégorie</label>
-                                <input type="text" id="nom-categorie" name="nom-categorie" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez le nom de la catégorie">
-                            </div>
-                            <div class="mb-4 sm:mb-5">
-                                <label for="description-categorie" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Description</label>
-                                <textarea id="description-categorie" name="description-categorie" rows="3" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez la description de la catégorie"></textarea>
-                            </div>
-                            <div class="mb-4 sm:mb-5 sm:hidden">
-                                <label for="parent-categorie-mobile" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégorie parente</label>
-                                <select id="parent-categorie-mobile" name="parent-categorie-mobile" class="w-full px-3 py-1 rounded text-sm sm:text-base">
-                                    <option value="" selected>Choisissez une catégorie parente (optionnel)</option>
-                                    <!-- Ajoutez ici les options de catégories parentes -->
-                                </select>
-                            </div>
-                            <div class="mb-4 sm:mb-5 hidden sm:block">
-                                <label class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégorie parente</label>
-                                <div id="parent-categorie-desktop" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                    <!-- Les catégories parentes seront affichées ici -->
+                        <div class="max-w-screen-xl mx-auto px-5 bg-white min-h-sceen">
+                            <div class="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
+                                <div class="py-5">
+                                    <details class="group">
+                                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
+                                            <span>Nouvelle catégorie</span>
+                                            <span class="transition group-open:rotate-180">
+                                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                                            </span>
+                                        </summary>
+                                        <div class="text-neutral-600 mt-3 group-open:animate-fadeIn">
+                                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Nouvelle catégorie">
+                                            <button class="mt-2 gradient-blue text-white px-4 py-2 rounded-md hover:opacity-90">Valider</button>
+                                        </div>
+                                    </details>
+                                </div>
+                                <div class="py-5">
+                                    <details class="group">
+                                        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
+                                            <span>Nouvelle sous catégorie</span>
+                                            <span class="transition group-open:rotate-180">
+                                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                                            </span>
+                                        </summary>
+                                        <div class="text-neutral-600 mt-3 group-open:animate-fadeIn">
+                                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2">
+                                                <option value="" disabled selected>Grande catégorie</option>
+                                                <!-- Les options seront ajoutées dynamiquement -->
+                                            </select>
+                                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="Nouvelle sous catégorie">
+                                            <button class="mt-2 gradient-blue text-white px-4 py-2 rounded-md hover:opacity-90">Valider</button>
+                                        </div>
+                                    </details>
                                 </div>
                             </div>
-                            <button type="submit" class="bg-white text-blue-500 px-6 py-2 rounded text-sm sm:text-base hover:bg-blue-100 font-semibold w-full sm:w-auto">Ajouter la catégorie</button>
-                        </form>
+                        </div>
                     `;
-                    // Charger les catégories parentes pour l'affichage sur desktop
                     loadParentCategories();
                     break;
                 default:
