@@ -58,7 +58,13 @@ function switchTab(clickedTab, tabId) {
                     </div>
                     <div class="mb-4 sm:mb-5">
                         <label for="image" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Image du produit</label>
-                        <input type="file" id="image" name="image" accept="image/*" class="w-full px-3 py-1 rounded text-sm sm:text-base">
+                        <div class="flex items-center">
+                          <label for="image" class="cursor-pointer bg-white text-blue-500 px-4 py-2 rounded-l text-sm sm:text-base hover:bg-blue-100 font-semibold">
+                            Choisir un fichier
+                          </label>
+                          <input type="file" id="image" name="image" accept="image/*" class="hidden">
+                          <span id="file-chosen" class="flex-grow bg-white text-gray-500 px-3 py-2 rounded-r text-sm sm:text-base">Aucun fichier choisi</span>
+                        </div>
                     </div>
                     <div class="mb-4 sm:mb-5">
                         <label for="marque" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Marque</label>
@@ -79,9 +85,23 @@ function switchTab(clickedTab, tabId) {
                             <!-- Les options seront ajoutées dynamiquement -->
                         </select>
                     </div>
-                    <button type="submit" class="bg-white text-blue-500 px-6 py-2 rounded text-sm sm:text-base hover:bg-blue-100 font-semibold w-full sm:w-auto">Valider</button>
+                    <div class="flex justify-center mt-6">
+                        <button type="submit" class="bg-white text-blue-500 px-6 py-2 rounded text-sm sm:text-base hover:bg-blue-100 font-semibold">Valider</button>
+                    </div>
                 </form>
             `;
+
+      // Ajoutez ce code après la définition du HTML
+      const fileInput = document.getElementById('image');
+      const fileChosen = document.getElementById('file-chosen');
+
+      fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+          fileChosen.textContent = this.files[0].name;
+        } else {
+          fileChosen.textContent = 'Aucun fichier choisi';
+        }
+      });
 
       document
         .getElementById("addArticleForm")
