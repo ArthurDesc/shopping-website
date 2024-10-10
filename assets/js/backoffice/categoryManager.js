@@ -66,5 +66,18 @@ function addNewSubcategory(parentCategoryId, subcategoryName) {
     // Ici, vous feriez probablement un appel API pour ajouter la sous-catégorie à la base de données
 }
 
+
+function addCategory(categoryData) {
+    return API.addCategory(categoryData);
+}
+
+function updateCategory(categoryId, categoryData) {
+    return API.updateCategory(categoryId, categoryData);
+}
+
+function deleteCategory(categoryId) {
+    return API.deleteCategory(categoryId);
+}
+
 // Exportez les fonctions qui doivent être accessibles depuis d'autres fichiers
 export { loadParentCategories, addNewCategory, addNewSubcategory };
