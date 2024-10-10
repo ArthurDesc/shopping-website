@@ -6,9 +6,9 @@ class ArticleManager {
         $this->conn = $conn;
     }
 
-    public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
+    public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $image, $categories = []) {
         // Préparer la requête d'insertion de l'article
-        $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             die("Erreur de préparation de la requête : " . $this->conn->error);
@@ -18,13 +18,13 @@ class ArticleManager {
         $prix = floatval($prix);
         $stock = intval($stock);
         
-        $stmt->bind_param("ssdiiss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
+        $stmt->bind_param("ssdiisss", $nom, $description, $prix, $stock, $taille, $marque, $collection, $image);
         
         // Exécuter la requête
         if ($stmt->execute()) {
             $article_id = $stmt->insert_id;
             
-            // Insérer les catégories pour cet article
+            // Insérer les catégories pour cet article seulement si des catégories sont fournies
             if (!empty($categories)) {
                 $category_query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
                 $category_stmt = $this->conn->prepare($category_query);

@@ -1,5 +1,19 @@
 <?php include '../includes/session.php'; ?>
 <?php include '../includes/_db.php'; ?>
+<?php require_once '../classe/produit.php'; ?>
+<?php require_once '../classe/ArticleManager.php'; ?>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_article') {
+    header('Content-Type: application/json');
+    
+    // Votre logique de traitement ici
+    
+    echo json_encode(['success' => true, 'message' => 'Article ajouté avec succès']);
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -44,12 +58,54 @@
             <!-- Le contenu sera chargé ici dynamiquement -->
         </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/pagedone@1.2.2/src/js/pagedone.js"></script>
+    <script>
+               const BASE_URL = '<?php echo BASE_URL; ?>';
+    </script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/articleManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/categoryManager.js"></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordionManager.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordion.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/adminMain.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM chargé');
+        const form = document.querySelector('form');
+        if (form) {
+            console.log('Formulaire trouvé');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Formulaire soumis');
+                const formData = new FormData(form);
+                formData.append('action', 'add_article');
+                console.log('FormData créé:', Object.fromEntries(formData));
+
+                fetch('backofficeV2.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log('Réponse reçue:', response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Données reçues:', data);
+                    if (data.success) {
+                        alert('Article ajouté avec succès !');
+                        form.reset();
+                    } else {
+                        alert('Erreur lors de l\'ajout de l\'article : ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+            });
+        } else {
+            console.log('Formulaire non trouvé');
+        }
+    });
+    
+    </script>
 </body>
 
 </html>

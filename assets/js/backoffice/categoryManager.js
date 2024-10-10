@@ -80,4 +80,4 @@ function deleteCategory(categoryId) {
 }
 
 // Exportez les fonctions qui doivent être accessibles depuis d'autres fichiers
-export { loadParentCategories, addNewCategory, addNewSubcategory };
+// export { loadParentCategories, addNewCategory, addNewSubcategory };

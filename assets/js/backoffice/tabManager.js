@@ -29,7 +29,7 @@ function switchTab(clickedTab, tabId) {
             break;
         case 'ajouter':
             tabContent.innerHTML = `
-                <form class="gradient-blue p-4 sm:p-6 rounded-lg shadow-md w-full mx-auto max-w-4xl">
+                <form id="addArticleForm" class="gradient-blue p-4 sm:p-6 rounded-lg shadow-md w-full mx-auto max-w-4xl" enctype="multipart/form-data">
                     <div class="mb-4 sm:mb-5">
                         <label for="titre" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Titre</label>
                         <input type="text" id="titre" name="titre" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez le titre">
@@ -37,10 +37,6 @@ function switchTab(clickedTab, tabId) {
                     <div class="mb-4 sm:mb-5">
                         <label for="description" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Description</label>
                         <textarea id="description" name="description" rows="3" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez la description"></textarea>
-                    </div>
-                    <div class="mb-4 sm:mb-5">
-                        <label for="image" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Nom de l'image</label>
-                        <input type="text" id="image" name="image" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez le nom de l'image">
                     </div>
                     <div class="mb-4 sm:mb-5">
                         <label for="prix" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Prix</label>
@@ -51,21 +47,65 @@ function switchTab(clickedTab, tabId) {
                     </div>
                     <div class="mb-4 sm:mb-5">
                         <label for="stock" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Stock</label>
-                        <select id="stock" name="stock" class="w-full px-3 py-1 rounded text-sm sm:text-base">
-                            <option value="" disabled selected>Choisissez le stock</option>
-                            <!-- Ajoutez ici les options de stock -->
-                        </select>
+                        <input type="number" id="stock" name="stock" 
+                            class="w-full px-3 py-1 rounded text-sm sm:text-base" 
+                            placeholder="Entrez la quantité en stock"
+                            min="0" max="1000" step="1">
                     </div>
                     <div class="mb-4 sm:mb-5">
+                        <label for="image" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Image du produit</label>
+                        <input type="file" id="image" name="image" accept="image/*" class="w-full px-3 py-1 rounded text-sm sm:text-base">
+                    </div>
+                    <div class="mb-4 sm:mb-5">
+                        <label for="marque" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Marque</label>
+                        <input type="text" id="marque" name="marque" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez la marque">
+                    </div>
+                    <div class="mb-4 sm:mb-5">
+                        <label for="collection" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Collection</label>
+                        <input type="text" id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez la collection">
+                    </div>
+                    <div class="mb-4 sm:mb-5" id="categoriesContainer" style="display: none;">
                         <label for="categories" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégories</label>
-                        <select id="categories" name="categories" class="w-full px-3 py-1 rounded text-sm sm:text-base">
-                            <option value="" disabled selected>Choisissez les catégories</option>
-                            <!-- Ajoutez ici les options de catégories -->
+                        <select id="categories" name="categories" multiple class="w-full px-3 py-1 rounded text-sm sm:text-base">
+                            <!-- Les options seront ajoutées dynamiquement -->
                         </select>
                     </div>
                     <button type="submit" class="bg-white text-blue-500 px-6 py-2 rounded text-sm sm:text-base hover:bg-blue-100 font-semibold w-full sm:w-auto">Valider</button>
                 </form>
             `;
+            
+            document.getElementById('addArticleForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Formulaire soumis');
+                
+                const formData = new FormData(this);
+                formData.append('action', 'add_article');
+                console.log('FormData créé:', Object.fromEntries(formData));
+
+                fetch('/shopping-website/admin/process_article.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Données reçues:', data);
+                    if (data.success) {
+                        alert('Article ajouté avec succès !');
+                        this.reset();
+                    } else {
+                        alert('Erreur lors de l\'ajout de l\'article : ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de l\'ajout de l\'article.');
+                });
+            });
             break;
         default:
             tabContent.innerHTML = '<p>Contenu non disponible</p>';
@@ -177,3 +217,27 @@ function loadCategoriesList() {
         `).join('');
     });
 }
+
+// Fonction pour charger les catégories
+function loadCategories() {
+    // Appel AJAX pour récupérer les catégories
+    fetch('/shopping-website/admin/get_categories.php')        .then(response => response.json())
+        .then(categories => {
+            const categoriesSelect = document.getElementById('categories');
+            if (categories.length > 0) {
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.nom;
+                    categoriesSelect.appendChild(option);
+                });
+                categoriesSelect.parentElement.style.display = 'block';
+            } else {
+                categoriesSelect.parentElement.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Erreur lors du chargement des catégories:', error));
+}
+
+// Appelez loadCategories après avoir généré le formulaire
+loadCategories();
