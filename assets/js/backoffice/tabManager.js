@@ -80,6 +80,13 @@ function switchTab(clickedTab, tabId) {
                 
                 const formData = new FormData(this);
                 formData.append('action', 'add_article');
+
+                const errors = validateForm(formData);
+                if (errors.length > 0) {
+                    showToast(errors.join('<br>'), 'error');
+                    return;
+                }
+
                 console.log('FormData créé:', Object.fromEntries(formData));
 
                 fetch('/shopping-website/admin/process_article.php', {
@@ -95,15 +102,15 @@ function switchTab(clickedTab, tabId) {
                 .then(data => {
                     console.log('Données reçues:', data);
                     if (data.success) {
-                        alert('Article ajouté avec succès !');
+                        showToast('Article ajouté avec succès !', 'success');
                         this.reset();
                     } else {
-                        alert('Erreur lors de l\'ajout de l\'article : ' + data.message);
+                        showToast('Erreur lors de l\'ajout de l\'article : ' + data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Erreur:', error);
-                    alert('Une erreur s\'est produite lors de l\'ajout de l\'article.');
+                    showToast('Une erreur s\'est produite lors de l\'ajout de l\'article.', 'error');
                 });
             });
             break;
@@ -241,3 +248,48 @@ function loadCategories() {
 
 // Appelez loadCategories après avoir généré le formulaire
 loadCategories();
+
+function showToast(message, type = 'success') {
+    // Créer l'élément toast
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-5 right-5 p-4 rounded-md text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} shadow-lg transition-opacity duration-500 ease-in-out`;
+    toast.style.zIndex = '1000';
+    toast.innerHTML = message; // Changé de textContent à innerHTML
+
+    // Ajouter le toast au body
+    document.body.appendChild(toast);
+
+    // Faire apparaître le toast
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 10);
+
+    // Faire disparaître le toast après 3 secondes
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 500);
+    }, 3000);
+}
+
+function validateForm(formData) {
+    const requiredFields = ['titre', 'description', 'prix', 'stock', 'marque', 'collection'];
+    const errors = [];
+
+    for (const field of requiredFields) {
+        if (!formData.get(field)) {
+            errors.push(`Le champ "${field}" est obligatoire.`);
+        }
+    }
+
+    if (formData.get('prix') && isNaN(parseFloat(formData.get('prix')))) {
+        errors.push('Le prix doit être un nombre valide.');
+    }
+
+    if (formData.get('stock') && isNaN(parseInt(formData.get('stock')))) {
+        errors.push('Le stock doit être un nombre entier valide.');
+    }
+
+    return errors;
+}

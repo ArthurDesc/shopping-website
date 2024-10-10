@@ -90,10 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 .then(data => {
                     console.log('Données reçues:', data);
                     if (data.success) {
-                        alert('Article ajouté avec succès !');
                         form.reset();
                     } else {
-                        alert('Erreur lors de l\'ajout de l\'article : ' + data.message);
                     }
                 })
                 .catch(error => {
