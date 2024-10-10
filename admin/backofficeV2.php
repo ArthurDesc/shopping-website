@@ -64,6 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/articleManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/categoryManager.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiUtils.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/formValidator.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordion.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/adminMain.js"></script>
     <script>
