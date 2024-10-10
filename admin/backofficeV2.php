@@ -28,32 +28,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 </head>
 
 <body class="bg-gray-100">
-    <!-- Sidebar -->
-    <div class="sidebar bg-white shadow-md">
-        <div class="flex justify-between items-center sm:flex-col h-full px-4 sm:px-0">
-            <a id="articles-link" class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16 hover:bg-gray-100" href="#" onclick="loadContent('articles')">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+    <!-- Navbar mobile -->
+    <div class="sm:hidden fixed top-0 left-0 right-0 bg-white shadow-md z-30">
+        <div class="flex justify-between items-center px-4 py-2">
+            <a id="articles-link" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100" href="#" onclick="loadContent('articles')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
-
-
-                <span class="text-[10px] sm:text-xs">Articles</span>
+                <span class="text-[10px]">Articles</span>
             </a>
-            <a class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16" href="../index.php">
-                <img src="<?php echo BASE_URL; ?>assets/images/logoF.png" alt="Logo F" class="w-6 h-6 sm:w-8 sm:h-8 object-contain mb-1 sm:mb-0">
-                <span class="text-[10px] sm:text-xs">Accueil</span>
+            <a class="flex flex-col items-center justify-center p-2" href="../index.php">
+                <img src="<?php echo BASE_URL; ?>assets/images/logoF.png" alt="Logo F" class="w-6 h-6 object-contain mb-1">
+                <span class="text-[10px]">Accueil</span>
             </a>
-            <a id="categories-link" class="flex-1 sm:flex-auto flex flex-col items-center justify-center p-2 sm:p-4 sm:w-16 sm:h-16 hover:bg-gray-100" href="#" onclick="loadContent('categories')">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-0">
+            <a id="categories-link" class="flex flex-col items-center justify-center p-2 hover:bg-gray-100" href="#" onclick="loadContent('categories')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
                 </svg>
-                <span class="text-[10px] sm:text-xs">Catégories</span>
+                <span class="text-[10px]">Catégories</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Sidebar desktop -->
+    <div class="hidden sm:flex sidebar bg-white shadow-md fixed h-full left-0 top-0 z-20 flex-col w-64">
+        <div class="flex flex-col h-full px-4 py-6">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold">Sidebar</h2>
+            </div>
+            <a id="home-link" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="../index.php">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg>
+                <span>Home</span>
+            </a>
+            <a id="articles-link" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('articles')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+                <span>Articles</span>
+            </a>
+            <a id="categories-link" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('categories')">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
+                </svg>
+                <span>Catégories</span>
             </a>
         </div>
     </div>
 
     <!-- Contenu principal -->
-    <main class="main-content p-4">
+    <main class="main-content p-4 sm:ml-64">
         <div id="content-area" class="max-w-5xl mx-auto">
             <!-- Le contenu sera chargé ici dynamiquement -->
         </div>

@@ -72,12 +72,19 @@ function switchTab(clickedTab, tabId) {
                     </div>
                     <div class="mb-4 sm:mb-5">
                         <label for="collection" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Collection</label>
-                        <select id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base">
+                        <div class="relative">
+                          <select id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base appearance-none bg-white text-gray-700">
                             <option value="" disabled selected>Sélectionnez une collection</option>
                             <option value="Homme">Homme</option>
                             <option value="Femme">Femme</option>
                             <option value="Enfant">Enfant</option>
-                        </select>
+                          </select>
+                          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                          </div>
+                        </div>
                     </div>
                     <div class="mb-4 sm:mb-5" id="categoriesContainer" style="display: none;">
                         <label for="categories" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégories</label>
