@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 07, 2024 at 10:00 AM
+-- Generation Time: Oct 10, 2024 at 09:58 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -54,9 +54,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id_categorie`, `nom`, `description`) VALUES
-(2, 'hrfhr', 'hrfjh'),
-(3, 'UAEYGY', 'IUEGYED'),
-(4, 'TYUY', 'FDYRD');
+(1, 'G', 'F');
 
 -- --------------------------------------------------------
 
@@ -117,17 +115,27 @@ CREATE TABLE `produits` (
   `taille` varchar(50) DEFAULT NULL,
   `marque` varchar(100) DEFAULT NULL,
   `date_ajout` date DEFAULT NULL,
-  `collection` varchar(100) DEFAULT NULL
+  `collection` varchar(100) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `produits`
 --
 
-INSERT INTO `produits` (`id_produit`, `nom`, `description`, `prix`, `stock`, `taille`, `marque`, `date_ajout`, `collection`) VALUES
-(3, 'g', 'RFZQZ', '23.00', 45, '345', 'UIEDE', NULL, 'HE2UY'),
-(4, 'sxojhsjUZDI1U', '2EH2F3YU', '23.00', 34, '33', 'HZEEYH', NULL, 'HGY'),
-(5, 'sxojhsjUZDI1U', '2EH2F3YU', '23.00', 34, '33', 'HZEEYH', NULL, 'HGY');
+INSERT INTO `produits` (`id_produit`, `nom`, `description`, `prix`, `stock`, `taille`, `marque`, `date_ajout`, `collection`, `image`) VALUES
+(2, 'arthur', 'S', '2.00', 4, '4', 'DDF', NULL, 'E', NULL),
+(3, 'arthur', 'S', '2.00', 4, '4', 'DDF', NULL, 'E', NULL),
+(4, 'test', 'test', '23.00', 23, '0', 'test', NULL, 'test', 'addCart.png'),
+(5, 'Veste', 'belle veste', '35.00', 129, '0', 'Adidas', NULL, 'Femme', 'adidas.jpg'),
+(6, 'Chaussure', 'Air force 1', '25.00', 1000, '0', 'Nike', NULL, 'Homme', ''),
+(7, 'test', 'test', '34.00', 35, '0', 'tesy', NULL, 'jdsf', ''),
+(8, 'sdsq', 'fdfds', '8974.00', 497, '0', 'DFS', NULL, 'DFSFS', ''),
+(9, 'ddsf', 'sdfds', '23.00', 45, '0', 'fdsfds', NULL, 'sdfds', ''),
+(10, '', '', '0.00', 0, '0', '', NULL, '', ''),
+(11, '', '', '0.00', 0, '0', '', NULL, '', ''),
+(12, '', '', '0.00', 0, '0', '', NULL, '', ''),
+(13, 'dfsfs', 'sdfs', '700.00', 231, '0', 'fsef', NULL, 'dfksn', '');
 
 -- --------------------------------------------------------
 
@@ -145,11 +153,8 @@ CREATE TABLE `produit_categorie` (
 --
 
 INSERT INTO `produit_categorie` (`id_produit`, `id_categorie`) VALUES
-(3, 2),
-(4, 2),
-(5, 2),
-(4, 4),
-(5, 4);
+(2, 1),
+(3, 1);
 
 -- --------------------------------------------------------
 
@@ -173,11 +178,15 @@ CREATE TABLE `utilisateurs` (
 
 INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
 (1, 'Baileche', 'Hamza', 'hamza1301@outlook.fr', NULL, '$2y$10$pPfTCUGDooaXAzpmVAZFc.v1HxQTxoxQNsRbm7t0tQO0BrwYCc.mu', 'user'),
-(3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'admin'),
+(3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'user'),
 (4, 'as', 'as', 'jhzdjhed@gmail.fr', NULL, '$2y$10$hiUtprh65P3qAj29c.JmU.jgRmmZpU7.e0uikjf4rHbxd15jynzTW', 'user'),
 (5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user'),
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
-(7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user');
+(7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
+(8, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$xFusA/RgllIA4xdQkOFveeDWyNHt1134.Q2AIuKuTqnQrtHLjGzFK', 'admin'),
+(9, 'derroce', 'derroce', 'derroce@gmail.com', NULL, '$2y$10$n9FNCsL.6egtOYsrEKMr2OdcMvrl84uXOnyNk0w5nAN2BRxSCsPhy', 'user'),
+(10, 'Test', 'Utilisateur', 'test@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user'),
+(12, 'Test2', 'Utilisateur', 'test2@example.com', 'Adresse de test', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', 'user');
 
 --
 -- Indexes for dumped tables
@@ -253,7 +262,7 @@ ALTER TABLE `avis`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `commandes`
@@ -271,13 +280,13 @@ ALTER TABLE `paiements`
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables

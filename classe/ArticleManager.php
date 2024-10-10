@@ -6,42 +6,47 @@ class ArticleManager {
         $this->conn = $conn;
     }
 
-    public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $categories) {
-        // Préparer la requête d'insertion de l'article
-        $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($query);
-        if (!$stmt) {
-            die("Erreur de préparation de la requête : " . $this->conn->error);
-        }
-        
-        // Convertir les valeurs numériques en nombres
-        $prix = floatval($prix);
-        $stock = intval($stock);
-        
-        $stmt->bind_param("ssdiiss", $nom, $description, $prix, $stock, $taille, $marque, $collection);
-        
-        // Exécuter la requête
-        if ($stmt->execute()) {
-            $article_id = $stmt->insert_id;
-            
-            // Insérer les catégories pour cet article
-            if (!empty($categories)) {
-                $category_query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
-                $category_stmt = $this->conn->prepare($category_query);
-                
-                foreach ($categories as $category_id) {
-                    $category_stmt->bind_param("ii", $article_id, $category_id);
-                    $category_stmt->execute();
-                }
-                
-                $category_stmt->close();
+    public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $image, $categories = []) {
+        try {
+            // Préparer la requête d'insertion de l'article
+            $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($query);
+            if (!$stmt) {
+                die("Erreur de préparation de la requête : " . $this->conn->error);
             }
             
-            $stmt->close();
-            return true;
-        } else {
-            error_log("Erreur lors de l'ajout de l'article : " . $stmt->error);
-            $stmt->close();
+            // Convertir les valeurs numériques en nombres
+            $prix = floatval($prix);
+            $stock = intval($stock);
+            
+            $stmt->bind_param("ssdiisss", $nom, $description, $prix, $stock, $taille, $marque, $collection, $image);
+            
+            // Exécuter la requête
+            if ($stmt->execute()) {
+                $article_id = $stmt->insert_id;
+                
+                // Insérer les catégories pour cet article seulement si des catégories sont fournies
+                if (!empty($categories)) {
+                    $category_query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
+                    $category_stmt = $this->conn->prepare($category_query);
+                    
+                    foreach ($categories as $category_id) {
+                        $category_stmt->bind_param("ii", $article_id, $category_id);
+                        $category_stmt->execute();
+                    }
+                    
+                    $category_stmt->close();
+                }
+                
+                $stmt->close();
+                return true;
+            } else {
+                error_log("Erreur lors de l'ajout de l'article : " . $stmt->error);
+                $stmt->close();
+                return false;
+            }
+        } catch (Exception $e) {
+            error_log("Erreur lors de l'ajout de l'article : " . $e->getMessage());
             return false;
         }
     }
