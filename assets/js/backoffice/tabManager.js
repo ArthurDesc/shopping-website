@@ -81,6 +81,12 @@ function switchTab(clickedTab, tabId) {
                 const formData = new FormData(this);
                 formData.append('action', 'add_article');
 
+                // Récupérer le nom de l'image
+                const imageFile = document.getElementById('image').files[0];
+                if (imageFile) {
+                    formData.append('image_name', imageFile.name);
+                }
+
                 const errors = validateForm(formData);
                 if (errors.length > 0) {
                     showToast(errors.join('<br>'), 'error');

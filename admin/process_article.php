@@ -69,6 +69,12 @@ try {
             }
         }
 
+        // Traitement du nom de l'image
+        $imageName = $_POST['image_name'] ?? '';
+        if (empty($imageName)) {
+            $errors[] = "Le nom de l'image est requis.";
+        }
+
         // Si aucune erreur, procédez à l'ajout de l'article
         if (empty($errors)) {
             $articleManager = new ArticleManager($conn);
@@ -83,14 +89,7 @@ try {
             $collection = $_POST['collection'] ?? '';
             $categories = isset($_POST['categories']) ? explode(',', $_POST['categories']) : [];
 
-            // Gestion de l'image (si nécessaire)
-            $image = '';
-            if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-                // Logique de traitement de l'image
-                // ...
-            }
-
-            $result = $articleManager->addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $image, $categories);
+            $result = $articleManager->addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $imageName, $categories);
 
             if ($result) {
                 echo json_encode(['success' => true, 'message' => 'Article ajouté avec succès']);
