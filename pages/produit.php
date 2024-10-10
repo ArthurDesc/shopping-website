@@ -71,13 +71,15 @@ $result = $conn->query($query);
         while ($produit = $result->fetch_assoc()) {
     ?>
         <div class="bg-white rounded-lg shadow-md p-4">
-            <div class="aspect-w-1 aspect-h-1 mb-4"> <!-- Ajout d'un conteneur avec ratio d'aspect 1:1 -->
-                <img src="<?php echo htmlspecialchars($produit['image_url'] ?? ''); ?>" 
-                     alt="<?php echo htmlspecialchars($produit['nom'] ?? ''); ?>" 
-                     class="w-full h-full object-cover rounded-lg"> <!-- Modifié pour remplir le conteneur -->
-            </div>
-            <h3 class="font-semibold text-lg font-medium"><?php echo htmlspecialchars($produit['nom'] ?? ''); ?></h3>
-            <p class="text-sm text-gray-600 mt-2 font-medium"><?php echo htmlspecialchars($produit['description'] ?? ''); ?></p>
+            <a href="detail.php?id=<?php echo $produit['id_produit']; ?>">
+                <div class="aspect-w-1 aspect-h-1 mb-4">
+                    <img src="<?php echo htmlspecialchars($produit['image_url'] ?? ''); ?>" 
+                         alt="<?php echo htmlspecialchars($produit['nom'] ?? ''); ?>" 
+                         class="w-full h-full object-cover rounded-lg">
+                </div>
+                <h3 class="font-semibold text-lg font-medium"><?php echo htmlspecialchars($produit['nom'] ?? ''); ?></h3>
+                <p class="text-sm text-gray-600 mt-2 font-medium"><?php echo htmlspecialchars($produit['description'] ?? ''); ?></p>
+            </a>
             <div class="flex justify-between items-center mt-4">
                 <span class="font-bold text-lg font-medium"><?php echo number_format($produit['prix'] ?? 0, 2); ?> €</span>
                 <form action="" method="post">
