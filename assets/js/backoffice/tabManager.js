@@ -29,23 +29,7 @@ function switchTab(clickedTab, tabId) {
   const tabContent = document.getElementById("tab-content");
   switch (tabId) {
     case "modifier":
-      tabContent.innerHTML = `
-                <div class="mb-4">
-                    <div class="relative">
-                        <input type="text" id="search-articles" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Rechercher un article...">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div id="articles-list" class="space-y-2">
-                    <!-- La liste des articles sera chargée ici dynamiquement -->
-                </div>
-            `;
-      // Ici, vous pouvez ajouter une fonction pour charger et afficher la liste des articles
-      // Par exemple : loadArticlesList();
+      loadArticles();
       break;
     case "ajouter":
       tabContent.innerHTML = `
@@ -82,7 +66,12 @@ function switchTab(clickedTab, tabId) {
                     </div>
                     <div class="mb-4 sm:mb-5">
                         <label for="collection" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Collection</label>
-                        <input type="text" id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base" placeholder="Entrez la collection">
+                        <select id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base">
+                            <option value="" disabled selected>Sélectionnez une collection</option>
+                            <option value="Homme">Homme</option>
+                            <option value="Femme">Femme</option>
+                            <option value="Enfant">Enfant</option>
+                        </select>
                     </div>
                     <div class="mb-4 sm:mb-5" id="categoriesContainer" style="display: none;">
                         <label for="categories" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégories</label>
@@ -253,4 +242,3 @@ function switchCategoryTab(clickedTab, tabId) {
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
   }
 }
-
