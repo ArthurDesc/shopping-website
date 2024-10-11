@@ -239,13 +239,13 @@
         </div>
       </div>
       <div class="flex-shrink-0 w-80 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/balenciaga.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
+        <img src="<?php echo BASE_URL; ?>assets/images/produits/balenciaga.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
         <div class="absolute bottom-2 right-2">
           <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
         </div>
       </div>
       <div class="flex-shrink-0 w-80 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/jaune1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
+        <img src="<?php echo BASE_URL; ?>assets/images/produits/jaune1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
         <div class="absolute bottom-2 right-2">
           <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
         </div>
