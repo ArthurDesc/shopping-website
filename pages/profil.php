@@ -26,7 +26,7 @@ $user = $result->fetch_assoc();
 $stmt->close();
 
 if ($adminManager->isAdmin($id_utilisateur)) {
-    header("Location: " . BASE_URL . "admin/backoffice.php");
+    header("Location: " . BASE_URL . "admin/backofficeV2.php");
     exit();
 }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 10, 2024 at 02:35 PM
+-- Generation Time: Oct 11, 2024 at 07:41 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -125,9 +125,11 @@ CREATE TABLE `produits` (
 --
 
 INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`, `stock`, `taille`, `marque`, `date_ajout`, `collection`) VALUES
-(4, 's', '', '2EH2F3YU', '23.00', 34, '33', 'HZ', NULL, 'HGY'),
-(7, 'hamza', '', 'fcfg', '1.00', 4, '14', 'AEHVG', NULL, 'HEDVG'),
-(8, 'gikhlk', '', 'd', '1.00', 3, '14', 'ER', NULL, 'ZE');
+(4, 's', 'balenciaga.jpg', '2EH2F3YU', '23.00', 34, '33', 'HZ', NULL, 'HGY'),
+(7, 'hamza', 'femme.png', 'fcfg', '1.00', 4, '14', 'AEHVG', NULL, 'HEDVG'),
+(8, 'gikhlk', 'jamaique.png', 'd', '1.00', 3, '14', 'ER', NULL, 'ZE'),
+(9, 'sdjdf', 'jaune1.jpg', 'dsf', '87.00', 65, '0', 'dsfsd', NULL, 'djfsd'),
+(10, 'mlgke', 'NB1.jpg', 'fdkjfd', '76.00', 45, '0', 'sdfsfds', NULL, 'sdflkfs');
 
 -- --------------------------------------------------------
 
@@ -177,7 +179,8 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user'),
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
-(8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user');
+(8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
+(9, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$Fccp.bEivtr7qhxBxCGHs.e8.UMPS1zWqzhh0TzS8hT37jVFkTgcq', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -271,13 +274,13 @@ ALTER TABLE `paiements`
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
