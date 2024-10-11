@@ -1,10 +1,12 @@
+
 <?php
+// Fichier pour charger les articles depuis la base de données et les afficher sur backoffice 
 require_once '../classe/ArticleManager.php';
 include '../includes/_db.php';
 
 // Définir le chemin de base pour les images
 define('BASE_URL', '/shopping-website/'); // Ajustez ceci selon votre configuration
-define('IMAGE_PATH', BASE_URL . 'assets/images/');
+define('IMAGE_PATH', BASE_URL . 'assets/images/produits/');
 
 // Créer une connexion à la base de données
 $conn = new mysqli($servername, $username, $password, $dbname);
