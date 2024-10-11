@@ -20,7 +20,7 @@ if (!isset($_SESSION['panier'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+<?= require_once '../includes/_header.php'; ?>
     <!-- Afficher le nombre de produits dans le panier -->
 
     <div class="mt-6 flex justify-between items-center">
@@ -40,8 +40,8 @@ if (!isset($_SESSION['panier'])) {
             <div class="bg-white rounded-lg shadow-md p-4">
                 <a href="detail.php?id=<?php echo $row['id_produit']; ?>">
                     <div class="aspect-w-1 aspect-h-1 mb-4">
-                        <img src="project_images/<?php echo htmlspecialchars($row['img']); ?>" 
-                             alt="<?php echo htmlspecialchars($row['nom']); ?>" 
+                        <img src="project_images/<?php echo htmlspecialchars($row['image'] ?? 'default.jpg'); ?>" 
+                             alt="<?php echo htmlspecialchars($row['nom'] ?? 'Produit sans nom'); ?>" 
                              class="w-full h-full object-cover rounded-lg">
                     </div>
                     <h3 class="font-semibold text-lg font-medium"><?php echo htmlspecialchars($row['nom']); ?></h3>
@@ -49,7 +49,7 @@ if (!isset($_SESSION['panier'])) {
                 </a>
                 <div class="flex justify-between items-center mt-4">
                     <span class="font-bold text-lg font-medium"><?php echo number_format($row['prix'], 2); ?> €</span>
-                    <form action="ajouter_panier.php" method="post">
+                    <form action="ajouter_panier.php" method="get"> <!-- Changez POST en GET -->
                         <input type="hidden" name="id_produit" value="<?php echo $row['id_produit']; ?>">
                         <button type="submit" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition">
                             <img src="../assets/images/addCart.png" alt="Ajouter au panier" class="w-6 h-6">

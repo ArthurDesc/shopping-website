@@ -5,6 +5,19 @@ ini_set('display_errors', 1);
 if (!defined('BASE_URL')) {
   define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
 }
+
+// Check if a session is already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Start the session only if it hasn't been started yet
+}
+
+// Initialize the 'panier' session variable if it doesn't exist
+if (!isset($_SESSION['panier'])) {
+    $_SESSION['panier'] = array(); // Initialize as an empty array
+}
+
+$total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid errors
+
 ?>
 
 <!DOCTYPE html>
@@ -37,10 +50,10 @@ if (!defined('BASE_URL')) {
         </a>
       </div>
       <div class="flex space-x-4">
-        <a href="<?php echo BASE_URL; ?>pages/panier.php">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-          </svg>
+        <a href="<?php echo BASE_URL; ?>pages/panier.php" aria-label="Voir le panier">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+          </svg><?= htmlspecialchars(array_sum($_SESSION['panier'])) ?>
         </a>
         <a href="<?php echo BASE_URL; ?>pages/profil.php">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
