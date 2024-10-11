@@ -9,7 +9,7 @@ class ArticleManager {
     public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $image, $categories = []) {
         try {
             // Préparer la requête d'insertion de l'article
-            $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($query);
             if (!$stmt) {
                 die("Erreur de préparation de la requête : " . $this->conn->error);
