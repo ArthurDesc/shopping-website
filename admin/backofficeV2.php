@@ -1,7 +1,9 @@
 <?php include '../includes/session.php'; ?>
 <?php include '../includes/_db.php'; ?>
 <?php require_once '../classe/produit.php'; ?>
-<?php require_once '../classe/ArticleManager.php';
+<?php require_once '../classe/ArticleManager.php'; ?>
+
+<?php
 
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
@@ -15,6 +17,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     echo json_encode(['success' => true, 'message' => 'Article ajouté avec succès']);
     exit;
 }
+
+require_once '../classe/CategoryManager.php';
+
+
+// Création de l'instance de CategoryManager
+$categoryManager = new CategoryManager($conn);
+
+// Récupération des catégories
+$categories = $categoryManager->getAllCategories();
+
+// Conversion des catégories en format JSON pour le JavaScript
+$categoriesJson = json_encode($categories);
+
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    echo $categoriesJson;
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
     <title>BackOffice</title>
@@ -88,10 +110,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     </main>
     <script>
                const BASE_URL = '<?php echo BASE_URL; ?>';
+               const categories = <?php echo $categoriesJson; ?>;
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/articleManager.js"></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/categoryManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiUtils.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/formValidator.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordion.js"></script>
@@ -122,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     if (data.success) {
                         form.reset();
                     } else {
+                        // Gérer le cas d'erreur ici
                     }
                 })
                 .catch(error => {
@@ -132,7 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             console.log('Formulaire non trouvé');
         }
     });
-    
     </script>
 </body>
 
