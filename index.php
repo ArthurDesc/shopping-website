@@ -1,5 +1,15 @@
 <?php include './includes/session.php'; ?>
 <?php include './includes/_header.php'; ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
 <style>
   .swiper-button-next,
   .swiper-button-prev {
@@ -79,6 +89,7 @@
     }
   }
 </style>
+  
 
 <main class="flex-grow">
 
@@ -89,21 +100,21 @@
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit (2).jpeg" alt="Image 1" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2"></h2>
+          <h2 class="text-3xl font-bold mb-2">Élasticité</h2>
         </div>
       </div>
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit(3).jpeg" alt="Image 2" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2"></h2>
+          <h2 class="text-3xl font-bold mb-2">Confort</h2>
         </div>
       </div>
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 60%;">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2"></h2>
+          <h2 class="text-3xl font-bold mb-2">Performance</h2>
         </div>
       </div>
     </div>
@@ -126,7 +137,6 @@
           </div>
         </a>
       </div>
-      <!-- Répétez ce bloc pour chaque nouveauté -->
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg">
         <a href="#" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/adidas.png" alt="Adidas" class="w-full h-64 object-cover rounded-lg">
@@ -143,7 +153,6 @@
           </div>
         </a>
       </div>
-      <!-- Ajoutez d'autres nouveautés ici -->
     </div>
   </div>
 
@@ -208,6 +217,39 @@
           <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Enfant</button>
         </div>
       </div>
+    
+    </div>
+  </div>
+
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Promotions</h2>
+  <div class="custom-scroll">
+    <div class="flex space-x-8 p-4 w-max">
+      <div class="flex-shrink-0 w-80 relative">
+        <a href="#" class="block relative">
+          <img src="<?php echo BASE_URL; ?>assets/images/camp.jpeg" alt="Homme" class="w-full h-44 object-cover rounded-lg">
+          <div class="absolute bottom-2 right-2">
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+          </div>
+        </a>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/promo.jpg" alt="Femme" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/balenciaga.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-80 relative">
+        <img src="<?php echo BASE_URL; ?>assets/images/jaune1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
+        <div class="absolute bottom-2 right-2">
+          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -218,5 +260,4 @@
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
-
 </html>

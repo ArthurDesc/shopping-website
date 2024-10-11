@@ -1,8 +1,11 @@
 <?php include '../includes/session.php'; ?>
 <?php include '../includes/_db.php'; ?>
 <?php require_once '../classe/produit.php'; ?>
-<?php require_once '../classe/ArticleManager.php'; ?>
+<?php require_once '../classe/ArticleManager.php';
 
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+  }?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_article') {
     header('Content-Type: application/json');

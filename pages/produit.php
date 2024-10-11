@@ -53,38 +53,49 @@ $result = $conn->query($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produits</title>
-    <link rel="stylesheet" href="style.css"> <!-- Lien vers le fichier CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100">
 
-<div class="container">
+<div class="container mx-auto px-4">
+   
+
+    <div class="mt-6 flex justify-between items-center">
+        <h2 class="text-xl font-semibold font-medium">Voir tous</h2>
+        <button class="px-4 py-2 bg-white rounded shadow font-medium">Filtrer</button>
+    </div>
+
     <?php
-    // Vérifiez s'il y a des produits
     if ($result->num_rows > 0) {
-        echo '<div class="product-grid">';
-
-        // Boucle pour afficher chaque produit
+        echo '<div class="grid grid-cols-2 gap-6 mt-6">';
         while ($produit = $result->fetch_assoc()) {
-            ?>
-            <div class="product-item">
-                <h2><?php echo htmlspecialchars($produit['nom']); ?></h2>
-                <p><?php echo htmlspecialchars($produit['description']); ?></p>
-                <p>Prix : <?php echo number_format($produit['prix'], 2); ?> €</p>
+    ?>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <a href="detail.php?id=<?php echo $produit['id_produit']; ?>">
+                <div class="aspect-w-1 aspect-h-1 mb-4">
+                    <img src="<?php echo htmlspecialchars($produit['image_url'] ?? ''); ?>" 
+                         alt="<?php echo htmlspecialchars($produit['nom'] ?? ''); ?>" 
+                         class="w-full h-full object-cover rounded-lg">
+                </div>
+                <h3 class="font-semibold text-lg font-medium"><?php echo htmlspecialchars($produit['nom'] ?? ''); ?></h3>
+                <p class="text-sm text-gray-600 mt-2 font-medium"><?php echo htmlspecialchars($produit['description'] ?? ''); ?></p>
+            </a>
+            <div class="flex justify-between items-center mt-4">
+                <span class="font-bold text-lg font-medium"><?php echo number_format($produit['prix'] ?? 0, 2); ?> €</span>
                 <form action="" method="post">
-                    <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                    <button type="submit">Ajouter au panier</button>
+                    <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit'] ?? ''; ?>">
+                    <button type="submit" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition">
+                        <img src="../assets/images/addCart.png" alt="Ajouter au panier" class="w-6 h-6">
+                    </button>
                 </form>
             </div>
-            <?php
+        </div>
+    <?php
         }
-
         echo '</div>';
     } else {
-        echo "<p>Aucun produit trouvé.</p>";
+        echo "<p class='mt-6 text-center font-medium'>Aucun produit trouvé.</p>";
     }
-
-    // Fermer la connexion
-    $conn->close();
     ?>
 </div>
 
