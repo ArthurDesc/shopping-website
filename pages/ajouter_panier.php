@@ -1,37 +1,46 @@
 <?php
-//inclure la page de connexion
- include_once "con_dbb.php";
- //verifier si une session existe
- if(!isset($_SESSION)){
-    //si non demarer la session
+// Inclure la page de connexion
+require_once "../includes/_db.php";
+
+// Vérifier si une session existe
+if (!isset($_SESSION)) {
+    // Si non, démarrer la session
     session_start();
- }
- //creer la session
- if(!isset($_SESSION['panier'])){
-    //s'il nexiste pas une session on créer une et on mets un tableau a l'intérieur 
+}
+
+// Créer la session panier si elle n'existe pas
+if (!isset($_SESSION['panier'])) {
+    // Si la session panier n'existe pas, on la crée et on met un tableau à l'intérieur
     $_SESSION['panier'] = array();
- }
- //récupération de l'id dans le lien
-  if(isset($_GET['id'])){//si un id a été envoyé alors :
-    $id = $_GET['id'] ;
-    //verifier grace a l'id si le produit existe dans la base de  données
-    $produit = mysqli_query($con ,"SELECT * FROM products WHERE id = $id") ;
-    if(empty(mysqli_fetch_assoc($produit))){
-        //si ce produit n'existe pas
+}
+
+// Récupération de l'ID dans le lien
+if (isset($_GET['id'])) {
+    // Si un ID a été envoyé
+    $id = (int)$_GET['id']; // S'assurer que l'ID est un entier pour éviter les injections
+
+    // Vérifier grâce à l'ID si le produit existe dans la base de données
+    $stmt = $conn->prepare("SELECT * FROM produits WHERE id_produit = ?");
+    $stmt->bind_param("i", $id); // Associer le paramètre (ID du produit)
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $produit = $result->fetch_assoc();
+
+    if (empty($produit)) {
+        // Si ce produit n'existe pas
         die("Ce produit n'existe pas");
     }
-    //ajouter le produit dans le panier ( Le tableau)
 
-    if(isset($_SESSION['panier'][$id])){// si le produit est déjà dans le panier
-        $_SESSION['panier'][$id]++; //Représente la quantité 
-    }else {
-        //si non on ajoute le produit
-        $_SESSION['panier'][$id]= 1 ;
+    // Ajouter le produit dans le panier (le tableau)
+    if (isset($_SESSION['panier'][$id])) {
+        // Si le produit est déjà dans le panier
+        $_SESSION['panier'][$id]++; // Augmenter la quantité
+    } else {
+        // Sinon, ajouter le produit avec une quantité de 1
+        $_SESSION['panier'][$id] = 1;
     }
 
-   //redirection vers la page index.php
-   header("Location:index.php");
-
-
-  }
+    // Redirection vers la page index.php
+    header("Location:index.php");
+}
 ?>
