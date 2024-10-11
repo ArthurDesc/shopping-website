@@ -16,7 +16,7 @@ if (isset($_GET['del'])) {
 // Mettre à jour la quantité du produit si le formulaire est soumis
 if (isset($_POST['update'])) {
     $id_update = $_POST['id_produit'];
-    $quantity = $_POST['quantite'];
+    $quantity = $_POST['quantite']; // Changez 'stock' en 'quantite'
     
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
@@ -39,13 +39,6 @@ if (isset($_POST['update'])) {
     <?php include '../includes/_header.php';?>
     <section>
         <table>
-            <tr>
-                <th></th>
-                <th>Nom</th>
-                <th>Prix</th>
-                <th>Quantité</th>
-                <th>Action</th>
-            </tr>
             <?php 
             $total = 0;
             // Récupérer les clés du tableau session
@@ -62,6 +55,13 @@ if (isset($_POST['update'])) {
                 echo '</div>';
                 echo '</div>';
             } else {
+                echo '<tr>'; 
+                echo '<th></th>';
+                echo '<th>Nom</th>';
+                echo '<th>Prix</th>';
+                echo '<th>Quantité</th>';
+                echo '<th>Action</th>';
+                echo '</tr>';
                 // Récupérer les produits dans le panier
                 $products = mysqli_query($conn, "SELECT * FROM produits WHERE id_produit IN (".implode(',', $ids).")");
 
@@ -79,7 +79,7 @@ if (isset($_POST['update'])) {
                     $total += $product_total;
 
                     // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                    $img = htmlspecialchars($product['img'] ?? '', ENT_QUOTES, 'UTF-8');
+                    $img = htmlspecialchars($product['image'] ?? '', ENT_QUOTES, 'UTF-8');
                     $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
             ?>
                 <tr>
@@ -89,8 +89,10 @@ if (isset($_POST['update'])) {
                     <td>
                         <form method="post" action="">
                             <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
-                            <input type="number" name="quantite" value="<?= intval($quantity) ?>" min="1">
-                            <button type="submit" name="update">Mettre à jour</button>
+                            <button type="button" class="change-quantity" onclick="changeQuantity(<?= $product['id_produit'] ?>, -1)">-</button>
+                            <input type="number" name="quantite" value="<?= intval($quantity) ?>" min="1" id="quantity-<?= $product['id_produit'] ?>" onchange="updateQuantity(<?= $product['id_produit'] ?>)">
+                            <button type="button" class="change-quantity" onclick="changeQuantity(<?= $product['id_produit'] ?>, 1)">+</button>
+                            <button type="submit" name="update" style="display:none;">Mettre à jour</button> <!-- Cacher le bouton de mise à jour -->
                         </form>
                     </td>
                     <td><a href="panier.php?del=<?= $product['id_produit']; ?>"><img src="assets/images/delete.png" alt="Supprimer"></a></td>
@@ -108,5 +110,21 @@ if (isset($_POST['update'])) {
 
     <script src="../assets/js/script.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
+    <script>
+        function changeQuantity(productId, change) {
+            const quantityInput = document.getElementById('quantity-' + productId);
+            let currentQuantity = parseInt(quantityInput.value);
+            currentQuantity += change;
+            if (currentQuantity < 1) currentQuantity = 1; // Ne pas permettre une quantité inférieure à 1
+            quantityInput.value = currentQuantity;
+            updateQuantity(productId); // Appeler la fonction pour mettre à jour automatiquement
+        }
+
+        function updateQuantity(productId) {
+            const form = document.querySelector(`input[name="id_produit"][value="${productId}"]`).closest('form');
+            console.log("Submitting form for product ID:", productId); // Debugging line
+            form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
+        }
+    </script>
 </body>
 </html>
