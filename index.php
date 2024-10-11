@@ -131,7 +131,7 @@
     <div class="flex space-x-12 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
         <a href="#" class="block relative">
-          <img src="<?php echo BASE_URL; ?>assets/images/octa.png" alt="Nocta" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+          <img src="<?php echo BASE_URL; ?>assets/images/octa.png" alt="Nocta" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nocta</button>
           </div>
@@ -139,7 +139,7 @@
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
         <a href="#" class="block relative">
-          <img src="<?php echo BASE_URL; ?>assets/images/adidas.png" alt="Adidas" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+          <img src="<?php echo BASE_URL; ?>assets/images/adidas.png" alt="Adidas" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Adidas</button>
           </div>
@@ -147,7 +147,7 @@
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
         <a href="#" class="block relative">
-          <img src="<?php echo BASE_URL; ?>assets/images/nike.png" alt="Nike" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+          <img src="<?php echo BASE_URL; ?>assets/images/nike.png" alt="Nike" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nike</button>
           </div>
