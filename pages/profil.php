@@ -5,7 +5,11 @@ require_once '../includes/session.php';
 require_once '../includes/_db.php';
 require_once '../classe/AdminManager.php';
 
-
+// Vérification si l'utilisateur est connecté
+if (!isset($_SESSION['id_utilisateur'])) {
+    header("Location: " . BASE_URL . "pages/auth.php");
+    exit();
+}
 
 $adminManager = new AdminManager($conn);
 
@@ -22,7 +26,7 @@ $user = $result->fetch_assoc();
 $stmt->close();
 
 if ($adminManager->isAdmin($id_utilisateur)) {
-    header("Location: " . BASE_URL . "admin/backoffice.php");
+    header("Location: " . BASE_URL . "admin/backofficeV2.php");
     exit();
 }
 
