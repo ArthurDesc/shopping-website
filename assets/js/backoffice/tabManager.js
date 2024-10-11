@@ -86,11 +86,11 @@ function switchTab(clickedTab, tabId) {
                           </div>
                         </div>
                     </div>
-                    <div class="mb-4 sm:mb-5" id="categoriesContainer" style="display: none;">
+                    <div class="mb-4 sm:mb-5">
                         <label for="categories" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégories</label>
-                        <select id="categories" name="categories" multiple class="w-full px-3 py-1 rounded text-sm sm:text-base">
-                            <!-- Les options seront ajoutées dynamiquement -->
-                        </select>
+                        <div id="categories-container" class="bg-white rounded-lg p-2 max-h-40 overflow-y-auto">
+                          <!-- Les catégories seront ajoutées ici dynamiquement -->
+                        </div>
                     </div>
                     <div class="flex justify-center mt-6">
                         <button type="submit" class="bg-white text-blue-500 px-6 py-2 rounded text-sm sm:text-base hover:bg-blue-100 font-semibold">Valider</button>
@@ -163,6 +163,9 @@ function switchTab(clickedTab, tabId) {
               );
             });
         });
+        console.log("Avant loadCategories()");
+        loadCategories();
+        console.log("Après loadCategories()");
       break;
     default:
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
@@ -269,3 +272,71 @@ function switchCategoryTab(clickedTab, tabId) {
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
   }
 }
+
+function setupCategorySearch() {
+  console.log("Début de setupCategorySearch()");
+  const searchInput = document.getElementById('input-group-search');
+  const categoriesList = document.getElementById('categories-list');
+  
+  console.log("searchInput:", searchInput);
+  console.log("categoriesList:", categoriesList);
+
+  if (searchInput && categoriesList) {
+    searchInput.addEventListener('input', function() {
+      console.log("Recherche en cours:", this.value);
+      const searchTerm = this.value.toLowerCase();
+      const categoryItems = categoriesList.querySelectorAll('li');
+  
+      categoryItems.forEach(item => {
+        const categoryName = item.textContent.toLowerCase();
+        if (categoryName.includes(searchTerm)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+    console.log("Écouteur d'événements ajouté pour la recherche");
+  } else {
+    console.log("searchInput ou categoriesList non trouvé");
+  }
+  console.log("Fin de setupCategorySearch()");
+}
+
+function loadCategories() {
+    console.log("Début de loadCategories()");
+    const categoriesContainer = document.getElementById('categories-container');
+  
+    fetch('/shopping-website/admin/backofficeV2.php', {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(categories => {
+        console.log("Catégories reçues:", categories);
+  
+        if (categoriesContainer) {
+          console.log("categoriesContainer trouvé, début du remplissage");
+          categoriesContainer.innerHTML = ''; // Vider les options existantes
+          categories.forEach(category => {
+            console.log("Ajout de la catégorie:", category);
+            const div = document.createElement('div');
+            div.className = 'flex items-center mb-2';
+            div.innerHTML = `
+              <input id="category-${category.id_categorie}" type="checkbox" name="categories[]" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+              <label for="category-${category.id_categorie}" class="ml-2 text-sm font-medium text-gray-900">${category.nom}</label>
+            `;
+            categoriesContainer.appendChild(div);
+          });
+          console.log("Fin du remplissage des catégories");
+        } else {
+          console.log("categoriesContainer non trouvé");
+        }
+    })
+    .catch(error => {
+        console.error("Erreur lors du chargement des catégories:", error);
+    });
+  
+    console.log("Fin de loadCategories()");
+  }

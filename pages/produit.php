@@ -3,6 +3,7 @@ session_start();
 
 // Connexion à la base de données
 require_once "../includes/_db.php"; 
+require_once "../includes/_header.php"; 
 
 // Initialiser la session panier si elle n'existe pas
 if (!isset($_SESSION['panier'])) {
