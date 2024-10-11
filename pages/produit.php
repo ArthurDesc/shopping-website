@@ -19,7 +19,7 @@ if (!isset($_SESSION['panier'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+<?= require_once '../includes/_header.php'; ?>
     <!-- Afficher le nombre de produits dans le panier -->
 
     <div class="mt-6 flex justify-between items-center">
@@ -39,8 +39,8 @@ if (!isset($_SESSION['panier'])) {
             <div class="bg-white rounded-lg shadow-md p-4">
                 <a href="detail.php?id=<?php echo $row['id_produit']; ?>">
                     <div class="aspect-w-1 aspect-h-1 mb-4">
-                        <img src="project_images/<?php echo htmlspecialchars($row['img']); ?>" 
-                             alt="<?php echo htmlspecialchars($row['nom']); ?>" 
+                        <img src="project_images/<?php echo htmlspecialchars($row['img'] ?? 'default.jpg'); ?>" 
+                             alt="<?php echo htmlspecialchars($row['nom'] ?? 'Produit sans nom'); ?>" 
                              class="w-full h-full object-cover rounded-lg">
                     </div>
                     <h3 class="font-semibold text-lg font-medium"><?php echo htmlspecialchars($row['nom']); ?></h3>

@@ -2,45 +2,49 @@
 // Inclure la page de connexion
 require_once "../includes/_db.php";
 
-// Vérifier si une session existe
-if (!isset($_SESSION)) {
-    // Si non, démarrer la session
-    session_start();
+// Démarrer la session si elle n'existe pas
+if (session_status() == PHP_SESSION_NONE) {
+    session_start([
+        'cookie_lifetime' => 86400, // 1 jour de durée de vie pour le cookie de session
+        'cookie_secure' => true,    // Cookies sécurisés (HTTPS)
+        'cookie_httponly' => true,  // Empêche l'accès des scripts JS au cookie de session
+    ]);
 }
 
 // Créer la session panier si elle n'existe pas
 if (!isset($_SESSION['panier'])) {
-    // Si la session panier n'existe pas, on la crée et on met un tableau à l'intérieur
     $_SESSION['panier'] = array();
 }
 
 // Récupération de l'ID dans le lien
-if (isset($_GET['id'])) {
-    // Si un ID a été envoyé
-    $id = (int)$_GET['id']; // S'assurer que l'ID est un entier pour éviter les injections
+if (isset($_GET['id_produit'])) {
+    // S'assurer que l'ID est un entier
+    $id = (int)$_GET['id_produit']; 
 
-    // Vérifier grâce à l'ID si le produit existe dans la base de données
+    // Vérifier si le produit existe dans la base de données
     $stmt = $conn->prepare("SELECT * FROM produits WHERE id_produit = ?");
-    $stmt->bind_param("i", $id); // Associer le paramètre (ID du produit)
+    $stmt->bind_param("i", $id); 
     $stmt->execute();
     $result = $stmt->get_result();
     $produit = $result->fetch_assoc();
 
     if (empty($produit)) {
-        // Si ce produit n'existe pas
-        die("Ce produit n'existe pas");
+        // Si le produit n'existe pas, message d'erreur et redirection
+        echo "<script>alert('Ce produit n\'existe pas'); window.location.href='produit.php';</script>";
+        exit;
     }
 
-    // Ajouter le produit dans le panier (le tableau)
+    // Ajouter le produit dans le panier
     if (isset($_SESSION['panier'][$id])) {
-        // Si le produit est déjà dans le panier
-        $_SESSION['panier'][$id]++; // Augmenter la quantité
+        // Si le produit est déjà dans le panier, augmenter la quantité
+        $_SESSION['panier'][$id]++;
     } else {
         // Sinon, ajouter le produit avec une quantité de 1
         $_SESSION['panier'][$id] = 1;
     }
 
-    // Redirection vers la page index.php
-    header("Location:index.php");
+    // Redirection vers la page produit.php
+    header("Location: produit.php");
+    exit();
 }
 ?>

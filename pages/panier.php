@@ -2,6 +2,11 @@
 session_start();
 include_once "../includes/_db.php";
 
+// Initialiser le panier si ce n'est pas déjà fait
+if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
+    $_SESSION['panier'] = []; // Initialisation du panier comme tableau vide
+}
+
 // Supprimer les produits si la variable 'del' existe
 if (isset($_GET['del'])) {
     $id_del = $_GET['del'];
@@ -101,7 +106,7 @@ if (isset($_POST['update'])) {
     </section>
     <?php include '../includes/_footer.php'; ?>
 
-    <script src="assets/js/script.js" defer></script>
-    <script src="assets/js/navbar.js" defer></script>
+    <script src="../assets/js/script.js" defer></script>
+    <script src="../assets/js/navbar.js" defer></script>
 </body>
 </html>
