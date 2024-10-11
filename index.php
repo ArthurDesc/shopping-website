@@ -97,7 +97,7 @@
   <div class="swiper-container relative w-full mx-auto h-[calc(80vh-4rem)] sm:h-64 md:h-80 lg:h-[28rem] xl:h-[32rem] overflow-hidden">
     <div class="swiper-wrapper h-full">
       <div class="swiper-slide relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit (2).jpeg" alt="Image 1" class="w-full h-full object-cover sm:object-top">
+        <img src="<?php echo BASE_URL; ?>assets/images/basketPic2.png" alt="Image 1" class="w-full h-full object-cover sm:object-top">
         <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 left-8 text-white">
           <h2 class="text-3xl font-bold mb-2">Élasticité</h2>
