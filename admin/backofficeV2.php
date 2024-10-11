@@ -44,6 +44,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
     <title>BackOffice</title>
@@ -110,6 +112,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                const BASE_URL = '<?php echo BASE_URL; ?>';
                const categories = <?php echo $categoriesJson; ?>;
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/articleManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiUtils.js"></script>
