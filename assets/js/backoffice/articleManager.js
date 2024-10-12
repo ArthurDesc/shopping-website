@@ -40,27 +40,30 @@ function deleteArticle(articleId) {
 }
 
 function editArticle(id) {
-    // Rediriger vers une page d'édition ou ouvrir un modal pour éditer l'article
-    window.location.href = '/shopping-website/admin/edit_article.php?id=' + id;
+    // Rediriger vers une page d'édition avec un paramètre pour indiquer le mode édition
+    window.location.href = '/shopping-website/pages/detail.php?id=' + id + '&mode=edit';
 }
 
 function loadArticles() {
     fetch('/shopping-website/admin/load_articles.php')
         .then(response => response.text())
         .then(data => {
-            document.getElementById("tab-content").innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Erreur lors du chargement des articles:', error);
-            document.getElementById("tab-content").innerHTML = '<p>Une erreur est survenue lors du chargement des articles.</p>';
-        });
-}
+            const tabContent = document.getElementById("tab-content");
+            tabContent.innerHTML = data;
 
-function loadArticles() {
-    fetch('/shopping-website/admin/load_articles.php')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("tab-content").innerHTML = data;
+            // Ajouter des boutons d'édition à chaque article
+            const articles = tabContent.querySelectorAll('[data-article-id]');
+            articles.forEach(article => {
+                const articleId = article.dataset.articleId;
+                const actionsCell = article.querySelector('.article-actions');
+                if (actionsCell) {
+                    const editButton = document.createElement('button');
+                    editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>';
+                    editButton.className = 'text-blue-500 hover:text-blue-700 mr-2';
+                    editButton.onclick = () => editArticle(articleId);
+                    actionsCell.insertBefore(editButton, actionsCell.firstChild);
+                }
+            });
         })
         .catch(error => {
             console.error('Erreur lors du chargement des articles:', error);

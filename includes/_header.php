@@ -18,6 +18,10 @@ if (!isset($_SESSION['panier'])) {
 
 $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid errors
 
+function get_id_utilisateur() {
+    return $_SESSION['id_utilisateur'] ?? null;
+}
+
 ?>
 
 <!DOCTYPE html>
