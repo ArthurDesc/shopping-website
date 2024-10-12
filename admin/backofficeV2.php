@@ -2,6 +2,8 @@
 <?php include '../includes/_db.php'; ?>
 <?php require_once '../classe/produit.php'; ?>
 <?php require_once '../classe/ArticleManager.php'; ?>
+<?php require_once '../classe/ArticleManager.php'; ?>
+
 
 <?php
 
