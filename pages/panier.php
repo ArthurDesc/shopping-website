@@ -26,16 +26,7 @@ if (isset($_POST['update'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panier</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="panier">
+
     <?php include '../includes/_header.php';?>
     <section>
         <table>
@@ -79,11 +70,13 @@ if (isset($_POST['update'])) {
                     $total += $product_total;
 
                     // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                    $img = htmlspecialchars($product['image'] ?? '', ENT_QUOTES, 'UTF-8');
+                    $img = htmlspecialchars($product['image_url'] ?? '', ENT_QUOTES, 'UTF-8');
                     $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
             ?>
                 <tr>
-                    <td><img src="project_images/<?= $img ?>" alt="<?= $nom ?>"></td>
+                    <td>
+                        <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover">
+                    </td>
                     <td><?= $nom ?></td>
                     <td><?= number_format($product['prix'], 2); ?>€</td>
                     <td>
