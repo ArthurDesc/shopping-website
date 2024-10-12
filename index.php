@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="swiper-slide relative">
-      <img src="<?php echo BASE_URL; ?>assets/images/basketSlide2.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 30%;">
+      <img src="<?php echo BASE_URL; ?>assets/images/basketSlide2.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 15%;">
       <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
       <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 text-white">
         <h2 class="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Performance</h2>

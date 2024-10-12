@@ -25,7 +25,7 @@
   
   @media (min-width: 640px) {
     .carousel-height {
-      height: 30rem; /* 256px */
+      height: 25rem; /* 256px */
     }
   }
   
@@ -44,25 +44,25 @@
   
   @media (min-width: 1280px) {
     .carousel-height {
-      height: 40rem; /* 512px */
+      height: 33.5rem; /* 512px */
     }
   }
   
   @media (min-width: 1460px) {
     .carousel-height {
-      height:45rem; /* 720px - augmenté de 40rem à 45rem */
+      height:40rem; /* 720px - augmenté de 40rem à 45rem */
     }
   }
   
   /* Ajoutez une nouvelle règle pour les écrans encore plus larges si nécessaire */
   @media (min-width: 1600px) {
     .carousel-height {
-      height: 55rem; /* 800px */
+      height: 50rem; /* 800px */
     }
   }
   
   @media (min-width: 2000px) {
     .carousel-height {
-      height: 65rem; /* 800px */
+      height: 62rem; /* 800px */
     }
   }
