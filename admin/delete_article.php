@@ -1,25 +1,52 @@
 <?php
-require_once 'classe/ArticleManager.php';
-include '../includes/_db.php';
+// delete_article.php
+header('Content-Type: application/json');
 
-// Créer une connexion à la base de données
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Désactiver l'affichage des erreurs PHP en production
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
 
-if ($conn->connect_error) {
-    die("La connexion a échoué : " . $conn->connect_error);
+// Démarrer la mise en tampon de sortie
+ob_start();
+
+require_once '../includes/_db.php';
+require_once '../classe/ArticleManager.php';
+
+try {
+    // Vérifier si la connexion est établie
+    if (!$conn) {
+        throw new Exception("La connexion à la base de données n'a pas pu être établie.");
+    }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+    $articleId = $data['id_article'] ?? null;
+
+    if ($articleId) {
+        $articleManager = new ArticleManager($conn);
+        $result = $articleManager->deleteArticle($articleId);
+        
+        if ($result) {
+            $response = ['success' => true];
+        } else {
+            $response = ['success' => false, 'message' => 'Erreur lors de la suppression'];
+        }
+    } else {
+        $response = ['success' => false, 'message' => 'ID d\'article non fourni'];
+    }
+} catch (Exception $e) {
+    // Log l'erreur côté serveur
+    error_log("Erreur lors de la suppression de l'article: " . $e->getMessage());
+    
+    $response = ['success' => false, 'message' => 'Une erreur inattendue s\'est produite'];
 }
 
-$articleManager = new ArticleManager($conn);
+// Nettoyer la sortie tampon
+ob_clean();
 
-$id = $_POST['id'] ?? null;
+// Envoyer la réponse JSON
+echo json_encode($response);
 
-if ($id) {
-    $result = $articleManager->deleteArticle($id);
-    echo json_encode(['success' => $result]);
-} else {
-    echo json_encode(['success' => false, 'message' => 'ID de l\'article non fourni']);
+// Fermer la connexion
+if ($conn) {
+    mysqli_close($conn);
 }
-
-$conn->close();
-
-?>

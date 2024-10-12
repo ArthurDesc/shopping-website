@@ -101,10 +101,10 @@ class ArticleManager {
     }
 
     public function deleteArticle($id) {
-        $this->conn->begin_transaction();
-
         try {
-            // Supprimer d'abord les relations avec les catégories
+            $this->conn->begin_transaction();
+
+            // Supprimer d'abord les relations dans la table produit_categorie
             $sql = "DELETE FROM produit_categorie WHERE id_produit = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $id);
@@ -114,16 +114,19 @@ class ArticleManager {
             $sql = "DELETE FROM produits WHERE id_produit = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $id);
-            if (!$stmt->execute()) {
+            $result = $stmt->execute();
+
+            if ($result) {
+                $this->conn->commit();
+                return true;
+            } else {
+                $this->conn->rollback();
                 throw new Exception("Erreur lors de la suppression du produit");
             }
-
-            $this->conn->commit();
-            return true;
         } catch (Exception $e) {
             $this->conn->rollback();
             error_log($e->getMessage());
-            return false;
+            throw $e; // Propager l'exception pour qu'elle soit gérée dans delete_article.php
         }
     }
 

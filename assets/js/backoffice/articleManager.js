@@ -1,20 +1,40 @@
-function deleteArticle(id) {
+function deleteArticle(articleId) {
     if (confirm("Êtes-vous sûr de vouloir supprimer cet article ?")) {
         fetch('/shopping-website/admin/delete_article.php', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: 'id=' + id
+            body: JSON.stringify({ id_article: articleId })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                });
+            }
+            return response.text();
+        })
+        .then(text => {
+            console.log("Réponse brute du serveur:", text); // Pour le débogage
+            try {
+                return JSON.parse(text);
+            } catch (error) {
+                console.error("Erreur lors du parsing JSON:", error);
+                throw new Error("Réponse invalide du serveur");
+            }
+        })
         .then(data => {
             if (data.success) {
-                // Recharger la liste des articles
-                loadArticles();
+                showToast("Article supprimé avec succès", "success");
+                loadArticles(); // Recharger la liste des articles
             } else {
-                alert("Erreur lors de la suppression de l'article");
+                showToast("Erreur lors de la suppression de l'article : " + (data.message || "Erreur inconnue"), "error");
             }
+        })
+        .catch(error => {
+            console.error("Erreur:", error);
+            showToast("Une erreur s'est produite lors de la suppression de l'article: " + error.message, "error");
         });
     }
 }
