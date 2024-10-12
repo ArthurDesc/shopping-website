@@ -1,7 +1,24 @@
 <?php
-session_start();
-require_once '../includes/_db.php';
 require_once '../includes/_header.php';
+include '../includes/_db.php';
+require_once '../classe/produit.php';
+require_once '../classe/ArticleManager.php';
+require_once '../classe/AdminManager.php'; // Assurez-vous que cette classe existe
+
+// Créez une instance de AdminManager
+$adminManager = new AdminManager($conn);
+
+$mode = isset($_GET['mode']) && $_GET['mode'] === 'edit' ? 'edit' : 'view';
+$isEditMode = $mode === 'edit';
+
+// Vérifiez si l'utilisateur est admin pour le mode édition
+if ($isEditMode) {
+    $id_utilisateur = get_id_utilisateur();
+    if (!$id_utilisateur || !$adminManager->isAdmin($id_utilisateur)) {
+        header("Location: " . BASE_URL . "index.php");
+        exit();
+    }
+}
 
 // Vérifier si un ID de produit est passé dans l'URL
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -40,8 +57,27 @@ while ($row = $result_categories->fetch_assoc()) {
     $categories[] = $row;
 }
 
-// Définir une image par défaut si image_url est vide
-$image_url = !empty($produit['image_url']) ? $produit['image_url'] : '../assets/images/default_product.jpg';
+// Définir le chemin de l'image
+$image_path = '../assets/images/produits/';
+$image_url = $image_path . ($produit['image_url'] ?? 'default_product.jpg');
+
+// Vérifier si l'image existe, sinon utiliser l'image par défaut
+if (!file_exists($image_url) || empty($produit['image_url'])) {
+    $image_url = $image_path . 'default_product.jpg';
+}
+
+$articleManager = new ArticleManager($conn);
+$id_article = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$article = $articleManager->getArticle($id_article);
+
+if (!$article) {
+    // Rediriger si l'article n'existe pas
+    header("Location: " . BASE_URL . "index.php");
+    exit();
+}
+
+$categories = $articleManager->getArticleCategories($id_article);
+$allCategories = $articleManager->getAllCategories();
 
 ?>
 
@@ -130,6 +166,33 @@ $image_url = !empty($produit['image_url']) ? $produit['image_url'] : '../assets/
         </div>
     </div>
 </div>
+
+<?php if ($isEditMode): ?>
+<script>
+document.getElementById('editArticleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('/shopping-website/admin/update_article.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Article mis à jour avec succès');
+            window.location.href = '/shopping-website/admin/backofficeV2.php';
+        } else {
+            alert('Erreur lors de la mise à jour de l'article: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Une erreur s\'est produite');
+    });
+});
+</script>
+<?php endif; ?>
 
 </body>
 </html>
