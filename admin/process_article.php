@@ -54,7 +54,7 @@ try {
 
         // Validation de l'image (si nécessaire)
         if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-            $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
+            $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png", "jfif" => "image/jfif", "avif" => "image/avif", "webp" => "image/webp");
             $filename = $_FILES["image"]["name"];
             $filetype = $_FILES["image"]["type"];
             $filesize = $_FILES["image"]["size"];
