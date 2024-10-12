@@ -10,7 +10,7 @@ header('Content-Type: application/json');
 $categoryManager = new CategoryManager($conn);
 
 // Supposons que nous avons une méthode getParentCategories dans CategoryManager
-$parentCategories = $categoryManager->getParentCategories();
+$parentCategories = $categoryManager->getAllCategories();
 
 echo json_encode($parentCategories);
 
