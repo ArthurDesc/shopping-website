@@ -232,12 +232,15 @@ $allCategories = $articleManager->getAllCategories();
                 <div class="flex items-center">
                     <span class="text-sm text-gray-600">Collection : </span>
                     <span x-show="!editingCollection" x-text="collection" class="text-sm text-gray-600 ml-1"></span>
-                    <input x-show="editingCollection"
-                           x-model="collection"
-                           @keydown.enter="editingCollection = false; updateCollection(collection)"
-                           @keydown.escape="editingCollection = false"
-                           class="text-sm border-b-2 border-blue-500 focus:outline-none ml-1"
-                           type="text">
+                    <select x-show="editingCollection"
+                            x-model="collection"
+                            @change="editingCollection = false; updateCollection(collection)"
+                            @keydown.escape="editingCollection = false"
+                            class="text-sm border-b-2 border-blue-500 focus:outline-none ml-1">
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Enfant">Enfant</option>
+                    </select>
                     <?php if ($isEditMode): ?>
                     <button @click="editingCollection = !editingCollection" class="ml-2 text-gray-600 hover:text-blue-500">
                         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -317,7 +320,12 @@ $allCategories = $articleManager->getAllCategories();
             }
 
             function updateCollection(newCollection) {
-                updateField('collection', newCollection);
+                if (['Homme', 'Femme', 'Enfant'].includes(newCollection)) {
+                    updateField('collection', newCollection);
+                } else {
+                    console.error('Collection invalide');
+                    alert('Veuillez choisir une collection valide : Homme, Femme ou Enfant');
+                }
             }
         </script>
     <?php endif; ?>
