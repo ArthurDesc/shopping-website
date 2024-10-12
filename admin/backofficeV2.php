@@ -79,12 +79,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     <div class="hidden sm:flex sidebar bg-white shadow-md fixed h-full left-0 top-0 z-20 flex-col w-64">
         <div class="flex flex-col h-full px-4 py-6">
             <div class="mb-6">
-                <h2 class="text-xl font-bold">Sidebar</h2>
+                <h2 class="text-xl font-bold">Mode Admin</h2>
             </div>
             <a id="home-link" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="../index.php">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                </svg>
+                <img src="<?php echo BASE_URL; ?>assets/images/logoF.png" alt="Logo F" class="w-6 h-6 object-contain mr-3">
                 <span>Home</span>
             </a>
             <a id="articles-link" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('articles')">

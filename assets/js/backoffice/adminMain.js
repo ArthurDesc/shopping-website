@@ -80,3 +80,4 @@ function loadContent(section) {
             contentArea.innerHTML = '<p>Sélectionnez une option dans la barre latérale</p>';
     }
 }
+
