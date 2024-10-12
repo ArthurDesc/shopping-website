@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 11, 2024 at 07:41 AM
+-- Generation Time: Oct 12, 2024 at 08:26 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -53,9 +53,9 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id_categorie`, `nom`, `description`) VALUES
-(2, 'h', 'hrfjgftgft'),
-(3, 'U', 'IUEGYED'),
-(4, 'T', 'FDYRD');
+(2, 'T', 'T-shirt'),
+(3, 'V', 'Veste'),
+(4, 'J', 'Jogging');
 
 -- --------------------------------------------------------
 
@@ -129,7 +129,8 @@ INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`,
 (7, 'hamza', 'femme.png', 'fcfg', '1.00', 4, '14', 'AEHVG', NULL, 'HEDVG'),
 (8, 'gikhlk', 'jamaique.png', 'd', '1.00', 3, '14', 'ER', NULL, 'ZE'),
 (9, 'sdjdf', 'jaune1.jpg', 'dsf', '87.00', 65, '0', 'dsfsd', NULL, 'djfsd'),
-(10, 'mlgke', 'NB1.jpg', 'fdkjfd', '76.00', 45, '0', 'sdfsfds', NULL, 'sdflkfs');
+(10, 'mlgke', 'NB1.jpg', 'fdkjfd', '76.00', 45, '0', 'sdfsfds', NULL, 'sdflkfs'),
+(11, 'Nearti', 'NB.jpg', 'Lorem ipsum', '145.00', 200, '0', 'New balance', NULL, 'Homme');
 
 -- --------------------------------------------------------
 
@@ -274,7 +275,7 @@ ALTER TABLE `paiements`
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`
