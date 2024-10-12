@@ -61,7 +61,7 @@
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/octa.png" alt="Nocta" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nocta</button>
@@ -69,7 +69,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/adidas.png" alt="Adidas" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Adidas</button>
@@ -77,7 +77,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/nike.png" alt="Nike" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nike</button>
@@ -91,7 +91,7 @@
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/football.jpg" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Football</button>
@@ -99,7 +99,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/basketball.jpg" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Basketball</button>
@@ -107,7 +107,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/running.jpg" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Running</button>
@@ -115,7 +115,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/handball.jpg" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Handball</button>
@@ -123,7 +123,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/rugby.jpg" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Rugby</button>
@@ -137,7 +137,7 @@
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/homme.jpg" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Homme</button>
@@ -145,7 +145,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/femme.jpg" alt="Femme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Femme</button>
@@ -153,7 +153,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/enfant.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Enfant</button>
@@ -167,7 +167,7 @@
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/camp.jpeg" alt="Homme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
@@ -175,7 +175,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/airmax-sunder.jpg" alt="Femme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
@@ -183,7 +183,7 @@
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="#" class="block relative">
+        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
           <img src="<?php echo BASE_URL; ?>assets/images/kids.jpg" alt="Enfant" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
