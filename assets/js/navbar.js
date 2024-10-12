@@ -26,6 +26,29 @@ document.addEventListener('click', function(event) {
         prevEl: '.swiper-button-prev',
       },
     });
+
+    // Ajoutez cette nouvelle fonction pour gérer le scroll
+    function handleScroll() {
+      const header = document.getElementById('main-header');
+      let lastScrollTop = 0;
+
+      window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > lastScrollTop) {
+          // Scroll vers le bas
+          header.style.transform = 'translateY(-100%)';
+        } else {
+          // Scroll vers le haut
+          header.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+      }, false);
+    }
+
+    // Appelez la fonction au chargement du document
+    handleScroll();
   });
 
   const toggles = ['menu-homme', 'menu-femme', 'menu-enfants', 'menu-sports'];
