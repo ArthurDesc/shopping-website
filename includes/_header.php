@@ -38,7 +38,7 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="flex flex-col min-h-screen">
   <header class="flex justify-center items-center py-3 px-2 bg-white shadow-md">
     <div class="flex justify-between items-center w-full max-w-full px-2 sm:px-4 md:px-6 lg:px-8">
       <div class="menu-icon cursor-pointer" id="menu-toggle">

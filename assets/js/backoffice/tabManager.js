@@ -205,22 +205,21 @@ function switchCategoryTab(clickedTab, tabId) {
   switch (tabId) {
     case "modifier":
       tabContent.innerHTML = `
-                <div class="mb-4">
-                    <div class="relative">
-                        <input type="text" id="search-categories" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Rechercher une catégorie...">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div id="categories-list" class="space-y-2">
-                    <!-- La liste des catégories sera chargée ici dynamiquement -->
-                </div>
-            `;
-      // Ici, vous pouvez ajouter une fonction pour charger et afficher la liste des catégories
-      // Par exemple : loadCategoriesList();
+        <div class="mb-4">
+          <div class="relative">
+            <input type="text" id="search-categories" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Rechercher une catégorie...">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div id="categories-list" class="space-y-2">
+          <!-- La liste des catégories sera chargée ici dynamiquement -->
+        </div>
+      `;
+      loadCategoriesList();
       break;
     case "ajouter":
       tabContent.innerHTML = `
@@ -266,7 +265,6 @@ function switchCategoryTab(clickedTab, tabId) {
         </div>
         </div>
             `;
-      loadParentCategories();
       break;
     default:
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
@@ -335,6 +333,12 @@ function loadCategories() {
             <ul id="categories-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700" aria-labelledby="dropdownSearchButton">
                 <!-- Les catégories seront ajoutées ici dynamiquement -->
             </ul>
+            <div class="p-3 border-t border-gray-200">
+                <form id="addCategoryForm" class="flex items-center">
+                    <input type="text" id="newCategoryName" name="newCategoryName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nouvelle catégorie" required>
+                    <button type="submit" class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Ajouter</button>
+                </form>
+            </div>
         </div>
     `;
   
@@ -370,27 +374,47 @@ function loadCategories() {
     });
   
     console.log("Fin de loadCategories()");
+
+    // Appeler la fonction pour configurer le formulaire d'ajout de catégorie
+    setupAddCategoryForm();
 }
 
-function setupCategorySearch() {
-    const searchInput = document.getElementById('input-group-search');
-    const categoriesList = document.getElementById('categories-list');
-  
-    if (searchInput && categoriesList) {
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const categoryItems = categoriesList.querySelectorAll('li');
-  
-            categoryItems.forEach(item => {
-                const categoryName = item.textContent.toLowerCase();
-                if (categoryName.includes(searchTerm)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+function setupAddCategoryForm() {
+    const addCategoryForm = document.getElementById('addCategoryForm');
+    if (addCategoryForm) {
+        addCategoryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newCategoryName = document.getElementById('newCategoryName').value;
+            if (newCategoryName) {
+                addNewCategory(newCategoryName);
+            }
         });
+    } else {
+        console.log("Formulaire d'ajout de catégorie non trouvé");
     }
+}
+
+function addNewCategory(categoryName) {
+    fetch('/shopping-website/admin/add_category.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `categoryName=${encodeURIComponent(categoryName)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Catégorie ajoutée avec succès', 'success');
+            loadCategories(); // Recharger la liste des catégories
+        } else {
+            showToast('Erreur lors de l\'ajout de la catégorie: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        showToast('Une erreur s\'est produite lors de l\'ajout de la catégorie', 'error');
+    });
 }
 
 function setupDropdown() {
@@ -497,3 +521,72 @@ function deleteArticle(articleId) {
 
 // Assurez-vous que cette fonction est accessible globalement
 window.deleteArticle = deleteArticle;
+
+function loadCategoriesList() {
+  const categoriesList = document.getElementById('categories-list');
+  
+  fetch('/shopping-website/admin/get_categories.php')
+    .then(response => response.json())
+    .then(categories => {
+      categoriesList.innerHTML = '';
+      categories.forEach(category => {
+        const categoryItem = document.createElement('div');
+        categoryItem.className = 'flex items-center justify-between p-2 bg-white rounded-lg shadow';
+        categoryItem.innerHTML = `
+          <span>${category.nom}</span>
+          <div>
+            <button onclick="editCategory(${category.id_categorie})" class="text-blue-500 hover:text-blue-700 mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+            </button>
+            <button onclick="deleteCategory(${category.id_categorie})" class="text-red-500 hover:text-red-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        `;
+        categoriesList.appendChild(categoryItem);
+      });
+    })
+    .catch(error => {
+      console.error("Erreur lors du chargement des catégories:", error);
+      showToast("Erreur lors du chargement des catégories", "error");
+    });
+}
+
+function editCategory(categoryId) {
+  // Implémentez la logique pour éditer une catégorie
+  console.log("Édition de la catégorie:", categoryId);
+  // Vous pouvez ouvrir un modal ou rediriger vers une page d'édition
+}
+
+function deleteCategory(categoryId) {
+  if (confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) {
+    fetch('/shopping-website/admin/delete_category.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_categorie: categoryId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showToast("Catégorie supprimée avec succès", "success");
+        loadCategoriesList(); // Recharger la liste des catégories
+      } else {
+        showToast("Erreur lors de la suppression de la catégorie : " + data.message, "error");
+      }
+    })
+    .catch(error => {
+      console.error("Erreur:", error);
+      showToast("Une erreur s'est produite lors de la suppression de la catégorie", "error");
+    });
+  }
+}
+
+// Assurez-vous que ces fonctions sont accessibles globalement
+window.editCategory = editCategory;
+window.deleteCategory = deleteCategory;
