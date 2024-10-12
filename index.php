@@ -15,37 +15,47 @@
 <main class="flex-grow">
 
   
-  <div class="swiper-container relative w-full mx-auto overflow-hidden carousel-height">
-    <div class="swiper-wrapper h-full">
-      <div class="swiper-slide relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/basketPic2.png" alt="Image 1" class="w-full h-full object-cover sm:object-top">
-        <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
-        <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Élasticité</h2>
-        </div>
-      </div>
-      <div class="swiper-slide relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit(3).jpeg" alt="Image 2" class="w-full h-full object-cover sm:object-top">
-        <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
-        <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Confort</h2>
-        </div>
-      </div>
-      <div class="swiper-slide relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 60%;">
-        <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
-        <div class="absolute bottom-8 left-8 text-white">
-          <h2 class="text-3xl font-bold mb-2">Performance</h2>
-        </div>
+<div class="swiper-container relative w-full mx-auto overflow-hidden carousel-height">
+  <div class="swiper-wrapper h-full">
+    
+    
+    <div class="swiper-slide relative">
+      <img src="<?php echo BASE_URL; ?>assets/images/pikaso_edit.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 60%;">
+      <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
+      <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 text-white">
+        <h2 class="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Performance</h2>
       </div>
     </div>
-    <div class="swiper-pagination"></div>
-    <!-- Flèches de navigation -->
-    <div class="hidden sm:block">
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+    <div class="swiper-slide relative">
+      <img src="<?php echo BASE_URL; ?>assets/images/basketSlide2.png" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 30%;">
+      <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
+      <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 text-white">
+        <h2 class="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Performance</h2>
+      </div>
     </div>
+    <div class="swiper-slide relative">
+      <img src="<?php echo BASE_URL; ?>assets/images/rugby4.jpeg" alt="Image 2" class="w-full h-full object-cover sm:object-top">
+      <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
+      <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 text-white">
+        <h2 class="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Confort</h2>
+      </div>
+    </div>
+    <div class="swiper-slide relative">
+      <img src="<?php echo BASE_URL; ?>assets/images/running.jpeg" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 20%;">
+      <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black to-transparent opacity-50"></div>
+      <div class="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 text-white">
+        <h2 class="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Performance</h2>
+      </div>
+    </div>
+    
   </div>
+  <div class="swiper-pagination"></div>
+  <!-- Flèches de navigation -->
+  <div class="hidden sm:block">
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
 
   <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
   <div class="custom-scroll">
