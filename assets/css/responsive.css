@@ -1,0 +1,68 @@
+/* Styles pour les écrans larges (ordinateurs) */
+@media (min-width: 1024px) {
+    .custom-scroll {
+      scrollbar-width: none; /* Pour Firefox */
+      -ms-overflow-style: none; /* Pour Internet Explorer et Edge */
+    }
+  
+    .custom-scroll::-webkit-scrollbar {
+      display: none; /* Pour Chrome, Safari et Opera */
+    }
+  }
+  
+  /* Styles pour les écrans mobiles */
+  @media (max-width: 1023px) {
+    .custom-scroll {
+      overflow-x: auto;
+    }
+  }
+  
+  /* Ajoutez ceci à la fin de votre fichier main.css */
+  
+  .carousel-height {
+    height: calc(80vh - 4rem);
+  }
+  
+  @media (min-width: 640px) {
+    .carousel-height {
+      height: 30rem; /* 256px */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .carousel-height {
+      height: 32rem; /* 320px */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .carousel-height {
+      height: 35rem; /* 448px */
+    }
+  }
+ 
+  
+  @media (min-width: 1280px) {
+    .carousel-height {
+      height: 40rem; /* 512px */
+    }
+  }
+  
+  @media (min-width: 1460px) {
+    .carousel-height {
+      height:45rem; /* 720px - augmenté de 40rem à 45rem */
+    }
+  }
+  
+  /* Ajoutez une nouvelle règle pour les écrans encore plus larges si nécessaire */
+  @media (min-width: 1600px) {
+    .carousel-height {
+      height: 55rem; /* 800px */
+    }
+  }
+  
+  @media (min-width: 2000px) {
+    .carousel-height {
+      height: 65rem; /* 800px */
+    }
+  }

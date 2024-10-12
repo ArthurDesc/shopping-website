@@ -9,92 +9,13 @@
   <title>Document</title>
 </head>
 <body>
-  
-<style>
-  .swiper-button-next,
-  .swiper-button-prev {
-    width: 40px !important;
-    height: 40px !important;
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .swiper-button-next::after,
-  .swiper-button-prev::after {
-    content: '';
-    width: 24px;
-    height: 24px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-  }
-  .swiper-button-next::after {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%232563EB'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' /%3E%3C/svg%3E");
-  }
-  .swiper-button-prev::after {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%232563EB'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' /%3E%3C/svg%3E");
-  }
 
-  .custom-scroll {
-    scrollbar-width: none; /* Pour Firefox */
-    -ms-overflow-style: none; /* Pour Internet Explorer et Edge */
-    overflow-x: auto;
-  }
-
-  .custom-scroll::-webkit-scrollbar {
-    display: none; /* Pour Chrome, Safari et Opera */
-  }
-
-  .scroll-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 10;
-  }
-
-  .scroll-left {
-    left: 10px;
-  }
-
-  .scroll-right {
-    right: 10px;
-  }
-
-  /* Styles pour les écrans larges (ordinateurs) */
-  @media (min-width: 1024px) {
-    .custom-scroll {
-      scrollbar-width: none; /* Pour Firefox */
-      -ms-overflow-style: none; /* Pour Internet Explorer et Edge */
-    }
-
-    .custom-scroll::-webkit-scrollbar {
-      display: none; /* Pour Chrome, Safari et Opera */
-    }
-  }
-
-  /* Styles pour les écrans mobiles */
-  @media (max-width: 1023px) {
-    .custom-scroll {
-      overflow-x: auto;
-    }
-  }
-</style>
   
 
 <main class="flex-grow">
 
   
-  <div class="swiper-container relative w-full mx-auto h-[calc(80vh-4rem)] sm:h-64 md:h-80 lg:h-[28rem] xl:h-[32rem] overflow-hidden">
+  <div class="swiper-container relative w-full mx-auto overflow-hidden carousel-height">
     <div class="swiper-wrapper h-full">
       <div class="swiper-slide relative">
         <img src="<?php echo BASE_URL; ?>assets/images/basketPic2.png" alt="Image 1" class="w-full h-full object-cover sm:object-top">
@@ -268,5 +189,6 @@
 <!-- Scripts -->
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+
 </body>
 </html>
