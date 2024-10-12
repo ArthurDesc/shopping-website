@@ -497,3 +497,5 @@ function deleteArticle(articleId) {
 
 // Assurez-vous que cette fonction est accessible globalement
 window.deleteArticle = deleteArticle;
+
+export { switchTab, switchCategoryTab };
