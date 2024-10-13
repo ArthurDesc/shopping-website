@@ -1,6 +1,10 @@
 <?php 
 session_start();
 
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+  }
+
 // Connexion à la base de données
 require_once "../includes/_db.php"; 
 
@@ -12,17 +16,7 @@ if (!isset($_SESSION['panier'])) {
 // Définir le chemin de base pour les images des produits
 $image_base_path = '../assets/images/produits/';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boutique</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+
 <?php require_once '../includes/_header.php'; ?>
 
 <div class="container mx-auto px-4">
@@ -76,6 +70,10 @@ $image_base_path = '../assets/images/produits/';
         ?>
     </section>
 </div>
+<?php include '../includes/_footer.php'; ?>
 
+<!-- Scripts -->
+<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
 </html>
