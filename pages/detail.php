@@ -328,6 +328,8 @@ $allCategories = $articleManager->getAllCategories();
             }
         </script>
     <?php endif; ?>
+    <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
+ <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 
 </body>
 
