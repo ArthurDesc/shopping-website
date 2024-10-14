@@ -41,7 +41,7 @@ if (isset($_POST['update'])) {
                 echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">';
                 echo '<p class="text-gray-600 mb-6">Votre panier est actuellement vide.</p>';
                 echo '<div class="flex flex-col space-y-4">';
-                echo '<button onclick="window.location.href=\'produit.php\'" class="sm:w-80 md:w-80 lg:w-80 mx-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4">Continuer vos achats</button>';
+                echo '<a href="produit.php" class="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 inline-block">Continuer vos achats</a>';
                 echo '<a href="auth.php" class="text-blue-500 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez-vous pour récupérer votre panier</a>';
                 echo '</div>';
                 echo '</div>';
@@ -70,13 +70,11 @@ if (isset($_POST['update'])) {
                     $total += $product_total;
 
                     // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                    $img = htmlspecialchars($product['image_url'] ?? '', ENT_QUOTES, 'UTF-8');
+                    $img = htmlspecialchars($product['image'] ?? '', ENT_QUOTES, 'UTF-8');
                     $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
             ?>
                 <tr>
-                    <td>
-                        <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover">
-                    </td>
+                    <td><img src="project_images/<?= $img ?>" alt="<?= $nom ?>"></td>
                     <td><?= $nom ?></td>
                     <td><?= number_format($product['prix'], 2); ?>€</td>
                     <td>

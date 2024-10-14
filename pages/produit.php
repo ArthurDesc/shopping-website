@@ -73,7 +73,7 @@ $image_base_path = '../assets/images/produits/';
 <?php include '../includes/_footer.php'; ?>
 
 <!-- Scripts -->
-<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
 </html>

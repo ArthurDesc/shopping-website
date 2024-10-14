@@ -182,31 +182,13 @@
           </div>
         </a>
       </div>
-
-      <div class="flex-shrink-0 w-80 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/produits/balenciaga.jpg" alt="Enfant" class="w-full h-44 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
-        </div>
-      </div>
-      <div class="flex-shrink-0 w-80 relative">
-        <img src="<?php echo BASE_URL; ?>assets/images/produits/jaune1.jpg" alt="Baskets" class="w-full h-44 object-cover rounded-lg">
-        <div class="absolute bottom-2 right-2">
-          <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full hover:bg-gray-100 transition duration-300 shadow-md">Promotion</button>
-        </div>
-
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-
-        <a href="<?php echo BASE_URL; ?>/pages/produit.php" class="block relative">
-
         <a href="<?php echo BASE_URL; ?>pages/produit.php" class="block relative">
-
           <img src="<?php echo BASE_URL; ?>assets/images/kids.jpg" alt="Enfant" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
           </div>
         </a>
-
       </div>
     </div>
   </div>
@@ -215,7 +197,7 @@
 <?php include './includes/_footer.php'; ?>
 
 <!-- Scripts -->
-<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 
 </body>
