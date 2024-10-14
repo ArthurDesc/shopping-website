@@ -36,13 +36,8 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
-<<<<<<< HEAD
-  <script src="<?php echo BASE_URL; ?>assets/js/header.js" defer></script>
-  <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
-=======
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/responsive.css?v=<?php echo filemtime('assets/css/responsive.css'); ?>">
->>>>>>> main
 </head>
 
 <body class="flex flex-col min-h-screen pt-14">

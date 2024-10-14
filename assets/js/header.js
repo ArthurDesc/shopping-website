@@ -58,15 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function showAutocompleteResults() {
-    if (autocompleteResults) {
-      autocompleteResults.classList.remove('hidden');
-    }
+    autocompleteResults.classList.remove('hidden');
   }
 
   function hideAutocompleteResults() {
-    if (autocompleteResults) {
-      autocompleteResults.classList.add('hidden');
-    }
+    autocompleteResults.classList.add('hidden');
   }
 
   function debounce(func, wait) {
