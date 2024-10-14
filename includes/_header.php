@@ -76,15 +76,16 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
   <!-- Barre de navigation latérale -->
   <div id="sidebar" class="fixed left-0 top-0 w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform z-50">
     <!-- Ajout de la barre de recherche -->
-    <div class="p-4 border-b">
+    <div class="p-4 border-b relative">
       <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex items-center">
-        <input type="text" name="q" placeholder="Rechercher..." class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="text" id="search-input" name="q" placeholder="Rechercher..." class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
         </button>
       </form>
+      <div id="autocomplete-results" class="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded-md shadow-lg hidden"></div>
     </div>
 
     <nav class="p-4">
