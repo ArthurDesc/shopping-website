@@ -90,7 +90,7 @@ include '../includes/_header.php';
         <!-- Bouton de déconnexion -->
         <div>
             <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
-                Me déconnecter
+                Déconnexion
             </a>
         </div>
     </div>
@@ -99,7 +99,7 @@ include '../includes/_header.php';
 
 <?php include '../includes/_footer.php'; ?>
 
-<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 </body>
 </html>

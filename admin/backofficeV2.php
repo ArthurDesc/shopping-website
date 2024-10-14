@@ -1,6 +1,5 @@
 <?php include '../includes/session.php'; ?>
 <?php include '../includes/_db.php'; ?>
-<?php require_once '../classe/produit.php'; ?>
 <?php require_once '../classe/ArticleManager.php'; ?>
 <?php require_once '../classe/ArticleManager.php'; ?>
 
@@ -100,7 +99,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 <span>Catégories</span>
             </a>
             <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
-                Me déconnecter
+                Déconnexion
             </a>
         </div>
     </div>
