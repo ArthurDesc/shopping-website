@@ -1,4 +1,4 @@
-const CategoryManager = (function() {
+const CategoryManager = (function(UIManager) {
     function loadCategories() {
         console.log("Début de loadCategories()");
         const categoriesContainer = document.getElementById('categories-container');
@@ -64,8 +64,8 @@ const CategoryManager = (function() {
             });
   
             console.log("Fin du remplissage des catégories");
-            setupCategorySearch();
-            setupDropdown(); // Ajout de cette ligne
+            UIManager.setupCategorySearch();
+            UIManager.setupDropdown();
         })
         .catch(error => {
             console.error("Erreur lors du chargement des catégories:", error);
@@ -104,4 +104,4 @@ const CategoryManager = (function() {
         loadCategories: loadCategories,
         addNewCategory: addNewCategory
     };
-})();
+})(UIManager);  // Passez UIManager comme dépendance ici
