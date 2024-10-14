@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   searchInput.addEventListener('input', debounce(function() {
     const query = this.value.trim();
-    if (query.length > 2) {
+    if (query.length > 0) { // Modifié pour déclencher dès le premier caractère
       fetchAutocompleteResults(query);
     } else {
       hideAutocompleteResults();
