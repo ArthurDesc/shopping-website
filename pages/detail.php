@@ -2,6 +2,7 @@
 include '../includes/session.php';
 require_once '../includes/_header.php';
 include '../includes/_db.php';
+require_once '../classe/produit.php';
 require_once '../classe/ArticleManager.php';
 require_once '../classe/AdminManager.php'; // Assurez-vous que cette classe existe
 
