@@ -18,9 +18,7 @@ if (!isset($_SESSION['panier'])) {
 
 $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid errors
 
-function get_id_utilisateur() {
-    return $_SESSION['id_utilisateur'] ?? null;
-}
+
 
 ?>
 
@@ -31,39 +29,46 @@ function get_id_utilisateur() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
+  <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/responsive.css?v=<?php echo filemtime('assets/css/responsive.css'); ?>">
 </head>
 
-<body class="bg-gray-100">
-  <header class="flex justify-center items-center py-3 px-2 bg-white shadow-md">
-    <div class="flex justify-between items-center w-full max-w-full px-2 sm:px-4 md:px-6 lg:px-8">
-      <div class="menu-icon cursor-pointer" id="menu-toggle">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </div>
-      <div class="logo">
-        <a href="<?php echo BASE_URL; ?>index.php">
-          <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="h-8 w-auto">
-        </a>
-      </div>
-      <div class="flex space-x-4">
-        <a href="<?php echo BASE_URL; ?>pages/panier.php" aria-label="Voir le panier">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-          </svg><?= htmlspecialchars(array_sum($_SESSION['panier'])) ?>
-        </a>
-        <a href="<?php echo BASE_URL; ?>pages/profil.php">
+<body class="flex flex-col min-h-screen pt-14">
+  <header class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out" id="main-header">
+    <div class="flex justify-center items-center py-3 px-2 bg-white shadow-md">
+      <div class="flex justify-between items-center w-full max-w-full px-2 sm:px-4 md:px-6 lg:px-8">
+        <div class="menu-icon cursor-pointer" id="menu-toggle">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
-        </a>
+        </div>
+        <div class="logo">
+          <a href="<?php echo BASE_URL; ?>index.php">
+            <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="h-8 w-auto">
+          </a>
+        </div>
+        <div class="flex space-x-4">
+          <a href="<?php echo BASE_URL; ?>pages/panier.php" aria-label="Voir le panier" class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+            <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 <?php echo array_sum($_SESSION['panier']) > 0 ? 'bg-green-600' : 'bg-red-600'; ?> rounded-full">
+              <?= htmlspecialchars(array_sum($_SESSION['panier'])) ?>
+            </span>
+          </a>
+          <a href="<?php echo BASE_URL; ?>pages/profil.php">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </header>
