@@ -83,7 +83,11 @@ if (isset($_POST['update'])) {
                         <form method="post" action="">
                             <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
                             <button type="button" class="change-quantity" onclick="changeQuantity(<?= $product['id_produit'] ?>, -1)">-</button>
-                            <input type="number" name="quantite" value="<?= intval($quantity) ?>" min="1" id="quantity-<?= $product['id_produit'] ?>" onchange="updateQuantity(<?= $product['id_produit'] ?>)">
+                            <select name="quantite" id="quantity-<?= $product['id_produit'] ?>" onchange="updateQuantity(<?= $product['id_produit'] ?>)">
+                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                    <option value="<?= $i ?>" <?= $i == intval($quantity) ? 'selected' : '' ?>><?= $i ?></option>
+                                <?php endfor; ?>
+                            </select>
                             <button type="button" class="change-quantity" onclick="changeQuantity(<?= $product['id_produit'] ?>, 1)">+</button>
                             <button type="submit" name="update" style="display:none;">Mettre à jour</button> <!-- Cacher le bouton de mise à jour -->
                         </form>
@@ -108,14 +112,20 @@ if (isset($_POST['update'])) {
             const quantityInput = document.getElementById('quantity-' + productId);
             let currentQuantity = parseInt(quantityInput.value);
             currentQuantity += change;
+
+            // Limiter la quantité entre 1 et 10
             if (currentQuantity < 1) currentQuantity = 1; // Ne pas permettre une quantité inférieure à 1
-            quantityInput.value = currentQuantity;
-            updateQuantity(productId); // Appeler la fonction pour mettre à jour automatiquement
+            if (currentQuantity > 10) currentQuantity = 10; // Limiter à 10
+
+            quantityInput.value = currentQuantity; // Mettre à jour la valeur du sélecteur
+
+            // Soumettre le formulaire automatiquement après la mise à jour de la quantité
+            updateQuantity(productId);
         }
 
         function updateQuantity(productId) {
             const form = document.querySelector(`input[name="id_produit"][value="${productId}"]`).closest('form');
-            console.log("Submitting form for product ID:", productId); // Debugging line
+            console.log("Submitting form for product ID:", productId); // Ligne de débogage
             form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
         }
     </script>
