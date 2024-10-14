@@ -291,13 +291,6 @@ function setupAddCategoryForm() {
 }
 
 
-
-
-
-
-
-
-
 // Assurez-vous que cette fonction est accessible globalement
 window.deleteArticle = ArticleManager.deleteArticle;
 
