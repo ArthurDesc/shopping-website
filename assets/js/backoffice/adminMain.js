@@ -1,5 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
-    loadContent('articles');
+import { switchTab, switchCategoryTab } from './tabManager.js';
+import { setupCategorySearch, loadCategories } from './categoryManager.js';
+import { loadArticles } from './articleManager.js';
+import { setupAddArticleForm } from './formManager.js';
+import { showToast } from './uiUtils.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialisez vos gestionnaires d'événements et autres fonctionnalités ici
 });
 
 function loadContent(section) {

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Oct 11, 2024 at 07:41 AM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Hôte : localhost:3306
+-- Généré le : sam. 12 oct. 2024 à 10:25
+-- Version du serveur : 8.0.30
+-- Version de PHP : 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `boutique`
+-- Base de données : `boutique`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `avis`
+-- Structure de la table `avis`
 --
 
 CREATE TABLE `avis` (
@@ -39,7 +39,7 @@ CREATE TABLE `avis` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Structure de la table `categories`
 --
 
 CREATE TABLE `categories` (
@@ -49,18 +49,31 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `categories`
+-- Déchargement des données de la table `categories`
 --
 
 INSERT INTO `categories` (`id_categorie`, `nom`, `description`) VALUES
-(2, 'h', 'hrfjgftgft'),
-(3, 'U', 'IUEGYED'),
-(4, 'T', 'FDYRD');
+(1, 'Vêtements', 'Catégorie pour tous les vêtements de sport'),
+(2, 'Chaussures', 'Catégorie pour toutes les chaussures de sport'),
+(3, 'Accessoires', 'Catégorie pour tous les accessoires de sport'),
+(4, 'Equipements', 'Catégorie pour tous les équipements de sport'),
+(5, 'T-shirts', 'Catégorie pour tous les t-shirts de sport'),
+(6, 'Pantalons', 'Catégorie pour tous les pantalons de sport'),
+(7, 'Shorts', 'Catégorie pour tous les shorts de sport'),
+(8, 'Sweats', 'Catégorie pour tous les sweats de sport'),
+(9, 'Casquettes', 'Catégorie pour toutes les casquettes de sport'),
+(10, 'Sacs', 'Catégorie pour tous les sacs de sport'),
+(11, 'Chaussettes', 'Catégorie pour toutes les chaussettes de sport'),
+(12, 'Gants', 'Catégorie pour tous les gants de sport'),
+(13, 'Maillots de bain', 'Catégorie pour tous les maillots de bain de sport'),
+(14, 'Combinaisons', 'Catégorie pour toutes les combinaisons de sport'),
+(15, 'Vêtements de running', 'Catégorie pour tous les vêtements de running'),
+(16, 'Leggings', 'leggings');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `commandes`
+-- Structure de la table `commandes`
 --
 
 CREATE TABLE `commandes` (
@@ -74,7 +87,7 @@ CREATE TABLE `commandes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `commande_produit`
+-- Structure de la table `commande_produit`
 --
 
 CREATE TABLE `commande_produit` (
@@ -87,7 +100,7 @@ CREATE TABLE `commande_produit` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `paiements`
+-- Structure de la table `paiements`
 --
 
 CREATE TABLE `paiements` (
@@ -104,7 +117,7 @@ CREATE TABLE `paiements` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `produits`
+-- Structure de la table `produits`
 --
 
 CREATE TABLE `produits` (
@@ -121,20 +134,24 @@ CREATE TABLE `produits` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `produits`
+-- Déchargement des données de la table `produits`
 --
 
 INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`, `stock`, `taille`, `marque`, `date_ajout`, `collection`) VALUES
-(4, 's', 'balenciaga.jpg', '2EH2F3YU', '23.00', 34, '33', 'HZ', NULL, 'HGY'),
-(7, 'hamza', 'femme.png', 'fcfg', '1.00', 4, '14', 'AEHVG', NULL, 'HEDVG'),
-(8, 'gikhlk', 'jamaique.png', 'd', '1.00', 3, '14', 'ER', NULL, 'ZE'),
-(9, 'sdjdf', 'jaune1.jpg', 'dsf', '87.00', 65, '0', 'dsfsd', NULL, 'djfsd'),
-(10, 'mlgke', 'NB1.jpg', 'fdkjfd', '76.00', 45, '0', 'sdfsfds', NULL, 'sdflkfs');
+(31, ' T-shirt Performance', 'perfNike.jpg', 'T-shirt respirant et confortable, idéal pour les entraînements intensifs.', 30.00, 50, '0', 'Nike', NULL, 'Homme'),
+(32, 'Pantalon de Yoga', 'yogaAdidas.jfif', 'Pantalon extensible et confortable, parfait pour le yoga et la méditation.', 40.00, 40, '0', 'Adidas', NULL, 'Femme'),
+(33, 'Short de Course', 'shortPuma.jpg', 'Short léger et respirant, idéal pour la course à pied.', 25.00, 60, '0', 'Puma', NULL, 'Homme'),
+(34, 'Legging de Sport', 'leggingUnderArmour.webp', 'Legging ajusté et confortable, parfait pour toutes les activités sportives.', 35.00, 35, '0', 'UnderArmour', NULL, 'Femme'),
+(35, 'Hoodie de Sport', 'hoodieReebok.webp', 'Sweat à capuche chaud et confortable, idéal pour les jours plus frais.', 50.00, 45, '0', 'Reebok', NULL, 'Homme'),
+(36, 'Veste de Running', 'vesteNorthface.jpg', 'Veste légère et imperméable, parfaite pour les sorties de running.', 60.00, 30, '0', 'NorthFace', NULL, 'Femme'),
+(37, 'T-shirt de Fitness', 'tshirtNewBalance.webp', 'T-shirt respirant et ajusté, parfait pour les séances de fitness.', 28.00, 40, '0', 'New Balance', NULL, 'Femme'),
+(38, 'Gilet de Sport', 'giletAsics.jpg', 'Gilet léger et chaud, idéal pour les activités en extérieur.', 45.00, 35, '0', 'Asics', NULL, 'Homme'),
+(39, 'Ensemble de Jogging', 'ensembleChamion.jpg', 'Ensemble de jogging confortable et chaud, parfait pour le sport et le loisir.', 70.00, 40, '0', 'Champion', NULL, 'Homme');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `produit_categorie`
+-- Structure de la table `produit_categorie`
 --
 
 CREATE TABLE `produit_categorie` (
@@ -143,19 +160,23 @@ CREATE TABLE `produit_categorie` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `produit_categorie`
+-- Déchargement des données de la table `produit_categorie`
 --
 
 INSERT INTO `produit_categorie` (`id_produit`, `id_categorie`) VALUES
-(4, 2),
-(8, 3),
-(4, 4),
-(7, 4);
+(34, 1),
+(35, 1),
+(36, 1),
+(37, 1),
+(38, 1),
+(39, 1),
+(37, 5),
+(35, 8);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utilisateurs`
+-- Structure de la table `utilisateurs`
 --
 
 CREATE TABLE `utilisateurs` (
@@ -169,7 +190,7 @@ CREATE TABLE `utilisateurs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `utilisateurs`
+-- Déchargement des données de la table `utilisateurs`
 --
 
 INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
@@ -180,14 +201,15 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
 (8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
-(9, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$Fccp.bEivtr7qhxBxCGHs.e8.UMPS1zWqzhh0TzS8hT37jVFkTgcq', 'admin');
+(9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user'),
+(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin');
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `avis`
+-- Index pour la table `avis`
 --
 ALTER TABLE `avis`
   ADD PRIMARY KEY (`id_avis`),
@@ -195,27 +217,27 @@ ALTER TABLE `avis`
   ADD KEY `idx_avis_produit` (`id_produit`);
 
 --
--- Indexes for table `categories`
+-- Index pour la table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id_categorie`);
 
 --
--- Indexes for table `commandes`
+-- Index pour la table `commandes`
 --
 ALTER TABLE `commandes`
   ADD PRIMARY KEY (`id_commande`),
   ADD KEY `idx_commande_utilisateur` (`id_utilisateur`);
 
 --
--- Indexes for table `commande_produit`
+-- Index pour la table `commande_produit`
 --
 ALTER TABLE `commande_produit`
   ADD PRIMARY KEY (`id_commande`,`id_produit`),
   ADD KEY `id_produit` (`id_produit`);
 
 --
--- Indexes for table `paiements`
+-- Index pour la table `paiements`
 --
 ALTER TABLE `paiements`
   ADD PRIMARY KEY (`id_paiement`),
@@ -223,98 +245,98 @@ ALTER TABLE `paiements`
   ADD KEY `idx_paiement_utilisateur` (`id_utilisateur`);
 
 --
--- Indexes for table `produits`
+-- Index pour la table `produits`
 --
 ALTER TABLE `produits`
   ADD PRIMARY KEY (`id_produit`);
 
 --
--- Indexes for table `produit_categorie`
+-- Index pour la table `produit_categorie`
 --
 ALTER TABLE `produit_categorie`
   ADD PRIMARY KEY (`id_produit`,`id_categorie`),
   ADD KEY `id_categorie` (`id_categorie`);
 
 --
--- Indexes for table `utilisateurs`
+-- Index pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
   ADD PRIMARY KEY (`id_utilisateur`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `avis`
+-- AUTO_INCREMENT pour la table `avis`
 --
 ALTER TABLE `avis`
   MODIFY `id_avis` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT pour la table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `commandes`
+-- AUTO_INCREMENT pour la table `commandes`
 --
 ALTER TABLE `commandes`
   MODIFY `id_commande` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `paiements`
+-- AUTO_INCREMENT pour la table `paiements`
 --
 ALTER TABLE `paiements`
   MODIFY `id_paiement` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `produits`
+-- AUTO_INCREMENT pour la table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
--- AUTO_INCREMENT for table `utilisateurs`
+-- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- Constraints for dumped tables
+-- Contraintes pour les tables déchargées
 --
 
 --
--- Constraints for table `avis`
+-- Contraintes pour la table `avis`
 --
 ALTER TABLE `avis`
   ADD CONSTRAINT `avis_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE,
   ADD CONSTRAINT `avis_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`) ON DELETE CASCADE;
 
 --
--- Constraints for table `commandes`
+-- Contraintes pour la table `commandes`
 --
 ALTER TABLE `commandes`
   ADD CONSTRAINT `commandes_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE;
 
 --
--- Constraints for table `commande_produit`
+-- Contraintes pour la table `commande_produit`
 --
 ALTER TABLE `commande_produit`
   ADD CONSTRAINT `commande_produit_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commandes` (`id_commande`) ON DELETE CASCADE,
   ADD CONSTRAINT `commande_produit_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`) ON DELETE CASCADE;
 
 --
--- Constraints for table `paiements`
+-- Contraintes pour la table `paiements`
 --
 ALTER TABLE `paiements`
   ADD CONSTRAINT `paiements_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commandes` (`id_commande`) ON DELETE CASCADE,
   ADD CONSTRAINT `paiements_ibfk_2` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE;
 
 --
--- Constraints for table `produit_categorie`
+-- Contraintes pour la table `produit_categorie`
 --
 ALTER TABLE `produit_categorie`
   ADD CONSTRAINT `produit_categorie_ibfk_1` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`) ON DELETE CASCADE,
