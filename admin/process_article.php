@@ -1,17 +1,17 @@
 <?php
 // Désactiver l'affichage des erreurs
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// Définir le type de contenu comme JSON
-header('Content-Type: application/json');
 
 // Fonction pour gérer les erreurs
 function handleError($errno, $errstr, $errfile, $errline) {
-    echo json_encode([
+    global $output;
+    $output = [
         'success' => false,
         'message' => "Erreur PHP: $errstr dans $errfile à la ligne $errline"
-    ]);
+    ];
+    echo json_encode($output);
     exit;
 }
 
@@ -21,6 +21,9 @@ set_error_handler("handleError");
 try {
     require_once '../includes/_db.php';
     require_once '../classe/ArticleManager.php';
+
+    error_log(print_r($_POST, true)); // Au début du fichier
+    error_log(print_r($_FILES, true)); // Pour vérifier les fichiers uploadés
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_article') {
         $errors = [];
@@ -87,21 +90,33 @@ try {
             $taille = $_POST['taille'] ?? '';
             $marque = $_POST['marque'] ?? '';
             $collection = $_POST['collection'] ?? '';
-            $categories = isset($_POST['categories']) ? explode(',', $_POST['categories']) : [];
+            $categories = isset($_POST['categories']) ? $_POST['categories'] : [];
+            if (!is_array($categories)) {
+                $categories = explode(',', $categories);
+            }
 
             $result = $articleManager->addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $imageName, $categories);
 
             if ($result) {
-                echo json_encode(['success' => true, 'message' => 'Article ajouté avec succès']);
+                $output = ['success' => true, 'message' => 'Article ajouté avec succès'];
             } else {
-                echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout de l\'article']);
+                $output = ['success' => false, 'message' => 'Erreur lors de l\'ajout de l\'article'];
             }
         } else {
-            echo json_encode(['success' => false, 'message' => implode('<br>', $errors)]);
+            $output = ['success' => false, 'message' => implode('<br>', $errors)];
         }
+
+        // À la fin du fichier
+        echo json_encode($output);
+        exit;
     } else {
         throw new Exception('Requête invalide');
     }
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
+
+// Définir le type de contenu comme JSON
+header('Content-Type: application/json');
+
+?>
