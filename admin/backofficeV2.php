@@ -117,8 +117,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     </script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 
-    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiManager.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/categoryManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/articleManager.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiUtils.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/formValidator.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordion.js"></script>

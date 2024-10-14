@@ -1,10 +1,9 @@
 <?php
 include '../includes/session.php';
-require_once '../includes/_header.php';
 include '../includes/_db.php';
 require_once '../classe/produit.php';
 require_once '../classe/ArticleManager.php';
-require_once '../classe/AdminManager.php'; // Assurez-vous que cette classe existe
+require_once '../classe/AdminManager.php';
 
 // Créez une instance de AdminManager
 $adminManager = new AdminManager($conn);
@@ -16,18 +15,21 @@ $isEditMode = $mode === 'edit';
 if ($isEditMode) {
     $id_utilisateur = get_id_utilisateur();
     if (!$id_utilisateur || !$adminManager->isAdmin($id_utilisateur)) {
-        header("Location: " . BASE_URL . "index.php");
+        header("Location: /shopping-website/index.php");
         exit();
     }
 }
 
 // Vérifier si un ID de produit est passé dans l'URL
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    echo "ID de produit non valide";
+    header("Location: /shopping-website/index.php");
     exit();
 }
 
 $id_produit = $_GET['id'];
+
+// Maintenant, incluez le header
+require_once '../includes/_header.php';
 
 // Récupérer les détails du produit
 $query = "SELECT * FROM produits WHERE id_produit = ?";

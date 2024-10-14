@@ -1,4 +1,4 @@
-const CategoryManager = (function() {
+const CategoryManager = (function(UIManager) {
     function loadCategories() {
         console.log("Début de loadCategories()");
         const categoriesContainer = document.getElementById('categories-container');
@@ -31,12 +31,7 @@ const CategoryManager = (function() {
                 <ul id="categories-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700" aria-labelledby="dropdownSearchButton">
                     <!-- Les catégories seront ajoutées ici dynamiquement -->
                 </ul>
-                <div class="p-3 border-t border-gray-200">
-                    <form id="addCategoryForm" class="flex items-center">
-                        <input type="text" id="newCategoryName" name="newCategoryName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nouvelle catégorie" required>
-                        <button type="submit" class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Ajouter</button>
-                    </form>
-                </div>
+
             </div>
         `;
   
@@ -64,8 +59,8 @@ const CategoryManager = (function() {
             });
   
             console.log("Fin du remplissage des catégories");
-            setupCategorySearch();
-            setupDropdown(); // Ajout de cette ligne
+            UIManager.setupCategorySearch();
+            UIManager.setupDropdown();
         })
         .catch(error => {
             console.error("Erreur lors du chargement des catégories:", error);
@@ -104,4 +99,4 @@ const CategoryManager = (function() {
         loadCategories: loadCategories,
         addNewCategory: addNewCategory
     };
-})();
+})(UIManager);  // Passez UIManager comme dépendance ici
