@@ -82,13 +82,14 @@ if (isset($_POST['update'])) {
                     <td>
                         <form method="post" action="">
                             <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
-                            <button type="button" class="change-quantity" onclick="changeQuantity(<?= $product['id_produit'] ?>, -1)">-</button>
-                            <input type="number" name="quantite" value="<?= intval($quantity) ?>" min="1" id="quantity-<?= $product['id_produit'] ?>" onchange="updateQuantity(<?= $product['id_produit'] ?>)">
-                            <button type="button" class="change-quantity" onclick="changeQuantity(<?= $product['id_produit'] ?>, 1)">+</button>
-                            <button type="submit" name="update" style="display:none;">Mettre à jour</button> <!-- Cacher le bouton de mise à jour -->
+                            <select name="quantite" id="quantity-<?= $product['id_produit'] ?>" onchange="updateQuantity(<?= $product['id_produit'] ?>)">
+                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                    <option value="<?= $i ?>" <?= $i == intval($quantity) ? 'selected' : '' ?>><?= $i ?></option>
+                                <?php endfor; ?>
+                            </select>
                         </form>
                     </td>
-                    <td><a href="panier.php?del=<?= $product['id_produit']; ?>"><img src="assets/images/delete.png" alt="Supprimer"></a></td>
+                    <td><a href="panier.php?del=<?= $product['id_produit']; ?>"><img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="30" height="30"></a></td>
                 </tr>
             <?php 
                 }
@@ -104,18 +105,9 @@ if (isset($_POST['update'])) {
     <script src="../assets/js/script.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
     <script>
-        function changeQuantity(productId, change) {
-            const quantityInput = document.getElementById('quantity-' + productId);
-            let currentQuantity = parseInt(quantityInput.value);
-            currentQuantity += change;
-            if (currentQuantity < 1) currentQuantity = 1; // Ne pas permettre une quantité inférieure à 1
-            quantityInput.value = currentQuantity;
-            updateQuantity(productId); // Appeler la fonction pour mettre à jour automatiquement
-        }
-
         function updateQuantity(productId) {
             const form = document.querySelector(`input[name="id_produit"][value="${productId}"]`).closest('form');
-            console.log("Submitting form for product ID:", productId); // Debugging line
+            console.log("Submitting form for product ID:", productId); // Ligne de débogage
             form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
         }
     </script>
