@@ -29,7 +29,7 @@ function switchTab(clickedTab, tabId) {
   const tabContent = document.getElementById("tab-content");
   switch (tabId) {
     case "modifier":
-      loadArticles();
+      ArticleManager.loadArticles();
       break;
     case "ajouter":
       tabContent.innerHTML = `
@@ -164,7 +164,7 @@ function switchTab(clickedTab, tabId) {
             });
         });
         console.log("Avant loadCategories()");
-        loadCategories();
+        CategoryManager.loadCategories();
         console.log("Après loadCategories()");
       break;
     default:
@@ -271,113 +271,9 @@ function switchCategoryTab(clickedTab, tabId) {
   }
 }
 
-function setupCategorySearch() {
-  console.log("Début de setupCategorySearch()");
-  const searchInput = document.getElementById('input-group-search');
-  const categoriesList = document.getElementById('categories-list');
-  
-  console.log("searchInput:", searchInput);
-  console.log("categoriesList:", categoriesList);
 
-  if (searchInput && categoriesList) {
-    searchInput.addEventListener('input', function() {
-      console.log("Recherche en cours:", this.value);
-      const searchTerm = this.value.toLowerCase();
-      const categoryItems = categoriesList.querySelectorAll('li');
-  
-      categoryItems.forEach(item => {
-        const categoryName = item.textContent.toLowerCase();
-        if (categoryName.includes(searchTerm)) {
-          item.style.display = '';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    });
-    console.log("Écouteur d'événements ajouté pour la recherche");
-  } else {
-    console.log("searchInput ou categoriesList non trouvé");
-  }
-  console.log("Fin de setupCategorySearch()");
-}
 
-function loadCategories() {
-    console.log("Début de loadCategories()");
-    const categoriesContainer = document.getElementById('categories-container');
-  
-    if (!categoriesContainer) {
-        console.log("categoriesContainer non trouvé");
-        return;
-    }
-  
-    categoriesContainer.innerHTML = `
-        <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" class="w-full inline-flex items-center justify-between px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
-            Sélectionner les catégories 
-            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-        </button>
 
-        <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-full md:w-60 mt-2 absolute">
-            <div class="p-3">
-                <label for="input-group-search" class="sr-only">Rechercher</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                    </div>
-                    <input type="text" id="input-group-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Rechercher une catégorie">
-                </div>
-            </div>
-            <ul id="categories-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700" aria-labelledby="dropdownSearchButton">
-                <!-- Les catégories seront ajoutées ici dynamiquement -->
-            </ul>
-            <div class="p-3 border-t border-gray-200">
-                <form id="addCategoryForm" class="flex items-center">
-                    <input type="text" id="newCategoryName" name="newCategoryName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nouvelle catégorie" required>
-                    <button type="submit" class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Ajouter</button>
-                </form>
-            </div>
-        </div>
-    `;
-  
-    const categoriesList = document.getElementById('categories-list');
-  
-    fetch('/shopping-website/admin/backofficeV2.php', {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(categories => {
-        console.log("Catégories reçues:", categories);
-  
-        categories.forEach(category => {
-            console.log("Ajout de la catégorie:", category);
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <div class="flex items-center p-2 rounded hover:bg-gray-100">
-                    <input id="category-${category.id_categorie}" type="checkbox" name="categories[]" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                    <label for="category-${category.id_categorie}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded">${category.nom}</label>
-                </div>
-            `;
-            categoriesList.appendChild(li);
-        });
-  
-        console.log("Fin du remplissage des catégories");
-        setupCategorySearch();
-        setupDropdown(); // Ajout de cette ligne
-    })
-    .catch(error => {
-        console.error("Erreur lors du chargement des catégories:", error);
-    });
-  
-    console.log("Fin de loadCategories()");
-
-    // Appeler la fonction pour configurer le formulaire d'ajout de catégorie
-    setupAddCategoryForm();
-}
 
 function setupAddCategoryForm() {
     const addCategoryForm = document.getElementById('addCategoryForm');
@@ -394,133 +290,16 @@ function setupAddCategoryForm() {
     }
 }
 
-function addNewCategory(categoryName) {
-    fetch('/shopping-website/admin/add_category.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `categoryName=${encodeURIComponent(categoryName)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showToast('Catégorie ajoutée avec succès', 'success');
-            loadCategories(); // Recharger la liste des catégories
-        } else {
-            showToast('Erreur lors de l\'ajout de la catégorie: ' + data.message, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Erreur:', error);
-        showToast('Une erreur s\'est produite lors de l\'ajout de la catégorie', 'error');
-    });
-}
 
-function setupDropdown() {
-    const dropdownButton = document.getElementById('dropdownSearchButton');
-    const dropdownMenu = document.getElementById('dropdownSearch');
 
-    dropdownButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        dropdownMenu.classList.toggle('hidden');
-    });
 
-    document.addEventListener('click', function(event) {
-        if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
-            dropdownMenu.classList.add('hidden');
-        }
-    });
-}
 
-function loadArticles() {
-    console.log("Chargement des articles");
-    const tabContent = document.getElementById("tab-content");
-    
-    fetch('/shopping-website/admin/get_articles.php')
-        .then(response => response.json())
-        .then(articles => {
-            console.log("Articles chargés:", articles);
-            
-            let articlesHTML = `
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="py-2 px-4 border-b">ID</th>
-                                <th class="py-2 px-4 border-b">Titre</th>
-                                <th class="py-2 px-4 border-b">Prix</th>
-                                <th class="py-2 px-4 border-b">Stock</th>
-                                <th class="py-2 px-4 border-b">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
 
-            articles.forEach(article => {
-                articlesHTML += `
-                    <tr>
-                        <td class="py-2 px-4 border-b">${article.id_article}</td>
-                        <td class="py-2 px-4 border-b">${article.titre}</td>
-                        <td class="py-2 px-4 border-b">${article.prix} €</td>
-                        <td class="py-2 px-4 border-b">${article.stock}</td>
-                        <td class="py-2 px-4 border-b">
-                            <button onclick="deleteArticle(${article.id_article})" class="text-red-500 hover:text-red-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
 
-            articlesHTML += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
 
-            tabContent.innerHTML = articlesHTML;
-        })
-        .catch(error => {
-            console.error("Erreur lors du chargement des articles:", error);
-            showToast("Erreur lors du chargement des articles", "error");
-        });
-}
-
-function deleteArticle(articleId) {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cet article ?")) {
-        fetch('/shopping-website/admin/delete_article.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id_article: articleId })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                showToast("Article supprimé avec succès", "success");
-                loadArticles(); // Recharger la liste des articles
-            } else {
-                showToast("Erreur lors de la suppression de l'article : " + (data.message || "Erreur inconnue"), "error");
-            }
-        })
-        .catch(error => {
-            console.error("Erreur:", error);
-            showToast("Une erreur s'est produite lors de la suppression de l'article", "error");
-        });
-    }
-}
 
 // Assurez-vous que cette fonction est accessible globalement
-window.deleteArticle = deleteArticle;
+window.deleteArticle = ArticleManager.deleteArticle;
 
 function loadCategoriesList() {
   const categoriesList = document.getElementById('categories-list');
@@ -590,3 +369,8 @@ function deleteCategory(categoryId) {
 // Assurez-vous que ces fonctions sont accessibles globalement
 window.editCategory = editCategory;
 window.deleteCategory = deleteCategory;
+
+// Exposez les fonctions nécessaires globalement
+window.deleteArticle = ArticleManager.deleteArticle;
+window.editArticle = ArticleManager.editArticle;
+window.addNewCategory = CategoryManager.addNewCategory;
