@@ -8,6 +8,7 @@ class ArticleManager {
 
     public function addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $image, $categories = []) {
         try {
+            error_log("Début de l'ajout de l'article");
             // Préparer la requête d'insertion de l'article
             $query = "INSERT INTO produits (nom, description, prix, stock, taille, marque, collection, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($query);
@@ -25,29 +26,27 @@ class ArticleManager {
             if ($stmt->execute()) {
                 $article_id = $stmt->insert_id;
                 
-                // Insérer les catégories pour cet article seulement si des catégories sont fournies
-                if (!empty($categories)) {
-                    $category_query = "INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)";
-                    $category_stmt = $this->conn->prepare($category_query);
-                    
-                    foreach ($categories as $category_id) {
-                        $category_stmt->bind_param("ii", $article_id, $category_id);
-                        $category_stmt->execute();
+                error_log("Article inséré avec succès");
+                
+                error_log("Début de l'ajout des catégories");
+                // Ajout des catégories
+                foreach ($categories as $category_id) {
+                    $stmt = $this->conn->prepare("INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)");
+                    $stmt->bind_param("ii", $article_id, $category_id);
+                    if (!$stmt->execute()) {
+                        return "Erreur lors de l'ajout des catégories : " . $stmt->error;
                     }
-                    
-                    $category_stmt->close();
                 }
                 
-                $stmt->close();
+                error_log("Catégories ajoutées avec succès");
+                
                 return true;
             } else {
-                error_log("Erreur lors de l'ajout de l'article : " . $stmt->error);
-                $stmt->close();
-                return false;
+                return "Erreur lors de l'exécution de la requête : " . $stmt->error;
             }
         } catch (Exception $e) {
-            error_log("Erreur lors de l'ajout de l'article : " . $e->getMessage());
-            return false;
+            error_log("Exception dans addArticle: " . $e->getMessage());
+            return "Erreur : " . $e->getMessage();
         }
     }
 

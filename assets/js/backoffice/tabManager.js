@@ -140,11 +140,15 @@ function switchTab(clickedTab, tabId) {
             method: "POST",
             body: formData,
           })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            .then((response) => response.text())
+            .then((text) => {
+              console.log("Réponse brute du serveur:", text); // Pour le débogage
+              try {
+                return JSON.parse(text);
+              } catch (e) {
+                console.error("Erreur de parsing JSON:", e);
+                throw new Error("La réponse du serveur n'est pas un JSON valide: " + text);
               }
-              return response.json();
             })
             .then((data) => {
               console.log("Données reçues:", data);
@@ -159,9 +163,9 @@ function switchTab(clickedTab, tabId) {
               }
             })
             .catch((error) => {
-              console.error("Erreur:", error);
+              console.error("Erreur complète:", error);
               showToast(
-                "Une erreur s'est produite lors de l'ajout de l'article.",
+                "Une erreur s'est produite lors de l'ajout de l'article: " + error.message,
                 "error"
               );
             });

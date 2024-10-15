@@ -4,17 +4,18 @@
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
+header('Content-Type: application/json');
+
 require_once '../includes/_db.php';
 require_once '../classe/CategoryManager.php';
 require_once '../classe/AdminManager.php';
-
-header('Content-Type: application/json');
 
 try {
     // Vérifier si l'utilisateur est connecté et a les droits d'administrateur
     session_start();
     if (!isset($_SESSION['id_utilisateur'])) {
-        throw new Exception('Utilisateur non connecté');
+        echo json_encode(['success' => false, 'message' => 'Utilisateur non connecté']);
+        exit;
     }
 
     $adminManager = new AdminManager($conn);
@@ -63,4 +64,5 @@ try {
     }
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    exit;
 }
