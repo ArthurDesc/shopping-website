@@ -1,26 +1,38 @@
 <?php
-// Désactiver l'affichage des erreurs
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Désactiver l'affichage des erreurs à l'écran
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
+
+
 
 // Fonction pour gérer les erreurs
 function handleError($errno, $errstr, $errfile, $errline) {
-    global $output;
-    $output = [
+    error_log("Erreur PHP: $errstr dans $errfile à la ligne $errline");
+    header('Content-Type: application/json');
+    echo json_encode([
         'success' => false,
-        'message' => "Erreur PHP: $errstr dans $errfile à la ligne $errline"
-    ];
-    echo json_encode($output);
+        'message' => "Une erreur interne s'est produite."
+    ]);
     exit;
 }
 
 // Définir le gestionnaire d'erreurs
 set_error_handler("handleError");
 
+// Capturer les erreurs fatales
+register_shutdown_function(function() {
+    $error = error_get_last();
+    if ($error !== null && in_array($error['type'], [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE])) {
+        handleError($error['type'], $error['message'], $error['file'], $error['line']);
+    }
+});
+
+header('Content-Type: application/json');
+
 try {
-    require_once '../includes/_db.php';
-    require_once '../classe/ArticleManager.php';
+    require_once __DIR__ . '/../includes/_db.php';
+    require_once __DIR__ . '/../classe/ArticleManager.php';
+    require_once __DIR__ . '/../classe/CategoryManager.php';
 
     error_log(print_r($_POST, true)); // Au début du fichier
     error_log(print_r($_FILES, true)); // Pour vérifier les fichiers uploadés
@@ -97,10 +109,11 @@ try {
 
             $result = $articleManager->addArticle($nom, $description, $prix, $stock, $taille, $marque, $collection, $imageName, $categories);
 
-            if ($result) {
+            if ($result === true) {
                 $output = ['success' => true, 'message' => 'Article ajouté avec succès'];
             } else {
-                $output = ['success' => false, 'message' => 'Erreur lors de l\'ajout de l\'article'];
+                error_log("Erreur lors de l'ajout de l'article: " . $result);
+                $output = ['success' => false, 'message' => 'Erreur lors de l\'ajout de l\'article: ' . $result];
             }
         } else {
             $output = ['success' => false, 'message' => implode('<br>', $errors)];
@@ -113,10 +126,11 @@ try {
         throw new Exception('Requête invalide');
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    error_log("Erreur dans process_article.php: " . $e->getMessage());
+    echo json_encode([
+        'success' => false,
+        'message' => 'Une erreur est survenue : ' . $e->getMessage()
+    ]);
+    exit;
 }
-
-// Définir le type de contenu comme JSON
-header('Content-Type: application/json');
-
 ?>

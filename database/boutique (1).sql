@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 14, 2024 at 12:38 PM
+-- Generation Time: Oct 15, 2024 at 09:44 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -56,7 +56,7 @@ CREATE TABLE `categories` (
 INSERT INTO `categories` (`id_categorie`, `nom`, `description`, `parent_id`) VALUES
 (1, 'Vêtements', 'Catégorie pour tous les vêtements de sport', NULL),
 (2, 'Chaussures', 'Catégorie pour toutes les chaussures de sport', NULL),
-(3, 'Accessoires', 'Catégorie pour tous les accessoires de sport', NULL),
+(3, 'Accesso', 'Catégorie pour tous les accessoires de sport', NULL),
 (4, 'Equipements', 'Catégorie pour tous les équipements de sport', NULL),
 (5, 'T-shirts', 'Catégorie pour tous les t-shirts de sport', 1),
 (6, 'Pantalons', 'Catégorie pour tous les pantalons de sport', 1),
@@ -216,6 +216,22 @@ ALTER TABLE `avis`
   ADD PRIMARY KEY (`id_avis`),
   ADD KEY `id_utilisateur` (`id_utilisateur`),
   ADD KEY `idx_avis_produit` (`id_produit`);
+
+--
+-- Indexes for table `produits`
+--
+ALTER TABLE `produits`
+  ADD PRIMARY KEY (`id_produit`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `produits`
+--
+ALTER TABLE `produits`
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
