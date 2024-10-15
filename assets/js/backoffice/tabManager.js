@@ -440,10 +440,17 @@ function createCategoryAccordionItem(category, index, allCategories) {
     <div class="flex flex-col p-5 md:p-0 w-full transform transition duration-300 ease-in-out border-b pb-10"
       x-cloak x-show="open${index}" x-collapse x-collapse.duration.500ms>
       ${subCategories.map(subCat => `
-        <div class="mb-2 flex justify-between items-center">
-          <span>${subCat.nom}</span>
+        <div class="mb-2 flex justify-between items-center" x-data="{ editing: false, subCategoryName: '${subCat.nom}' }">
+          <span x-show="!editing" x-text="subCategoryName"></span>
+          <input 
+            x-show="editing" 
+            x-model="subCategoryName" 
+            @blur="updateSubCategoryName(${subCat.id_categorie}, subCategoryName); editing = false"
+            @keyup.enter="updateSubCategoryName(${subCat.id_categorie}, subCategoryName); editing = false"
+            class="border rounded px-2 py-1 text-sm"
+          >
           <div>
-            <button onclick="editCategory(${subCat.id_categorie})" class="text-blue-500 hover:text-blue-700 ml-2">
+            <button @click="editing = true" class="text-blue-500 hover:text-blue-700 ml-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
               </svg>
@@ -497,6 +504,32 @@ function deleteCategory(categoryId) {
   }
 }
 
+function updateSubCategoryName(categoryId, newName) {
+  fetch('/shopping-website/admin/update_category.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id_categorie: categoryId, nom: newName })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast("Nom de la sous-catégorie mis à jour avec succès", "success");
+      loadCategoriesList(); // Recharger la liste des catégories
+    } else {
+      showToast("Erreur lors de la mise à jour du nom de la sous-catégorie : " + data.message, "error");
+    }
+  })
+  .catch(error => {
+    console.error("Erreur:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la sous-catégorie", "error");
+  });
+}
+
+// N'oubliez pas d'exposer cette fonction globalement
+window.updateSubCategoryName = updateSubCategoryName;
+
 // Exposer les fonctions nécessaires globalement
 window.switchTab = switchTab;
 window.switchCategoryTab = switchCategoryTab;
@@ -506,5 +539,4 @@ window.deleteArticle = ArticleManager.deleteArticle;
 window.editArticle = ArticleManager.editArticle;
 window.addNewCategory = CategoryManager.addNewCategory;
 
-// Fin du fichier tabManager.js
 // Fin du fichier tabManager.js
