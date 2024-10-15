@@ -341,6 +341,13 @@ function loadCategoriesList() {
       const mainCategories = categories.filter(cat => cat.parent_id === null);
       console.log("Catégories principales:", mainCategories);
       
+      // Trier les catégories principales par nombre de sous-catégories (ordre décroissant)
+      mainCategories.sort((a, b) => {
+        const subCatsA = categories.filter(cat => cat.parent_id === a.id_categorie).length;
+        const subCatsB = categories.filter(cat => cat.parent_id === b.id_categorie).length;
+        return subCatsB - subCatsA;
+      });
+      
       mainCategories.forEach((mainCategory, index) => {
         console.log("Création de l'élément d'accordéon pour:", mainCategory.nom);
         const categoryItem = createCategoryAccordionItem(mainCategory, index, categories);
