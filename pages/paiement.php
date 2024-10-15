@@ -1,7 +1,6 @@
 <?php
 // Inclure l'autoloader de Composer
-require 'vendor/autoload.php'; // Ajout de l'autoloader de Composer
-
+require_once 'stripe-php/init.php';
 // Configuration de Stripe
 \Stripe\Stripe::setApiKey('sk_test_51Q7Hl1P5XJmDt2UG2j3o2mIobvzMWo0XoZ8Md4YeqakLP682h9aEuYczQfUzjEMEdt6SyLUENnbgTmZPNotX2rEa00cMDNxsLs'); // Remplace par ta clé secrète
 ?>
