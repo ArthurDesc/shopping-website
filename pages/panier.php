@@ -145,6 +145,10 @@ if (isset($_POST['update'])) {
         function updateQuantity(productId) {
             const form = document.querySelector(`input[name="id_produit"][value="${productId}"]`).closest('form');
             console.log("Submitting form for product ID:", productId); // Ligne de débogage
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Empêche le rechargement de la page
+                form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
+            });
             form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
         }
     </script>
