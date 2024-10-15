@@ -45,19 +45,26 @@ const CategoryManager = (function(UIManager) {
         .then(response => response.json())
         .then(categories => {
             console.log("Catégories reçues:", categories);
-  
+
             categories.forEach(category => {
                 console.log("Ajout de la catégorie:", category);
                 const li = document.createElement('li');
                 li.innerHTML = `
-                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
-                        <input id="category-${category.id_categorie}" type="checkbox" name="categories[]" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                        <label for="category-${category.id_categorie}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded">${category.nom}</label>
+                    <div class="flex items-center justify-between p-2 rounded hover:bg-gray-100">
+                        <div>
+                            <input id="category-${category.id_categorie}" type="checkbox" name="categories[]" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="category-${category.id_categorie}" class="ms-2 text-sm font-medium text-gray-900 rounded">${category.nom}</label>
+                        </div>
+                        <button onclick="CategoryManager.deleteCategory(${category.id_categorie})" class="text-red-500 hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
                     </div>
                 `;
                 categoriesList.appendChild(li);
             });
-  
+
             console.log("Fin du remplissage des catégories");
             UIManager.setupCategorySearch();
             UIManager.setupDropdown();
@@ -95,8 +102,34 @@ const CategoryManager = (function(UIManager) {
         });
     }
 
+    function deleteCategory(categoryId) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) {
+            fetch('/shopping-website/admin/delete_category.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id_categorie: categoryId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast("Catégorie supprimée avec succès", "success");
+                    loadCategories(); // Recharger la liste des catégories
+                } else {
+                    showToast("Erreur lors de la suppression de la catégorie : " + data.message, "error");
+                }
+            })
+            .catch(error => {
+                console.error("Erreur:", error);
+                showToast("Une erreur s'est produite lors de la suppression de la catégorie", "error");
+            });
+        }
+    }
+
     return {
         loadCategories: loadCategories,
-        addNewCategory: addNewCategory
+        addNewCategory: addNewCategory,
+        deleteCategory: deleteCategory
     };
 })(UIManager);  // Passez UIManager comme dépendance ici

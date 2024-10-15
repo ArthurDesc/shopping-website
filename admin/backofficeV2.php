@@ -9,13 +9,13 @@
 
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-  }?>
+} ?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_article') {
     header('Content-Type: application/json');
-    
+
     // Votre logique de traitement ici
-    
+
     echo json_encode(['success' => true, 'message' => 'Article ajouté avec succès']);
     exit;
 }
@@ -112,11 +112,13 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         </div>
     </main>
     <script>
-               const BASE_URL = '<?php echo BASE_URL; ?>';
-               const categories = <?php echo $categoriesJson; ?>;
+        const BASE_URL = '<?php echo BASE_URL; ?>';
+        const categories = <?php echo $categoriesJson; ?>;
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 
+<script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+<script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/categoryManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/articleManager.js"></script>
@@ -126,42 +128,42 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordion.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/adminMain.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM chargé');
-        const form = document.querySelector('form');
-        if (form) {
-            console.log('Formulaire trouvé');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Formulaire soumis');
-                const formData = new FormData(form);
-                formData.append('action', 'add_article');
-                console.log('FormData créé:', Object.fromEntries(formData));
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM chargé');
+            const form = document.querySelector('form');
+            if (form) {
+                console.log('Formulaire trouvé');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('Formulaire soumis');
+                    const formData = new FormData(form);
+                    formData.append('action', 'add_article');
+                    console.log('FormData créé:', Object.fromEntries(formData));
 
-                fetch('backofficeV2.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    console.log('Réponse reçue:', response);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Données reçues:', data);
-                    if (data.success) {
-                        form.reset();
-                    } else {
-                        // Gérer le cas d'erreur ici
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
+                    fetch('backofficeV2.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => {
+                            console.log('Réponse reçue:', response);
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Données reçues:', data);
+                            if (data.success) {
+                                form.reset();
+                            } else {
+                                // Gérer le cas d'erreur ici
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                        });
                 });
-            });
-        } else {
-            console.log('Formulaire non trouvé');
-        }
-    });
+            } else {
+                console.log('Formulaire non trouvé');
+            }
+        });
     </script>
 </body>
 

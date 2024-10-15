@@ -1,3 +1,6 @@
+// Début du fichier tabManager.js
+
+// Fonction switchTab existante
 function switchTab(clickedTab, tabId) {
   document.querySelectorAll('a[onclick^="switchTab"]').forEach((tab) => {
     tab.classList.remove(
@@ -171,6 +174,8 @@ function switchTab(clickedTab, tabId) {
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
   }
 }
+
+// Nouvelle fonction switchCategoryTab
 function switchCategoryTab(clickedTab, tabId) {
   document
     .querySelectorAll('a[onclick^="switchCategoryTab"]')
@@ -205,19 +210,31 @@ function switchCategoryTab(clickedTab, tabId) {
   switch (tabId) {
     case "modifier":
       tabContent.innerHTML = `
-        <div class="mb-4">
-          <div class="relative">
-            <input type="text" id="search-categories" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Rechercher une catégorie...">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-              </svg>
+        <div id="category-management" class="p-4">
+          <h2 class="text-2xl font-bold mb-4">Gestion des Catégories</h2>
+
+          <!-- Liste des catégories -->
+          <div id="categories-list" class="space-y-4">
+            <!-- Les catégories seront ajoutées ici dynamiquement -->
+          </div>
+
+
+        <!-- Template pour une catégorie (sera cloné par JavaScript) -->
+        <template id="category-template">
+          <div class="category bg-white p-4 rounded-lg shadow">
+            <div class="flex justify-between items-center">
+              <span class="category-name font-semibold"></span>
+              <div class="space-x-2">
+                <button class="edit-category text-blue-500 hover:text-blue-700">Modifier</button>
+                <button class="delete-category text-red-500 hover:text-red-700">Supprimer</button>
+                <button class="toggle-subcategories text-gray-500 hover:text-gray-700">▼</button>
+              </div>
+            </div>
+            <div class="subcategories mt-2 ml-4 hidden">
+              <!-- Les sous-catégories seront ajoutées ici dynamiquement -->
             </div>
           </div>
-        </div>
-        <div id="categories-list" class="space-y-2">
-          <!-- La liste des catégories sera chargée ici dynamiquement -->
-        </div>
+        </template>
       `;
       loadCategoriesList();
       break;
@@ -271,53 +288,63 @@ function switchCategoryTab(clickedTab, tabId) {
   }
 }
 
-
-
-
-
+// Fonction setupAddCategoryForm
 function setupAddCategoryForm() {
-    const addCategoryForm = document.getElementById('addCategoryForm');
-    if (addCategoryForm) {
-        addCategoryForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const newCategoryName = document.getElementById('newCategoryName').value;
-            if (newCategoryName) {
-                addNewCategory(newCategoryName);
-            }
-        });
-    } else {
-        console.log("Formulaire d'ajout de catégorie non trouvé");
-    }
+  const addCategoryForm = document.getElementById('addCategoryForm');
+  if (addCategoryForm) {
+    addCategoryForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const newCategoryName = document.getElementById('newCategoryName').value;
+      if (newCategoryName) {
+        addNewCategory(newCategoryName);
+      }
+    });
+  } else {
+    console.log("Formulaire d'ajout de catégorie non trouvé");
+  }
 }
 
+function initAccordion() {
+  console.log("Début de initAccordion");
+  if (typeof window.Accordion === 'undefined') {
+    console.error("La bibliothèque Flowbite n'est pas chargée correctement");
+    return;
+  }
 
-// Assurez-vous que cette fonction est accessible globalement
-window.deleteArticle = ArticleManager.deleteArticle;
+  const accordionElement = document.getElementById('accordion-color');
+  if (accordionElement) {
+    console.log("Élément d'accordéon trouvé, initialisation...");
+    const accordion = new window.Accordion(accordionElement, {
+      onToggle: (item) => {
+        console.log('Toggled accordion item:', item);
+      }
+    });
+    console.log("Accordéon initialisé");
+  } else {
+    console.error("L'élément accordion-color n'a pas été trouvé");
+  }
+}
 
+// Fonction loadCategoriesList
 function loadCategoriesList() {
+  console.log("Début de loadCategoriesList");
   const categoriesList = document.getElementById('categories-list');
   
   fetch('/shopping-website/admin/get_categories.php')
     .then(response => response.json())
     .then(categories => {
-      categoriesList.innerHTML = '';
+      console.log("Catégories reçues:", categories);
+      categoriesList.innerHTML = '<div class="w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl">';
       const mainCategories = categories.filter(cat => cat.parent_id === null);
+      console.log("Catégories principales:", mainCategories);
       
-      mainCategories.forEach(mainCategory => {
-        const categoryItem = createCategoryItem(mainCategory);
-        categoriesList.appendChild(categoryItem);
-        
-        const subCategories = categories.filter(cat => cat.parent_id === mainCategory.id_categorie);
-        if (subCategories.length > 0) {
-          const subCategoriesList = document.createElement('div');
-          subCategoriesList.className = 'ml-6 mt-2 space-y-2';
-          subCategories.forEach(subCategory => {
-            const subCategoryItem = createCategoryItem(subCategory);
-            subCategoriesList.appendChild(subCategoryItem);
-          });
-          categoryItem.appendChild(subCategoriesList);
-        }
+      mainCategories.forEach((mainCategory, index) => {
+        console.log("Création de l'élément d'accordéon pour:", mainCategory.nom);
+        const categoryItem = createCategoryAccordionItem(mainCategory, index, categories);
+        categoriesList.querySelector('div').appendChild(categoryItem);
       });
+
+      categoriesList.innerHTML += '</div>';
     })
     .catch(error => {
       console.error("Erreur lors du chargement des catégories:", error);
@@ -325,33 +352,69 @@ function loadCategoriesList() {
     });
 }
 
-function createCategoryItem(category) {
-  const categoryItem = document.createElement('div');
-  categoryItem.className = 'flex items-center justify-between p-2 bg-white rounded-lg shadow mb-2';
-  categoryItem.innerHTML = `
-    <span>${category.nom}</span>
-    <div>
-      <button onclick="editCategory(${category.id_categorie})" class="text-blue-500 hover:text-blue-700 mr-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-        </svg>
-      </button>
-      <button onclick="deleteCategory(${category.id_categorie})" class="text-red-500 hover:text-red-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+function createCategoryAccordionItem(category, index, allCategories) {
+  console.log("Création de l'élément d'accordéon pour la catégorie:", category.nom);
+  const item = document.createElement('div');
+  item.setAttribute('x-data', `{ open${index}: false }`);
+  
+  const subCategories = allCategories.filter(cat => cat.parent_id === category.id_categorie);
+  
+  item.innerHTML = `
+    <div @click="open${index} = !open${index}" class='flex items-center justify-between text-gray-600 w-full border-b overflow-hidden mt-5 mb-5 mx-auto'>
+      <div class='flex items-center'>
+        <div class='w-10 border-r px-2 transform transition duration-300 ease-in-out' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>          
+        </div>
+        <div class='flex items-center px-2 py-3'>
+          <div class='mx-3'>
+            <span class="hover:underline">${category.nom}</span>
+          </div>
+        </div>
+      </div>
+      <button onclick="editCategory(${category.id_categorie})" class="text-blue-500 hover:text-blue-700 mr-4" title="Modifier la catégorie">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
         </svg>
       </button>
     </div>
+
+    <div class="flex flex-col p-5 md:p-0 w-full transform transition duration-300 ease-in-out border-b pb-10"
+      x-cloak x-show="open${index}" x-collapse x-collapse.duration.500ms>
+      ${subCategories.map(subCat => `
+        <div class="mb-2 flex justify-between items-center">
+          <span>${subCat.nom}</span>
+          <div>
+            <button onclick="editCategory(${subCat.id_categorie})" class="text-blue-500 hover:text-blue-700 ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+            </button>
+            <button onclick="deleteCategory(${subCat.id_categorie})" class="text-red-500 hover:text-red-700 ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
   `;
-  return categoryItem;
+  
+  console.log("Élément d'accordéon créé pour la catégorie:", category.nom);
+  return item;
 }
 
+
+// Fonction editCategory
 function editCategory(categoryId) {
   // Implémentez la logique pour éditer une catégorie
   console.log("Édition de la catégorie:", categoryId);
   // Vous pouvez ouvrir un modal ou rediriger vers une page d'édition
 }
 
+// Fonction deleteCategory
 function deleteCategory(categoryId) {
   if (confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")) {
     fetch('/shopping-website/admin/delete_category.php', {
@@ -377,11 +440,14 @@ function deleteCategory(categoryId) {
   }
 }
 
-// Assurez-vous que ces fonctions sont accessibles globalement
+// Exposer les fonctions nécessaires globalement
+window.switchTab = switchTab;
+window.switchCategoryTab = switchCategoryTab;
 window.editCategory = editCategory;
 window.deleteCategory = deleteCategory;
-
-// Exposez les fonctions nécessaires globalement
 window.deleteArticle = ArticleManager.deleteArticle;
 window.editArticle = ArticleManager.editArticle;
 window.addNewCategory = CategoryManager.addNewCategory;
+
+// Fin du fichier tabManager.js
+// Fin du fichier tabManager.js
