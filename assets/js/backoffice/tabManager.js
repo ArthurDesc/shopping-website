@@ -370,18 +370,31 @@ function updateCategoryName(categoryId, newName) {
     },
     body: JSON.stringify({ id_categorie: categoryId, nom: newName })
   })
-  .then(response => response.json())
+  .then(response => {
+    console.log("Réponse brute:", response);
+    return response.text();
+  })
+  .then(text => {
+    console.log("Texte de la réponse:", text);
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.error("Erreur de parsing JSON:", e);
+      throw new Error("La réponse du serveur n'est pas un JSON valide: " + text);
+    }
+  })
   .then(data => {
+    console.log("Données parsées:", data);
     if (data.success) {
-      showToast("Nom de la catégorie mis à jour avec succès", "success");
-      loadCategoriesList(); // Recharger la liste des catégories
+        showToast("Nom de la catégorie mis à jour avec succès", "success");
+        loadCategoriesList();
     } else {
-      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
+        showToast("Erreur lors de la mise à jour du nom de la catégorie : " + (data.message || "Erreur inconnue"), "error");
     }
   })
   .catch(error => {
-    console.error("Erreur:", error);
-    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
+    console.error("Erreur complète:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie: " + error.message, "error");
   });
 }
 

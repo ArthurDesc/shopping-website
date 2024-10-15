@@ -1,6 +1,7 @@
 <?php
 class CategoryManager {
     private $conn;
+    private $lastError;
 
     public function __construct($conn) {
         $this->conn = $conn;
@@ -17,23 +18,46 @@ class CategoryManager {
         return false;
     }
 
-    public function updateCategory($id, $nom, $description) {
-        $sql = "UPDATE categories SET nom = ?, description = ? WHERE id_categorie = ?";
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) {
-            error_log("Erreur de préparation de la requête : " . $this->conn->error);
-            return false;
-        }
-        $stmt->bind_param("ssi", $nom, $description, $id);
-        if ($stmt->execute()) {
-            if ($stmt->affected_rows > 0) {
-                return true;
-            } else {
-                error_log("Aucune ligne mise à jour pour la catégorie ID: $id");
+    public function updateCategory($categoryId, $newName, $description) {
+        try {
+            // Vérifier si la catégorie existe
+            $checkStmt = $this->conn->prepare("SELECT nom FROM categories WHERE id_categorie = ?");
+            $checkStmt->bind_param("i", $categoryId);
+            $checkStmt->execute();
+            $result = $checkStmt->get_result();
+            
+            if ($result->num_rows === 0) {
+                $this->lastError = "Catégorie non trouvée.";
                 return false;
             }
-        } else {
-            error_log("Erreur lors de l'exécution de la requête : " . $stmt->error);
+            
+            $currentName = $result->fetch_assoc()['nom'];
+            
+            // Si le nouveau nom est identique à l'ancien, considérez cela comme un succès
+            if ($currentName === $newName) {
+                return true;
+            }
+
+            $stmt = $this->conn->prepare("UPDATE categories SET nom = ?, description = ? WHERE id_categorie = ?");
+            if (!$stmt) {
+                $this->lastError = "Erreur de préparation de la requête: " . $this->conn->error;
+                error_log($this->lastError);
+                return false;
+            }
+
+            $stmt->bind_param("ssi", $newName, $description, $categoryId);
+            $result = $stmt->execute();
+            
+            if (!$result) {
+                $this->lastError = "Erreur d'exécution: " . $stmt->error;
+                error_log($this->lastError);
+                return false;
+            }
+            
+            return true;
+        } catch (Exception $e) {
+            $this->lastError = "Exception: " . $e->getMessage();
+            error_log($this->lastError);
             return false;
         }
     }
@@ -85,6 +109,6 @@ class CategoryManager {
     }
 
     public function getLastError() {
-        return $this->conn->error;
+        return $this->lastError;
     }
 }

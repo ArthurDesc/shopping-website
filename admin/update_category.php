@@ -1,7 +1,7 @@
 <?php
 // admin/update_category.php
 
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 header('Content-Type: application/json');
@@ -59,10 +59,12 @@ try {
     if ($result) {
         echo json_encode(['success' => true, 'message' => 'Catégorie mise à jour avec succès']);
     } else {
-        $error = $categoryManager->getLastError(); // Ajoutez cette méthode à votre CategoryManager
-        throw new Exception('Erreur lors de la mise à jour de la catégorie: ' . $error);
+        $error = $categoryManager->getLastError();
+        error_log("Erreur dans update_category.php: " . $error);
+        echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour de la catégorie: ' . $error]);
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    error_log("Exception dans update_category.php: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Exception: ' . $e->getMessage()]);
     exit;
 }

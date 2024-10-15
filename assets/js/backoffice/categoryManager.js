@@ -135,3 +135,4 @@ const CategoryManager = (function(UIManager) {
         deleteCategory: deleteCategory
     };
 })(UIManager);  // Passez UIManager comme dépendance ici
+
