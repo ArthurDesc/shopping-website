@@ -211,7 +211,6 @@ function switchCategoryTab(clickedTab, tabId) {
     case "modifier":
       tabContent.innerHTML = `
         <div id="category-management" class="p-4">
-          <h2 class="text-2xl font-bold mb-4">Gestion des Catégories</h2>
 
           <!-- Liste des catégories -->
           <div id="categories-list" class="space-y-4">
@@ -352,32 +351,87 @@ function loadCategoriesList() {
     });
 }
 
+function updateCategoryName(categoryId, newName) {
+  fetch('/shopping-website/admin/update_category.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id_categorie: categoryId, nom: newName })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.text(); // On récupère d'abord le texte brut
+  })
+  .then(text => {
+    try {
+      return JSON.parse(text); // On essaie de parser le JSON
+    } catch (e) {
+      console.error("Réponse non-JSON reçue:", text);
+      throw new Error("La réponse du serveur n'est pas un JSON valide");
+    }
+  })
+  .then(data => {
+    if (data.success) {
+      showToast("Nom de la catégorie mis à jour avec succès", "success");
+    } else {
+      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
+    }
+  })
+  .catch(error => {
+    console.error("Erreur:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
+  });
+}
+
 function createCategoryAccordionItem(category, index, allCategories) {
   console.log("Création de l'élément d'accordéon pour la catégorie:", category.nom);
   const item = document.createElement('div');
-  item.setAttribute('x-data', `{ open${index}: false }`);
+  item.setAttribute('x-data', `{ 
+    open${index}: false, 
+    editing: false, 
+    categoryName: '${category.nom}',
+    editName() {
+      this.editing = true;
+      this.$nextTick(() => this.$refs.nameInput.focus());
+    },
+    saveName() {
+      if (this.categoryName.trim() !== '') {
+        updateCategoryName(${category.id_categorie}, this.categoryName);
+        this.editing = false;
+      }
+    }
+  }`);
   
   const subCategories = allCategories.filter(cat => cat.parent_id === category.id_categorie);
+  const subCategoryCount = subCategories.length;
   
   item.innerHTML = `
-    <div @click="open${index} = !open${index}" class='flex items-center justify-between text-gray-600 w-full border-b overflow-hidden mt-5 mb-5 mx-auto'>
+    <div class='flex items-center justify-between text-gray-600 w-full border-b overflow-hidden mt-5 mb-5 mx-auto'>
       <div class='flex items-center'>
-        <div class='w-10 border-r px-2 transform transition duration-300 ease-in-out' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
+        <div @click="open${index} = !open${index}" class='w-10 border-r px-2 transform transition duration-300 ease-in-out cursor-pointer' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>          
         </div>
         <div class='flex items-center px-2 py-3'>
-          <div class='mx-3'>
-            <span class="hover:underline">${category.nom}</span>
+          <div class='mx-3' x-show="!editing" @dblclick="editName()">
+            <span class="hover:underline" x-text="categoryName"></span>
+            <span class="text-sm text-gray-500 ml-2">(${subCategoryCount})</span>
+          </div>
+          <div x-show="editing" class="mx-3">
+            <input 
+              x-ref="nameInput"
+              x-model="categoryName" 
+              @blur="saveName()" 
+              @keyup.enter="saveName()"
+              class="border rounded px-2 py-1 text-sm"
+            >
           </div>
         </div>
       </div>
-      <button onclick="editCategory(${category.id_categorie})" class="text-blue-500 hover:text-blue-700 mr-4" title="Modifier la catégorie">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-        </svg>
-      </button>
     </div>
 
     <div class="flex flex-col p-5 md:p-0 w-full transform transition duration-300 ease-in-out border-b pb-10"

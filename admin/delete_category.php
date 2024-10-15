@@ -1,5 +1,5 @@
 <?php
-require_once '../config.php';
+require_once '../includes/_db.php';
 require_once '../classe/CategoryManager.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -26,7 +26,12 @@ class CategoryManager {
         }
         $stmt->bind_param("ssi", $nom, $description, $id);
         if ($stmt->execute()) {
-            return true;
+            if ($stmt->affected_rows > 0) {
+                return true;
+            } else {
+                error_log("Aucune ligne mise à jour pour la catégorie ID: $id");
+                return false;
+            }
         } else {
             error_log("Erreur lors de l'exécution de la requête : " . $stmt->error);
             return false;
@@ -77,5 +82,9 @@ class CategoryManager {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getLastError() {
+        return $this->conn->error;
     }
 }
