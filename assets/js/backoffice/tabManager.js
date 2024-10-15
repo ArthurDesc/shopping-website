@@ -381,10 +381,17 @@ function updateCategoryName(categoryId, newName) {
 function createCategoryAccordionItem(category, index, allCategories) {
   console.log("Création de l'élément d'accordéon pour la catégorie:", category.nom);
   const item = document.createElement('div');
+  
+  const subCategories = allCategories.filter(cat => cat.parent_id === category.id_categorie);
+  const subCategoryCount = subCategories.length;
+  const hasSubCategories = subCategoryCount > 0;
+  
   item.setAttribute('x-data', `{ 
     open${index}: false, 
     editing: false, 
     categoryName: '${category.nom}',
+    hasSubCategories: ${hasSubCategories},
+    subCategoryCount: ${subCategoryCount},
     editName() {
       this.editing = true;
       this.$nextTick(() => this.$refs.nameInput.focus());
@@ -397,21 +404,18 @@ function createCategoryAccordionItem(category, index, allCategories) {
     }
   }`);
   
-  const subCategories = allCategories.filter(cat => cat.parent_id === category.id_categorie);
-  const subCategoryCount = subCategories.length;
-  
   item.innerHTML = `
     <div class='flex items-center justify-between text-gray-600 w-full border-b overflow-hidden mt-5 mb-5 mx-auto'>
       <div class='flex items-center'>
-        <div @click="open${index} = !open${index}" class='w-10 border-r px-2 transform transition duration-300 ease-in-out cursor-pointer' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <div @click="open${index} = !open${index}" class='w-10 border-r px-2 transform transition duration-300 ease-in-out cursor-pointer flex items-center justify-center' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
+          <svg x-show="hasSubCategories" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>          
         </div>
         <div class='flex items-center px-2 py-3'>
           <div class='mx-3' x-show="!editing" @dblclick="editName()">
             <span class="hover:underline" x-text="categoryName"></span>
-            <span class="text-sm text-gray-500 ml-2">(${subCategoryCount})</span>
+            <span class="text-sm text-gray-500 ml-2">(<span x-text="subCategoryCount"></span>)</span>
           </div>
           <div x-show="editing" class="mx-3">
             <input 
