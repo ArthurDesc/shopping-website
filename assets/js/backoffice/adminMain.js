@@ -6,14 +6,18 @@ function loadContent(section) {
     const contentArea = document.getElementById('content-area');
     const articlesLink = document.getElementById('articles-link');
     const categoriesLink = document.getElementById('categories-link');
+    const articlesLinkDesktop = document.getElementById('articles-link-desktop');
+    const categoriesLinkDesktop = document.getElementById('categories-link-desktop');
 
-    // Réinitialiser les styles
-    articlesLink.classList.remove('text-blue-500');
-    categoriesLink.classList.remove('text-blue-500');
+    // Réinitialiser les styles pour mobile et desktop
+    [articlesLink, categoriesLink, articlesLinkDesktop, categoriesLinkDesktop].forEach(link => {
+        link.classList.remove('active-tab');
+    });
 
     switch (section) {
         case 'articles':
-            articlesLink.classList.add('text-blue-500');
+            articlesLink.classList.add('active-tab');
+            articlesLinkDesktop.classList.add('active-tab');
             contentArea.innerHTML = `
                 <div class="bg-white shadow-md rounded-lg p-6">
                     <h1 class="text-2xl font-normal mb-4 text-center alata-font">Articles</h1>
@@ -45,7 +49,8 @@ function loadContent(section) {
             switchTab(document.querySelector('[onclick="switchTab(this, \'ajouter\')"]'), 'ajouter');
             break;
         case 'categories':
-            categoriesLink.classList.add('text-blue-500');
+            categoriesLink.classList.add('active-tab');
+            categoriesLinkDesktop.classList.add('active-tab');
             contentArea.innerHTML = `
                 <div class="bg-white shadow-md rounded-lg p-6">
                     <h1 class="text-2xl font-normal mb-4 text-center alata-font">Catégories</h1>
@@ -80,4 +85,3 @@ function loadContent(section) {
             contentArea.innerHTML = '<p>Sélectionnez une option dans la barre latérale</p>';
     }
 }
-

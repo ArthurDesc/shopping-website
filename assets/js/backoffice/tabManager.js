@@ -363,18 +363,13 @@ function updateCategoryName(categoryId, newName) {
     },
     body: JSON.stringify({ id_categorie: categoryId, nom: newName })
   })
-  .then(response => response.text())
-  .then(text => {
-    try {
-      const data = JSON.parse(text);
-      if (data.success) {
-        showToast("Nom de la catégorie mis à jour avec succès", "success");
-      } else {
-        showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
-      }
-    } catch (e) {
-      console.error("Réponse non-JSON reçue:", text);
-      showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast("Nom de la catégorie mis à jour avec succès", "success");
+      loadCategoriesList(); // Recharger la liste des catégories
+    } else {
+      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
     }
   })
   .catch(error => {
