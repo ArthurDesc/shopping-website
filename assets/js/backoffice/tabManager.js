@@ -359,25 +359,18 @@ function updateCategoryName(categoryId, newName) {
     },
     body: JSON.stringify({ id_categorie: categoryId, nom: newName })
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.text(); // On récupère d'abord le texte brut
-  })
+  .then(response => response.text())
   .then(text => {
     try {
-      return JSON.parse(text); // On essaie de parser le JSON
+      const data = JSON.parse(text);
+      if (data.success) {
+        showToast("Nom de la catégorie mis à jour avec succès", "success");
+      } else {
+        showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
+      }
     } catch (e) {
       console.error("Réponse non-JSON reçue:", text);
-      throw new Error("La réponse du serveur n'est pas un JSON valide");
-    }
-  })
-  .then(data => {
-    if (data.success) {
-      showToast("Nom de la catégorie mis à jour avec succès", "success");
-    } else {
-      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
+      showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
     }
   })
   .catch(error => {

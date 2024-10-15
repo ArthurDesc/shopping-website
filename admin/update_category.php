@@ -1,6 +1,9 @@
 <?php
 // admin/update_category.php
 
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
 require_once '../includes/_db.php';
 require_once '../classe/CategoryManager.php';
 require_once '../classe/AdminManager.php';
@@ -15,7 +18,7 @@ try {
     }
 
     $adminManager = new AdminManager($conn);
-    if (!$adminManager->isAdmin($_SESSION['user_id'])) {
+    if (!$adminManager->isAdmin($_SESSION['id_utilisateur'])) {
         throw new Exception('Accès non autorisé');
     }
 

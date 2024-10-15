@@ -35,6 +35,9 @@ const CategoryManager = (function(UIManager) {
             </div>
         `;
   
+        // Appeler setupDropdown immédiatement après avoir ajouté le HTML
+        UIManager.setupDropdown();
+
         const categoriesList = document.getElementById('categories-list');
   
         fetch('/shopping-website/admin/backofficeV2.php', {
@@ -67,7 +70,6 @@ const CategoryManager = (function(UIManager) {
 
             console.log("Fin du remplissage des catégories");
             UIManager.setupCategorySearch();
-            UIManager.setupDropdown();
         })
         .catch(error => {
             console.error("Erreur lors du chargement des catégories:", error);
