@@ -54,7 +54,7 @@ class CategoryManager {
     }
 
     public function getAllCategories() {
-        $sql = "SELECT * FROM categories";
+        $sql = "SELECT id_categorie, nom, description, parent_id FROM categories ORDER BY parent_id IS NULL DESC, nom ASC";
         $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }

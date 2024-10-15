@@ -43,10 +43,22 @@ const ArticleManager = (function() {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return response.json();
+                return response.text(); // Utilisez .text() au lieu de .json()
+            })
+            .then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error("Réponse du serveur:", text);
+                    throw new Error("La réponse du serveur n'est pas un JSON valide");
+                }
             })
             .then(articles => {
                 console.log("Articles chargés:", articles);
+                
+                if (articles.error) {
+                    throw new Error(articles.error);
+                }
                 
                 let articlesHTML = `
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
