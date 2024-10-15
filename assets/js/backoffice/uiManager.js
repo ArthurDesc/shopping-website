@@ -32,17 +32,21 @@ const UIManager = (function() {
       function setupDropdown() {
         const dropdownButton = document.getElementById('dropdownSearchButton');
         const dropdownMenu = document.getElementById('dropdownSearch');
+        
+        if (dropdownButton && dropdownMenu) {
+            dropdownButton.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('hidden');
+            });
 
-        dropdownButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            dropdownMenu.classList.toggle('hidden');
-        });
-
-        document.addEventListener('click', function(event) {
-            if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
-                dropdownMenu.classList.add('hidden');
-            }
-        });
+            // Fermer le dropdown si on clique en dehors
+            document.addEventListener('click', function(event) {
+                if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        } else {
+            console.warn("Éléments du dropdown non trouvés");
+        }
       }
 
       return {

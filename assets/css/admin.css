@@ -61,3 +61,9 @@ details>summary::-webkit-details-marker {
 .gradient-blue {
     background: linear-gradient(to top right, #1E40AF, #60A5FA);
 }
+
+.active-tab {
+    background-color: #E5E7EB;
+    font-weight: bold;
+    color: #3B82F6;
+}

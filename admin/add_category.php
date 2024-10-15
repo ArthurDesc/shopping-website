@@ -1,9 +1,7 @@
 <?php
-require_once '../includes/config.php';
 require_once '../includes/_db.php';
 require_once '../classe/CategoryManager.php';
 
-// Vérifiez si l'utilisateur est admin (à implémenter selon votre système d'authentification)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoryName = $_POST['categoryName'] ?? '';
