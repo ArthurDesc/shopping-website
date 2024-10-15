@@ -47,7 +47,7 @@ if (isset($_POST['update'])) {
 
                 if (empty($ids)) {
                     echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; // Ajout de classes pour le style
-                    echo '<h2 class="text-2xl font-bold mb-4 text-red-600">Panier vide !</h2>'; // Augmentation de la taille de la police et changement de couleur
+                    echo '<h2 class="text-2xl font-bold mb-4 text-blue-700">Panier vide !</h2>'; // Augmentation de la taille de la police et changement de couleur
                     echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">'; 
                     echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>'; // Changement de couleur
                     echo '<div class="flex flex-col space-y-4">'; 
