@@ -341,6 +341,13 @@ function loadCategoriesList() {
       const mainCategories = categories.filter(cat => cat.parent_id === null);
       console.log("Catégories principales:", mainCategories);
       
+      // Trier les catégories principales par nombre de sous-catégories (ordre décroissant)
+      mainCategories.sort((a, b) => {
+        const subCatsA = categories.filter(cat => cat.parent_id === a.id_categorie).length;
+        const subCatsB = categories.filter(cat => cat.parent_id === b.id_categorie).length;
+        return subCatsB - subCatsA;
+      });
+      
       mainCategories.forEach((mainCategory, index) => {
         console.log("Création de l'élément d'accordéon pour:", mainCategory.nom);
         const categoryItem = createCategoryAccordionItem(mainCategory, index, categories);
@@ -381,10 +388,17 @@ function updateCategoryName(categoryId, newName) {
 function createCategoryAccordionItem(category, index, allCategories) {
   console.log("Création de l'élément d'accordéon pour la catégorie:", category.nom);
   const item = document.createElement('div');
+  
+  const subCategories = allCategories.filter(cat => cat.parent_id === category.id_categorie);
+  const subCategoryCount = subCategories.length;
+  const hasSubCategories = subCategoryCount > 0;
+  
   item.setAttribute('x-data', `{ 
     open${index}: false, 
     editing: false, 
     categoryName: '${category.nom}',
+    hasSubCategories: ${hasSubCategories},
+    subCategoryCount: ${subCategoryCount},
     editName() {
       this.editing = true;
       this.$nextTick(() => this.$refs.nameInput.focus());
@@ -397,21 +411,18 @@ function createCategoryAccordionItem(category, index, allCategories) {
     }
   }`);
   
-  const subCategories = allCategories.filter(cat => cat.parent_id === category.id_categorie);
-  const subCategoryCount = subCategories.length;
-  
   item.innerHTML = `
     <div class='flex items-center justify-between text-gray-600 w-full border-b overflow-hidden mt-5 mb-5 mx-auto'>
       <div class='flex items-center'>
-        <div @click="open${index} = !open${index}" class='w-10 border-r px-2 transform transition duration-300 ease-in-out cursor-pointer' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <div @click="open${index} = !open${index}" class='w-10 border-r px-2 transform transition duration-300 ease-in-out cursor-pointer flex items-center justify-center' :class="{'rotate-90': open${index},' -translate-y-0.0': !open${index} }">
+          <svg x-show="hasSubCategories" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>          
         </div>
         <div class='flex items-center px-2 py-3'>
           <div class='mx-3' x-show="!editing" @dblclick="editName()">
             <span class="hover:underline" x-text="categoryName"></span>
-            <span class="text-sm text-gray-500 ml-2">(${subCategoryCount})</span>
+            <span class="text-sm text-gray-500 ml-2">(<span x-text="subCategoryCount"></span>)</span>
           </div>
           <div x-show="editing" class="mx-3">
             <input 
@@ -429,10 +440,17 @@ function createCategoryAccordionItem(category, index, allCategories) {
     <div class="flex flex-col p-5 md:p-0 w-full transform transition duration-300 ease-in-out border-b pb-10"
       x-cloak x-show="open${index}" x-collapse x-collapse.duration.500ms>
       ${subCategories.map(subCat => `
-        <div class="mb-2 flex justify-between items-center">
-          <span>${subCat.nom}</span>
+        <div class="mb-2 flex justify-between items-center" x-data="{ editing: false, subCategoryName: '${subCat.nom}' }">
+          <span x-show="!editing" x-text="subCategoryName"></span>
+          <input 
+            x-show="editing" 
+            x-model="subCategoryName" 
+            @blur="updateSubCategoryName(${subCat.id_categorie}, subCategoryName); editing = false"
+            @keyup.enter="updateSubCategoryName(${subCat.id_categorie}, subCategoryName); editing = false"
+            class="border rounded px-2 py-1 text-sm"
+          >
           <div>
-            <button onclick="editCategory(${subCat.id_categorie})" class="text-blue-500 hover:text-blue-700 ml-2">
+            <button @click="editing = true" class="text-blue-500 hover:text-blue-700 ml-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
               </svg>
@@ -486,6 +504,32 @@ function deleteCategory(categoryId) {
   }
 }
 
+function updateSubCategoryName(categoryId, newName) {
+  fetch('/shopping-website/admin/update_category.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id_categorie: categoryId, nom: newName })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast("Nom de la sous-catégorie mis à jour avec succès", "success");
+      loadCategoriesList(); // Recharger la liste des catégories
+    } else {
+      showToast("Erreur lors de la mise à jour du nom de la sous-catégorie : " + data.message, "error");
+    }
+  })
+  .catch(error => {
+    console.error("Erreur:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la sous-catégorie", "error");
+  });
+}
+
+// N'oubliez pas d'exposer cette fonction globalement
+window.updateSubCategoryName = updateSubCategoryName;
+
 // Exposer les fonctions nécessaires globalement
 window.switchTab = switchTab;
 window.switchCategoryTab = switchCategoryTab;
@@ -495,5 +539,4 @@ window.deleteArticle = ArticleManager.deleteArticle;
 window.editArticle = ArticleManager.editArticle;
 window.addNewCategory = CategoryManager.addNewCategory;
 
-// Fin du fichier tabManager.js
 // Fin du fichier tabManager.js

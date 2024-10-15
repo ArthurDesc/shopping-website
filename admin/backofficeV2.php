@@ -86,28 +86,35 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     <!-- Sidebar desktop -->
     <div class="hidden sm:flex sidebar bg-white shadow-md fixed h-full left-0 top-0 z-20 flex-col w-64">
         <div class="flex flex-col h-full px-4 py-6">
-            <div class="mb-6">
-                <h2 class="text-xl font-bold">Mode Admin</h2>
+            <div>
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold">Mode Admin</h2>
+                </div>
+                <a id="home-link-desktop" class="flex items-center p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg mb-6 transition duration-300" href="../index.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mr-2">
+                        <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
+                    </svg>
+                    <img src="<?php echo BASE_URL; ?>assets/images/logoFBlanc.png" alt="Logo F" class="w-6 h-6 object-contain mr-3 ">
+                    <span>Retour à l'Accueil</span>
+                </a>
+                <a id="articles-link-desktop" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('articles')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                    <span>Articles</span>
+                </a>
+                <a id="categories-link-desktop" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('categories')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
+                    </svg>
+                    <span>Catégories</span>
+                </a>
             </div>
-            <a id="home-link-desktop" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="../index.php">
-                <img src="<?php echo BASE_URL; ?>assets/images/logoF.png" alt="Logo F" class="w-6 h-6 object-contain mr-3">
-                <span>Home</span>
-            </a>
-            <a id="articles-link-desktop" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('articles')">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                </svg>
-                <span>Articles</span>
-            </a>
-            <a id="categories-link-desktop" class="flex items-center p-2 hover:bg-gray-100 rounded-lg mb-2" href="#" onclick="loadContent('categories')">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
-                </svg>
-                <span>Catégories</span>
-            </a>
-            <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
-                Déconnexion
-            </a>
+            <div class="mt-auto">
+                <a href="<?php echo BASE_URL; ?>pages/deconnexion.php" class="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-center">
+                    Déconnexion
+                </a>
+            </div>
         </div>
     </div>
 
