@@ -264,7 +264,7 @@ $allCategories = $articleManager->getAllCategories();
 
                     <!-- Boutons d'action -->
                     <div class="mt-4 space-y-2">
-                        <form action="" method="post">
+                        <form action="ajouter_panier.php" method="get">
                             <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
                             <button type="submit" name="ajouter_au_panier" class="w-full bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
                         </form>
