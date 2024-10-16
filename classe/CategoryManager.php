@@ -10,13 +10,20 @@ class CategoryManager {
     public function addCategory($nom, $parent_id = null) {
         try {
             error_log("CategoryManager: Tentative d'ajout de la catégorie: $nom");
-            $sql = "INSERT INTO categories (nom, parent_id) VALUES (?, ?)";
+            
+            // Obtenir le prochain ID disponible
+            $sql = "SELECT MAX(id_categorie) as max_id FROM categories";
+            $result = $this->conn->query($sql);
+            $row = $result->fetch_assoc();
+            $next_id = $row['max_id'] + 1;
+            
+            $sql = "INSERT INTO categories (id_categorie, nom, parent_id) VALUES (?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             if (!$stmt) {
                 error_log("CategoryManager: Erreur de préparation de la requête: " . $this->conn->error);
                 throw new Exception("Erreur de préparation de la requête: " . $this->conn->error);
             }
-            $stmt->bind_param("si", $nom, $parent_id);
+            $stmt->bind_param("isi", $next_id, $nom, $parent_id);
             $result = $stmt->execute();
             if (!$result) {
                 error_log("CategoryManager: Erreur lors de l'exécution de la requête: " . $stmt->error);

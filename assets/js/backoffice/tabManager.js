@@ -215,29 +215,12 @@ function switchCategoryTab(clickedTab, tabId) {
     case "modifier":
       tabContent.innerHTML = `
         <div id="category-management" class="p-4">
-
           <!-- Liste des catégories -->
           <div id="categories-list" class="space-y-4">
             <!-- Les catégories seront ajoutées ici dynamiquement -->
           </div>
-
-
-        <!-- Template pour une catégorie (sera cloné par JavaScript) -->
-        <template id="category-template">
-          <div class="category bg-white p-4 rounded-lg shadow">
-            <div class="flex justify-between items-center">
-              <span class="category-name font-semibold"></span>
-              <div class="space-x-2">
-                <button class="edit-category text-blue-500 hover:text-blue-700">Modifier</button>
-                <button class="delete-category text-red-500 hover:text-red-700">Supprimer</button>
-                <button class="toggle-subcategories text-gray-500 hover:text-gray-700">▼</button>
-              </div>
-            </div>
-            <div class="subcategories mt-2 ml-4 hidden">
-              <!-- Les sous-catégories seront ajoutées ici dynamiquement -->
-            </div>
-          </div>
-        </template>
+          <!-- ... autres éléments ... -->
+        </div>
       `;
       loadCategoriesList();
       break;
@@ -343,36 +326,41 @@ function initAccordion() {
 
 // Fonction loadCategoriesList
 function loadCategoriesList() {
-    console.log("Début de loadCategoriesList");
-    const categoriesList = document.getElementById('categories-list');
-    
-    if (!categoriesList) {
-        console.error("L'élément 'categories-list' n'a pas été trouvé");
-        return;
-    }
+  console.log("Début de loadCategoriesList");
+  const categoriesList = document.getElementById('categories-list');
+  
+  if (!categoriesList) {
+    console.error("L'élément 'categories-list' n'a pas été trouvé");
+    return;
+  }
+  
+  fetch('/shopping-website/admin/get_categories.php')
+    .then(response => response.json())
+    .then(categories => {
+      console.log("Catégories reçues:", categories);
+      categoriesList.innerHTML = '<div class="w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl">';
+      const mainCategories = categories.filter(cat => cat.parent_id === null);
+      console.log("Catégories principales:", mainCategories);
+      
+      // Trier les catégories principales par nombre de sous-catégories (ordre décroissant)
+      mainCategories.sort((a, b) => {
+        const subCatsA = categories.filter(cat => cat.parent_id === a.id_categorie).length;
+        const subCatsB = categories.filter(cat => cat.parent_id === b.id_categorie).length;
+        return subCatsB - subCatsA;
+      });
+      
+      mainCategories.forEach((mainCategory, index) => {
+        console.log("Création de l'élément d'accordéon pour:", mainCategory.nom);
+        const categoryItem = createCategoryAccordionItem(mainCategory, index, categories);
+        categoriesList.querySelector('div').appendChild(categoryItem);
+      });
 
-    fetch('/shopping-website/admin/get_categories.php')
-        .then(response => response.json())
-        .then(categories => {
-            console.log("Catégories reçues:", categories);
-            categoriesList.innerHTML = ''; // Vider la liste existante
-
-            categories.forEach(category => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <input id="checkbox-item-${category.id_categorie}" type="checkbox" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                        <label for="checkbox-item-${category.id_categorie}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${category.nom}</label>
-                    </div>
-                `;
-                categoriesList.appendChild(li);
-            });
-
-            console.log("Fin du remplissage des catégories");
-        })
-        .catch(error => {
-            console.error("Erreur lors du chargement des catégories:", error);
-        });
+      categoriesList.innerHTML += '</div>';
+    })
+    .catch(error => {
+      console.error("Erreur lors du chargement des catégories:", error);
+      showToast("Erreur lors du chargement des catégories", "error");
+    });
 }
 
 function updateCategoryName(categoryId, newName) {
