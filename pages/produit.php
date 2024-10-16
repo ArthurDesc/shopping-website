@@ -54,107 +54,74 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <?php require_once '../includes/_header.php'; ?>
 
 <div class="container mx-auto px-4">
-    <div class="flex flex-col md:flex-row">
-        <!-- Filtres à gauche -->
-        <div id="filterForm" class="w-full md:w-1/4 bg-white p-4 rounded shadow mt-4 md:mt-0 md:mr-4">
-            <h3 class="font-semibold mb-4">Filtres</h3>
-            <div class="space-y-2">
+    <div class="flex flex-col md:flex-row relative">
+        <!-- Filtres (modifiés pour l'animation et ajout des boutons) -->
+        <div id="filterForm" class="w-full md:w-1/4 bg-white p-4 rounded shadow mt-4 md:mt-0 md:mr-4 md:block fixed md:static top-0 left-0 h-full md:h-auto z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-semibold text-lg">Filtres</h3>
+                <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Contenu des filtres -->
+            <div class="flex-grow overflow-y-auto">
                 <!-- Catégories -->
-                <div x-data="{ categoriesOpen: false }" class="filter-category">
-                    <div @click="categoriesOpen = !categoriesOpen" class="flex items-center text-gray-600 w-full border-b overflow-hidden cursor-pointer">
-                        <div class="w-10 border-r px-2 transform transition duration-300 ease-in-out" :class="{'rotate-90': categoriesOpen, '-translate-y-0.0': !categoriesOpen}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                        </div>
-                        <div class="flex items-center px-2 py-3">
-                            <div class="mx-3">
-                                <button class="hover:underline">Catégories</button>
+                <details class="mb-4">
+                    <summary class="font-semibold mb-2 cursor-pointer">Catégories</summary>
+                    <div class="pl-4">
+                        <?php foreach ($categories as $category): ?>
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" id="cat_<?php echo $category['id_categorie']; ?>" name="categories[]" value="<?php echo $category['id_categorie']; ?>" class="mr-2">
+                                <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="flex p-5 w-full transform transition duration-300 ease-in-out border-b pb-10"
-                         x-cloak x-show="categoriesOpen" x-collapse x-collapse.duration.500ms>
-                        <ul class="w-full space-y-1 text-sm text-gray-700">
-                            <?php foreach ($categories as $category): ?>
-                                <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
-                                        <input id="category-<?php echo $category['id_categorie']; ?>" type="checkbox" name="category" value="<?php echo $category['id_categorie']; ?>" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                        <label for="category-<?php echo $category['id_categorie']; ?>" class="w-full ms-2 text-sm font-medium text-gray-900"><?php echo htmlspecialchars($category['nom']); ?></label>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                </div>
+                </details>
 
                 <!-- Marques -->
-                <div x-data="{ marquesOpen: false }" class="filter-category">
-                    <div @click="marquesOpen = !marquesOpen" class="flex items-center text-gray-600 w-full border-b overflow-hidden cursor-pointer">
-                        <div class="w-10 border-r px-2 transform transition duration-300 ease-in-out" :class="{'rotate-90': marquesOpen, '-translate-y-0.0': !marquesOpen}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                        </div>
-                        <div class="flex items-center px-2 py-3">
-                            <div class="mx-3">
-                                <button class="hover:underline">Marques</button>
+                <details class="mb-4">
+                    <summary class="font-semibold mb-2 cursor-pointer">Marques</summary>
+                    <div class="pl-4">
+                        <?php foreach ($marques as $marque): ?>
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" name="marques[]" value="<?php echo htmlspecialchars($marque['marque']); ?>" class="mr-2">
+                                <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="flex p-5 w-full transform transition duration-300 ease-in-out border-b pb-10"
-                         x-cloak x-show="marquesOpen" x-collapse x-collapse.duration.500ms>
-                        <ul class="w-full space-y-1 text-sm text-gray-700">
-                            <?php foreach ($marques as $marque): ?>
-                                <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
-                                        <input id="marque-<?php echo htmlspecialchars($marque['marque']); ?>" type="checkbox" name="brand" value="<?php echo htmlspecialchars($marque['marque']); ?>" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                        <label for="marque-<?php echo htmlspecialchars($marque['marque']); ?>" class="w-full ms-2 text-sm font-medium text-gray-900"><?php echo htmlspecialchars($marque['marque']); ?></label>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                </div>
+                </details>
 
                 <!-- Collections -->
-                <div x-data="{ collectionsOpen: false }" class="filter-category">
-                    <div @click="collectionsOpen = !collectionsOpen" class="flex items-center text-gray-600 w-full border-b overflow-hidden cursor-pointer">
-                        <div class="w-10 border-r px-2 transform transition duration-300 ease-in-out" :class="{'rotate-90': collectionsOpen, '-translate-y-0.0': !collectionsOpen}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                        </div>
-                        <div class="flex items-center px-2 py-3">
-                            <div class="mx-3">
-                                <button class="hover:underline">Collections</button>
+                <details class="mb-4">
+                    <summary class="font-semibold mb-2 cursor-pointer">Collections</summary>
+                    <div class="pl-4">
+                        <?php foreach ($collections as $collection): ?>
+                            <div class="flex items-center mb-2">
+                                <input type="checkbox" id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" name="collections[]" value="<?php echo htmlspecialchars($collection['collection']); ?>" class="mr-2">
+                                <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="flex p-5 w-full transform transition duration-300 ease-in-out border-b pb-10"
-                         x-cloak x-show="collectionsOpen" x-collapse x-collapse.duration.500ms>
-                        <ul class="w-full space-y-1 text-sm text-gray-700">
-                            <?php foreach ($collections as $collection): ?>
-                                <li>
-                                    <div class="flex items-center p-2 rounded hover:bg-gray-100">
-                                        <input id="collection-<?php echo htmlspecialchars($collection['collection']); ?>" type="checkbox" name="collection" value="<?php echo htmlspecialchars($collection['collection']); ?>" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                        <label for="collection-<?php echo htmlspecialchars($collection['collection']); ?>" class="w-full ms-2 text-sm font-medium text-gray-900"><?php echo htmlspecialchars($collection['collection']); ?></label>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Ajoutez d'autres filtres ici si nécessaire -->
-
+                </details>
             </div>
+            
+            <!-- Bouton Valider (visible sur mobile et desktop) -->
+            <button id="applyFilters" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
+                Valider les filtres
+            </button>
         </div>
 
         <!-- Liste des produits à droite -->
         <div class="w-full md:w-3/4">
             <div class="mt-6 flex justify-between items-center">
                 <h2 class="text-xl font-semibold">Voir tous</h2>
+                <!-- Bouton pour afficher/masquer les filtres en version mobile -->
+                <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-3 py-1 text-sm rounded">
+                    Filtres
+                </button>
             </div>
             <section class="products_list">
                 <?php 
@@ -217,5 +184,38 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
 <!-- Ajout d'Alpine.js -->
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+<!-- Ajoutez ce script juste avant la fermeture de la balise body -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleFiltersButton = document.getElementById('toggleFilters');
+    const closeFiltersButton = document.getElementById('closeFilters');
+    const applyFiltersButton = document.getElementById('applyFilters');
+    const filterForm = document.getElementById('filterForm');
+
+    function openFilters() {
+        filterForm.classList.remove('-translate-x-full');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFilters() {
+        filterForm.classList.add('-translate-x-full');
+        document.body.style.overflow = '';
+    }
+
+    toggleFiltersButton.addEventListener('click', openFilters);
+    closeFiltersButton.addEventListener('click', closeFilters);
+
+    applyFiltersButton.addEventListener('click', function() {
+        // Logique pour appliquer les filtres
+        if (window.innerWidth < 768) { // Si on est en version mobile
+            closeFilters();
+        }
+        // Ajoutez ici la logique pour appliquer les filtres et mettre à jour la liste des produits
+        console.log('Filtres appliqués');
+        // Exemple : fetchFilteredProducts();
+    });
+});
+</script>
 </body>
 </html>
