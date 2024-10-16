@@ -211,7 +211,7 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <?php include '../includes/_footer.php'; ?>
 
 <!-- Scripts -->
-<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 <!-- Ajout du script de filtrage -->
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>

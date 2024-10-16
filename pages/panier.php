@@ -141,7 +141,7 @@ if (isset($_POST['update'])) {
 
     <?php include '../includes/_footer.php'; ?>
 
-    <script src="../assets/js/script.js" defer></script>
+    <script src="../assets/js/scripts.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
     <script>
         function updateQuantity(productId) {
