@@ -56,7 +56,7 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <div class="container mx-auto px-4">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (modifiés pour l'animation et ajout des boutons) -->
-        <div id="filterForm" class="w-full md:w-1/4 bg-white p-4 rounded shadow mt-4 md:mt-0 md:mr-4 md:block fixed md:static top-0 left-0 h-full md:h-auto z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+        <div id="filterForm" class="w-full md:w-1/4 bg-white p-4 rounded shadow mt-4 md:mt-0 md:mr-4 md:block fixed md:static top-0 left-0 h-full md:h-auto z-40 md:z-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-semibold text-lg">Filtres</h3>
                 <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
