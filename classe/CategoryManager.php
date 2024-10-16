@@ -1,7 +1,7 @@
 <?php
 class CategoryManager {
     private $conn;
-    private $lastError;
+    private $lastError = '';
 
     public function __construct($conn) {
         $this->conn = $conn;

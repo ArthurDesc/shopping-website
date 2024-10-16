@@ -44,19 +44,32 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
 
 <body class="flex flex-col min-h-screen pt-14">
   <header class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out" id="main-header">
-    <div class="flex justify-center items-center py-3 px-2 bg-white shadow-md">
-      <div class="flex justify-between items-center w-full max-w-full px-2 sm:px-4 md:px-6 lg:px-8">
-        <div class="menu-icon cursor-pointer" id="menu-toggle">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
+    <div class="flex justify-between items-center py-3 px-2 bg-white shadow-md">
+      <div class="flex items-center justify-between w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+        <div class="flex items-center w-1/3">
+          <div class="menu-icon cursor-pointer md:hidden" id="menu-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </div>
+          <nav class="hidden md:flex space-x-4 ml-4">
+            <a href="<?php echo BASE_URL; ?>pages/produit.php" class="text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+              <strong>Tous les articles</strong>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-300">Homme</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-300">Femme</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-300">Enfant</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium transition duration-300">Sports</a>
+          </nav>
         </div>
-        <div class="logo">
-          <a href="<?php echo BASE_URL; ?>index.php">
+        
+        <div class="flex justify-center w-1/3">
+          <a href="<?php echo BASE_URL; ?>index.php" class="flex items-center">
             <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="h-8 w-auto">
           </a>
         </div>
-        <div class="flex space-x-4">
+        
+        <div class="flex justify-end space-x-4 w-1/3">
           <a href="<?php echo BASE_URL; ?>pages/panier.php" aria-label="Voir le panier" class="relative">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -156,3 +169,7 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
       </ul>
     </nav>
   </div>
+
+
+
+

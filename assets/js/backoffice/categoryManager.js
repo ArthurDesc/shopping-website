@@ -2,12 +2,18 @@ const CategoryManager = (function(UIManager) {
     function loadCategories() {
         console.log("Début de loadCategories()");
         const categoriesContainer = document.getElementById('categories-container');
-  
+        const categoriesList = document.getElementById('categories-list');
+
         if (!categoriesContainer) {
-            console.log("categoriesContainer non trouvé");
+            console.error("categoriesContainer non trouvé");
             return;
         }
-  
+
+        if (!categoriesList) {
+            console.error("categoriesList non trouvé");
+            return;
+        }
+
         categoriesContainer.innerHTML = `
             <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" class="w-full inline-flex items-center justify-between px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
                 Sélectionner les catégories 
@@ -38,8 +44,6 @@ const CategoryManager = (function(UIManager) {
         // Appeler setupDropdown immédiatement après avoir ajouté le HTML
         UIManager.setupDropdown();
 
-        const categoriesList = document.getElementById('categories-list');
-  
         fetch('/shopping-website/admin/backofficeV2.php', {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -48,6 +52,7 @@ const CategoryManager = (function(UIManager) {
         .then(response => response.json())
         .then(categories => {
             console.log("Catégories reçues:", categories);
+            categoriesList.innerHTML = ''; // Vider la liste existante
 
             categories.forEach(category => {
                 console.log("Ajout de la catégorie:", category);
@@ -157,6 +162,7 @@ const CategoryManager = (function(UIManager) {
     }
 
     return {
+        init: init,
         loadCategories: loadCategories,
         addNewCategory: addNewCategory,
         deleteCategory: deleteCategory,

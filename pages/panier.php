@@ -1,6 +1,25 @@
 <?php 
+ob_start(); // Démarre la mise en mémoire tampon de sortie
 session_start();
 include_once "../includes/_db.php";
+
+// Traitement de la mise à jour de la quantité
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
+    $id_update = $_POST['id_produit'];
+    
+    // Vérifier l'action (augmentation ou diminution)
+    if ($_POST['action'] === 'increase') {
+        $_SESSION['panier'][$id_update] = isset($_SESSION['panier'][$id_update]) ? $_SESSION['panier'][$id_update] + 1 : 1;
+    } elseif ($_POST['action'] === 'decrease') {
+        if (isset($_SESSION['panier'][$id_update]) && $_SESSION['panier'][$id_update] > 1) {
+            $_SESSION['panier'][$id_update]--;
+        } else {
+            unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
+        }
+    }
+    header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
+    exit(); // Terminer le script après la redirection
+}
 
 // Initialiser le panier si ce n'est pas déjà fait
 if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
@@ -112,9 +131,11 @@ if (isset($_POST['update'])) {
                 <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
             </div>
             <div class="flex flex-col space-y-2">
-                <a href="paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center">Payer</a>
+                <a href="paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($ids) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($ids) ? 'onclick="return false;"' : '' ?>>Payer</a>
                 <a href="produit.php" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-200 text-center">Continuer vos achats</a>
-                <a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>
+               <?php if (!isset($_SESSION['id_utilisateur'])) { 
+                   echo '<a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>';
+                } ?>
             </div>
         </div>
     </section>
@@ -134,12 +155,14 @@ if (isset($_POST['update'])) {
                 unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
             }
         }
+        header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
+        exit(); // Terminer le script après la redirection
     }
     ?>
 
-    <?php include '../includes/_footer.php'; ?>
+    
 
-    <script src="../assets/js/script.js" defer></script>
+    <script src="../assets/js/scripts.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
     <script>
         function updateQuantity(productId) {
@@ -152,5 +175,7 @@ if (isset($_POST['update'])) {
             form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
         }
     </script>
+    <?php include '../includes/_footer.php'; ?>
 </body>
+
 </html>
