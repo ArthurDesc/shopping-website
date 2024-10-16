@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 16, 2024 at 09:47 AM
+-- Generation Time: Oct 16, 2024 at 01:10 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -66,23 +66,7 @@ INSERT INTO `categories` (`id_categorie`, `nom`, `parent_id`) VALUES
 (11, 'Chaussettes', 3),
 (14, 'Combinaisons', NULL),
 (15, 'Vêtements de running', 1),
-(16, 'Leggings', 1),
-(17, 'cwc', NULL),
-(18, 'fwf', NULL),
-(19, 'dxw', NULL),
-(20, 'cwcwx', NULL),
-(21, 'sfdfs', NULL),
-(22, 'vvx', NULL),
-(23, 'Fdqs', NULL),
-(24, 'cxwc', NULL),
-(25, 'svs', NULL),
-(26, 'cwc', NULL),
-(27, 'cxw', NULL),
-(28, 'cxw', NULL),
-(29, 'fsdfs', NULL),
-(30, 'test', NULL),
-(31, 'csc', NULL),
-(32, 'wcx', 28);
+(16, 'Leggings', 1);
 
 -- --------------------------------------------------------
 
@@ -256,7 +240,7 @@ ALTER TABLE `utilisateurs`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `produits`
@@ -274,4 +258,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
