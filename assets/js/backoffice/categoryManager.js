@@ -82,26 +82,14 @@ const CategoryManager = (function(UIManager) {
     }
 
     function addNewCategory(categoryName) {
-        fetch('/shopping-website/admin/add_category.php', {
+        return fetch('/shopping-website/admin/add_category.php', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: `categoryName=${encodeURIComponent(categoryName)}`
+            body: JSON.stringify({ nom: categoryName })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast('Catégorie ajoutée avec succès', 'success');
-                loadCategories(); // Recharger la liste des catégories
-            } else {
-                showToast('Erreur lors de l\'ajout de la catégorie: ' + data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            showToast('Une erreur s\'est produite lors de l\'ajout de la catégorie', 'error');
-        });
+        .then(response => response.json());
     }
 
     function deleteCategory(categoryId) {
@@ -129,9 +117,21 @@ const CategoryManager = (function(UIManager) {
         }
     }
 
+    function addNewSubCategory(parentId, subCategoryName) {
+        return fetch('/shopping-website/admin/add_subcategory.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ parent_id: parentId, nom: subCategoryName })
+        })
+        .then(response => response.json());
+    }
+
     return {
         loadCategories: loadCategories,
         addNewCategory: addNewCategory,
-        deleteCategory: deleteCategory
+        deleteCategory: deleteCategory,
+        addNewSubCategory: addNewSubCategory
     };
 })(UIManager);  // Passez UIManager comme dépendance ici

@@ -243,48 +243,61 @@ function switchCategoryTab(clickedTab, tabId) {
       break;
     case "ajouter":
       tabContent.innerHTML = `
-                <div class="max-w-screen-xl mx-auto px-5 bg-white min-h-screen">
+        <div x-data="{ openTab: null }" class="w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl">
+          <div class="space-y-4">
+            <!-- Nouvelle catégorie principale -->
+            <div class="border-b">
+              <div @click="openTab = openTab === 'main' ? null : 'main'" class="flex items-center justify-between cursor-pointer py-4">
+                <span class="font-semibold text-gray-600">Nouvelle catégorie principale</span>
+                <svg :class="{'rotate-180': openTab === 'main'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <div x-show="openTab === 'main'" x-collapse>
+                <div class="py-4">
+                  <input type="text" id="newMainCategory" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" placeholder="Nouvelle catégorie principale">
+                  <button onclick="addNewMainCategory()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Ajouter
+                  </button>
+                </div>
+              </div>
+            </div>
 
-        <div class="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
-        <div class="py-5">
-        <details class="group">
-        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
-        <span class="text-gray-900 transition duration-500 group-open:text-[#007AFF]">Nouvelle catégorie</span>
-        <span class="transition-transform duration-300">
-        <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
-        <path d="M6 9l6 6 6-6"></path>
-        </svg>
-        </span>
-        </summary>
-        <div class="group-open:animate-fadeIn mt-3 text-neutral-600">
-        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" placeholder="Nouvelle catégorie">
-        <button class="bg-[#007AFF] text-white px-4 py-2 rounded-md hover:bg-[#007AFF] transition duration-300">Valider</button>
+            <!-- Nouvelle sous-catégorie -->
+            <div class="border-b">
+              <div @click="openTab = openTab === 'sub' ? null : 'sub'" class="flex items-center justify-between cursor-pointer py-4">
+                <span class="font-semibold text-gray-600">Nouvelle sous-catégorie</span>
+                <svg :class="{'rotate-180': openTab === 'sub'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <div x-show="openTab === 'sub'" x-collapse>
+                <div class="py-4">
+                  <select id="mainCategorySelect" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2">
+                    <option value="" disabled selected>Choisissez une catégorie principale</option>
+                  </select>
+                  <input type="text" id="newSubCategory" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" placeholder="Nouvelle sous-catégorie">
+                  <button onclick="addNewSubCategory()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Ajouter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        </details>
-        </div>
-        <div class="py-5">
-        <details class="group">
-        <summary class="flex justify-between items-center font-medium cursor-pointer list-none">
-        <span class="text-gray-900 transition duration-500 group-open:text-[#007AFF]">Nouvelle sous catégorie</span>
-        <span class="transition-transform duration-300">
-        <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24">
-        <path d="M6 9l6 6 6-6"></path>
-        </svg>
-        </span>
-        </summary>
-        <div class="group-open:animate-fadeIn mt-3 text-neutral-600">
-        <select class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2">
-            <option value="" disabled selected>Grande catégorie</option>
-            <!-- Les options seront ajoutées dynamiquement -->
-        </select>
-        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md mb-2" placeholder="Nouvelle sous catégorie">
-        <button class="bg-[#007AFF] text-white px-4 py-2 rounded-md hover:bg-[#007AFF] transition duration-300">Valider</button>
-        </div>
-        </details>
-        </div>
-        </div>
-        </div>
-            `;
+      `;
+      
+      // Charger les catégories principales dans le select
+      loadMainCategories().then(mainCategories => {
+        const select = document.getElementById('mainCategorySelect');
+        mainCategories.forEach(category => {
+          const option = document.createElement('option');
+          option.value = category.id_categorie;
+          option.textContent = category.nom;
+          select.appendChild(option);
+        });
+      });
+      
       break;
     default:
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
@@ -370,18 +383,31 @@ function updateCategoryName(categoryId, newName) {
     },
     body: JSON.stringify({ id_categorie: categoryId, nom: newName })
   })
-  .then(response => response.json())
+  .then(response => {
+    console.log("Réponse brute:", response);
+    return response.text();
+  })
+  .then(text => {
+    console.log("Texte de la réponse:", text);
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.error("Erreur de parsing JSON:", e);
+      throw new Error("La réponse du serveur n'est pas un JSON valide: " + text);
+    }
+  })
   .then(data => {
+    console.log("Données parsées:", data);
     if (data.success) {
-      showToast("Nom de la catégorie mis à jour avec succès", "success");
-      loadCategoriesList(); // Recharger la liste des catégories
+        showToast("Nom de la catégorie mis à jour avec succès", "success");
+        loadCategoriesList();
     } else {
-      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + data.message, "error");
+        showToast("Erreur lors de la mise à jour du nom de la catégorie : " + (data.message || "Erreur inconnue"), "error");
     }
   })
   .catch(error => {
-    console.error("Erreur:", error);
-    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
+    console.error("Erreur complète:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie: " + error.message, "error");
   });
 }
 
@@ -529,6 +555,65 @@ function updateSubCategoryName(categoryId, newName) {
 
 // N'oubliez pas d'exposer cette fonction globalement
 window.updateSubCategoryName = updateSubCategoryName;
+
+// Ajoutez cette nouvelle fonction après la fonction loadCategoriesList
+function loadMainCategories() {
+  return fetch('/shopping-website/admin/get_categories.php')
+    .then(response => response.json())
+    .then(categories => {
+      return categories.filter(cat => cat.parent_id === null);
+    });
+}
+
+// Ajoutez ces nouvelles fonctions à la fin du fichier
+function addNewMainCategory() {
+  const newCategoryName = document.getElementById('newMainCategory').value;
+  if (newCategoryName) {
+    CategoryManager.addNewCategory(newCategoryName)
+      .then(response => {
+        if (response.success) {
+          showToast("Nouvelle catégorie ajoutée avec succès", "success");
+          loadCategoriesList(); // Recharger la liste des catégories
+          document.getElementById('newMainCategory').value = ''; // Vider le champ
+        } else {
+          showToast("Erreur lors de l'ajout de la catégorie : " + response.message, "error");
+        }
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+        showToast("Une erreur s'est produite lors de l'ajout de la catégorie", "error");
+      });
+  } else {
+    showToast("Veuillez entrer un nom pour la nouvelle catégorie", "error");
+  }
+}
+
+function addNewSubCategory() {
+  const mainCategoryId = document.getElementById('mainCategorySelect').value;
+  const newSubCategoryName = document.getElementById('newSubCategory').value;
+  if (mainCategoryId && newSubCategoryName) {
+    CategoryManager.addNewSubCategory(mainCategoryId, newSubCategoryName)
+      .then(response => {
+        if (response.success) {
+          showToast("Nouvelle sous-catégorie ajoutée avec succès", "success");
+          loadCategoriesList(); // Recharger la liste des catégories
+          document.getElementById('newSubCategory').value = ''; // Vider le champ
+        } else {
+          showToast("Erreur lors de l'ajout de la sous-catégorie : " + response.message, "error");
+        }
+      })
+      .catch(error => {
+        console.error("Erreur:", error);
+        showToast("Une erreur s'est produite lors de l'ajout de la sous-catégorie", "error");
+      });
+  } else {
+    showToast("Veuillez sélectionner une catégorie principale et entrer un nom pour la sous-catégorie", "error");
+  }
+}
+
+// N'oubliez pas d'exposer ces nouvelles fonctions globalement
+window.addNewMainCategory = addNewMainCategory;
+window.addNewSubCategory = addNewSubCategory;
 
 // Exposer les fonctions nécessaires globalement
 window.switchTab = switchTab;
