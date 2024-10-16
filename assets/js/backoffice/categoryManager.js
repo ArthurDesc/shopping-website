@@ -132,6 +132,7 @@ const CategoryManager = (function(UIManager) {
     }
 
     function addNewSubCategory(parentId, subCategoryName) {
+        console.log("CategoryManager: Tentative d'ajout de la sous-catégorie:", subCategoryName, "pour le parent:", parentId);
         return fetch('/shopping-website/admin/add_subcategory.php', {
             method: 'POST',
             headers: {
@@ -139,7 +140,20 @@ const CategoryManager = (function(UIManager) {
             },
             body: JSON.stringify({ parent_id: parentId, nom: subCategoryName })
         })
-        .then(response => response.json());
+        .then(response => {
+            console.log("CategoryManager: Réponse brute reçue:", response);
+            return response.text();
+        })
+        .then(text => {
+            console.log("CategoryManager: Texte de la réponse:", text);
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error("CategoryManager: Erreur de parsing JSON:", e);
+                console.error("CategoryManager: Réponse non-JSON reçue:", text);
+                throw new Error("Réponse du serveur invalide");
+            }
+        });
     }
 
     return {
@@ -148,4 +162,4 @@ const CategoryManager = (function(UIManager) {
         deleteCategory: deleteCategory,
         addNewSubCategory: addNewSubCategory
     };
-})(UIManager);  // Passez UIManager comme dépendance ici
+})(UIManager);
