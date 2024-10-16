@@ -45,7 +45,6 @@ CREATE TABLE `avis` (
 CREATE TABLE `categories` (
   `id_categorie` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
-  `description` text,
   `parent_id` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

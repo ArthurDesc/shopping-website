@@ -343,36 +343,36 @@ function initAccordion() {
 
 // Fonction loadCategoriesList
 function loadCategoriesList() {
-  console.log("Début de loadCategoriesList");
-  const categoriesList = document.getElementById('categories-list');
-  
-  fetch('/shopping-website/admin/get_categories.php')
-    .then(response => response.json())
-    .then(categories => {
-      console.log("Catégories reçues:", categories);
-      categoriesList.innerHTML = '<div class="w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl">';
-      const mainCategories = categories.filter(cat => cat.parent_id === null);
-      console.log("Catégories principales:", mainCategories);
-      
-      // Trier les catégories principales par nombre de sous-catégories (ordre décroissant)
-      mainCategories.sort((a, b) => {
-        const subCatsA = categories.filter(cat => cat.parent_id === a.id_categorie).length;
-        const subCatsB = categories.filter(cat => cat.parent_id === b.id_categorie).length;
-        return subCatsB - subCatsA;
-      });
-      
-      mainCategories.forEach((mainCategory, index) => {
-        console.log("Création de l'élément d'accordéon pour:", mainCategory.nom);
-        const categoryItem = createCategoryAccordionItem(mainCategory, index, categories);
-        categoriesList.querySelector('div').appendChild(categoryItem);
-      });
+    console.log("Début de loadCategoriesList");
+    const categoriesList = document.getElementById('categories-list');
+    
+    if (!categoriesList) {
+        console.error("L'élément 'categories-list' n'a pas été trouvé");
+        return;
+    }
 
-      categoriesList.innerHTML += '</div>';
-    })
-    .catch(error => {
-      console.error("Erreur lors du chargement des catégories:", error);
-      showToast("Erreur lors du chargement des catégories", "error");
-    });
+    fetch('/shopping-website/admin/get_categories.php')
+        .then(response => response.json())
+        .then(categories => {
+            console.log("Catégories reçues:", categories);
+            categoriesList.innerHTML = ''; // Vider la liste existante
+
+            categories.forEach(category => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <input id="checkbox-item-${category.id_categorie}" type="checkbox" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                        <label for="checkbox-item-${category.id_categorie}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">${category.nom}</label>
+                    </div>
+                `;
+                categoriesList.appendChild(li);
+            });
+
+            console.log("Fin du remplissage des catégories");
+        })
+        .catch(error => {
+            console.error("Erreur lors du chargement des catégories:", error);
+        });
 }
 
 function updateCategoryName(categoryId, newName) {
@@ -383,31 +383,18 @@ function updateCategoryName(categoryId, newName) {
     },
     body: JSON.stringify({ id_categorie: categoryId, nom: newName })
   })
-  .then(response => {
-    console.log("Réponse brute:", response);
-    return response.text();
-  })
-  .then(text => {
-    console.log("Texte de la réponse:", text);
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("Erreur de parsing JSON:", e);
-      throw new Error("La réponse du serveur n'est pas un JSON valide: " + text);
-    }
-  })
+  .then(response => response.json())
   .then(data => {
-    console.log("Données parsées:", data);
     if (data.success) {
-        showToast("Nom de la catégorie mis à jour avec succès", "success");
-        loadCategoriesList();
+      showToast("Nom de la catégorie mis à jour avec succès", "success");
+      loadCategoriesList();
     } else {
-        showToast("Erreur lors de la mise à jour du nom de la catégorie : " + (data.message || "Erreur inconnue"), "error");
+      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + (data.message || "Erreur inconnue"), "error");
     }
   })
   .catch(error => {
-    console.error("Erreur complète:", error);
-    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie: " + error.message, "error");
+    console.error("Erreur:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
   });
 }
 
@@ -561,29 +548,42 @@ function loadMainCategories() {
   return fetch('/shopping-website/admin/get_categories.php')
     .then(response => response.json())
     .then(categories => {
-      return categories.filter(cat => cat.parent_id === null);
+      const mainCategories = categories.filter(cat => cat.parent_id === null);
+      const select = document.getElementById('mainCategorySelect');
+      select.innerHTML = '<option value="" disabled selected>Choisissez une catégorie principale</option>';
+      mainCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id_categorie;
+        option.textContent = category.nom;
+        select.appendChild(option);
+      });
+      return mainCategories;
     });
 }
 
 // Ajoutez ces nouvelles fonctions à la fin du fichier
 function addNewMainCategory() {
-  const newCategoryName = document.getElementById('newMainCategory').value;
+  const newCategoryName = document.getElementById('newMainCategory').value.trim();
+  console.log("Tentative d'ajout de la catégorie principale:", newCategoryName);
   if (newCategoryName) {
     CategoryManager.addNewCategory(newCategoryName)
       .then(response => {
+        console.log("Réponse reçue de addNewCategory:", response);
         if (response.success) {
-          showToast("Nouvelle catégorie ajoutée avec succès", "success");
-          loadCategoriesList(); // Recharger la liste des catégories
-          document.getElementById('newMainCategory').value = ''; // Vider le champ
+          showToast("Nouvelle catégorie principale ajoutée avec succès", "success");
+          document.getElementById('newMainCategory').value = '';
+          loadMainCategories();
+          loadCategoriesList();
         } else {
-          showToast("Erreur lors de l'ajout de la catégorie : " + response.message, "error");
+          showToast("Erreur lors de l'ajout de la catégorie : " + (response.message || "Erreur inconnue"), "error");
         }
       })
       .catch(error => {
-        console.error("Erreur:", error);
-        showToast("Une erreur s'est produite lors de l'ajout de la catégorie", "error");
+        console.error("Erreur complète dans addNewMainCategory:", error);
+        showToast("Une erreur s'est produite lors de l'ajout de la catégorie. Vérifiez la console pour plus de détails.", "error");
       });
   } else {
+    console.log("Tentative d'ajout d'une catégorie avec un nom vide");
     showToast("Veuillez entrer un nom pour la nouvelle catégorie", "error");
   }
 }
@@ -623,5 +623,43 @@ window.deleteCategory = deleteCategory;
 window.deleteArticle = ArticleManager.deleteArticle;
 window.editArticle = ArticleManager.editArticle;
 window.addNewCategory = CategoryManager.addNewCategory;
+
+function loadCategories() {
+  console.log("Début de loadCategories()");
+  const categoriesContainer = document.getElementById('categories-container');
+  const categoriesList = document.getElementById('categories-list');
+
+  if (!categoriesContainer) {
+    console.error("L'élément 'categories-container' n'a pas été trouvé");
+    return;
+  }
+
+  if (!categoriesList) {
+    console.error("L'élément 'categories-list' n'a pas été trouvé");
+    return;
+  }
+
+  console.log("Éléments trouvés, tentative de mise à jour du contenu");
+
+  // Le reste de votre code pour charger les catégories...
+
+  fetch('/shopping-website/admin/backofficeV2.php', {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.json())
+  .then(categories => {
+    console.log("Catégories reçues:", categories);
+    categoriesList.innerHTML = ''; // Vider la liste existante
+
+    categories.forEach(category => {
+      // Votre code pour ajouter chaque catégorie...
+    });
+  })
+  .catch(error => {
+    console.error("Erreur lors du chargement des catégories:", error);
+  });
+}
 
 // Fin du fichier tabManager.js

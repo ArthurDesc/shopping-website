@@ -54,7 +54,7 @@ try {
     }
 
     // Mettre à jour la catégorie
-    $result = $categoryManager->updateCategory($categoryId, $newName, $existingCategory['description']);
+    $result = $categoryManager->updateCategory($categoryId, $newName);
 
     if ($result) {
         echo json_encode(['success' => true, 'message' => 'Catégorie mise à jour avec succès']);

@@ -1,51 +1,46 @@
 <?php
 class CategoryManager {
     private $conn;
-    private $lastError;
+    private $lastError = '';
 
     public function __construct($conn) {
         $this->conn = $conn;
     }
 
-    public function addCategory($nom, $description) {
-        $sql = "INSERT INTO categories (nom, description) VALUES (?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $nom, $description);
-        
-        if ($stmt->execute()) {
-            return $stmt->insert_id;
+    public function addCategory($nom, $parent_id = null) {
+        try {
+            error_log("CategoryManager: Tentative d'ajout de la catégorie: $nom");
+            $sql = "INSERT INTO categories (nom, parent_id) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            if (!$stmt) {
+                error_log("CategoryManager: Erreur de préparation de la requête: " . $this->conn->error);
+                throw new Exception("Erreur de préparation de la requête: " . $this->conn->error);
+            }
+            $stmt->bind_param("si", $nom, $parent_id);
+            $result = $stmt->execute();
+            if (!$result) {
+                error_log("CategoryManager: Erreur lors de l'exécution de la requête: " . $stmt->error);
+                throw new Exception($stmt->error);
+            }
+            error_log("CategoryManager: Catégorie ajoutée avec succès");
+            return true;
+        } catch (Exception $e) {
+            $this->lastError = $e->getMessage();
+            error_log("Erreur dans CategoryManager::addCategory : " . $this->lastError);
+            return false;
         }
-        return false;
     }
 
-    public function updateCategory($categoryId, $newName, $description) {
+    public function updateCategory($categoryId, $newName) {
         try {
-            // Vérifier si la catégorie existe
-            $checkStmt = $this->conn->prepare("SELECT nom FROM categories WHERE id_categorie = ?");
-            $checkStmt->bind_param("i", $categoryId);
-            $checkStmt->execute();
-            $result = $checkStmt->get_result();
-            
-            if ($result->num_rows === 0) {
-                $this->lastError = "Catégorie non trouvée.";
-                return false;
-            }
-            
-            $currentName = $result->fetch_assoc()['nom'];
-            
-            // Si le nouveau nom est identique à l'ancien, considérez cela comme un succès
-            if ($currentName === $newName) {
-                return true;
-            }
-
-            $stmt = $this->conn->prepare("UPDATE categories SET nom = ?, description = ? WHERE id_categorie = ?");
+            $stmt = $this->conn->prepare("UPDATE categories SET nom = ? WHERE id_categorie = ?");
             if (!$stmt) {
                 $this->lastError = "Erreur de préparation de la requête: " . $this->conn->error;
                 error_log($this->lastError);
                 return false;
             }
 
-            $stmt->bind_param("ssi", $newName, $description, $categoryId);
+            $stmt->bind_param("si", $newName, $categoryId);
             $result = $stmt->execute();
             
             if (!$result) {
@@ -83,7 +78,7 @@ class CategoryManager {
     }
 
     public function getAllCategories() {
-        $sql = "SELECT id_categorie, nom, description, parent_id FROM categories ORDER BY parent_id IS NULL DESC, nom ASC";
+        $sql = "SELECT id_categorie, nom, parent_id FROM categories ORDER BY parent_id IS NULL DESC, nom ASC";
         $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
