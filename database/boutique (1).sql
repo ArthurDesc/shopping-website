@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 15, 2024 at 09:44 AM
+-- Generation Time: Oct 16, 2024 at 01:10 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -28,13 +28,16 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `avis` (
-  `id_avis` int NOT NULL,
-  `note` int DEFAULT NULL,
-  `commentaire` text,
-  `date_avis` datetime DEFAULT NULL,
-  `id_utilisateur` int DEFAULT NULL,
-  `id_produit` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id_avis` int(11) NOT NULL AUTO_INCREMENT,
+  `id_produit` int(11) NOT NULL,
+  `id_utilisateur` int(11) NOT NULL,
+  `note` int(11) NOT NULL,
+  `commentaire` text NOT NULL,
+  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_avis`),
+  KEY `id_produit` (`id_produit`),
+  KEY `id_utilisateur` (`id_utilisateur`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -45,30 +48,29 @@ CREATE TABLE `avis` (
 CREATE TABLE `categories` (
   `id_categorie` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
-  `parent_id` int DEFAULT NULL
+  `parent_id` int DEFAULT NULL,
+  `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id_categorie`, `nom`, `description`, `parent_id`) VALUES
-(1, 'Vêtements', 'Catégorie pour tous les vêtements de sport', NULL),
-(2, 'Chaussures', 'Catégorie pour toutes les chaussures de sport', NULL),
-(3, 'Accesso', 'Catégorie pour tous les accessoires de sport', NULL),
-(4, 'Equipements', 'Catégorie pour tous les équipements de sport', NULL),
-(5, 'T-shirts', 'Catégorie pour tous les t-shirts de sport', 1),
-(6, 'Pantalons', 'Catégorie pour tous les pantalons de sport', 1),
-(7, 'Shorts', 'Catégorie pour tous les shorts de sport', 1),
-(8, 'Sweats', 'Catégorie pour tous les sweats de sport', 1),
-(9, 'Casquettes', 'Catégorie pour toutes les casquettes de sport', NULL),
-(10, 'Sacs', 'Catégorie pour tous les sacs de sport', 3),
-(11, 'Chaussettes', 'Catégorie pour toutes les chaussettes de sport', 3),
-(12, 'Gants', 'Catégorie pour tous les gants de sport', 3),
-(13, 'Maillots de bain', 'Catégorie pour tous les maillots de bain de sport', NULL),
-(14, 'Combinaisons', 'Catégorie pour toutes les combinaisons de sport', NULL),
-(15, 'Vêtements de running', 'Catégorie pour tous les vêtements de running', 1),
-(16, 'Leggings', 'leggings', 1);
+INSERT INTO `categories` (`id_categorie`, `nom`, `parent_id`, `description`) VALUES
+(1, 'Vêtements', NULL, 'Catégorie pour tous les vêtements de sport'),
+(2, 'Chaussures', NULL, 'Catégorie pour toutes les chaussures de sport'),
+(3, 'Accessoires', NULL, 'Catégorie pour tous les accessoires de sport'),
+(4, 'Equipements', NULL, 'Catégorie pour tous les équipements de sport'),
+(5, 'T-shirts', 1, 'Catégorie pour tous les T-shirts de sport'),
+(6, 'Pantalons', 1, 'Catégorie pour tous les pantalons de sport'),
+(7, 'Shorts', 1, 'Catégorie pour tous les shorts de sport'),
+(8, 'Sweats', 1, 'Catégorie pour tous les sweats de sport'),
+(9, 'Casquettes', NULL, 'Catégorie pour toutes les casquettes de sport'),
+(10, 'Sacs', 3, 'Catégorie pour tous les sacs de sport'),
+(11, 'Chaussettes', 3, 'Catégorie pour toutes les chaussettes de sport'),
+(14, 'Combinaisons', NULL, 'Catégorie pour toutes les combinaisons de sport'),
+(15, 'Vêtements de running', 1, 'Catégorie pour tous les vêtements de running'),
+(16, 'Leggings', 1, 'Catégorie pour tous les leggings de sport');
 
 -- --------------------------------------------------------
 
@@ -217,23 +219,46 @@ ALTER TABLE `avis`
   ADD KEY `idx_avis_produit` (`id_produit`);
 
 --
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id_categorie`);
+
+--
 -- Indexes for table `produits`
 --
 ALTER TABLE `produits`
   ADD PRIMARY KEY (`id_produit`);
 
 --
+-- Indexes for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  ADD PRIMARY KEY (`id_utilisateur`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
   MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-

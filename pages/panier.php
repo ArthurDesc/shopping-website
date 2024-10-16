@@ -25,6 +25,38 @@ if (isset($_POST['update'])) {
         unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité n'est pas valide
     }
 }
+
+// Ajouter le produit au panier
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['id_produit']) && isset($_POST['action']) && isset($_POST['taille'])) {
+        $id_produit = $_POST['id_produit'];
+        $action = $_POST['action'];
+        $taille = $_POST['taille'];
+
+        // Ajouter le produit au panier avec sa taille
+        if (!isset($_SESSION['panier'])) {
+            $_SESSION['panier'] = [];
+        }
+        $product_key = $id_produit . '_' . $taille; // Clé unique pour chaque combinaison produit/taille
+        if (isset($_SESSION['panier'][$product_key])) {
+            $_SESSION['panier'][$product_key]['quantite']++;
+        } else {
+            $_SESSION['panier'][$product_key] = [
+                'id_produit' => $id_produit,
+                'taille' => $taille,
+                'quantite' => 1
+            ];
+        }
+
+        // Si l'action est "acheter", vous pouvez rediriger vers une page de paiement
+        if ($action === 'acheter') {
+            // Rediriger vers la page de paiement ou effectuer une autre action
+            // header("Location: " . BASE_URL . "pages/paiement.php");
+            // exit();
+        }
+    }
+}
+
 ?>
 
     <?php include '../includes/_header.php';?>

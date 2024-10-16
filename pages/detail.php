@@ -4,6 +4,7 @@ include '../includes/_db.php';
 require_once '../classe/produit.php';
 require_once '../classe/ArticleManager.php';
 require_once '../classe/AdminManager.php';
+require_once '../includes/product_functions.php';
 
 // Créez une instance de AdminManager
 $adminManager = new AdminManager($conn);
@@ -31,8 +32,12 @@ $id_produit = $_GET['id'];
 
 
 // Récupérer les détails du produit
-$query = "SELECT * FROM produits WHERE id_produit = ?";
-$stmt = $conn->prepare($query);
+$sql = "SELECT p.*, pc.id_categorie 
+        FROM produits p 
+        LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
+        WHERE p.id_produit = ?";
+
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_produit);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -80,6 +85,21 @@ if (!$article) {
 
 $categories = $articleManager->getArticleCategories($id_article);
 $allCategories = $articleManager->getAllCategories();
+
+// Fonction pour obtenir la moyenne des notes et le nombre d'avis
+function getProductRatingSummary($product_id) {
+    global $conn;
+    $sql = "SELECT COALESCE(AVG(note), 0) as average_rating, COUNT(*) as review_count FROM avis WHERE id_produit = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+}
+
+$rating_summary = getProductRatingSummary($produit['id_produit']);
+$average_rating = $rating_summary['average_rating'] !== null ? round($rating_summary['average_rating'], 1) : 0;
+$review_count = $rating_summary['review_count'];
 
 ?>
 
@@ -146,14 +166,26 @@ $allCategories = $articleManager->getAllCategories();
 
                     <!-- Étoiles et avis -->
                     <div class="flex items-center">
-                        <div class="flex text-yellow-400">
-                            <?php for ($i = 0; $i < 5; $i++): ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            <?php endfor; ?>
+                        <div class="flex items-center">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $average_rating) {
+                                    echo '<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                                } else {
+                                    echo '<svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                                }
+                            }
+                            ?>
                         </div>
-                        <span class="ml-1 text-gray-600">4.50 (85)</span>
+                        <p class="ml-2 text-sm text-gray-600">
+                            <?php 
+                            if ($review_count > 0) {
+                                echo "$average_rating sur 5 ($review_count avis)";
+                            } else {
+                                echo "Aucun avis pour le moment";
+                            }
+                            ?>
+                        </p>
                     </div>
 
                     <!-- Description -->
@@ -263,15 +295,120 @@ $allCategories = $articleManager->getAllCategories();
                     <?php endif; ?>
 
                     <!-- Boutons d'action -->
+                    <?php
+                    $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
+                    ?>
                     <div class="mt-4 space-y-2">
-                        <form action="" method="post">
+                        <form action="<?php echo BASE_URL; ?>pages/panier.php" method="post" id="product-form">
                             <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                            <button type="submit" name="ajouter_au_panier" class="w-full bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
+                            <input type="hidden" name="action" value="ajouter">
+                            
+                            <select name="taille" class="w-full mb-2 p-2 border rounded" required>
+                                <option value="">Choisissez une taille</option>
+                                <?php foreach ($tailles_disponibles as $taille): ?>
+                                    <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            
+                            <div class="flex space-x-2">
+                                <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
+                                <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">Acheter maintenant</button>
+                            </div>
                         </form>
-                        <button class="w-full bg-blue-600 text-white font-semibold py-2 rounded">Acheter maintenant</button>
                     </div>
+
+                    <script>
+                    function acheterMaintenant() {
+                        var form = document.getElementById('product-form');
+                        form.action.value = 'acheter';
+                        form.submit();
+                    }
+                    </script>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Après les détails du produit et avant le formulaire d'ajout au panier -->
+    <div class="mt-4 mb-4">
+        <h3 class="text-lg font-semibold">Avis clients</h3>
+        <div class="flex items-center">
+            <div class="flex items-center">
+                <?php
+                for ($i = 1; $i <= 5; $i++) {
+                    if ($i <= $average_rating) {
+                        echo '<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                    } else {
+                        echo '<svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                    }
+                }
+                ?>
+            </div>
+            <p class="ml-2 text-sm text-gray-600">
+                <?php 
+                if ($review_count > 0) {
+                    echo "$average_rating sur 5 ($review_count avis)";
+                } else {
+                    echo "Aucun avis pour le moment";
+                }
+                ?>
+            </p>
+        </div>
+        <a href="<?php echo BASE_URL; ?>pages/avis.php?id_produit=<?php echo $produit['id_produit']; ?>" class="text-blue-600 hover:underline">Voir tous les avis</a>
+    </div>
+
+    <div class="mt-8">
+        <h3 class="text-xl font-semibold mb-4">Avis des clients</h3>
+        <?php
+        // Récupérer les avis pour ce produit (à implémenter)
+        $avis = getProductReviews($produit['id_produit']);
+        if (!empty($avis)) {
+            foreach ($avis as $review) {
+                echo "<div class='mb-4 p-4 bg-gray-100 rounded'>";
+                echo "<p class='font-bold'>" . str_repeat("★", $review['note']) . str_repeat("☆", 5 - $review['note']) . "</p>";
+                echo "<p>" . htmlspecialchars($review['commentaire']) . "</p>";
+                echo "</div>";
+            }
+        } else {
+            echo "<p>Aucun avis pour ce produit.</p>";
+        }
+        ?>
+        <form action="<?php echo BASE_URL; ?>pages/ajouter_avis.php" method="POST" class="mt-4">
+            <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
+            <div class="mb-4">
+                <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
+                <select name="note" id="note" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">Choisissez une note</option>
+                    <option value="1">1 étoile</option>
+                    <option value="2">2 étoiles</option>
+                    <option value="3">3 étoiles</option>
+                    <option value="4">4 étoiles</option>
+                    <option value="5">5 étoiles</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="commentaire" class="block text-sm font-medium text-gray-700">Commentaire</label>
+                <textarea name="commentaire" id="commentaire" rows="3" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded">Soumettre l'avis</button>
+        </form>
+    </div>
+
+    <div class="mt-12">
+        <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <?php
+            // Récupérer les produits associés (à implémenter)
+            $produits_associes = getRelatedProducts($produit['id_produit'], $produit['id_categorie']);
+            foreach ($produits_associes as $produit_associe) {
+                echo "<div class='border p-4 rounded'>";
+                echo "<img src='" . BASE_URL . "assets/images/produits/" . $produit_associe['image_url'] . "' alt='" . $produit_associe['nom'] . "' class='w-full h-48 object-cover mb-2'>";
+                echo "<h4 class='font-semibold'>" . $produit_associe['nom'] . "</h4>";
+                echo "<p class='text-gray-600'>" . number_format($produit_associe['prix'], 2) . " €</p>";
+                echo "<a href='detail.php?id=" . $produit_associe['id_produit'] . "' class='mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded'>Voir le produit</a>";
+                echo "</div>";
+            }
+            ?>
         </div>
     </div>
 
