@@ -1,6 +1,25 @@
 <?php 
+ob_start(); // Démarre la mise en mémoire tampon de sortie
 session_start();
 include_once "../includes/_db.php";
+
+// Traitement de la mise à jour de la quantité
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
+    $id_update = $_POST['id_produit'];
+    
+    // Vérifier l'action (augmentation ou diminution)
+    if ($_POST['action'] === 'increase') {
+        $_SESSION['panier'][$id_update] = isset($_SESSION['panier'][$id_update]) ? $_SESSION['panier'][$id_update] + 1 : 1;
+    } elseif ($_POST['action'] === 'decrease') {
+        if (isset($_SESSION['panier'][$id_update]) && $_SESSION['panier'][$id_update] > 1) {
+            $_SESSION['panier'][$id_update]--;
+        } else {
+            unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
+        }
+    }
+    header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
+    exit(); // Terminer le script après la redirection
+}
 
 // Initialiser le panier si ce n'est pas déjà fait
 if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
@@ -136,10 +155,12 @@ if (isset($_POST['update'])) {
                 unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
             }
         }
+        header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
+        exit(); // Terminer le script après la redirection
     }
     ?>
 
-    <?php include '../includes/_footer.php'; ?>
+    
 
     <script src="../assets/js/scripts.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
@@ -154,5 +175,7 @@ if (isset($_POST['update'])) {
             form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
         }
     </script>
+    <?php include '../includes/_footer.php'; ?>
 </body>
+
 </html>
