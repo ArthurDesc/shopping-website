@@ -81,15 +81,29 @@ const CategoryManager = (function(UIManager) {
         setupAddCategoryForm();
     }
 
-    function addNewCategory(categoryName) {
+    function addNewCategory(categoryName, description = null, parentId = null) {
+        console.log("CategoryManager: Tentative d'ajout de la catégorie:", categoryName);
         return fetch('/shopping-website/admin/add_category.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nom: categoryName })
+            body: JSON.stringify({ nom: categoryName, description: description, parent_id: parentId })
         })
-        .then(response => response.json());
+        .then(response => {
+            console.log("CategoryManager: Réponse brute reçue:", response);
+            return response.text();
+        })
+        .then(text => {
+            console.log("CategoryManager: Texte de la réponse:", text);
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error("CategoryManager: Erreur de parsing JSON:", e);
+                console.error("CategoryManager: Réponse non-JSON reçue:", text);
+                throw new Error("Réponse du serveur invalide");
+            }
+        });
     }
 
     function deleteCategory(categoryId) {

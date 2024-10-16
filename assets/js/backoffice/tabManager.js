@@ -215,29 +215,12 @@ function switchCategoryTab(clickedTab, tabId) {
     case "modifier":
       tabContent.innerHTML = `
         <div id="category-management" class="p-4">
-
           <!-- Liste des catégories -->
           <div id="categories-list" class="space-y-4">
             <!-- Les catégories seront ajoutées ici dynamiquement -->
           </div>
-
-
-        <!-- Template pour une catégorie (sera cloné par JavaScript) -->
-        <template id="category-template">
-          <div class="category bg-white p-4 rounded-lg shadow">
-            <div class="flex justify-between items-center">
-              <span class="category-name font-semibold"></span>
-              <div class="space-x-2">
-                <button class="edit-category text-blue-500 hover:text-blue-700">Modifier</button>
-                <button class="delete-category text-red-500 hover:text-red-700">Supprimer</button>
-                <button class="toggle-subcategories text-gray-500 hover:text-gray-700">▼</button>
-              </div>
-            </div>
-            <div class="subcategories mt-2 ml-4 hidden">
-              <!-- Les sous-catégories seront ajoutées ici dynamiquement -->
-            </div>
-          </div>
-        </template>
+          <!-- ... autres éléments ... -->
+        </div>
       `;
       loadCategoriesList();
       break;
@@ -346,6 +329,11 @@ function loadCategoriesList() {
   console.log("Début de loadCategoriesList");
   const categoriesList = document.getElementById('categories-list');
   
+  if (!categoriesList) {
+    console.error("L'élément 'categories-list' n'a pas été trouvé");
+    return;
+  }
+  
   fetch('/shopping-website/admin/get_categories.php')
     .then(response => response.json())
     .then(categories => {
@@ -383,31 +371,18 @@ function updateCategoryName(categoryId, newName) {
     },
     body: JSON.stringify({ id_categorie: categoryId, nom: newName })
   })
-  .then(response => {
-    console.log("Réponse brute:", response);
-    return response.text();
-  })
-  .then(text => {
-    console.log("Texte de la réponse:", text);
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("Erreur de parsing JSON:", e);
-      throw new Error("La réponse du serveur n'est pas un JSON valide: " + text);
-    }
-  })
+  .then(response => response.json())
   .then(data => {
-    console.log("Données parsées:", data);
     if (data.success) {
-        showToast("Nom de la catégorie mis à jour avec succès", "success");
-        loadCategoriesList();
+      showToast("Nom de la catégorie mis à jour avec succès", "success");
+      loadCategoriesList();
     } else {
-        showToast("Erreur lors de la mise à jour du nom de la catégorie : " + (data.message || "Erreur inconnue"), "error");
+      showToast("Erreur lors de la mise à jour du nom de la catégorie : " + (data.message || "Erreur inconnue"), "error");
     }
   })
   .catch(error => {
-    console.error("Erreur complète:", error);
-    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie: " + error.message, "error");
+    console.error("Erreur:", error);
+    showToast("Une erreur s'est produite lors de la mise à jour du nom de la catégorie", "error");
   });
 }
 

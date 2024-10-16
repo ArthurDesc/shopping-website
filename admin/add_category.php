@@ -1,24 +1,33 @@
 <?php
-require_once '../includes/_db.php';
-require_once '../classe/CategoryManager.php';
+header('Content-Type: application/json');
 
+try {
+    error_log("Début de add_category.php");
+    require_once '../includes/_db.php';
+    require_once '../classe/CategoryManager.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $categoryName = $_POST['categoryName'] ?? '';
+    $input = file_get_contents('php://input');
+    error_log("Données reçues: " . $input);
+    $data = json_decode($input, true);
 
-    if (empty($categoryName)) {
-        echo json_encode(['success' => false, 'message' => 'Le nom de la catégorie est requis']);
-        exit;
+    if (!isset($data['nom'])) {
+        throw new Exception('Nom de catégorie manquant');
     }
 
+    error_log("Tentative d'ajout de la catégorie: " . $data['nom']);
     $categoryManager = new CategoryManager($conn);
-    $result = $categoryManager->addCategory($categoryName, ''); // Description vide
+    $result = $categoryManager->addCategory($data['nom'], $data['description'] ?? null, $data['parent_id'] ?? null);
 
     if ($result) {
-        echo json_encode(['success' => true, 'message' => 'Catégorie ajoutée avec succès']);
+        $response = ['success' => true, 'message' => 'Catégorie ajoutée avec succès'];
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout de la catégorie']);
+        $error = $categoryManager->getLastError();
+        $response = ['success' => false, 'message' => 'Erreur lors de l\'ajout de la catégorie: ' . $error];
     }
-} else {
-    echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+    error_log("Réponse: " . json_encode($response));
+    echo json_encode($response);
+} catch (Exception $e) {
+    error_log("Exception dans add_category.php: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Une erreur est survenue : ' . $e->getMessage()]);
 }
+error_log("Fin de add_category.php");
