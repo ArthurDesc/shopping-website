@@ -30,14 +30,12 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
   <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-
   <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/responsive.css?v=<?php echo filemtime('assets/css/responsive.css'); ?>">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/navbar.css?v=<?php echo filemtime('assets/css/responsive.css'); ?>">
@@ -177,12 +175,12 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
     </div>
 
     <!-- Barre de recherche déroulante sticky -->
-    <div id="search-bar" class="w-full bg-white shadow-md transition-all duration-300 ease-in-out overflow-hidden">
+    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden">
       <div class="container mx-auto px-4 py-4">
         <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex items-center">
-          <input type="text" name="q" placeholder="Rechercher..." class="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <input type="text" name="q" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
+          <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
           </button>
