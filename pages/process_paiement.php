@@ -69,7 +69,7 @@ try {
     </form>
 
     <script>
-        const stripe = Stripe('YOUR_PUBLIC_STRIPE_KEY'); // Remplacez par votre clé publique Stripe
+        const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O'); // Remplacez par votre clé publique Stripe
         const elements = stripe.elements();
         const cardElement = elements.create('card');
         cardElement.mount('#card-element');
