@@ -9,13 +9,19 @@ document.addEventListener('DOMContentLoaded', function() {
   let isSidebarOpen = false;
   let lastScrollTop = 0;
 
-  // Fonction pour gérer l'affichage/masquage du header
+  // Fonction pour gérer l'affichage/masquage du header et de la barre de recherche
   function handleScroll() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > lastScrollTop && scrollTop > 200 && !isSidebarOpen) {
       headerContainer.style.transform = 'translateY(-100%)';
+      if (isSearchBarOpen) {
+        searchBar.style.transform = 'translateY(-100%)';
+      }
     } else {
       headerContainer.style.transform = 'translateY(0)';
+      if (isSearchBarOpen) {
+        searchBar.style.transform = 'translateY(0)';
+      }
     }
     lastScrollTop = scrollTop;
   }
@@ -27,7 +33,16 @@ document.addEventListener('DOMContentLoaded', function() {
   function closeSearchBar() {
     isSearchBarOpen = false;
     searchBar.style.height = '0';
+    searchBar.style.transform = 'translateY(-100%)';
     searchBar.classList.remove('shadow-md', 'open');
+  }
+
+  // Fonction pour ouvrir la barre de recherche
+  function openSearchBar() {
+    isSearchBarOpen = true;
+    searchBar.style.height = '60px';
+    searchBar.style.transform = 'translateY(0)';
+    searchBar.classList.add('shadow-md', 'open');
   }
 
   // Fonction pour ouvrir la sidebar
@@ -51,13 +66,11 @@ document.addEventListener('DOMContentLoaded', function() {
     searchToggle.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      isSearchBarOpen = !isSearchBarOpen;
       if (isSearchBarOpen) {
-        searchBar.style.height = '60px';
-        searchBar.classList.add('shadow-md', 'open');
-        closeSidebar();
-      } else {
         closeSearchBar();
+      } else {
+        openSearchBar();
+        closeSidebar();
       }
     });
   }

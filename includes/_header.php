@@ -32,7 +32,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex flex-col min-h-screen pt-14">
+<body class="flex flex-col min-h-full">
   <div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-3 px-2 bg-white shadow-md">
@@ -168,10 +168,6 @@ $total = array_sum($_SESSION['panier'] ?? []);
         </ul>
       </nav>
     </div>
-          <!-- Répétez pour Femme, Enfants, Sports -->
-        </ul>
-      </nav>
-    </div>
 
     <!-- Barre de recherche déroulante sticky -->
     <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md border-t border-gray-200">
@@ -187,6 +183,9 @@ $total = array_sum($_SESSION['panier'] ?? []);
       </div>
     </div>
   </div>
+
+  <!-- Le reste de votre contenu ici -->
+
 </body>
 </html>
 
