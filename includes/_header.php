@@ -180,7 +180,7 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
     </div>
 
     <!-- Barre de recherche déroulante sticky -->
-    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0">
+    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md">
       <div class="container mx-auto px-4">
         <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex items-center">
           <input type="text" name="q" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
@@ -195,6 +195,7 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
   </div>
 
   
+
 
 
 
