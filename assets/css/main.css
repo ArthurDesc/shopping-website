@@ -11,8 +11,12 @@ footer, footer .font-sans {
 }
 
 #sidebar {
-  transition: transform 0.3s ease;
-  z-index: 1000; /* Augmenté significativement pour être au-dessus de tous les autres éléments */
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%);
+}
+
+#sidebar.open {
+  transform: translateX(0);
 }
 
 .swiper-container {

@@ -9,9 +9,20 @@
   border-top-width: 1px;
 }
 
+#search-bar .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#search-bar form {
+  width: 100%;
+}
+
 #search-bar input {
   background-color: transparent;
   border: none;
+  height: 40px; /* Ajustez cette valeur selon vos besoins */
 }
 
 #search-bar input::placeholder {
@@ -20,4 +31,8 @@
 
 #search-bar button:hover svg {
   stroke: #3B82F6; /* Couleur bleue au survol de l'icône */
+}
+
+body.sidebar-open {
+  overflow: hidden;
 }

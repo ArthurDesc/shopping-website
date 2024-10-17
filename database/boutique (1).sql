@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 16, 2024 at 01:10 PM
+-- Generation Time: Oct 17, 2024 at 02:29 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -29,12 +29,24 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `avis` (
   `id_avis` int NOT NULL,
-  `note` int DEFAULT NULL,
-  `commentaire` text,
-  `date_avis` datetime DEFAULT NULL,
-  `id_utilisateur` int DEFAULT NULL,
-  `id_produit` int DEFAULT NULL
+  `id_produit` int NOT NULL,
+  `id_utilisateur` int NOT NULL,
+  `note` int NOT NULL,
+  `commentaire` text NOT NULL,
+  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `avis`
+--
+
+INSERT INTO `avis` (`id_avis`, `id_produit`, `id_utilisateur`, `note`, `commentaire`, `date_creation`) VALUES
+(1, 31, 11, 3, 'dd', '2024-10-17 09:07:35'),
+(2, 32, 11, 4, 'confortable', '2024-10-17 11:46:24'),
+(3, 33, 11, 4, 'vsvdjdjl', '2024-10-17 11:48:00'),
+(4, 33, 11, 2, 'ljefoubgf,lzjd', '2024-10-17 11:48:23'),
+(5, 33, 11, 1, 'khegfyibejkmuoef', '2024-10-17 11:48:54'),
+(6, 33, 11, 5, 'bon', '2024-10-17 11:49:59');
 
 -- --------------------------------------------------------
 
@@ -45,28 +57,29 @@ CREATE TABLE `avis` (
 CREATE TABLE `categories` (
   `id_categorie` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
-  `parent_id` int DEFAULT NULL
+  `parent_id` int DEFAULT NULL,
+  `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id_categorie`, `nom`, `parent_id`) VALUES
-(1, 'Vêtements', NULL),
-(2, 'Chaussures', NULL),
-(3, 'Accessoires', NULL),
-(4, 'Equipements', NULL),
-(5, 'T-shirts', 1),
-(6, 'Pantalons', 1),
-(7, 'Shorts', 1),
-(8, 'Sweats', 1),
-(9, 'Casquettes', NULL),
-(10, 'Sacs', 3),
-(11, 'Chaussettes', 3),
-(14, 'Combinaisons', NULL),
-(15, 'Vêtements de running', 1),
-(16, 'Leggings', 1);
+INSERT INTO `categories` (`id_categorie`, `nom`, `parent_id`, `description`) VALUES
+(1, 'Vêtements', NULL, 'Catégorie pour tous les vêtements de sport'),
+(2, 'Chaussures', NULL, 'Catégorie pour toutes les chaussures de sport'),
+(3, 'Accessoires', NULL, 'Catégorie pour tous les accessoires de sport'),
+(4, 'Equipements', NULL, 'Catégorie pour tous les équipements de sport'),
+(5, 'T-shirts', 1, 'Catégorie pour tous les T-shirts de sport'),
+(6, 'Pantalons', 1, 'Catégorie pour tous les pantalons de sport'),
+(7, 'Shorts', 1, 'Catégorie pour tous les shorts de sport'),
+(8, 'Sweats', 1, 'Catégorie pour tous les sweats de sport'),
+(9, 'Casquettes', NULL, 'Catégorie pour toutes les casquettes de sport'),
+(10, 'Sacs', 3, 'Catégorie pour tous les sacs de sport'),
+(11, 'Chaussettes', 3, 'Catégorie pour toutes les chaussettes de sport'),
+(14, 'Combinaisons', NULL, 'Catégorie pour toutes les combinaisons de sport'),
+(15, 'Vêtements de running', 1, 'Catégorie pour tous les vêtements de running'),
+(16, 'Leggings', 1, 'Catégorie pour tous les leggings de sport');
 
 -- --------------------------------------------------------
 
@@ -126,6 +139,7 @@ CREATE TABLE `produits` (
   `prix` decimal(10,2) DEFAULT NULL,
   `stock` int DEFAULT NULL,
   `taille` varchar(50) DEFAULT NULL,
+  `tailles_disponibles` varchar(255) DEFAULT NULL,
   `marque` varchar(100) DEFAULT NULL,
   `date_ajout` date DEFAULT NULL,
   `collection` varchar(100) DEFAULT NULL
@@ -135,16 +149,16 @@ CREATE TABLE `produits` (
 -- Dumping data for table `produits`
 --
 
-INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`, `stock`, `taille`, `marque`, `date_ajout`, `collection`) VALUES
-(31, ' T-shirt Performance', 'perfNike.jpg', 'T-shirt respirant et confortable, idéal pour les entraînements intensifs.', '30.00', 50, '0', 'Nike', NULL, 'Homme'),
-(32, 'Pantalon de Yoga', 'yogaAdidas.jfif', 'Pantalon extensible et confortable, parfait pour le yoga et la méditation.', '40.00', 40, '0', 'Adidas', NULL, 'Femme'),
-(33, 'Short de Course', 'shortPuma.jpg', 'Short léger et respirant, idéal pour la course à pied.', '25.00', 60, '0', 'Puma', NULL, 'Homme'),
-(34, 'Legging de Sport', 'leggingUnderArmour.webp', 'Legging ajusté et confortable, parfait pour toutes les activités sportives.', '35.00', 35, '0', 'UnderArmour', NULL, 'Femme'),
-(35, 'Hoodie de Sport', 'hoodieReebok.webp', 'Sweat à capuche chaud et confortable, idéal pour les jours plus frais.', '50.00', 45, '0', 'Reebok', NULL, 'Homme'),
-(36, 'Veste de Running', 'vesteNorthface.jpg', 'Veste légère et imperméable, parfaite pour les sorties de running.', '60.00', 30, '0', 'NorthFace', NULL, 'Femme'),
-(37, 'T-shirt de Fitness', 'tshirtNewBalance.webp', 'T-shirt respirant et ajusté, parfait pour les séances de fitness.', '28.00', 40, '0', 'New Balance', NULL, 'Femme'),
-(38, 'Gilet de Sport', 'giletAsics.jpg', 'Gilet léger et chaud, idéal pour les activités en extérieur.', '45.00', 35, '0', 'Asics', NULL, 'Homme'),
-(39, 'Ensemble de Jogging', 'ensembleChamion.jpg', 'Ensemble de jogging confortable et chaud, parfait pour le sport et le loisir.', '70.00', 40, '0', 'Champion', NULL, 'Homme');
+INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`, `stock`, `taille`, `tailles_disponibles`, `marque`, `date_ajout`, `collection`) VALUES
+(31, ' T-shirt Performance', 'perfNike.jpg', 'T-shirt respirant et confortable, idéal pour les entraînements intensifs.', '30.00', 50, '0', 'XS,S,M,L,XL', 'Nike', NULL, 'Homme'),
+(32, 'Pantalon de Yoga', 'yogaAdidas.jfif', 'Pantalon extensible et confortable, parfait pour le yoga et la méditation.', '40.00', 40, '0', 'XS,S,M,L,XL', 'Adidas', NULL, 'Femme'),
+(33, 'Short de Course', 'shortPuma.jpg', 'Short léger et respirant, idéal pour la course à pied.', '25.00', 60, '0', 'S,M,L,XL', 'Puma', NULL, 'Homme'),
+(34, 'Legging de Sport', 'leggingUnderArmour.webp', 'Legging ajusté et confortable, parfait pour toutes les activités sportives.', '35.00', 35, '0', 'XS,S,M,L', 'UnderArmour', NULL, 'Femme'),
+(35, 'Hoodie de Sport', 'hoodieReebok.webp', 'Sweat à capuche chaud et confortable, idéal pour les jours plus frais.', '50.00', 45, '0', 'S,M,L,XL,XXL', 'Reebok', NULL, 'Homme'),
+(36, 'Veste de Running', 'vesteNorthface.jpg', 'Veste légère et imperméable, parfaite pour les sorties de running.', '60.00', 30, '0', 'XS,S,M,L,XL', 'NorthFace', NULL, 'Femme'),
+(37, 'T-shirt de Fitness', 'tshirtNewBalance.webp', 'T-shirt respirant et ajusté, parfait pour les séances de fitness.', '28.00', 40, '0', 'XS,S,M,L', 'New Balance', NULL, 'Femme'),
+(38, 'Gilet de Sport', 'giletAsics.jpg', 'Gilet léger et chaud, idéal pour les activités en extérieur.', '45.00', 35, '0', 'S,M,L,XL', 'Asics', NULL, 'Homme'),
+(39, 'Ensemble de Jogging', 'ensembleChamion.jpg', 'Ensemble de jogging confortable et chaud, parfait pour le sport et le loisir.', '70.00', 40, '0', 'S,M,L,XL', 'Champion', NULL, 'Homme');
 
 -- --------------------------------------------------------
 
@@ -200,7 +214,8 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
 (8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
 (9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user'),
-(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin');
+(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin'),
+(11, 'Diomande', 'Adama', 'adama.diomande@laplateforme.io', NULL, '$2y$10$g7YKOoGuXuEIzqoX/n/9seNhgIih5y0vREtRCtyg/7YxPlePdheb2', 'user');
 
 --
 -- Indexes for dumped tables
@@ -211,14 +226,8 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 --
 ALTER TABLE `avis`
   ADD PRIMARY KEY (`id_avis`),
-  ADD KEY `id_utilisateur` (`id_utilisateur`),
-  ADD KEY `idx_avis_produit` (`id_produit`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id_categorie`);
+  ADD KEY `id_produit` (`id_produit`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`);
 
 --
 -- Indexes for table `produits`
@@ -237,22 +246,22 @@ ALTER TABLE `utilisateurs`
 --
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT for table `avis`
 --
-ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+ALTER TABLE `avis`
+  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

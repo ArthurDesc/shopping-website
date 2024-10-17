@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const headerContainer = document.getElementById('header-container');
   const searchToggle = document.getElementById('search-toggle');
   const searchBar = document.getElementById('search-bar');
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
   let isSearchBarOpen = false;
   let lastScrollTop = 0;
 
@@ -9,10 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function handleScroll() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > lastScrollTop && scrollTop > 200) {
-      // Scroll vers le bas
       headerContainer.style.transform = 'translateY(-100%)';
     } else {
-      // Scroll vers le haut ou en haut de la page
       headerContainer.style.transform = 'translateY(0)';
     }
     lastScrollTop = scrollTop;
@@ -21,17 +21,88 @@ document.addEventListener('DOMContentLoaded', function() {
   // Écouteur d'événement pour le scroll
   window.addEventListener('scroll', handleScroll);
 
+  // Fonction pour fermer le sidebar
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
+  }
+
+  // Fonction pour fermer la barre de recherche
+  function closeSearchBar() {
+    isSearchBarOpen = false;
+    searchBar.style.height = '0';
+  }
+
   // Gestion de la barre de recherche
-  searchToggle.addEventListener('click', function(e) {
-    e.preventDefault();
-    isSearchBarOpen = !isSearchBarOpen;
-    if (isSearchBarOpen) {
-      searchBar.classList.add('open');
-      setTimeout(() => {
-        searchBar.querySelector('input').focus();
-      }, 300); // Attendre la fin de l'animation avant de focus
-    } else {
-      searchBar.classList.remove('open');
+  if (searchToggle && searchBar) {
+    searchToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      isSearchBarOpen = !isSearchBarOpen;
+      if (isSearchBarOpen) {
+        searchBar.style.height = '60px';
+        closeSidebar(); // Ferme le sidebar si ouvert
+      } else {
+        closeSearchBar();
+      }
+    });
+  }
+
+  // Gestion du menu burger
+  if (menuToggle && sidebar) {
+    menuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      sidebar.classList.toggle('open');
+      document.body.classList.toggle('sidebar-open');
+      if (sidebar.classList.contains('open')) {
+        closeSearchBar(); // Ferme la barre de recherche si ouverte
+      }
+    });
+  }
+
+  // Gestion des sous-menus
+  const subMenuToggles = document.querySelectorAll('[id$="-toggle"]');
+  subMenuToggles.forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const subMenuId = this.id.replace('-toggle', '');
+      const subMenu = document.getElementById(subMenuId);
+      if (subMenu) {
+        subMenu.classList.toggle('hidden');
+      }
+    });
+  });
+
+  // Fermer le sidebar et la barre de recherche en cliquant à l'extérieur
+  document.addEventListener('click', function(e) {
+    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+      closeSidebar();
+    }
+    if (!searchBar.contains(e.target) && !searchToggle.contains(e.target)) {
+      closeSearchBar();
     }
   });
+
+  // Empêcher la propagation des clics à l'intérieur du sidebar et de la barre de recherche
+  sidebar.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  searchBar.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Ajoutez ceci pour empêcher le défilement lorsque le sidebar est ouvert
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+
+  const closeSidebarButton = document.getElementById('close-sidebar');
+  
+  if (closeSidebarButton) {
+    closeSidebarButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeSidebar();
+    });
+  }
 });

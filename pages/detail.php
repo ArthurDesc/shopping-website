@@ -4,6 +4,7 @@ include '../includes/_db.php';
 require_once '../classe/produit.php';
 require_once '../classe/ArticleManager.php';
 require_once '../classe/AdminManager.php';
+require_once '../includes/product_functions.php';
 
 // Créez une instance de AdminManager
 $adminManager = new AdminManager($conn);
@@ -31,8 +32,12 @@ $id_produit = $_GET['id'];
 
 
 // Récupérer les détails du produit
-$query = "SELECT * FROM produits WHERE id_produit = ?";
-$stmt = $conn->prepare($query);
+$sql = "SELECT p.*, pc.id_categorie 
+        FROM produits p 
+        LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
+        WHERE p.id_produit = ?";
+
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_produit);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -80,6 +85,21 @@ if (!$article) {
 
 $categories = $articleManager->getArticleCategories($id_article);
 $allCategories = $articleManager->getAllCategories();
+
+// Fonction pour obtenir la moyenne des notes et le nombre d'avis
+function getProductRatingSummary($product_id) {
+    global $conn;
+    $sql = "SELECT COALESCE(AVG(note), 0) as average_rating, COUNT(*) as review_count FROM avis WHERE id_produit = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+}
+
+$rating_summary = getProductRatingSummary($produit['id_produit']);
+$average_rating = $rating_summary['average_rating'] !== null ? round($rating_summary['average_rating'], 1) : 0;
+$review_count = $rating_summary['review_count'];
 
 ?>
 
@@ -146,14 +166,26 @@ $allCategories = $articleManager->getAllCategories();
 
                     <!-- Étoiles et avis -->
                     <div class="flex items-center">
-                        <div class="flex text-yellow-400">
-                            <?php for ($i = 0; $i < 5; $i++): ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            <?php endfor; ?>
+                        <div class="flex items-center">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $average_rating) {
+                                    echo '<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                                } else {
+                                    echo '<svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                                }
+                            }
+                            ?>
                         </div>
-                        <span class="ml-1 text-gray-600">4.50 (85)</span>
+                        <p class="ml-2 text-sm text-gray-600">
+                            <?php 
+                            if ($review_count > 0) {
+                                echo "$average_rating sur 5 ($review_count avis)";
+                            } else {
+                                echo "Aucun avis pour le moment";
+                            }
+                            ?>
+                        </p>
                     </div>
 
                     <!-- Description -->
@@ -191,7 +223,7 @@ $allCategories = $articleManager->getAllCategories();
                             <button @click="editingPrice = !editingPrice" class="ml-2 text-gray-600 hover:text-blue-500">
                                 <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
+                            </svg>
                             </button>
                             <?php endif; ?>
                         </div>
@@ -263,15 +295,106 @@ $allCategories = $articleManager->getAllCategories();
                     <?php endif; ?>
 
                     <!-- Boutons d'action -->
+                    <?php
+                    $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
+                    ?>
                     <div class="mt-4 space-y-2">
-                        <form action="ajouter_panier.php" method="get">
+                        <form action="<?php echo BASE_URL; ?>pages/panier.php" method="post" id="product-form">
                             <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                            <button type="submit" name="ajouter_au_panier" class="w-full bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
+                            <input type="hidden" name="action" value="ajouter">
+                            
+                            <select name="taille" class="w-full mb-2 p-2 border rounded" required>
+                                <option value="">Choisissez une taille</option>
+                                <?php foreach ($tailles_disponibles as $taille): ?>
+                                    <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            
+                            <div class="flex space-x-2">
+                                <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
+                                <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">Acheter maintenant</button>
+                            </div>
                         </form>
-                        <button class="w-full bg-blue-600 text-white font-semibold py-2 rounded">Acheter maintenant</button>
                     </div>
+
+                    <script>
+                    function acheterMaintenant() {
+                        var form = document.getElementById('product-form');
+                        form.action.value = 'acheter';
+                        form.submit();
+                    }
+                    </script>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Après les détails du produit et avant le formulaire d'ajout au panier -->
+    <div class="mt-8">
+        <h3 class="text-xl font-semibold mb-4">Avis des clients</h3>
+        <?php
+        $avis = getProductReviews($produit['id_produit']);
+        if (empty($avis)) {
+            echo "<p>Aucun avis pour ce produit.</p>";
+        } else {
+            foreach ($avis as $review) {
+                ?>
+                <div class="mb-4 p-4 bg-gray-100 rounded">
+                    <div class="flex items-center mb-2">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <svg class="w-5 h-5 <?php echo $i <= $review['note'] ? 'text-yellow-400' : 'text-gray-300'; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        <?php endfor; ?>
+                        <span class="ml-2 text-sm text-gray-600"><?php echo htmlspecialchars($review['nom_utilisateur']); ?></span>
+                    </div>
+                    <p class="text-gray-700"><?php echo htmlspecialchars($review['commentaire']); ?></p>
+                </div>
+                <?php
+            }
+        }
+        ?>
+        <a href="<?php echo BASE_URL; ?>pages/avis.php?id_produit=<?php echo $produit['id_produit']; ?>" class="text-blue-600 hover:underline">Voir tous les avis</a>
+    </div>
+
+    <div class="mt-8">
+        <h3 class="text-xl font-semibold mb-4">Donnez votre avis</h3>
+        <form action="<?php echo BASE_URL; ?>pages/ajouter_avis.php" method="POST" id="avis-form">
+            <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Note</label>
+                <div class="flex items-center" id="star-rating">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <svg class="w-8 h-8 text-gray-300 cursor-pointer star-icon" data-rating="<?php echo $i; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    <?php endfor; ?>
+                </div>
+                <input type="hidden" name="note" id="note-input" value="" required>
+            </div>
+            <div class="mb-4">
+                <label for="commentaire" class="block text-sm font-medium text-gray-700">Commentaire</label>
+                <textarea name="commentaire" id="commentaire" rows="3" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded">Soumettre l'avis</button>
+        </form>
+    </div>
+
+    <div class="mt-12">
+        <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <?php
+            // Récupérer les produits associés (à implémenter)
+            $produits_associes = getRelatedProducts($produit['id_produit'], $produit['id_categorie']);
+            foreach ($produits_associes as $produit_associe) {
+                echo "<div class='border p-4 rounded'>";
+                echo "<img src='" . BASE_URL . "assets/images/produits/" . $produit_associe['image_url'] . "' alt='" . $produit_associe['nom'] . "' class='w-full h-48 object-cover mb-2'>";
+                echo "<h4 class='font-semibold'>" . $produit_associe['nom'] . "</h4>";
+                echo "<p class='text-gray-600'>" . number_format($produit_associe['prix'], 2) . " €</p>";
+                echo "<a href='detail.php?id=" . $produit_associe['id_produit'] . "' class='mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded'>Voir le produit</a>";
+                echo "</div>";
+            }
+            ?>
         </div>
     </div>
 
@@ -334,6 +457,52 @@ $allCategories = $articleManager->getAllCategories();
 
     <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
     <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const starRating = document.getElementById('star-rating');
+        const stars = starRating.querySelectorAll('.star-icon');
+        const noteInput = document.getElementById('note-input');
+        const form = document.getElementById('avis-form');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                noteInput.value = rating;
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseover', function() {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseout', function() {
+                const currentRating = noteInput.value || 0;
+                highlightStars(currentRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        form.addEventListener('submit', function(e) {
+            if (!noteInput.value) {
+                e.preventDefault();
+                alert('Veuillez sélectionner une note avant de soumettre votre avis.');
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>
