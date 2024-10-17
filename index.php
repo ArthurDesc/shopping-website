@@ -38,9 +38,19 @@ include './includes/_header.php';
     <div class="swiper-pagination"></div>
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
+    
+    <!-- Nouveau bouton d'ancrage -->
+    <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-10">
+      <a href="#nouveautes" class="bg-white bg-opacity-80 text-blue-600 px-4 py-2 rounded-full shadow-md hover:bg-blue-600 hover:text-white transition duration-300 flex items-center space-x-2">
+        <span>Découvrir plus</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
   </div>
 
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
+  <h2 id="nouveautes" class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
@@ -178,3 +188,32 @@ include './includes/_header.php';
 </main>
 
 <?php include './includes/_footer.php'; ?>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            const headerOffset = 60; // Hauteur de votre header fixe
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            gsap.to(window, {
+                duration: 1, 
+                scrollTo: {
+                    y: offsetPosition,
+                    autoKill: false
+                },
+                ease: "power2.inOut"
+            });
+        }
+    });
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
