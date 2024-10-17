@@ -187,10 +187,7 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <?php include '../includes/_footer.php'; ?>
 
 <!-- Scripts -->
-<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-<!-- Ajout du script de filtrage -->
-<script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
+
 <!-- Ajout d'Alpine.js -->
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
@@ -228,5 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
 </body>
 </html>
