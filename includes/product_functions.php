@@ -1,18 +1,16 @@
 <?php
 function getProductReviews($product_id) {
     global $conn;
-    $reviews = array();
-    
-    $stmt = $conn->prepare("SELECT * FROM avis WHERE id_produit = ? ORDER BY date_creation DESC");
+    $sql = "SELECT a.*, u.nom as nom_utilisateur 
+            FROM avis a 
+            JOIN utilisateurs u ON a.id_utilisateur = u.id_utilisateur 
+            WHERE a.id_produit = ? 
+            ORDER BY a.date_creation DESC";  // Tri par date de création décroissante
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $product_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
-    while ($row = $result->fetch_assoc()) {
-        $reviews[] = $row;
-    }
-    
-    return $reviews;
+    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
 function getRelatedProducts($product_id, $category_ids = null, $limit = 3) {
@@ -55,4 +53,14 @@ function getRelatedProducts($product_id, $category_ids = null, $limit = 3) {
     }
     
     return $related_products;
+}
+
+function getProductDetails($product_id) {
+    global $conn;
+    $sql = "SELECT * FROM produits WHERE id_produit = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
 }

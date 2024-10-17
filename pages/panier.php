@@ -1,190 +1,144 @@
-<?php 
+<?php
 session_start();
-include_once "../includes/_db.php";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Initialiser le panier si ce n'est pas déjà fait
-if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
-    $_SESSION['panier'] = []; // Initialisation du panier comme tableau vide
+require_once '../includes/_db.php';
+require_once '../includes/_header.php';
+
+// Fonction pour nettoyer les clés du panier
+function cleanCartKey($key) {
+    $parts = explode('_', $key);
+    return intval($parts[0]);
 }
 
-// Supprimer les produits si la variable 'del' existe
-if (isset($_GET['del'])) {
-    $id_del = $_GET['del'];
-    unset($_SESSION['panier'][$id_del]);
-}
-
-// Mettre à jour la quantité du produit si le formulaire est soumis
-if (isset($_POST['update'])) {
-    $id_update = $_POST['id_produit'];
-    $quantity = $_POST['quantite']; // Changez 'stock' en 'quantite'
-    
-    // Vérifier si la quantité est valide
-    if (is_numeric($quantity) && $quantity > 0) {
-        $_SESSION['panier'][$id_update] = intval($quantity);
-    } else {
-        unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité n'est pas valide
-    }
-}
-
-// Ajouter le produit au panier
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['id_produit']) && isset($_POST['action']) && isset($_POST['taille'])) {
-        $id_produit = $_POST['id_produit'];
-        $action = $_POST['action'];
-        $taille = $_POST['taille'];
-
-        // Ajouter le produit au panier avec sa taille
-        if (!isset($_SESSION['panier'])) {
-            $_SESSION['panier'] = [];
-        }
-        $product_key = $id_produit . '_' . $taille; // Clé unique pour chaque combinaison produit/taille
-        if (isset($_SESSION['panier'][$product_key])) {
-            $_SESSION['panier'][$product_key]['quantite']++;
+// Nettoyage du panier
+if (isset($_SESSION['panier']) && is_array($_SESSION['panier'])) {
+    $cleanedCart = array();
+    foreach ($_SESSION['panier'] as $key => $value) {
+        $cleanKey = cleanCartKey($key);
+        if (is_array($value)) {
+            $cleanedCart[$cleanKey] = $value;
         } else {
-            $_SESSION['panier'][$product_key] = [
-                'id_produit' => $id_produit,
-                'taille' => $taille,
-                'quantite' => 1
-            ];
-        }
-
-        // Si l'action est "acheter", vous pouvez rediriger vers une page de paiement
-        if ($action === 'acheter') {
-            // Rediriger vers la page de paiement ou effectuer une autre action
-            // header("Location: " . BASE_URL . "pages/paiement.php");
-            // exit();
+            $cleanedCart[$cleanKey] = ['quantite' => $value, 'taille' => null];
         }
     }
+    $_SESSION['panier'] = $cleanedCart;
 }
 
-?>
+// Affichage du panier
+echo "<div class='container mx-auto px-4 py-8'>";
+echo "<h2 class='text-2xl font-bold mb-4'>Votre panier</h2>";
 
-    <?php include '../includes/_header.php';?>
-    <section class="p-4 bg-white shadow-md rounded-lg flex">
-        <div class="w-3/4"> <!-- Colonne pour le tableau des produits -->
-            <table class="min-w-full">
-                <thead class="bg-blue-500 text-white">
-                    <tr>
-                        <th class="p-3">Image</th>
-                        <th class="p-3">Nom</th>
-                        <th class="p-3">Prix</th>
-                        <th class="p-3">Quantité</th>
-                        <th class="p-3">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $total = 0;
-                    // Récupérer les clés du tableau session
-                    $ids = array_keys($_SESSION['panier']);
+if (empty($_SESSION['panier'])) {
+    echo "<p>Votre panier est vide.</p>";
+} else {
+    echo "<div class='overflow-x-auto'>";
+    echo "<table class='w-full text-sm text-left text-gray-500'>";
+    echo "<thead class='text-xs text-gray-700 uppercase bg-gray-50'>";
+    echo "<tr>";
+    echo "<th scope='col' class='px-6 py-3'>Produit</th>";
+    echo "<th scope='col' class='px-6 py-3'>Prix</th>";
+    echo "<th scope='col' class='px-6 py-3'>Quantité</th>";
+    echo "<th scope='col' class='px-6 py-3'>Total</th>";
+    echo "<th scope='col' class='px-6 py-3'>Action</th>";
+    echo "</tr>";
+    echo "</thead>";
+    echo "<tbody>";
 
-                    if (empty($ids)) {
-                        echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; // Ajout de classes pour le style
-                        echo '<h2 class="text-2xl font-bold mb-4 text-red-600">Panier vide !</h2>'; // Augmentation de la taille de la police et changement de couleur
-                        echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">'; 
-                        echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>'; // Changement de couleur
-                        echo '<div class="flex flex-col space-y-4">'; 
-                        echo '<a href="produit.php" class="bg-blue-600 text-white px-1 py-3 rounded-full hover:bg-blue-700 transition duration-200">Continuer vos achats</a>'; // Réduction supplémentaire de la taille sur les côtés
-                        echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez-vous pour récupérer votre panier</a>'; // Changement de couleur
-                        echo '</div>';
-                        echo '</div>';
-                    } else {
-                        // Récupérer les produits dans le panier
-                        $products = mysqli_query($conn, "SELECT * FROM produits WHERE id_produit IN (".implode(',', $ids).")");
+    $total = 0;
 
-                        foreach ($products as $product) {
-                            // Quantité du produit dans le panier
-                            $quantity = $_SESSION['panier'][$product['id_produit']];
-                            $product_total = $product['prix'] * intval($quantity);
-                            $total += $product_total;
+    foreach ($_SESSION['panier'] as $product_id => $item) {
+        $product_id = intval($product_id);
+        $quantite = $item['quantite'];
+        $taille = $item['taille'] ?? null;
 
-                            // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                            $img = htmlspecialchars($product['image_url'] ?? '', ENT_QUOTES, 'UTF-8');
-                            $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
-                    ?>
-                    <tr class="hover:bg-blue-100 transition duration-200">
-                        <td class="p-2">
-                            <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover rounded">
-                        </td>
-                        <td class="p-2"><?= $nom ?></td>
-                        <td class="p-2"><?= number_format($product['prix'], 2); ?>€</td>
-                        <td class="p-2">
-                            <form method="post" action="">
-                                <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
-                                <div class="flex items-center">
-                                    <button type="submit" name="action" value="decrease" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-l">-</button>
-                                    <span class="mx-2"><?= $quantity ?></span>
-                                    <button type="submit" name="action" value="increase" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-r">+</button>
-                                </div>
-                            </form>
-                        </td>
-                        <td class="p-2">
-                            <a href="panier.php?del=<?= $product['id_produit']; ?>" class="text-red-500 hover:text-red-700 transition duration-200">
-                                <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="30" height="30">
-                            </a>
-                        </td>
-                    </tr>
-                    <?php 
-                        }
-                    }
-                    ?>
-                </tbody>
-                <tfoot>
-                    <tr class="bg-gray-200">
-                        <th colspan="4" class="p-3 text-right">Total :</th>
-                        <th class="p-3"><?= number_format($total, 2); ?>€</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        <div class="w-1/4 p-4 bg-gray-50 rounded-lg shadow-lg"> <!-- Colonne pour le résumé du panier -->
-            <h2 class="text-xl font-bold mb-4">Résumé du Panier</h2>
-            <div class="mb-4">
-                <p class="text-lg">Total à payer :</p>
-                <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
-            </div>
-            <div class="flex flex-col space-y-2">
-                <a href="paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center">Payer</a>
-                <a href="produit.php" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-200 text-center">Continuer vos achats</a>
-               <?php if (!isset($_SESSION['id_utilisateur'])) { 
-                   echo '<a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>';
-                } ?>
-            </div>
-        </div>
-    </section>
-    
-    <?php 
-    // Traitement de la mise à jour de la quantité
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
-        $id_update = $_POST['id_produit'];
+        $sql = "SELECT * FROM produits WHERE id_produit = ?";
+        $stmt = $conn->prepare($sql);
         
-        // Vérifier l'action (augmentation ou diminution)
-        if ($_POST['action'] === 'increase') {
-            $_SESSION['panier'][$id_update] = isset($_SESSION['panier'][$id_update]) ? $_SESSION['panier'][$id_update] + 1 : 1;
-        } elseif ($_POST['action'] === 'decrease') {
-            if (isset($_SESSION['panier'][$id_update]) && $_SESSION['panier'][$id_update] > 1) {
-                $_SESSION['panier'][$id_update]--;
-            } else {
-                unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
+        if ($stmt === false) {
+            echo "<tr><td colspan='5' class='text-red-500'>Erreur de préparation de la requête pour le produit ID $product_id</td></tr>";
+            continue;
+        }
+
+        $stmt->bind_param("i", $product_id);
+        
+        if (!$stmt->execute()) {
+            echo "<tr><td colspan='5' class='text-red-500'>Erreur d'exécution de la requête pour le produit ID $product_id</td></tr>";
+            continue;
+        }
+
+        $result = $stmt->get_result();
+        $produit = $result->fetch_assoc();
+
+        if ($produit) {
+            $prix_total = $produit['prix'] * $quantite;
+            $total += $prix_total;
+
+            echo "<tr class='bg-white border-b'>";
+            echo "<td class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap'>";
+            echo "<div class='flex items-center'>";
+            if (!empty($produit['image'])) {
+                echo "<img class='w-10 h-10 object-cover mr-3' src='" . htmlspecialchars($produit['image']) . "' alt='" . htmlspecialchars($produit['nom']) . "'>";
             }
+            echo htmlspecialchars($produit['nom']);
+            if ($taille) {
+                echo " <span class='text-sm text-gray-500'>(Taille : " . htmlspecialchars($taille) . ")</span>";
+            }
+            echo "</div>";
+            echo "</td>";
+            echo "<td class='px-6 py-4'>" . number_format($produit['prix'], 2, ',', ' ') . " €</td>";
+            echo "<td class='px-6 py-4'>" . htmlspecialchars($quantite) . "</td>";
+            echo "<td class='px-6 py-4'>" . number_format($prix_total, 2, ',', ' ') . " €</td>";
+            echo "<td class='px-6 py-4'>";
+            echo "<a href='supprimer_produit.php?id=" . $product_id . "' class='font-medium text-red-600 hover:underline'>Supprimer</a>";
+            echo "</td>";
+            echo "</tr>";
+        } else {
+            echo "<tr><td colspan='5' class='text-red-500'>Produit non trouvé pour l'ID : $product_id</td></tr>";
         }
+
+        $stmt->close();
     }
-    ?>
 
-    <?php include '../includes/_footer.php'; ?>
+    echo "</tbody>";
+    echo "</table>";
+    echo "</div>";
 
-    <script src="../assets/js/scripts.js" defer></script>
-    <script src="../assets/js/navbar.js" defer></script>
-    <script>
-        function updateQuantity(productId) {
-            const form = document.querySelector(`input[name="id_produit"][value="${productId}"]`).closest('form');
-            console.log("Submitting form for product ID:", productId); // Ligne de débogage
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Empêche le rechargement de la page
-                form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
-            });
-            form.submit(); // Soumettre le formulaire pour mettre à jour la quantité
-        }
-    </script>
-</body>
-</html>
+    echo "<div class='mt-8 flex justify-between items-center'>";
+    echo "<div>";
+    echo "<p class='text-xl font-bold'>Total du panier : " . number_format($total, 2, ',', ' ') . " €</p>";
+    echo "</div>";
+    echo "<div class='space-x-4'>";
+    echo "<a href='passer_commande.php' class='inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'>Passer la commande</a>";
+    echo "<button onclick='showPaymentOptions()' class='bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600'>Payer maintenant</button>";
+    echo "</div>";
+    echo "</div>";
+
+    // Options de paiement (initialement cachées)
+    echo "<div id='paymentOptions' class='hidden mt-8 p-4 bg-gray-100 rounded'>";
+    echo "<h3 class='text-lg font-semibold mb-4'>Choisissez votre méthode de paiement :</h3>";
+    echo "<div class='space-y-2'>";
+    echo "<button onclick='processPayment(\"carte\")' class='w-full bg-white border border-gray-300 px-4 py-2 rounded hover:bg-gray-50'>Carte bancaire</button>";
+    echo "<button onclick='processPayment(\"paypal\")' class='w-full bg-white border border-gray-300 px-4 py-2 rounded hover:bg-gray-50'>PayPal</button>";
+    echo "<button onclick='processPayment(\"virement\")' class='w-full bg-white border border-gray-300 px-4 py-2 rounded hover:bg-gray-50'>Virement bancaire</button>";
+    echo "</div>";
+    echo "</div>";
+}
+
+echo "</div>";
+
+// JavaScript pour gérer l'affichage des options de paiement
+echo "<script>
+function showPaymentOptions() {
+    document.getElementById('paymentOptions').classList.remove('hidden');
+}
+
+function processPayment(method) {
+    alert('Paiement par ' + method + ' en cours de traitement...');
+    // Ici, vous pouvez rediriger vers une page de paiement ou effectuer une action AJAX
+}
+</script>";
+
+require_once '../includes/_footer.php';
+?>

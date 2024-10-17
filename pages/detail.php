@@ -330,61 +330,47 @@ $review_count = $rating_summary['review_count'];
     </div>
 
     <!-- Après les détails du produit et avant le formulaire d'ajout au panier -->
-    <div class="mt-4 mb-4">
-        <h3 class="text-lg font-semibold">Avis clients</h3>
-        <div class="flex items-center">
-            <div class="flex items-center">
+    <div class="mt-8">
+        <h3 class="text-xl font-semibold mb-4">Avis des clients</h3>
+        <?php
+        $avis = getProductReviews($produit['id_produit']);
+        if (empty($avis)) {
+            echo "<p>Aucun avis pour ce produit.</p>";
+        } else {
+            foreach ($avis as $review) {
+                ?>
+                <div class="mb-4 p-4 bg-gray-100 rounded">
+                    <div class="flex items-center mb-2">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <svg class="w-5 h-5 <?php echo $i <= $review['note'] ? 'text-yellow-400' : 'text-gray-300'; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        <?php endfor; ?>
+                        <span class="ml-2 text-sm text-gray-600"><?php echo htmlspecialchars($review['nom_utilisateur']); ?></span>
+                    </div>
+                    <p class="text-gray-700"><?php echo htmlspecialchars($review['commentaire']); ?></p>
+                </div>
                 <?php
-                for ($i = 1; $i <= 5; $i++) {
-                    if ($i <= $average_rating) {
-                        echo '<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
-                    } else {
-                        echo '<svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
-                    }
-                }
-                ?>
-            </div>
-            <p class="ml-2 text-sm text-gray-600">
-                <?php 
-                if ($review_count > 0) {
-                    echo "$average_rating sur 5 ($review_count avis)";
-                } else {
-                    echo "Aucun avis pour le moment";
-                }
-                ?>
-            </p>
-        </div>
+            }
+        }
+        ?>
         <a href="<?php echo BASE_URL; ?>pages/avis.php?id_produit=<?php echo $produit['id_produit']; ?>" class="text-blue-600 hover:underline">Voir tous les avis</a>
     </div>
 
     <div class="mt-8">
-        <h3 class="text-xl font-semibold mb-4">Avis des clients</h3>
-        <?php
-        // Récupérer les avis pour ce produit (à implémenter)
-        $avis = getProductReviews($produit['id_produit']);
-        if (!empty($avis)) {
-            foreach ($avis as $review) {
-                echo "<div class='mb-4 p-4 bg-gray-100 rounded'>";
-                echo "<p class='font-bold'>" . str_repeat("★", $review['note']) . str_repeat("☆", 5 - $review['note']) . "</p>";
-                echo "<p>" . htmlspecialchars($review['commentaire']) . "</p>";
-                echo "</div>";
-            }
-        } else {
-            echo "<p>Aucun avis pour ce produit.</p>";
-        }
-        ?>
-        <form action="<?php echo BASE_URL; ?>pages/ajouter_avis.php" method="POST" class="mt-4">
+        <h3 class="text-xl font-semibold mb-4">Donnez votre avis</h3>
+        <form action="<?php echo BASE_URL; ?>pages/ajouter_avis.php" method="POST" id="avis-form">
             <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
             <div class="mb-4">
-                <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
-                <select name="note" id="note" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    <option value="">Choisissez une note</option>
-                    <option value="1">1 étoile</option>
-                    <option value="2">2 étoiles</option>
-                    <option value="3">3 étoiles</option>
-                    <option value="4">4 étoiles</option>
-                    <option value="5">5 étoiles</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700">Note</label>
+                <div class="flex items-center" id="star-rating">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <svg class="w-8 h-8 text-gray-300 cursor-pointer star-icon" data-rating="<?php echo $i; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    <?php endfor; ?>
+                </div>
+                <input type="hidden" name="note" id="note-input" value="" required>
             </div>
             <div class="mb-4">
                 <label for="commentaire" class="block text-sm font-medium text-gray-700">Commentaire</label>
@@ -471,6 +457,52 @@ $review_count = $rating_summary['review_count'];
 
     <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
     <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const starRating = document.getElementById('star-rating');
+        const stars = starRating.querySelectorAll('.star-icon');
+        const noteInput = document.getElementById('note-input');
+        const form = document.getElementById('avis-form');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                noteInput.value = rating;
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseover', function() {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseout', function() {
+                const currentRating = noteInput.value || 0;
+                highlightStars(currentRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        form.addEventListener('submit', function(e) {
+            if (!noteInput.value) {
+                e.preventDefault();
+                alert('Veuillez sélectionner une note avant de soumettre votre avis.');
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>
