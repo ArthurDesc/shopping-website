@@ -43,11 +43,8 @@
     
   </div>
   <div class="swiper-pagination"></div>
-  <!-- Flèches de navigation -->
-  <div class="hidden sm:block">
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
 </div>
 
   <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
@@ -190,8 +187,10 @@
 <?php include './includes/_footer.php'; ?>
 
 <!-- Scripts -->
-<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+
 
 </body>
 </html>

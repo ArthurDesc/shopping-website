@@ -1,0 +1,38 @@
+#search-bar {
+  height: 0;
+  transition: height 0.3s ease-in-out, border-top-width 0.3s ease-in-out;
+  border-top: 0 solid black;
+}
+
+#search-bar.open {
+  height: 60px; /* Ajustez cette valeur selon vos besoins */
+  border-top-width: 1px;
+}
+
+#search-bar .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#search-bar form {
+  width: 100%;
+}
+
+#search-bar input {
+  background-color: transparent;
+  border: none;
+  height: 40px; /* Ajustez cette valeur selon vos besoins */
+}
+
+#search-bar input::placeholder {
+  color: #9CA3AF; /* Couleur gris clair pour le placeholder */
+}
+
+#search-bar button:hover svg {
+  stroke: #3B82F6; /* Couleur bleue au survol de l'icône */
+}
+
+body.sidebar-open {
+  overflow: hidden;
+}

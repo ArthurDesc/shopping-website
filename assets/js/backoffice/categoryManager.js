@@ -86,28 +86,28 @@ const CategoryManager = (function(UIManager) {
         setupAddCategoryForm();
     }
 
-    function addNewCategory(categoryName) {
+    function addNewCategory(categoryName, description = null, parentId = null) {
         console.log("CategoryManager: Tentative d'ajout de la catégorie:", categoryName);
         return fetch('/shopping-website/admin/add_category.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nom: categoryName, parent_id: null })
+            body: JSON.stringify({ nom: categoryName, description: description, parent_id: parentId })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log("Catégorie ajoutée avec succès");
-                loadCategories(); // Recharger les catégories après l'ajout
-            } else {
-                console.error("Erreur lors de l'ajout de la catégorie:", data.message);
+        .then(response => {
+            console.log("CategoryManager: Réponse brute reçue:", response);
+            return response.text();
+        })
+        .then(text => {
+            console.log("CategoryManager: Texte de la réponse:", text);
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error("CategoryManager: Erreur de parsing JSON:", e);
+                console.error("CategoryManager: Réponse non-JSON reçue:", text);
+                throw new Error("Réponse du serveur invalide");
             }
-            return data;
-        })
-        .catch(error => {
-            console.error("CategoryManager: Erreur lors de l'ajout de la catégorie:", error);
-            throw error;
         });
     }
 
@@ -137,6 +137,7 @@ const CategoryManager = (function(UIManager) {
     }
 
     function addNewSubCategory(parentId, subCategoryName) {
+        console.log("CategoryManager: Tentative d'ajout de la sous-catégorie:", subCategoryName, "pour le parent:", parentId);
         return fetch('/shopping-website/admin/add_subcategory.php', {
             method: 'POST',
             headers: {
@@ -144,13 +145,19 @@ const CategoryManager = (function(UIManager) {
             },
             body: JSON.stringify({ parent_id: parentId, nom: subCategoryName })
         })
-        .then(response => response.json());
-    }
-
-    function init() {
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCategories();
-            setupAddCategoryForm();
+        .then(response => {
+            console.log("CategoryManager: Réponse brute reçue:", response);
+            return response.text();
+        })
+        .then(text => {
+            console.log("CategoryManager: Texte de la réponse:", text);
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error("CategoryManager: Erreur de parsing JSON:", e);
+                console.error("CategoryManager: Réponse non-JSON reçue:", text);
+                throw new Error("Réponse du serveur invalide");
+            }
         });
     }
 
@@ -162,6 +169,3 @@ const CategoryManager = (function(UIManager) {
         addNewSubCategory: addNewSubCategory
     };
 })(UIManager);
-
-// Appeler init pour démarrer le gestionnaire de catégories
-CategoryManager.init();

@@ -4,6 +4,7 @@
 --
 -- Host: localhost:3306
 -- Generation Time: Oct 16, 2024 at 01:10 PM
+-- Generation Time: Oct 16, 2024 at 01:10 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -227,10 +228,22 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`id_categorie`);
 
 --
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id_categorie`);
+
+--
 -- Indexes for table `produits`
 --
 ALTER TABLE `produits`
   ADD PRIMARY KEY (`id_produit`);
+
+--
+-- Indexes for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  ADD PRIMARY KEY (`id_utilisateur`);
 
 --
 -- Indexes for table `utilisateurs`
@@ -249,10 +262,22 @@ ALTER TABLE `categories`
   MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
   MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `utilisateurs`
+--
+ALTER TABLE `utilisateurs`
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`

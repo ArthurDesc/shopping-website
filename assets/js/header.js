@@ -95,6 +95,4 @@ document.addEventListener('DOMContentLoaded', function() {
       subMenu.classList.toggle('hidden');
     });
   });
-
-  console.log('BASE_URL:', BASE_URL);
 });

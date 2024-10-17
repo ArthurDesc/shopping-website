@@ -1,62 +1,108 @@
-document.addEventListener('click', function(event) {
-  const sidebar = document.getElementById('sidebar');
-  const menuToggle = document.getElementById('menu-toggle');
-
-  // Vérifie si le clic est à l'extérieur de la barre latérale et du bouton de menu
-  if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
-    sidebar.classList.add('-translate-x-full');
-  }
-});
-
-document.getElementById('menu-toggle').addEventListener('click', function(event) {
-  event.stopPropagation(); // Empêche le clic de se propager au document
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('-translate-x-full');
-});
-
 document.addEventListener('DOMContentLoaded', function() {
-  var swiper = new Swiper('.swiper-container', {
-    loop: true,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+  const headerContainer = document.getElementById('header-container');
+  const searchToggle = document.getElementById('search-toggle');
+  const searchBar = document.getElementById('search-bar');
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  let isSearchBarOpen = false;
+  let lastScrollTop = 0;
 
-  // Ajoutez cette nouvelle fonction pour gérer le scroll
+  // Fonction pour gérer l'affichage/masquage du header
   function handleScroll() {
-    const header = document.getElementById('main-header');
-    let lastScrollTop = 0;
-
-    window.addEventListener('scroll', function() {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      if (scrollTop > lastScrollTop) {
-        // Scroll vers le bas
-        header.style.transform = 'translateY(-100%)';
-      } else {
-        // Scroll vers le haut
-        header.style.transform = 'translateY(0)';
-      }
-      
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-    }, false);
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > lastScrollTop && scrollTop > 200) {
+      headerContainer.style.transform = 'translateY(-100%)';
+    } else {
+      headerContainer.style.transform = 'translateY(0)';
+    }
+    lastScrollTop = scrollTop;
   }
 
-  // Appelez la fonction au chargement du document
-  handleScroll();
-});
+  // Écouteur d'événement pour le scroll
+  window.addEventListener('scroll', handleScroll);
 
-const toggles = ['menu-homme', 'menu-femme', 'menu-enfants', 'menu-sports'];
+  // Fonction pour fermer le sidebar
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
+  }
 
-toggles.forEach(toggle => {
-  document.getElementById(`${toggle}-toggle`).addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById(toggle).classList.toggle('hidden');
-    this.querySelector('svg').classList.toggle('rotate-180');
+  // Fonction pour fermer la barre de recherche
+  function closeSearchBar() {
+    isSearchBarOpen = false;
+    searchBar.style.height = '0';
+  }
+
+  // Gestion de la barre de recherche
+  if (searchToggle && searchBar) {
+    searchToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      isSearchBarOpen = !isSearchBarOpen;
+      if (isSearchBarOpen) {
+        searchBar.style.height = '60px';
+        closeSidebar(); // Ferme le sidebar si ouvert
+      } else {
+        closeSearchBar();
+      }
+    });
+  }
+
+  // Gestion du menu burger
+  if (menuToggle && sidebar) {
+    menuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      sidebar.classList.toggle('open');
+      document.body.classList.toggle('sidebar-open');
+      if (sidebar.classList.contains('open')) {
+        closeSearchBar(); // Ferme la barre de recherche si ouverte
+      }
+    });
+  }
+
+  // Gestion des sous-menus
+  const subMenuToggles = document.querySelectorAll('[id$="-toggle"]');
+  subMenuToggles.forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const subMenuId = this.id.replace('-toggle', '');
+      const subMenu = document.getElementById(subMenuId);
+      if (subMenu) {
+        subMenu.classList.toggle('hidden');
+      }
+    });
   });
+
+  // Fermer le sidebar et la barre de recherche en cliquant à l'extérieur
+  document.addEventListener('click', function(e) {
+    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+      closeSidebar();
+    }
+    if (!searchBar.contains(e.target) && !searchToggle.contains(e.target)) {
+      closeSearchBar();
+    }
+  });
+
+  // Empêcher la propagation des clics à l'intérieur du sidebar et de la barre de recherche
+  sidebar.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  searchBar.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Ajoutez ceci pour empêcher le défilement lorsque le sidebar est ouvert
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+
+  const closeSidebarButton = document.getElementById('close-sidebar');
+  
+  if (closeSidebarButton) {
+    closeSidebarButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeSidebar();
+    });
+  }
 });

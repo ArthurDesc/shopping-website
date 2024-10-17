@@ -16,12 +16,12 @@ try {
 
     error_log("Tentative d'ajout de la catégorie: " . $data['nom']);
     $categoryManager = new CategoryManager($conn);
-    $result = $categoryManager->addCategory($data['nom'], $data['parent_id'] ?? null);
+    $result = $categoryManager->addCategory($data['nom'], $data['description'] ?? null, $data['parent_id'] ?? null);
 
     if ($result) {
         $response = ['success' => true, 'message' => 'Catégorie ajoutée avec succès'];
     } else {
-        $error = $categoryManager->getLastError(); // Assurez-vous d'avoir une méthode getLastError dans CategoryManager
+        $error = $categoryManager->getLastError();
         $response = ['success' => false, 'message' => 'Erreur lors de l\'ajout de la catégorie: ' . $error];
     }
     error_log("Réponse: " . json_encode($response));
