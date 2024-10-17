@@ -4,7 +4,7 @@ include './includes/_header.php';
 ?>
 
 <main class="flex-grow">
-  <div class="swiper-container relative w-full mx-auto overflow-hidden h-[calc(100vh-60px)]">
+  <div class="swiper-container relative w-full mx-auto overflow-hidden h-[calc(100vh-55px)]">
     <div class="swiper-wrapper h-full">
       <div class="swiper-slide relative">
         <img src="<?php echo url('assets/images/pikaso_edit.png'); ?>" alt="Image 3" class="w-full h-full object-cover" style="object-position: center 60%;">
