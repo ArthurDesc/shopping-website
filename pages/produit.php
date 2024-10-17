@@ -179,8 +179,8 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Votre code pour les filtres ici

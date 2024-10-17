@@ -1,26 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const menuToggle = document.getElementById('menu-toggle');
-  const sidebar = document.getElementById('sidebar');
-  const closeFilters = document.getElementById('closeFilters');
+  const headerContainer = document.getElementById('header-container');
   const searchToggle = document.getElementById('search-toggle');
   const searchBar = document.getElementById('search-bar');
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  let isSearchBarOpen = false;
+  let lastScrollTop = 0;
 
-  if (menuToggle && sidebar) {
-    menuToggle.addEventListener('click', function() {
-      sidebar.classList.toggle('-translate-x-full');
-    });
+  // Fonction pour gérer l'affichage/masquage du header
+  function handleScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > lastScrollTop && scrollTop > 200) {
+      headerContainer.style.transform = 'translateY(-100%)';
+    } else {
+      headerContainer.style.transform = 'translateY(0)';
+    }
+    lastScrollTop = scrollTop;
   }
 
-  if (closeFilters && sidebar) {
-    closeFilters.addEventListener('click', function() {
-      sidebar.classList.add('-translate-x-full');
-    });
-  }
+  // Écouteur d'événement pour le scroll
+  window.addEventListener('scroll', handleScroll);
 
+  // Gestion de la barre de recherche
   if (searchToggle && searchBar) {
     searchToggle.addEventListener('click', function(e) {
       e.preventDefault();
-      searchBar.classList.toggle('open');
+      isSearchBarOpen = !isSearchBarOpen;
+      if (isSearchBarOpen) {
+        searchBar.style.height = '60px'; // Ajustez cette valeur selon vos besoins
+      } else {
+        searchBar.style.height = '0';
+      }
+    });
+  }
+
+  // Gestion du menu burger
+  if (menuToggle && sidebar) {
+    menuToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('-translate-x-full');
     });
   }
 
