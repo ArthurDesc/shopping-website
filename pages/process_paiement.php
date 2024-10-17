@@ -1,17 +1,25 @@
 <?php
+session_start(); // Assurez-vous que la session est démarrée
+
 // Inclure l'autoloader de Composer
 require_once '../vendor/autoload.php'; // Inclure l'autoloader de Composer
+
+// Inclure le fichier de connexion à la base de données
+require_once '../includes/_db.php'; // Assurez-vous que ce chemin est correct
+
 // Configuration de Stripe
 \Stripe\Stripe::setApiKey('sk_test_51Q7Hl1P5XJmDt2UG2j3o2mIobvzMWo0XoZ8Md4YeqakLP682h9aEuYczQfUzjEMEdt6SyLUENnbgTmZPNotX2rEa00cMDNxsLs'); // Remplace par ta clé secrète
 
 // Vérifier si le montant est présent
 $total_amount = 0; // Montant total en cents
+$line_items = []; // Initialiser un tableau pour les lignes de produits
 
 // Vérifier si le panier est utilisé
 if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
+    var_dump($_SESSION['panier']); // Debug: Afficher le contenu du panier
     foreach ($_SESSION['panier'] as $id_produit => $quantity) {
         // Récupérer le prix du produit
-        $query = "SELECT prix FROM produits WHERE id_produit = ?";
+        $query = "SELECT prix, nom FROM produits WHERE id_produit = ?"; // Ajout du nom du produit
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $id_produit);
         $stmt->execute();
@@ -20,26 +28,32 @@ if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
 
         if ($product) {
             $total_amount += $product['prix'] * $quantity; // Calculer le montant total
+            // Ajouter les informations du produit pour la session de checkout
+            $line_items[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => [
+                        'name' => $product['nom'], // Utiliser le nom du produit
+                    ],
+                    'unit_amount' => $product['prix'] * 100, // Montant en cents
+                ],
+                'quantity' => $quantity,
+            ];
         }
     }
+}
+
+if (empty($line_items)) {
+    // Rediriger ou afficher un message d'erreur si le panier est vide
+    echo 'Erreur : Aucun produit dans le panier.';
+    exit; // Arrêter l'exécution du script
 }
 
 try {
     // Créer une session de checkout
     $checkout_session = \Stripe\Checkout\Session::create([
-        'payment_method_types' => ['card'],
-        'line_items' => [[
-            'price_data' => [
-                'currency' => 'eur',
-                'product_data' => [
-                    'name' => 'Achat dans le panier', // Vous pouvez personnaliser cela
-                ],
-                'unit_amount' => $total_amount * 100, // Montant en cents
-            ],
-            'quantity' => 1,
-        ]],
+        'line_items' => $line_items, // Utiliser les lignes de produits récupérées
         'mode' => 'payment',
-        'payment_method_types' => ['card'], // Corrected this line
         'success_url' => 'http://localhost/shopping-website/pages/confirmation_paiement.php',
         'cancel_url' => 'http://localhost/shopping-website/pages/cancel.php',
     ]);
