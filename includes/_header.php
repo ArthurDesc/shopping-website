@@ -33,7 +33,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
 </head>
-<body class="flex flex-col min-h-full mt-[60px]">
+<body class="flex flex-col min-h-full pt-[55px]">
   <div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-3 px-2 bg-white shadow-md">
