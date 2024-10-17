@@ -32,3 +32,7 @@
 #search-bar button:hover svg {
   stroke: #3B82F6; /* Couleur bleue au survol de l'icône */
 }
+
+body.sidebar-open {
+  overflow: hidden;
+}

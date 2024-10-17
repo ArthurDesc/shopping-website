@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Fonction pour fermer le sidebar
   function closeSidebar() {
-    sidebar.classList.add('-translate-x-full');
+    sidebar.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
   }
 
   // Fonction pour fermer la barre de recherche
@@ -52,8 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
     menuToggle.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      sidebar.classList.toggle('-translate-x-full');
-      if (!sidebar.classList.contains('-translate-x-full')) {
+      sidebar.classList.toggle('open');
+      document.body.classList.toggle('sidebar-open');
+      if (sidebar.classList.contains('open')) {
         closeSearchBar(); // Ferme la barre de recherche si ouverte
       }
     });
@@ -91,4 +93,16 @@ document.addEventListener('DOMContentLoaded', function() {
   searchBar.addEventListener('click', function(e) {
     e.stopPropagation();
   });
+
+  // Ajoutez ceci pour empêcher le défilement lorsque le sidebar est ouvert
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+
+  const closeSidebarButton = document.getElementById('close-sidebar');
+  
+  if (closeSidebarButton) {
+    closeSidebarButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeSidebar();
+    });
+  }
 });
