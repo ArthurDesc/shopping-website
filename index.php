@@ -43,11 +43,8 @@
     
   </div>
   <div class="swiper-pagination"></div>
-  <!-- Flèches de navigation -->
-  <div class="hidden sm:block">
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
 </div>
 
   <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
