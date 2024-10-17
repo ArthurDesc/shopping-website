@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function closeSearchBar() {
     isSearchBarOpen = false;
     searchBar.style.height = '0';
+    searchBar.classList.remove('shadow-md');
+    searchBar.classList.remove('open');
   }
 
   // Gestion de la barre de recherche
@@ -41,9 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
       isSearchBarOpen = !isSearchBarOpen;
       if (isSearchBarOpen) {
         searchBar.style.height = '60px';
+        searchBar.classList.add('shadow-md');
+        searchBar.classList.add('open');
         closeSidebar(); // Ferme le sidebar si ouvert
       } else {
         closeSearchBar();
+        searchBar.classList.remove('shadow-md');
+        searchBar.classList.remove('open');
       }
     });
   }

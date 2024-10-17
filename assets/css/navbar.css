@@ -1,12 +1,12 @@
 #search-bar {
   height: 0;
   transition: height 0.3s ease-in-out, border-top-width 0.3s ease-in-out;
-  border-top: 0 solid black;
+  border-top: 0 solid #1388FA; /* Changez ici pour une bordure noire */
 }
 
 #search-bar.open {
   height: 60px; /* Ajustez cette valeur selon vos besoins */
-  border-top-width: 1px;
+  border-top-width: 0.5px; /* Cela rendra la bordure visible quand ouvert */
 }
 
 #search-bar .container {
@@ -36,3 +36,10 @@
 body.sidebar-open {
   overflow: hidden;
 }
+
+/* Supprimez ou commentez cette règle, car nous n'utilisons plus la classe border-t */
+/*
+#search-bar.border-t {
+  border-top-color: #000;
+}
+*/

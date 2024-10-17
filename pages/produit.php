@@ -51,7 +51,7 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 
 ?>
 
-<?php require_once '../includes/_header.php'; ?>
+<?php include '../includes/_header.php'; ?>
 
 <div class="container mx-auto px-4">
     <div class="flex flex-col md:flex-row relative md:mt-16">
@@ -186,15 +186,7 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 </div>
 <?php include '../includes/_footer.php'; ?>
 
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Votre code pour les filtres ici
-});
-</script>
+
 
 </body>
 </html>
