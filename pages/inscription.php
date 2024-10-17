@@ -2,14 +2,10 @@
 session_start();
 require_once dirname(__FILE__) . '/../includes/_db.php';
 
-// La connexion est déjà vérifiée dans _db.php, pas besoin de le refaire ici
-
 $erreurs = [];
 $inscription_reussie = false;
 
-// Traitement du formulaire d'inscription
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Vérification que tous les champs sont remplis
     $champs_requis = ['nom', 'prenom', 'email', 'motdepasse', 'confirmer_motdepasse'];
 
     foreach ($champs_requis as $champ) {
@@ -25,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $motdepasse = $_POST['motdepasse'];
         $confirmer_motdepasse = $_POST['confirmer_motdepasse'];
 
-        // Vérifier si l'email existe déjà
         $sql_check_email = "SELECT * FROM utilisateurs WHERE email = ?";
         $stmt_check_email = $conn->prepare($sql_check_email);
         $stmt_check_email->bind_param("s", $email);
@@ -35,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result_check_email->num_rows > 0) {
             $erreurs[] = "Cet email est déjà utilisé. Veuillez en choisir un autre.";
         } else {
-            // Validation du mot de passe
             $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
             
             if (!preg_match($regex_mdp, $motdepasse)) {
@@ -43,19 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } elseif ($motdepasse !== $confirmer_motdepasse) {
                 $erreurs[] = "Les mots de passe ne correspondent pas.";
             } else {
-                // Hachage du mot de passe
                 $motdepasse_hache = password_hash($motdepasse, PASSWORD_DEFAULT);
 
-                // Préparation de la requête SQL
                 $sql = "INSERT INTO utilisateurs (nom, prenom, email, motdepasse) VALUES (?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ssss", $nom, $prenom, $email, $motdepasse_hache);
 
-                // Exécution de la requête
                 if ($stmt->execute()) {
                     $inscription_reussie = true;
                     $_SESSION['message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
-                    // Voici la redirection
                     header("Location: profil.php");
                     exit();
                 } else {
@@ -69,28 +59,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Ne fermez pas la connexion ici, car le fichier _db.php s'en charge déjà
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+    define('BASE_URL', '/shopping-website/');
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitmode</title>
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitmode - Inscription</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 </head>
+
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <div class="container mx-auto px-4 py-8 flex-grow flex flex-col items-center justify-center">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
