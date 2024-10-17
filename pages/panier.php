@@ -131,7 +131,7 @@ if (isset($_POST['update'])) {
                 <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
             </div>
             <div class="flex flex-col space-y-2">
-                <a href="paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($ids) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($ids) ? 'onclick="return false;"' : '' ?>>Payer</a>
+                <a href="process_paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($ids) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($ids) ? 'onclick="return false;"' : '' ?>>Payer</a>
                 <a href="produit.php" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-200 text-center">Continuer vos achats</a>
                <?php if (!isset($_SESSION['id_utilisateur'])) { 
                    echo '<a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>';
