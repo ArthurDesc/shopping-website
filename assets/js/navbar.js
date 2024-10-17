@@ -26,9 +26,12 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     isSearchBarOpen = !isSearchBarOpen;
     if (isSearchBarOpen) {
-      searchBar.style.height = searchBar.scrollHeight + 'px';
+      searchBar.classList.add('open');
+      setTimeout(() => {
+        searchBar.querySelector('input').focus();
+      }, 300); // Attendre la fin de l'animation avant de focus
     } else {
-      searchBar.style.height = '0';
+      searchBar.classList.remove('open');
     }
   });
 });
