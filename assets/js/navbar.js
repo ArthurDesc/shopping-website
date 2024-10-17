@@ -21,23 +21,41 @@ document.addEventListener('DOMContentLoaded', function() {
   // Écouteur d'événement pour le scroll
   window.addEventListener('scroll', handleScroll);
 
+  // Fonction pour fermer le sidebar
+  function closeSidebar() {
+    sidebar.classList.add('-translate-x-full');
+  }
+
+  // Fonction pour fermer la barre de recherche
+  function closeSearchBar() {
+    isSearchBarOpen = false;
+    searchBar.style.height = '0';
+  }
+
   // Gestion de la barre de recherche
   if (searchToggle && searchBar) {
     searchToggle.addEventListener('click', function(e) {
       e.preventDefault();
+      e.stopPropagation();
       isSearchBarOpen = !isSearchBarOpen;
       if (isSearchBarOpen) {
-        searchBar.style.height = '60px'; // Ajustez cette valeur selon vos besoins
+        searchBar.style.height = '60px';
+        closeSidebar(); // Ferme le sidebar si ouvert
       } else {
-        searchBar.style.height = '0';
+        closeSearchBar();
       }
     });
   }
 
   // Gestion du menu burger
   if (menuToggle && sidebar) {
-    menuToggle.addEventListener('click', function() {
+    menuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       sidebar.classList.toggle('-translate-x-full');
+      if (!sidebar.classList.contains('-translate-x-full')) {
+        closeSearchBar(); // Ferme la barre de recherche si ouverte
+      }
     });
   }
 
@@ -46,11 +64,31 @@ document.addEventListener('DOMContentLoaded', function() {
   subMenuToggles.forEach(toggle => {
     toggle.addEventListener('click', function(e) {
       e.preventDefault();
+      e.stopPropagation();
       const subMenuId = this.id.replace('-toggle', '');
       const subMenu = document.getElementById(subMenuId);
       if (subMenu) {
         subMenu.classList.toggle('hidden');
       }
     });
+  });
+
+  // Fermer le sidebar et la barre de recherche en cliquant à l'extérieur
+  document.addEventListener('click', function(e) {
+    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+      closeSidebar();
+    }
+    if (!searchBar.contains(e.target) && !searchToggle.contains(e.target)) {
+      closeSearchBar();
+    }
+  });
+
+  // Empêcher la propagation des clics à l'intérieur du sidebar et de la barre de recherche
+  sidebar.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  searchBar.addEventListener('click', function(e) {
+    e.stopPropagation();
   });
 });
