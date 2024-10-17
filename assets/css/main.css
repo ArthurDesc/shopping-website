@@ -1,24 +1,67 @@
 footer, footer .font-sans {
-
-
   font-family: "Afacad Flux", sans-serif;
   font-optical-sizing: auto;
   font-weight: 230;
   font-style: normal;
-  font-variation-settings:
-    "slnt" 1;
-
+  font-variation-settings: "slnt" 1;
 }
 
 #sidebar {
-  transition: transform 0.3s ease-in-out;
   transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
 }
 
 #sidebar.open {
   transform: translateX(0);
 }
 
+@media (max-width: 768px) {
+  #sidebar {
+    width: 100%;
+  }
+}
+
+/* Styles de la barre de recherche */
+#search-bar {
+  height: 0;
+  transition: height 0.3s ease-in-out, border-top-width 0.3s ease-in-out;
+  border-top: 0 solid #1388FA;
+}
+
+#search-bar.open {
+  height: 60px;
+  border-top-width: 0.5px;
+}
+
+#search-bar .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#search-bar form {
+  width: 100%;
+}
+
+#search-bar input {
+  background-color: transparent;
+  border: none;
+  height: 40px;
+}
+
+#search-bar input::placeholder {
+  color: #9CA3AF;
+}
+
+#search-bar button:hover svg {
+  stroke: #3B82F6;
+}
+
+body.sidebar-open {
+  overflow: hidden;
+}
+
+/* Styles du carrousel */
 .swiper-container {
   width: 100%;
   height: 400px;
@@ -44,16 +87,16 @@ footer, footer .font-sans {
 }
 
 .icon {
-  stroke: #000; /* Changez cette valeur pour la couleur souhaitée */
+  stroke: #000;
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: inherit; /* Assurez-vous que la couleur est héritée */
+  color: inherit;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2; /* Réduit pour être en dessous du sidebar */
+  z-index: 2;
   width: 40px !important;
   height: 40px !important;
   background-color: rgba(255, 255, 255, 0.7);
@@ -126,13 +169,13 @@ footer, footer .font-sans {
 }
 
 .custom-scroll {
-  scrollbar-width: none; /* Pour Firefox */
-  -ms-overflow-style: none; /* Pour Internet Explorer et Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   overflow-x: auto;
 }
 
 .custom-scroll::-webkit-scrollbar {
-  display: none; /* Pour Chrome, Safari et Opera */
+  display: none;
 }
 
 .scroll-button {
@@ -157,5 +200,3 @@ footer, footer .font-sans {
 .scroll-right {
   right: 10px;
 }
-
-
