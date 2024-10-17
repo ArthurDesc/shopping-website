@@ -54,10 +54,10 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <?php require_once '../includes/_header.php'; ?>
 
 <div class="container mx-auto px-4">
-    <div class="flex flex-col md:flex-row relative">
-        <!-- Filtres (modifiés pour l'animation et ajout des boutons) -->
-        <div id="filterForm" class="w-full md:w-1/4 bg-white p-4 rounded shadow mt-4 md:mt-0 md:mr-4 md:block fixed md:static top-0 left-0 h-full md:h-auto z-40 md:z-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
-            <div class="flex justify-between items-center mb-4">
+    <div class="flex flex-col md:flex-row relative md:mt-16">
+        <!-- Filtres (modifiés pour couvrir tout l'écran en version mobile) -->
+        <div id="filterForm" class="w-full md:w-1/4 bg-white pt-6 rounded shadow mt-4 md:mt-0 md:mr-4 md:block fixed md:static top-0 left-0 h-screen md:h-auto z-50 md:z-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 px-4">
                 <h3 class="font-semibold text-lg">Filtres</h3>
                 <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,8 +66,15 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
                 </button>
             </div>
             
+            <!-- Bouton Valider (maintenant juste après le titre pour mobile, reste en place pour desktop) -->
+            <div class="md:hidden px-4 py-2 mb-4">
+                <button id="applyFilters" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
+                    Valider les filtres
+                </button>
+            </div>
+            
             <!-- Contenu des filtres -->
-            <div class="flex-grow overflow-y-auto">
+            <div class="flex-grow overflow-y-auto px-4">
                 <!-- Catégories -->
                 <details class="mb-4">
                     <summary class="font-semibold mb-2 cursor-pointer">Catégories</summary>
@@ -108,10 +115,12 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
                 </details>
             </div>
             
-            <!-- Bouton Valider (visible sur mobile et desktop) -->
-            <button id="applyFilters" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
-                Valider les filtres
-            </button>
+            <!-- Version desktop du bouton Valider -->
+            <div class="hidden md:block px-4 py-4">
+                <button id="applyFiltersDesktop" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
+                    Valider les filtres
+                </button>
+            </div>
         </div>
 
         <!-- Liste des produits à droite -->
