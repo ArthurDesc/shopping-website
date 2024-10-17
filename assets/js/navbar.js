@@ -4,13 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const searchBar = document.getElementById('search-bar');
   const menuToggle = document.getElementById('menu-toggle');
   const sidebar = document.getElementById('sidebar');
+  const closeSidebarButton = document.getElementById('close-sidebar');
   let isSearchBarOpen = false;
+  let isSidebarOpen = false;
   let lastScrollTop = 0;
 
   // Fonction pour gérer l'affichage/masquage du header
   function handleScroll() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop > lastScrollTop && scrollTop > 200) {
+    if (scrollTop > lastScrollTop && scrollTop > 200 && !isSidebarOpen) {
       headerContainer.style.transform = 'translateY(-100%)';
     } else {
       headerContainer.style.transform = 'translateY(0)';
@@ -21,18 +23,27 @@ document.addEventListener('DOMContentLoaded', function() {
   // Écouteur d'événement pour le scroll
   window.addEventListener('scroll', handleScroll);
 
-  // Fonction pour fermer le sidebar
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    document.body.classList.remove('sidebar-open');
-  }
-
   // Fonction pour fermer la barre de recherche
   function closeSearchBar() {
     isSearchBarOpen = false;
     searchBar.style.height = '0';
-    searchBar.classList.remove('shadow-md');
-    searchBar.classList.remove('open');
+    searchBar.classList.remove('shadow-md', 'open');
+  }
+
+  // Fonction pour ouvrir la sidebar
+  function openSidebar() {
+    isSidebarOpen = true;
+    sidebar.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    headerContainer.style.transform = 'translateY(0)'; // Assurez-vous que le header est visible
+  }
+
+  // Fonction pour fermer la sidebar
+  function closeSidebar() {
+    isSidebarOpen = false;
+    sidebar.classList.remove('open');
+    document.body.style.overflow = '';
+    handleScroll(); // Réappliquez la logique de défilement après la fermeture
   }
 
   // Gestion de la barre de recherche
@@ -43,13 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
       isSearchBarOpen = !isSearchBarOpen;
       if (isSearchBarOpen) {
         searchBar.style.height = '60px';
-        searchBar.classList.add('shadow-md');
-        searchBar.classList.add('open');
-        closeSidebar(); // Ferme le sidebar si ouvert
+        searchBar.classList.add('shadow-md', 'open');
+        closeSidebar();
       } else {
         closeSearchBar();
-        searchBar.classList.remove('shadow-md');
-        searchBar.classList.remove('open');
       }
     });
   }
@@ -59,11 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
     menuToggle.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      sidebar.classList.toggle('open');
-      document.body.classList.toggle('sidebar-open');
-      if (sidebar.classList.contains('open')) {
-        closeSearchBar(); // Ferme la barre de recherche si ouverte
-      }
+      openSidebar();
+      closeSearchBar();
     });
   }
 
@@ -100,11 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
     e.stopPropagation();
   });
 
-  // Ajoutez ceci pour empêcher le défilement lorsque le sidebar est ouvert
-  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-
-  const closeSidebarButton = document.getElementById('close-sidebar');
-  
+  // Gestion du bouton de fermeture de la sidebar
   if (closeSidebarButton) {
     closeSidebarButton.addEventListener('click', function(e) {
       e.preventDefault();

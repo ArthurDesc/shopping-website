@@ -8,11 +8,20 @@ footer, footer .font-sans {
 
 #sidebar {
   transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  background-color: white;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1000;
 }
 
 #sidebar.open {
   transform: translateX(0);
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -199,4 +208,24 @@ body.sidebar-open {
 
 .scroll-right {
   right: 10px;
+}
+
+/* Ajoutez ces styles pour l'animation de fondu */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  z-index: 999;
+}
+
+body.sidebar-open::after {
+  opacity: 1;
+  visibility: visible;
 }
