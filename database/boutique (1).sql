@@ -3,8 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 16, 2024 at 01:10 PM
--- Generation Time: Oct 16, 2024 at 01:10 PM
+-- Generation Time: Oct 17, 2024 at 02:29 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -29,16 +28,25 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `avis` (
-  `id_avis` int(11) NOT NULL AUTO_INCREMENT,
-  `id_produit` int(11) NOT NULL,
-  `id_utilisateur` int(11) NOT NULL,
-  `note` int(11) NOT NULL,
+  `id_avis` int NOT NULL,
+  `id_produit` int NOT NULL,
+  `id_utilisateur` int NOT NULL,
+  `note` int NOT NULL,
   `commentaire` text NOT NULL,
-  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_avis`),
-  KEY `id_produit` (`id_produit`),
-  KEY `id_utilisateur` (`id_utilisateur`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `avis`
+--
+
+INSERT INTO `avis` (`id_avis`, `id_produit`, `id_utilisateur`, `note`, `commentaire`, `date_creation`) VALUES
+(1, 31, 11, 3, 'dd', '2024-10-17 09:07:35'),
+(2, 32, 11, 4, 'confortable', '2024-10-17 11:46:24'),
+(3, 33, 11, 4, 'vsvdjdjl', '2024-10-17 11:48:00'),
+(4, 33, 11, 2, 'ljefoubgf,lzjd', '2024-10-17 11:48:23'),
+(5, 33, 11, 1, 'khegfyibejkmuoef', '2024-10-17 11:48:54'),
+(6, 33, 11, 5, 'bon', '2024-10-17 11:49:59');
 
 -- --------------------------------------------------------
 
@@ -124,7 +132,7 @@ CREATE TABLE `paiements` (
 --
 
 CREATE TABLE `produits` (
-  `id_produit` int NOT NULL AUTO_INCREMENT,
+  `id_produit` int NOT NULL,
   `nom` varchar(100) DEFAULT NULL,
   `image_url` varchar(255) NOT NULL,
   `description` text,
@@ -134,8 +142,7 @@ CREATE TABLE `produits` (
   `tailles_disponibles` varchar(255) DEFAULT NULL,
   `marque` varchar(100) DEFAULT NULL,
   `date_ajout` date DEFAULT NULL,
-  `collection` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id_produit`)
+  `collection` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -207,7 +214,8 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
 (8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
 (9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user'),
-(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin');
+(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin'),
+(11, 'Diomande', 'Adama', 'adama.diomande@laplateforme.io', NULL, '$2y$10$g7YKOoGuXuEIzqoX/n/9seNhgIih5y0vREtRCtyg/7YxPlePdheb2', 'user');
 
 --
 -- Indexes for dumped tables
@@ -218,20 +226,8 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 --
 ALTER TABLE `avis`
   ADD PRIMARY KEY (`id_avis`),
-  ADD KEY `id_utilisateur` (`id_utilisateur`),
-  ADD KEY `idx_avis_produit` (`id_produit`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id_categorie`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id_categorie`);
+  ADD KEY `id_produit` (`id_produit`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`);
 
 --
 -- Indexes for table `produits`
@@ -246,44 +242,26 @@ ALTER TABLE `utilisateurs`
   ADD PRIMARY KEY (`id_utilisateur`);
 
 --
--- Indexes for table `utilisateurs`
---
-ALTER TABLE `utilisateurs`
-  ADD PRIMARY KEY (`id_utilisateur`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT for table `avis`
 --
-ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
-
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id_categorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+ALTER TABLE `avis`
+  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `produits`
 --
 ALTER TABLE `produits`
-  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_produit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `utilisateurs`
---
-ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
