@@ -87,7 +87,7 @@ include './includes/_header.php';
       </div>
       
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?marque=underarmour'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/underArmour.png'); ?>" alt="UnderArmour" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">UnderArmour</button>

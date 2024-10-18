@@ -64,7 +64,20 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 
 <div class="container mx-auto px-4">
     <div class="flex justify-between items-center mb-4 mt-4">
-        <h2 class="text-xl font-semibold">Voir tous</h2>
+        <h2 class="text-xl font-semibold">
+            <?php
+            if ($categorie_filter) {
+                $categorie_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nom FROM categories WHERE id_categorie = '$categorie_filter'"))['nom'];
+                echo htmlspecialchars($categorie_name);
+            } elseif ($collection_filter) {
+                echo htmlspecialchars($collection_filter);
+            } elseif ($marque_filter) {
+                echo htmlspecialchars($marque_filter);
+            } else {
+                echo "Tous les articles";
+            }
+            ?>
+        </h2>
         <!-- Bouton pour afficher les filtres en version mobile -->
         <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-4 py-2 text-sm rounded">
             Filtres
