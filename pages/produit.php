@@ -59,43 +59,32 @@ $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 
 ?>
-
+<style>
+    .filter-tag {
+        display: inline-flex;
+        align-items: center;
+        padding-right: 0.5rem;
+    }
+    .filter-tag .close-icon {
+        margin-left: 0.25rem;
+        cursor: pointer;
+    }
+</style>
 <?php require_once '../includes/_header.php'; ?>
 
 <div class="container mx-auto px-4">
-    <div class="flex justify-between items-center mb-4 mt-4">
-        <h2 class="text-xl font-semibold">
-            <?php
-            if ($categorie_filter) {
-                $categorie_name = mysqli_fetch_assoc(mysqli_query($conn, "SELECT nom FROM categories WHERE id_categorie = '$categorie_filter'"))['nom'];
-                echo htmlspecialchars($categorie_name);
-            } elseif ($collection_filter) {
-                echo htmlspecialchars($collection_filter);
-            } elseif ($marque_filter) {
-                echo htmlspecialchars($marque_filter);
-            } else {
-                echo "Tous les articles";
-            }
-            ?>
-        </h2>
-        <!-- Bouton pour afficher les filtres en version mobile -->
-        <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-4 py-2 text-sm rounded">
-            Filtres
-        </button>
-    </div>
-
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
         <div id="filterForm" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto overflow-y-auto">
-    <div class="h-full p-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-lg">Filtres</h3>
-            <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>  
+            <div class="h-full p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-semibold text-lg">Filtres</h3>
+                    <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>  
                 
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
@@ -165,6 +154,19 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 
         <!-- Liste des produits à droite -->
         <div class="w-full md:w-3/4">
+            <div class="flex flex-col mb-4 mt-4">
+                <h2 class="text-xl font-semibold mb-2">
+                    <span id="filterTitle">Tous les articles</span>
+                </h2>
+                <div id="activeFilters" class="flex flex-wrap gap-2 mb-2">
+                    <!-- Les étiquettes seront ajoutées ici dynamiquement -->
+                </div>
+                <!-- Bouton pour afficher les filtres en version mobile -->
+                <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-4 py-2 text-sm rounded mt-2">
+                    Filtres
+                </button>
+            </div>
+
             <section class="products_list">
                 <?php 
                 // Requête pour récupérer tous les produits avec leurs catégories
@@ -186,7 +188,7 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
                         }
                 ?>
                     <div class="bg-white rounded-lg shadow-md p-4" 
-                         data-categories="<?php echo htmlspecialchars($row['categories'] ?? ''); ?>"
+                         data-categories="<?php echo htmlspecialchars(implode(',', explode(',', $row['categories']))); ?>"
                          data-collection="<?php echo htmlspecialchars($row['collection'] ?? ''); ?>"
                          data-brand="<?php echo htmlspecialchars($row['marque'] ?? ''); ?>">
                         <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block">
@@ -225,42 +227,7 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
 <!-- Ajoutez ce script juste avant la fermeture de la balise body -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const filterForm = document.getElementById('filterForm');
-    const toggleFiltersButton = document.getElementById('toggleFilters');
-    const closeFiltersButton = document.getElementById('closeFilters');
-    const applyFiltersButton = document.getElementById('applyFilters');
 
-    function openFilters() {
-        filterForm.classList.remove('translate-y-full');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeFilters() {
-        filterForm.classList.add('translate-y-full');
-        document.body.style.overflow = '';
-    }
-
-    toggleFiltersButton.addEventListener('click', openFilters);
-    closeFiltersButton.addEventListener('click', closeFilters);
-
-    applyFiltersButton.addEventListener('click', function() {
-        if (window.innerWidth < 768) { // Si on est en version mobile
-            closeFilters();
-        }
-        // Appliquer les filtres
-        if (typeof applyFilters === 'function') {
-            applyFilters();
-        }
-    });
-
-    // Appliquer les filtres au chargement de la page
-    if (typeof applyFilters === 'function') {
-        applyFilters();
-    }
-});
-</script>
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>

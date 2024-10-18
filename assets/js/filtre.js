@@ -45,6 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Appliquer les filtres dès le chargement de la page
     applyFilters();
+
+    const filterForm = document.getElementById('filterForm');
+    const applyFiltersButton = document.getElementById('applyFilters');
+
+    applyFiltersButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        filterForm.submit();
+    });
 });
 
 window.applyFilters = function() {
@@ -74,3 +82,78 @@ window.applyFilters = function() {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filterForm = document.getElementById('filterForm');
+    const toggleFiltersButton = document.getElementById('toggleFilters');
+    const closeFiltersButton = document.getElementById('closeFilters');
+    const activeFiltersContainer = document.getElementById('activeFilters');
+    const filterTitle = document.getElementById('filterTitle');
+
+    function openFilters() {
+        filterForm.classList.remove('translate-y-full');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFilters() {
+        filterForm.classList.add('translate-y-full');
+        document.body.style.overflow = '';
+    }
+
+    toggleFiltersButton.addEventListener('click', openFilters);
+    closeFiltersButton.addEventListener('click', closeFilters);
+
+    // Fonction pour mettre à jour les étiquettes des filtres actifs
+    function updateActiveFilters() {
+        activeFiltersContainer.innerHTML = '';
+        let activeFilters = [];
+
+        filterForm.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+            let filterType = checkbox.name.replace('[]', '');
+            let filterValue = checkbox.nextElementSibling.textContent.trim();
+            activeFilters.push({ type: filterType, value: filterValue });
+
+            let tag = document.createElement('span');
+            tag.className = 'bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full';
+            tag.textContent = filterValue;
+            activeFiltersContainer.appendChild(tag);
+        });
+
+        filterTitle.textContent = activeFilters.length > 0 ? "Articles filtrés" : "Tous les articles";
+
+        // Appliquer les filtres aux produits
+        applyFilters(activeFilters);
+    }
+
+    // Ajouter des écouteurs d'événements à toutes les cases à cocher
+    filterForm.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateActiveFilters);
+    });
+
+    // Fonction pour appliquer les filtres aux produits
+    function applyFilters(activeFilters) {
+        const products = document.querySelectorAll('.products_list .bg-white');
+        products.forEach(product => {
+            let shouldShow = true;
+            activeFilters.forEach(filter => {
+                if (filter.type === 'categories') {
+                    if (!product.dataset.categories.includes(filter.value)) {
+                        shouldShow = false;
+                    }
+                } else if (filter.type === 'marques') {
+                    if (product.dataset.brand !== filter.value) {
+                        shouldShow = false;
+                    }
+                } else if (filter.type === 'collections') {
+                    if (product.dataset.collection !== filter.value) {
+                        shouldShow = false;
+                    }
+                }
+            });
+            product.style.display = shouldShow ? '' : 'none';
+        });
+    }
+
+    // Appliquer les filtres au chargement de la page
+    updateActiveFilters();
+});
