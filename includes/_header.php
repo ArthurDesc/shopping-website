@@ -318,6 +318,11 @@ $total = array_sum($_SESSION['panier'] ?? []);
   </div>
 
   <!-- Le reste de votre contenu ici -->
+  // ... (le reste du code HTML)
+
+
+
+</html>
 
 </body>
 </html>
