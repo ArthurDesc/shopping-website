@@ -53,11 +53,11 @@ include './includes/_header.php';
   <h2 id="nouveautes" class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/octa.png'); ?>" alt="Nocta" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+    <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+        <a href="<?php echo url('pages/produit.php?marque=Puma'); ?>" class="block relative">
+          <img src="<?php echo url('assets/images/puma.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nocta</button>
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Puma</button>
           </div>
         </a>
       </div>
@@ -79,17 +79,18 @@ include './includes/_header.php';
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
         <a href="<?php echo url('pages/produit.php?marque=NorthFace'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/northFace.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+          <img src="<?php echo url('assets/images/northFace.png'); ?>" alt="NorthFace" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Puma</button>
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">NorthFace</button>
           </div>
         </a>
       </div>
+      
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?marque=Puma'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/puma.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+          <img src="<?php echo url('assets/images/underArmour.png'); ?>" alt="UnderArmour" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Puma</button>
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">UnderArmour</button>
           </div>
         </a>
       </div>
