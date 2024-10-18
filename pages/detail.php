@@ -208,7 +208,7 @@ $review_count = $rating_summary['review_count'];
                         </div>
                     </div>
 
-                    <!-- Prix et taille -->
+                    <!-- Prix -->
                     <div class="flex justify-between items-center">
                         <div class="flex items-center">
                             <span class="font-bold text-lg" x-show="!editingPrice" x-text="price + ' €'"></span>
@@ -227,10 +227,6 @@ $review_count = $rating_summary['review_count'];
                             </button>
                             <?php endif; ?>
                         </div>
-                        <select class="border rounded px-2 py-1 text-sm">
-                            <option>Taille</option>
-                            <option><?php echo htmlspecialchars($produit['taille']); ?></option>
-                        </select>
                     </div>
 
                     <!-- Quantité -->
