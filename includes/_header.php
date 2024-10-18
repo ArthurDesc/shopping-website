@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../functions/url.php';
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -6,51 +8,42 @@ if (!defined('BASE_URL')) {
   define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
 }
 
-// Check if a session is already started
 if (session_status() === PHP_SESSION_NONE) {
-    session_start(); // Start the session only if it hasn't been started yet
+    session_start();
 }
 
-// Initialize the 'panier' session variable if it doesn't exist
 if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = array(); // Initialize as an empty array
+    $_SESSION['panier'] = array();
 }
 
-$total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid errors
-
-
-
+$total = array_sum($_SESSION['panier'] ?? []);
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
-  <link rel="icon" type="image/png" href="<?php echo BASE_URL; ?>assets/images/favicon.png">
+  <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-  <script src="https://unpkg.com/@heroicons/react/outline" defer></script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/main.css?v=<?php echo filemtime('assets/css/main.css'); ?>">
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/responsive.css?v=<?php echo filemtime('assets/css/responsive.css'); ?>">
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/navbar.css?v=<?php echo filemtime('assets/css/responsive.css'); ?>">
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
 </head>
-
-<body class="flex flex-col min-h-screen pt-14">
+<body class="flex flex-col min-h-full pt-[55px]">
   <div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-3 px-2 bg-white shadow-md">
         <div class="flex items-center justify-between w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
           <div class="flex items-center w-1/3">
-            <div class="menu-icon cursor-pointer md:hidden" id="menu-toggle">
+            <button class="menu-icon cursor-pointer md:hidden" id="menu-toggle">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
-            </div>
+            </button>
             <nav class="hidden md:flex space-x-4 ml-4">
               <div class="relative group">
                 <a href="<?php echo BASE_URL; ?>pages/homme.php" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
@@ -192,29 +185,28 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
           </div>
           
           <div class="flex justify-center w-1/3">
-            <a href="<?php echo BASE_URL; ?>index.php" class="flex items-center">
-              <img src="<?php echo BASE_URL; ?>assets/images/logo.png" alt="Fitmode" class="h-8 w-auto">
+            <a href="<?php echo url('index.php'); ?>" class="flex items-center">
+              <img src="<?php echo url('assets/images/logo.png'); ?>" alt="Fitmode" class="h-8 w-auto">
             </a>
           </div>
           
           <div class="flex justify-end items-center space-x-4 w-1/3">
-            <!-- Icône de recherche (visible uniquement sur les grands écrans) -->
-            <button id="search-toggle" class="hidden md:block text-gray-600 hover:text-blue-600 focus:outline-none">
+            <button id="search-toggle" class="hidden md:block text-black hover:text-blue-600 focus:outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>
             </button>
             
-            <a href="<?php echo BASE_URL; ?>pages/panier.php" aria-label="Voir le panier" class="relative">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+            <a href="<?php echo url('pages/panier.php'); ?>" aria-label="Voir le panier" class="relative">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
               </svg>
-              <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 <?php echo array_sum($_SESSION['panier']) > 0 ? 'bg-green-600' : 'bg-red-600'; ?> rounded-full">
-                <?= htmlspecialchars(array_sum($_SESSION['panier'])) ?>
+              <span class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 <?php echo $total > 0 ? 'bg-green-600' : 'bg-red-600'; ?> rounded-full">
+                <?= htmlspecialchars($total) ?>
               </span>
             </a>
-            <a href="<?php echo BASE_URL; ?>pages/profil.php">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+            <a href="<?php echo url('pages/profil.php'); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
             </a>
@@ -224,16 +216,14 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
     </header>
 
     <!-- Barre de navigation latérale -->
-    <div id="sidebar" class="fixed left-0 top-0 w-full md:w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform z-50">
-      <!-- Ajout de l'icône de fermeture -->
+    <div id="sidebar" class="fixed left-0 top-0 w-full md:w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
       <div class="flex justify-between items-center p-4 border-b">
         <button id="close-sidebar" class="text-gray-500 hover:text-gray-700 focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <!-- Barre de recherche -->
-        <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex-grow flex items-center ml-4">
+        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex-grow flex items-center ml-4">
           <input type="text" name="q" placeholder="Rechercher..." class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
           <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -246,10 +236,11 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
       <nav class="p-4">
         <ul class="space-y-2">
           <li>
-            <a href="<?php echo BASE_URL; ?>pages/produit.php" class="flex items-center justify-between py-2 border-b">
-              Tout les articles
+            <a href="<?php echo url('pages/produit.php'); ?>" class="flex items-center justify-between py-2 border-b">
+              Tous les articles
             </a>
           </li>
+          <!-- Répétez ce bloc pour chaque catégorie (Homme, Femme, Enfants, Sports) -->
           <li>
             <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
               Homme
@@ -312,9 +303,9 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
     </div>
 
     <!-- Barre de recherche déroulante sticky -->
-    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md">
+    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md border-t border-gray-200">
       <div class="container mx-auto px-4">
-        <form action="<?php echo BASE_URL; ?>pages/recherche.php" method="GET" class="flex items-center">
+        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex items-center">
           <input type="text" name="q" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
           <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -326,50 +317,7 @@ $total = array_sum($_SESSION['panier'] ?? []); // Use null coalescing to avoid e
     </div>
   </div>
 
-  <div class="flex-1">
-    <!-- Contenu de la page -->
-  </div>
-
-  <footer class="mt-auto">
-    <!-- Pied de page -->
-  </footer>
-
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const menuItems = document.querySelectorAll('.relative.group');
-  
-  menuItems.forEach(item => {
-    const link = item.querySelector('a');
-    const submenu = item.querySelector('.absolute');
-    let timeout;
-
-    item.addEventListener('mouseenter', () => {
-      clearTimeout(timeout);
-      submenu.classList.remove('opacity-0', 'invisible');
-      submenu.classList.add('opacity-100', 'visible');
-    });
-
-    item.addEventListener('mouseleave', () => {
-      timeout = setTimeout(() => {
-        submenu.classList.remove('opacity-100', 'visible');
-        submenu.classList.add('opacity-0', 'invisible');
-      }, 200);
-    });
-
-    submenu.addEventListener('mouseenter', () => {
-      clearTimeout(timeout);
-    });
-
-    submenu.addEventListener('mouseleave', () => {
-      timeout = setTimeout(() => {
-        submenu.classList.remove('opacity-100', 'visible');
-        submenu.classList.add('opacity-0', 'invisible');
-      }, 200);
-    });
-  });
-});
-</script>
+  <!-- Le reste de votre contenu ici -->
 
 </body>
-
 </html>
