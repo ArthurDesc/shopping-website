@@ -54,84 +54,80 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <?php require_once '../includes/_header.php'; ?>
 
 <div class="container mx-auto px-4">
-    <div class="flex flex-col md:flex-row relative md:mt-16">
-        <!-- Filtres (modifiés pour couvrir tout l'écran en version mobile) -->
-        <div id="filterForm" class="w-full md:w-1/4 bg-white pt-6 rounded shadow mt-4 md:mt-0 md:mr-4 md:block fixed md:static top-0 left-0 h-screen md:h-auto z-50 md:z-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 px-4">
-                <h3 class="font-semibold text-lg">Filtres</h3>
-                <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Bouton Valider (maintenant juste après le titre pour mobile, reste en place pour desktop) -->
-            <div class="md:hidden px-4 py-2 mb-4">
-                <button id="applyFilters" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
-                    Valider les filtres
-                </button>
-            </div>
-            
-            <!-- Contenu des filtres -->
-            <div class="flex-grow overflow-y-auto px-4">
-                <!-- Catégories -->
-                <details class="mb-4">
-                    <summary class="font-semibold mb-2 cursor-pointer">Catégories</summary>
-                    <div class="pl-4">
-                        <?php foreach ($categories as $category): ?>
-                            <div class="flex items-center mb-2">
-                                <input type="checkbox" id="cat_<?php echo $category['id_categorie']; ?>" name="categories[]" value="<?php echo $category['id_categorie']; ?>" class="mr-2">
-                                <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </details>
+    <div class="flex justify-between items-center mb-4 mt-4">
+        <h2 class="text-xl font-semibold">Voir tous</h2>
+        <!-- Bouton pour afficher les filtres en version mobile -->
+        <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-4 py-2 text-sm rounded">
+            Filtres
+        </button>
+    </div>
 
-                <!-- Marques -->
-                <details class="mb-4">
-                    <summary class="font-semibold mb-2 cursor-pointer">Marques</summary>
-                    <div class="pl-4">
-                        <?php foreach ($marques as $marque): ?>
-                            <div class="flex items-center mb-2">
-                                <input type="checkbox" id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" name="marques[]" value="<?php echo htmlspecialchars($marque['marque']); ?>" class="mr-2">
-                                <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </details>
+    <div class="flex flex-col md:flex-row relative">
+        <!-- Filtres (optimisés pour la version mobile et desktop) -->
+        <div id="filterForm" class="fixed inset-0 bg-white z-50 transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent">
+            <div class="h-full overflow-y-auto p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-semibold text-lg">Filtres</h3>
+                    <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Contenu des filtres -->
+                <div class="flex-grow overflow-y-auto px-4">
+                    <!-- Catégories -->
+                    <details class="mb-4">
+                        <summary class="font-semibold mb-2 cursor-pointer">Catégories</summary>
+                        <div class="pl-4">
+                            <?php foreach ($categories as $category): ?>
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="cat_<?php echo $category['id_categorie']; ?>" name="categories[]" value="<?php echo $category['id_categorie']; ?>" class="mr-2">
+                                    <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </details>
 
-                <!-- Collections -->
-                <details class="mb-4">
-                    <summary class="font-semibold mb-2 cursor-pointer">Collections</summary>
-                    <div class="pl-4">
-                        <?php foreach ($collections as $collection): ?>
-                            <div class="flex items-center mb-2">
-                                <input type="checkbox" id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" name="collections[]" value="<?php echo htmlspecialchars($collection['collection']); ?>" class="mr-2">
-                                <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </details>
-            </div>
-            
-            <!-- Version desktop du bouton Valider -->
-            <div class="hidden md:block px-4 py-4">
-                <button id="applyFiltersDesktop" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
-                    Valider les filtres
-                </button>
+                    <!-- Marques -->
+                    <details class="mb-4">
+                        <summary class="font-semibold mb-2 cursor-pointer">Marques</summary>
+                        <div class="pl-4">
+                            <?php foreach ($marques as $marque): ?>
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" name="marques[]" value="<?php echo htmlspecialchars($marque['marque']); ?>" class="mr-2">
+                                    <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </details>
+
+                    <!-- Collections -->
+                    <details class="mb-4">
+                        <summary class="font-semibold mb-2 cursor-pointer">Collections</summary>
+                        <div class="pl-4">
+                            <?php foreach ($collections as $collection): ?>
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" name="collections[]" value="<?php echo htmlspecialchars($collection['collection']); ?>" class="mr-2">
+                                    <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </details>
+                </div>
+                
+                <!-- Bouton Valider pour mobile et desktop -->
+                <div class="mt-4">
+                    <button id="applyFilters" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
+                        Valider les filtres
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Liste des produits à droite -->
         <div class="w-full md:w-3/4">
-            <div class="mt-6 flex justify-between items-center">
-                <h2 class="text-xl font-semibold">Voir tous</h2>
-                <!-- Bouton pour afficher/masquer les filtres en version mobile -->
-                <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-3 py-1 text-sm rounded">
-                    Filtres
-                </button>
-            </div>
             <section class="products_list">
                 <?php 
                 // Requête pour récupérer tous les produits avec leurs catégories
