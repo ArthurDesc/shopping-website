@@ -10,9 +10,9 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');
 }
 
-// Créer la session panier si elle n'existe pas
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = array();
+// Initialize the cart session as an array if it doesn't exist
+if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
+    $_SESSION['panier'] = [];
 }
 
 // Vérification si l'ID du produit est passé dans l'URL
@@ -20,6 +20,14 @@ if (isset($_GET['id_produit'])) {
     // S'assurer que l'ID est un entier pour éviter les failles
     $id = (int)$_GET['id_produit']; 
     $taille = isset($_GET['taille']) ? $_GET['taille'] : null;
+
+    // Include the database connection file
+    include_once "../includes/_db.php"; // Ensure this file contains the database connection logic
+
+    // Check if the connection is established
+    if (!$conn) {
+        die("Database connection failed: " . mysqli_connect_error());
+    }
 
     // Préparer la requête SQL pour vérifier si le produit existe
     $stmt = $conn->prepare("SELECT * FROM produits WHERE id_produit = ?");
@@ -37,8 +45,10 @@ if (isset($_GET['id_produit'])) {
         exit;
     }
 
+    // Create a unique key for the product based on ID and size
     $key = $id . ($taille ? '_' . $taille : '');
 
+    // Check if the product is already in the cart
     if (isset($_SESSION['panier'][$key])) {
         $_SESSION['panier'][$key]['quantite']++;
     } else {
@@ -71,4 +81,14 @@ if (isset($_GET['id_produit'])) {
     echo "<script>alert('Aucun ID de produit fourni.'); window.location.href='produit.php';</script>";
     exit();
 }
-?>
+
+// Example of using the connection
+$stmt = $conn->prepare("INSERT INTO your_table (column1, column2) VALUES (?, ?)");
+if ($stmt) {
+    // Bind parameters and execute the statement
+    $stmt->bind_param("ss", $value1, $value2);
+    $stmt->execute();
+    $stmt->close();
+} else {
+    die("Prepare failed: " . $conn->error);
+}
