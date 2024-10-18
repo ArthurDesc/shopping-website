@@ -3,16 +3,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const filterInputs = document.querySelectorAll('#filterForm input[type="checkbox"]');
     const products = document.querySelectorAll('.products_list > div > div');
+    const activeFiltersContainer = document.getElementById('activeFilters');
+    const filterForm = document.getElementById('filterForm');
+    const toggleFiltersButton = document.getElementById('toggleFilters');
+    const closeFiltersButton = document.getElementById('closeFilters');
+    const applyFiltersButton = document.getElementById('applyFilters');
 
     // Ajouter un écouteur d'événements à chaque case à cocher
     filterInputs.forEach(input => {
-        input.addEventListener('change', applyFilters);
+        input.addEventListener('change', function() {
+            applyFilters();
+            updateActiveFilters();
+        });
     });
 
     function getSelectedValues(name) {
-        const selectedValues = Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
-        console.log(`Valeurs sélectionnées pour ${name}:`, selectedValues);
-        return selectedValues;
+        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
     }
 
     function applyFilters() {
@@ -43,16 +49,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Appliquer les filtres dès le chargement de la page
-    applyFilters();
+    function updateActiveFilters() {
+        activeFiltersContainer.innerHTML = '';
+        filterInputs.forEach(checkbox => {
+            if (checkbox.checked) {
+                const label = checkbox.nextElementSibling.textContent.trim();
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full';
+                tag.innerHTML = `
+                    ${label}
+                    <svg class="inline-block ml-1 w-4 h-4 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+                tag.querySelector('svg').addEventListener('click', () => {
+                    checkbox.checked = false;
+                    applyFilters();
+                    updateActiveFilters();
+                });
+                activeFiltersContainer.appendChild(tag);
+            }
+        });
+    }
 
-    const filterForm = document.getElementById('filterForm');
-    const applyFiltersButton = document.getElementById('applyFilters');
-
-    applyFiltersButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        filterForm.submit();
+    // Écouteur d'événements pour le bouton "Valider les filtres" sur mobile
+    applyFiltersButton.addEventListener('click', function() {
+        applyFilters();
+        updateActiveFilters();
+        closeFilters();
     });
+
+    // Fonctions pour ouvrir/fermer le panneau de filtres sur mobile
+    function openFilters() {
+        filterForm.classList.remove('translate-y-full');
+    }
+
+    function closeFilters() {
+        filterForm.classList.add('translate-y-full');
+    }
+
+    toggleFiltersButton.addEventListener('click', openFilters);
+    closeFiltersButton.addEventListener('click', closeFilters);
+
+    // Gestion du redimensionnement de la fenêtre
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            filterForm.classList.remove('translate-y-full');
+        } else {
+            filterForm.classList.add('translate-y-full');
+        }
+    });
+
+    // Appliquer les filtres et mettre à jour les étiquettes dès le chargement de la page
+    applyFilters();
+    updateActiveFilters();
 });
 
 window.applyFilters = function() {
@@ -82,104 +132,3 @@ window.applyFilters = function() {
         }
     });
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const filterForm = document.getElementById('filterForm');
-    const toggleFiltersButton = document.getElementById('toggleFilters');
-    const closeFiltersButton = document.getElementById('closeFilters');
-    const activeFiltersContainer = document.getElementById('activeFilters');
-    const filterTitle = document.getElementById('filterTitle');
-
-    function openFilters() {
-        filterForm.classList.remove('translate-y-full');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeFilters() {
-        filterForm.classList.add('translate-y-full');
-        document.body.style.overflow = '';
-    }
-
-    toggleFiltersButton.addEventListener('click', openFilters);
-    closeFiltersButton.addEventListener('click', closeFilters);
-
-    // Fonction pour mettre à jour les étiquettes des filtres actifs
-    function updateActiveFilters() {
-        activeFiltersContainer.innerHTML = '';
-        let activeFilters = [];
-
-        filterForm.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-            let filterType = checkbox.name.replace('[]', '');
-            let filterValue = checkbox.nextElementSibling.textContent.trim();
-            activeFilters.push({ type: filterType, value: filterValue, checkbox: checkbox });
-
-            let tagColor = getTagColor(filterType);
-            let tag = document.createElement('span');
-            tag.className = `filter-tag ${tagColor} text-xs font-medium px-2.5 py-0.5 rounded-full mr-2 mb-2`;
-            tag.innerHTML = `
-                ${filterValue}
-                <svg class="close-icon w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            `;
-            
-            tag.querySelector('.close-icon').addEventListener('click', () => {
-                checkbox.checked = false;
-                updateActiveFilters();
-            });
-
-            activeFiltersContainer.appendChild(tag);
-        });
-
-        filterTitle.textContent = activeFilters.length > 0 ? "Articles filtrés" : "Tous les articles";
-
-        // Appliquer les filtres aux produits
-        applyFilters(activeFilters);
-    }
-
-    // Fonction pour obtenir la couleur de l'étiquette en fonction du type de filtre
-    function getTagColor(filterType) {
-        switch(filterType) {
-            case 'categories':
-                return 'bg-blue-100 text-blue-800';
-            case 'marques':
-                return 'bg-red-100 text-red-800';
-            case 'collections':
-                return 'bg-yellow-100 text-yellow-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    }
-
-    // Ajouter des écouteurs d'événements à toutes les cases à cocher
-    filterForm.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', updateActiveFilters);
-    });
-
-    // Fonction pour appliquer les filtres aux produits
-    function applyFilters(activeFilters) {
-        const products = document.querySelectorAll('.products_list .bg-white');
-        products.forEach(product => {
-            let shouldShow = true;
-            activeFilters.forEach(filter => {
-                if (filter.type === 'categories') {
-                    if (!product.dataset.categories.includes(filter.checkbox.value)) {
-                        shouldShow = false;
-                    }
-                } else if (filter.type === 'marques') {
-                    if (product.dataset.brand !== filter.checkbox.value) {
-                        shouldShow = false;
-                    }
-                } else if (filter.type === 'collections') {
-                    if (product.dataset.collection !== filter.checkbox.value) {
-                        shouldShow = false;
-                    }
-                }
-            });
-            product.style.display = shouldShow ? '' : 'none';
-        });
-    }
-
-    // Appliquer les filtres au chargement de la page
-    updateActiveFilters();
-});

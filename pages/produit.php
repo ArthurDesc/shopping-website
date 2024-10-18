@@ -10,7 +10,7 @@ if (!defined('BASE_URL')) {
 
 // Connexion à la base de données
 require_once "../includes/_db.php"; 
-
+ 
 // Initialiser la session panier si elle n'existe pas
 if (!isset($_SESSION['panier'])) {
     $_SESSION['panier'] = array();
@@ -65,7 +65,7 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
         align-items: center;
         padding-right: 0.5rem;
     }
-    .filter-tag .close-icon {
+    .filter-tag svg {
         margin-left: 0.25rem;
         cursor: pointer;
     }
@@ -75,7 +75,7 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 <div class="container mx-auto px-4">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
-        <div id="filterForm" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto overflow-y-auto">
+        <div id="filterForm" x-data="{ openTab: null }" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto overflow-y-auto">
             <div class="h-full p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-semibold text-lg">Filtres</h3>
@@ -89,62 +89,83 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
                     <!-- Catégories -->
-                    <details class="mb-4" open>
-                        <summary class="font-semibold mb-2 cursor-pointer">Catégories</summary>
-                        <div class="pl-4">
-                            <?php foreach ($categories as $category): ?>
-                                <div class="flex items-center mb-2">
-                                    <input type="checkbox" 
-                                           id="cat_<?php echo $category['id_categorie']; ?>" 
-                                           name="categories[]" 
-                                           value="<?php echo $category['id_categorie']; ?>" 
-                                           class="mr-2"
-                                           <?php echo ($categorie_filter && $category['id_categorie'] == $categorie_filter) ? 'checked' : ''; ?>>
-                                    <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
-                                </div>
-                            <?php endforeach; ?>
+                    <div class="border-b">
+                        <div @click="openTab = openTab === 'categories' ? null : 'categories'" class="flex items-center justify-between cursor-pointer py-4">
+                            <span class="font-semibold text-gray-600">Catégories</span>
+                            <svg :class="{'rotate-180': openTab === 'categories'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                    </details>
+                        <div x-show="openTab === 'categories'" x-collapse>
+                            <div class="py-4 pl-4">
+                                <?php foreach ($categories as $category): ?>
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" 
+                                               id="cat_<?php echo $category['id_categorie']; ?>" 
+                                               name="categories[]" 
+                                               value="<?php echo $category['id_categorie']; ?>" 
+                                               class="mr-2"
+                                               <?php echo ($categorie_filter && $category['id_categorie'] == $categorie_filter) ? 'checked' : ''; ?>>
+                                        <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Marques -->
-                    <details class="mb-4" open>
-                        <summary class="font-semibold mb-2 cursor-pointer">Marques</summary>
-                        <div class="pl-4">
-                            <?php foreach ($marques as $marque): ?>
-                                <div class="flex items-center mb-2">
-                                    <input type="checkbox" 
-                                           id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" 
-                                           name="marques[]" 
-                                           value="<?php echo htmlspecialchars($marque['marque']); ?>" 
-                                           class="mr-2"
-                                           <?php echo ($marque_filter && strtolower($marque['marque']) == strtolower($marque_filter)) ? 'checked' : ''; ?>>
-                                    <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
-                                </div>
-                            <?php endforeach; ?>
+                    <div class="border-b">
+                        <div @click="openTab = openTab === 'marques' ? null : 'marques'" class="flex items-center justify-between cursor-pointer py-4">
+                            <span class="font-semibold text-gray-600">Marques</span>
+                            <svg :class="{'rotate-180': openTab === 'marques'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                    </details>
+                        <div x-show="openTab === 'marques'" x-collapse>
+                            <div class="py-4 pl-4">
+                                <?php foreach ($marques as $marque): ?>
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" 
+                                               id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                               name="marques[]" 
+                                               value="<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                               class="mr-2"
+                                               <?php echo ($marque_filter && strtolower($marque['marque']) == strtolower($marque_filter)) ? 'checked' : ''; ?>>
+                                        <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Collections -->
-                    <details class="mb-4" open>
-                        <summary class="font-semibold mb-2 cursor-pointer">Collections</summary>
-                        <div class="pl-4">
-                            <?php foreach ($collections as $collection): ?>
-                                <div class="flex items-center mb-2">
-                                    <input type="checkbox" 
-                                           id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" 
-                                           name="collections[]" 
-                                           value="<?php echo htmlspecialchars($collection['collection']); ?>" 
-                                           class="mr-2"
-                                           <?php echo ($collection_filter && strtolower($collection['collection']) == strtolower($collection_filter)) ? 'checked' : ''; ?>>
-                                    <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
-                                </div>
-                            <?php endforeach; ?>
+                    <div class="border-b">
+                        <div @click="openTab = openTab === 'collections' ? null : 'collections'" class="flex items-center justify-between cursor-pointer py-4">
+                            <span class="font-semibold text-gray-600">Collections</span>
+                            <svg :class="{'rotate-180': openTab === 'collections'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                    </details>
+                        <div x-show="openTab === 'collections'" x-collapse>
+                            <div class="py-4 pl-4">
+                                <?php foreach ($collections as $collection): ?>
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" 
+                                               id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               name="collections[]" 
+                                               value="<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               class="mr-2"
+                                               <?php echo ($collection_filter && strtolower($collection['collection']) == strtolower($collection_filter)) ? 'checked' : ''; ?>>
+                                        <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- Bouton Valider pour mobile et desktop -->
-                <div class="mt-4">
+                <!-- Bouton Valider pour mobile uniquement -->
+                <div class="mt-4 md:hidden">
                     <button id="applyFilters" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out">
                         Valider les filtres
                     </button>
