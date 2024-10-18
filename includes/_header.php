@@ -37,26 +37,9 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
+
 </head>
-<style>
-  @keyframes pulse {
 
-    0%,
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-
-    50% {
-      transform: scale(1.1);
-      opacity: 0.8;
-    }
-  }
-
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-</style>
 
 <body class="flex flex-col min-h-full pt-[55px]">
   <div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
@@ -172,7 +155,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
               <div class="relative group">
                 <a href="<?php echo BASE_URL; ?>pages/sport.php" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Sport
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1" :class="{'rotate-180': open}">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                   </svg>
                 </a>
@@ -234,17 +217,17 @@ $total = array_sum($_SESSION['panier'] ?? []);
               </span>
             </a>
             <a href="<?php echo url('pages/profil.php'); ?>" class="relative inline-block">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-  </svg>
-  <?php if (isset($_SESSION['id_utilisateur'])): ?>
-    <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-      <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
-    <?php else: ?>
-      <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-    <?php endif; ?>
-  <?php endif; ?>
-</a>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                  <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
+                <?php else: ?>
+                  <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                <?php endif; ?>
+              <?php endif; ?>
+            </a>
           </div>
         </div>
       </div>
