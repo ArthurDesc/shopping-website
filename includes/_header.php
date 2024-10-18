@@ -233,13 +233,13 @@ $total = array_sum($_SESSION['panier'] ?? []);
                 <?= htmlspecialchars($total) ?>
               </span>
             </a>
-            <a href="<?php echo url('pages/profil.php'); ?>" class="relative">
+            <a href="<?php echo url('pages/profil.php'); ?>" class="relative inline-block">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
   </svg>
   <?php if (isset($_SESSION['id_utilisateur'])): ?>
     <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-      <span class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-600">Admin</span>
+      <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
     <?php else: ?>
       <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
     <?php endif; ?>
