@@ -1,5 +1,7 @@
 <?php 
 session_start();
+$collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
+
 
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
@@ -49,6 +51,12 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     exit();
 }
 
+// Au début du fichier produit.php, après avoir démarré la session
+
+// Récupérer les paramètres de l'URL
+$categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
+$collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
+
 ?>
 
 <?php include '../includes/_header.php'; ?>
@@ -82,7 +90,11 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
                             <div class="pl-4">
                                 <?php foreach ($categories as $category): ?>
                                     <div class="flex items-center mb-2">
-                                        <input type="checkbox" id="cat_<?php echo $category['id_categorie']; ?>" name="categories[]" value="<?php echo $category['id_categorie']; ?>" class="mr-2">
+                                        <input type="checkbox" id="cat_<?php echo $category['id_categorie']; ?>" 
+                                               name="categories[]" 
+                                               value="<?php echo $category['id_categorie']; ?>" 
+                                               class="mr-2"
+                                               <?php echo ($categorie_filter && $category['nom'] == $categorie_filter) ? 'checked' : ''; ?>>
                                         <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
                                     </div>
                                 <?php endforeach; ?>
@@ -108,7 +120,11 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
                             <div class="pl-4">
                                 <?php foreach ($collections as $collection): ?>
                                     <div class="flex items-center mb-2">
-                                        <input type="checkbox" id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" name="collections[]" value="<?php echo htmlspecialchars($collection['collection']); ?>" class="mr-2">
+                                        <input type="checkbox" id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               name="collections[]" 
+                                               value="<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               class="mr-2"
+                                               <?php echo ($collection_filter && $collection['collection'] == $collection_filter) ? 'checked' : ''; ?>>
                                         <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
                                     </div>
                                 <?php endforeach; ?>

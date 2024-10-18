@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`Valeurs sélectionnées pour ${name}:`, selectedValues);
         return selectedValues;
     }
+    
 
     function applyFilters() {
         console.log("Fonction applyFilters appelée");
@@ -42,4 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Appliquer les filtres dès le chargement de la page
+    applyFilters();
 });
