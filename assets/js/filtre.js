@@ -111,11 +111,22 @@ document.addEventListener('DOMContentLoaded', function() {
         filterForm.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
             let filterType = checkbox.name.replace('[]', '');
             let filterValue = checkbox.nextElementSibling.textContent.trim();
-            activeFilters.push({ type: filterType, value: filterValue });
+            activeFilters.push({ type: filterType, value: filterValue, checkbox: checkbox });
 
             let tag = document.createElement('span');
-            tag.className = 'bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full';
-            tag.textContent = filterValue;
+            tag.className = 'filter-tag bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2 mb-2';
+            tag.innerHTML = `
+                ${filterValue}
+                <svg class="close-icon w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            `;
+            
+            tag.querySelector('.close-icon').addEventListener('click', () => {
+                checkbox.checked = false;
+                updateActiveFilters();
+            });
+
             activeFiltersContainer.appendChild(tag);
         });
 
@@ -137,15 +148,15 @@ document.addEventListener('DOMContentLoaded', function() {
             let shouldShow = true;
             activeFilters.forEach(filter => {
                 if (filter.type === 'categories') {
-                    if (!product.dataset.categories.includes(filter.value)) {
+                    if (!product.dataset.categories.includes(filter.checkbox.value)) {
                         shouldShow = false;
                     }
                 } else if (filter.type === 'marques') {
-                    if (product.dataset.brand !== filter.value) {
+                    if (product.dataset.brand !== filter.checkbox.value) {
                         shouldShow = false;
                     }
                 } else if (filter.type === 'collections') {
-                    if (product.dataset.collection !== filter.value) {
+                    if (product.dataset.collection !== filter.checkbox.value) {
                         shouldShow = false;
                     }
                 }
