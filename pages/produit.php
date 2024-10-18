@@ -1,9 +1,11 @@
 <?php 
 session_start();
+$collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
+$categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-  }
+}
 
 // Connexion à la base de données
 require_once "../includes/_db.php"; 
@@ -49,6 +51,12 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     exit();
 }
 
+// Au début du fichier produit.php, après avoir démarré la session
+
+// Récupérer les paramètres de l'URL
+$categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
+$collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
+
 ?>
 
 <?php require_once '../includes/_header.php'; ?>
@@ -64,26 +72,31 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
-        <div id="filterForm" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto">
-            <div class="h-full overflow-y-auto p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-semibold text-lg">Filtres</h3>
-                    <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
+        <div id="filterForm" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto overflow-y-auto">
+    <div class="h-full p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-lg">Filtres</h3>
+            <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>  
                 
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
                     <!-- Catégories -->
-                    <details class="mb-4">
+                    <details class="mb-4" open>
                         <summary class="font-semibold mb-2 cursor-pointer">Catégories</summary>
                         <div class="pl-4">
                             <?php foreach ($categories as $category): ?>
                                 <div class="flex items-center mb-2">
-                                    <input type="checkbox" id="cat_<?php echo $category['id_categorie']; ?>" name="categories[]" value="<?php echo $category['id_categorie']; ?>" class="mr-2">
+                                    <input type="checkbox" 
+                                           id="cat_<?php echo $category['id_categorie']; ?>" 
+                                           name="categories[]" 
+                                           value="<?php echo $category['id_categorie']; ?>" 
+                                           class="mr-2"
+                                           <?php echo ($categorie_filter && $category['id_categorie'] == $categorie_filter) ? 'checked' : ''; ?>>
                                     <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
                                 </div>
                             <?php endforeach; ?>
@@ -91,12 +104,16 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
                     </details>
 
                     <!-- Marques -->
-                    <details class="mb-4">
+                    <details class="mb-4" open>
                         <summary class="font-semibold mb-2 cursor-pointer">Marques</summary>
                         <div class="pl-4">
                             <?php foreach ($marques as $marque): ?>
                                 <div class="flex items-center mb-2">
-                                    <input type="checkbox" id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" name="marques[]" value="<?php echo htmlspecialchars($marque['marque']); ?>" class="mr-2">
+                                    <input type="checkbox" 
+                                           id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                           name="marques[]" 
+                                           value="<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                           class="mr-2">
                                     <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
                                 </div>
                             <?php endforeach; ?>
@@ -104,12 +121,17 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
                     </details>
 
                     <!-- Collections -->
-                    <details class="mb-4">
+                    <details class="mb-4" open>
                         <summary class="font-semibold mb-2 cursor-pointer">Collections</summary>
                         <div class="pl-4">
                             <?php foreach ($collections as $collection): ?>
                                 <div class="flex items-center mb-2">
-                                    <input type="checkbox" id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" name="collections[]" value="<?php echo htmlspecialchars($collection['collection']); ?>" class="mr-2">
+                                    <input type="checkbox" 
+                                           id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                           name="collections[]" 
+                                           value="<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                           class="mr-2"
+                                           <?php echo ($collection_filter && strtolower($collection['collection']) == strtolower($collection_filter)) ? 'checked' : ''; ?>>
                                     <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
                                 </div>
                             <?php endforeach; ?>
@@ -190,7 +212,38 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 <!-- Ajoutez ce script juste avant la fermeture de la balise body -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Votre code pour les filtres ici
+    const filterForm = document.getElementById('filterForm');
+    const toggleFiltersButton = document.getElementById('toggleFilters');
+    const closeFiltersButton = document.getElementById('closeFilters');
+    const applyFiltersButton = document.getElementById('applyFilters');
+
+    function openFilters() {
+        filterForm.classList.remove('translate-y-full');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFilters() {
+        filterForm.classList.add('translate-y-full');
+        document.body.style.overflow = '';
+    }
+
+    toggleFiltersButton.addEventListener('click', openFilters);
+    closeFiltersButton.addEventListener('click', closeFilters);
+
+    applyFiltersButton.addEventListener('click', function() {
+        if (window.innerWidth < 768) { // Si on est en version mobile
+            closeFilters();
+        }
+        // Appliquer les filtres
+        if (typeof applyFilters === 'function') {
+            applyFilters();
+        }
+    });
+
+    // Appliquer les filtres au chargement de la page
+    if (typeof applyFilters === 'function') {
+        applyFilters();
+    }
 });
 </script>
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
