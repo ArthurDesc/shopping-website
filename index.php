@@ -188,14 +188,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {
-            const headerOffset = 60; // Hauteur de votre header fixe
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const headerOffset = 10; // Hauteur de votre header fixe
+            const carouselHeight = document.querySelector('.swiper-container').offsetHeight;
+            const windowHeight = window.innerHeight;
+            
+            // Calculer la position de défilement pour que le bord inférieur du carrousel soit au bord supérieur de l'écran
+            const scrollPosition = targetElement.offsetTop - windowHeight + carouselHeight + headerOffset;
 
             gsap.to(window, {
                 duration: 1, 
                 scrollTo: {
-                    y: offsetPosition,
+                    y: scrollPosition,
                     autoKill: false
                 },
                 ease: "power2.inOut"
