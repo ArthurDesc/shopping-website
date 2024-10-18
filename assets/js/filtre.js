@@ -1,13 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Le DOM est chargé, le script s'exécute.");
 
-    const filterInputs = document.querySelectorAll('#filterForm input[type="checkbox"]');
+    const filterInputs = document.querySelectorAll('input[type="checkbox"][name^="categories"], input[type="checkbox"][name^="marques"], input[type="checkbox"][name^="collections"]');
     const products = document.querySelectorAll('.products_list > div > div');
     const activeFiltersContainer = document.getElementById('activeFilters');
-    const filterForm = document.getElementById('filterForm');
     const toggleFiltersButton = document.getElementById('toggleFilters');
-    const closeFiltersButton = document.getElementById('closeFilters');
-    const applyFiltersButton = document.getElementById('applyFilters');
+    const filterMenu = document.getElementById('filterMenu');
+
+    // Fonction pour afficher/masquer le menu des filtres
+    function toggleFilterMenu() {
+        filterMenu.classList.toggle('hidden');
+    }
+
+    // Écouteur d'événements pour le bouton de filtres
+    toggleFiltersButton.addEventListener('click', toggleFilterMenu);
 
     // Ajouter un écouteur d'événements à chaque case à cocher
     filterInputs.forEach(input => {
@@ -72,35 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Écouteur d'événements pour le bouton "Valider les filtres" sur mobile
-    applyFiltersButton.addEventListener('click', function() {
-        applyFilters();
-        updateActiveFilters();
-        closeFilters();
-    });
-
-    // Fonctions pour ouvrir/fermer le panneau de filtres sur mobile
-    function openFilters() {
-        filterForm.classList.remove('translate-y-full');
-    }
-
-    function closeFilters() {
-        filterForm.classList.add('translate-y-full');
-    }
-
-    toggleFiltersButton.addEventListener('click', openFilters);
-    closeFiltersButton.addEventListener('click', closeFilters);
-
-    // Gestion du redimensionnement de la fenêtre
-    window.addEventListener('resize', function() {
-        if (window.innerWidth >= 768) {
-            filterForm.classList.remove('translate-y-full');
-        } else {
-            filterForm.classList.add('translate-y-full');
-        }
-    });
-
-    // Appliquer les filtres et mettre à jour les étiquettes dès le chargement de la page
+    // Appliquer les filtres initiaux
     applyFilters();
     updateActiveFilters();
 });

@@ -60,14 +60,23 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 
 ?>
 <style>
-    .filter-tag {
-        display: inline-flex;
-        align-items: center;
-        padding-right: 0.5rem;
+    .filter-dropdown {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    .filter-tag svg {
-        margin-left: 0.25rem;
-        cursor: pointer;
+
+    .filter-dropdown.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    #filterDropdowns {
+        overflow: hidden;
+    }
+
+    #filterDropdowns.show {
+        display: block !important;
     }
 </style>
 <?php require_once '../includes/_header.php'; ?>
