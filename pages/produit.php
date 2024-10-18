@@ -2,6 +2,7 @@
 session_start();
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
+$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null;
 
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
@@ -113,7 +114,8 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
                                            id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" 
                                            name="marques[]" 
                                            value="<?php echo htmlspecialchars($marque['marque']); ?>" 
-                                           class="mr-2">
+                                           class="mr-2"
+                                           <?php echo ($marque_filter && strtolower($marque['marque']) == strtolower($marque_filter)) ? 'checked' : ''; ?>>
                                     <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
                                 </div>
                             <?php endforeach; ?>
