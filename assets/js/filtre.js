@@ -113,8 +113,9 @@ document.addEventListener('DOMContentLoaded', function() {
             let filterValue = checkbox.nextElementSibling.textContent.trim();
             activeFilters.push({ type: filterType, value: filterValue, checkbox: checkbox });
 
+            let tagColor = getTagColor(filterType);
             let tag = document.createElement('span');
-            tag.className = 'filter-tag bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full mr-2 mb-2';
+            tag.className = `filter-tag ${tagColor} text-xs font-medium px-2.5 py-0.5 rounded-full mr-2 mb-2`;
             tag.innerHTML = `
                 ${filterValue}
                 <svg class="close-icon w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -134,6 +135,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Appliquer les filtres aux produits
         applyFilters(activeFilters);
+    }
+
+    // Fonction pour obtenir la couleur de l'étiquette en fonction du type de filtre
+    function getTagColor(filterType) {
+        switch(filterType) {
+            case 'categories':
+                return 'bg-blue-100 text-blue-800';
+            case 'marques':
+                return 'bg-red-100 text-red-800';
+            case 'collections':
+                return 'bg-yellow-100 text-yellow-800';
+            default:
+                return 'bg-gray-100 text-gray-800';
+        }
     }
 
     // Ajouter des écouteurs d'événements à toutes les cases à cocher
