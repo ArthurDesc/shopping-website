@@ -302,27 +302,87 @@ $total = array_sum($_SESSION['panier'] ?? []);
       </nav>
     </div>
 
-    <!-- Barre de recherche déroulante sticky -->
+    <!-- Barre de recherche déroulante sticky avec autocomplétion -->
     <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md border-t border-gray-200">
       <div class="container mx-auto px-4">
-        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex items-center">
-          <input type="text" name="q" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
+        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex items-center relative">
+          <input type="text" name="q" id="search-input" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
           <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
           </button>
+          <div id="autocomplete-results" class="absolute left-0 right-0 top-full bg-white border border-gray-300 rounded-b-lg shadow-lg z-10 hidden"></div>
         </form>
       </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('search-input');
+      const autocompleteResults = document.getElementById('autocomplete-results');
+
+      searchInput.addEventListener('input', debounce(function() {
+        const query = this.value.trim();
+        if (query.length >= 2) {
+          fetchAutocompleteResults(query);
+        } else {
+          autocompleteResults.innerHTML = '';
+          autocompleteResults.classList.add('hidden');
+        }
+      }, 300));
+
+      function fetchAutocompleteResults(query) {
+        fetch(`<?php echo url('includes/autocomplete.php'); ?>?q=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+            displayAutocompleteResults(data);
+          })
+          .catch(error => console.error('Erreur:', error));
+      }
+
+      function displayAutocompleteResults(results) {
+        autocompleteResults.innerHTML = '';
+        if (results.length > 0) {
+          results.forEach(result => {
+            const div = document.createElement('div');
+            div.textContent = result;
+            div.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
+            div.addEventListener('click', function() {
+              searchInput.value = result;
+              autocompleteResults.classList.add('hidden');
+            });
+            autocompleteResults.appendChild(div);
+          });
+          autocompleteResults.classList.remove('hidden');
+        } else {
+          autocompleteResults.classList.add('hidden');
+        }
+      }
+
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+    });
+    </script>
   </div>
 
   <!-- Le reste de votre contenu ici -->
 
+  <script>
+const BASE_URL = '<?php echo BASE_URL; ?>';
+</script>
+<script src="/shopping-website/assets/js/autocomplete.js"></script>
+<script src="/shopping-website/assets/js/filtreToggle.js"></script>
 
 
-
-</html>
 
 </body>
 </html>
