@@ -1,9 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('autocomplete.js chargé');
     const searchInput = document.getElementById('search-input');
     const autocompleteResults = document.getElementById('autocomplete-results');
 
+    if (!searchInput || !autocompleteResults) {
+        console.error('Éléments de recherche manquants:', { searchInput, autocompleteResults });
+        return;
+    }
+
     searchInput.addEventListener('input', debounce(function() {
         const query = this.value.trim();
+        console.log('Requête de recherche:', query);
         if (query.length >= 2) {
             fetchAutocompleteResults(query);
         } else {
@@ -20,9 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function fetchAutocompleteResults(query) {
         console.log('Fetching results for:', query);
         fetch(`${BASE_URL}includes/autocomplete.php?q=${encodeURIComponent(query)}`)
-            .then(response => response.json())
+            .then(response => {
+                console.log('Réponse reçue:', response);
+                return response.json();
+            })
             .then(data => {
-                console.log('Received data:', data);
+                console.log('Données reçues:', data);
                 displayAutocompleteResults(data);
             })
             .catch(error => {

@@ -316,62 +316,6 @@ $total = array_sum($_SESSION['panier'] ?? []);
         </form>
       </div>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchInput = document.getElementById('search-input');
-      const autocompleteResults = document.getElementById('autocomplete-results');
-
-      searchInput.addEventListener('input', debounce(function() {
-        const query = this.value.trim();
-        if (query.length >= 2) {
-          fetchAutocompleteResults(query);
-        } else {
-          autocompleteResults.innerHTML = '';
-          autocompleteResults.classList.add('hidden');
-        }
-      }, 300));
-
-      function fetchAutocompleteResults(query) {
-        fetch(`<?php echo url('includes/autocomplete.php'); ?>?q=${encodeURIComponent(query)}`)
-          .then(response => response.json())
-          .then(data => {
-            displayAutocompleteResults(data);
-          })
-          .catch(error => console.error('Erreur:', error));
-      }
-
-      function displayAutocompleteResults(results) {
-        autocompleteResults.innerHTML = '';
-        if (results.length > 0) {
-          results.forEach(result => {
-            const div = document.createElement('div');
-            div.textContent = result;
-            div.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
-            div.addEventListener('click', function() {
-              searchInput.value = result;
-              autocompleteResults.classList.add('hidden');
-            });
-            autocompleteResults.appendChild(div);
-          });
-          autocompleteResults.classList.remove('hidden');
-        } else {
-          autocompleteResults.classList.add('hidden');
-        }
-      }
-
-      function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-          const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-          };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
-      }
-    });
-    </script>
   </div>
 
   <!-- Le reste de votre contenu ici -->
@@ -379,7 +323,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <script>
 const BASE_URL = '<?php echo BASE_URL; ?>';
 </script>
-<script src="/shopping-website/assets/js/autocomplete.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/autocomplete.js"></script>
 <script src="/shopping-website/assets/js/filtreToggle.js"></script>
 
 
