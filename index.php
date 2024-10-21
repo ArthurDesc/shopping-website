@@ -63,8 +63,8 @@ include './includes/_header.php';
             <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
             <div class="absolute bottom-2 right-2 z-10">
               <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-600 group-hover:text-white"><?php echo $marque; ?></button>
-            </div>
-          </a>
+              </div>
+            </a>
         </div>
       <?php endforeach; ?>
     </div>
