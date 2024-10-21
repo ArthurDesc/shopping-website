@@ -1,4 +1,4 @@
-const UIManager = (function() {
+let _UIManager = (function() {
     function setupCategorySearch() {
         console.log("Début de setupCategorySearch()");
         const searchInput = document.getElementById('input-group-search');
@@ -27,9 +27,9 @@ const UIManager = (function() {
           console.log("searchInput ou categoriesList non trouvé");
         }
         console.log("Fin de setupCategorySearch()");
-      }
+    }
 
-      function setupDropdown() {
+    function setupDropdown() {
         const dropdownButton = document.getElementById('dropdownSearchButton');
         const dropdownMenu = document.getElementById('dropdownSearch');
         
@@ -47,10 +47,25 @@ const UIManager = (function() {
         } else {
             console.warn("Éléments du dropdown non trouvés");
         }
-      }
+    }
 
-      return {
+    return {
         setupCategorySearch: setupCategorySearch,
         setupDropdown: setupDropdown
-      };
+    };
 })();
+
+window.UIManager = _UIManager;
+
+// Ajoutez ces lignes pour déboguer
+console.log("UIManager initialisé :", window.UIManager);
+console.log("setupCategorySearch disponible :", typeof window.UIManager.setupCategorySearch === 'function');
+
+/*
+window.UIManager = {
+    setupDropdown: function() {
+        // Le code pour configurer le dropdown
+    },
+    // Autres méthodes...
+};
+*/

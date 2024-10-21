@@ -1,5 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM chargé, UIManager disponible:", window.UIManager);
+    if (window.UIManager && typeof window.UIManager.setupCategorySearch === 'function') {
+        console.log("setupCategorySearch disponible:", true);
+    } else {
+        console.log("setupCategorySearch n'est pas disponible");
+    }
+    
+    if (typeof CategoryManager === 'undefined') {
+        console.error("CategoryManager n'est pas défini. Vérifiez l'ordre de chargement des scripts.");
+        return;
+    }
     loadContent('articles');
+
+    // Attendre un court instant pour que le contenu soit chargé
+    setTimeout(() => {
+        const form = document.querySelector('form');
+        if (form) {
+            console.log('Formulaire trouvé');
+            // Ajoutez ici la logique pour gérer le formulaire
+        } else {
+            console.log('Formulaire non trouvé');
+        }
+    }, 100);
 });
 
 function loadContent(section) {
