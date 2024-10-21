@@ -1,10 +1,7 @@
 <?php
 require_once '_db.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-file_put_contents('debug.log', "Requête reçue: " . print_r($_GET, true) . "\n", FILE_APPEND);
+header('Content-Type: application/json');
 
 if (isset($_GET['q'])) {
     $query = $_GET['q'];
@@ -19,10 +16,7 @@ if (isset($_GET['q'])) {
         $suggestions[] = $row;
     }
     
-    file_put_contents('debug.log', "Résultats: " . print_r($suggestions, true) . "\n", FILE_APPEND);
-    
-    header('Content-Type: application/json');
     echo json_encode($suggestions);
 } else {
-    file_put_contents('debug.log', "Aucune requête 'q' trouvée\n", FILE_APPEND);
+    echo json_encode([]);
 }
