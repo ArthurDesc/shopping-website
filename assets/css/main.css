@@ -249,3 +249,37 @@ body.sidebar-open::after {
   z-index: 1000;
   background-color: white;
 }
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.group:hover .absolute {
+  display: block;
+}
+.group .absolute {
+  display: none;
+}
+.group:hover .absolute::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
