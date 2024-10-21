@@ -81,13 +81,13 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?marque=NorthFace'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/northFace.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Puma</button>
+            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">the north face</button>
           </div>
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
         <a href="<?php echo url('pages/produit.php?marque=Puma'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/puma.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+          <img src="<?php echo url('assets/images/neyma.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Puma</button>
           </div>
