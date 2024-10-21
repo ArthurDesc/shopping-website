@@ -125,6 +125,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             <!-- Le contenu sera chargé ici dynamiquement -->
         </div>
     </main>
+    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiManager.js"></script>
     <script>
         const BASE_URL = '<?php echo BASE_URL; ?>';
         const categories = <?php echo $categoriesJson; ?>;
@@ -133,7 +134,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     <script src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/uiUtils.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/formValidator.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/categoryManager.js"></script>

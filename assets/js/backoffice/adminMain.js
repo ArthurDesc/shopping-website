@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOM chargé, UIManager disponible:", window.UIManager);
-    if (window.UIManager && typeof window.UIManager.setupCategorySearch === 'function') {
-        console.log("setupCategorySearch disponible:", true);
+    console.log("DOM chargé");
+    if (window.UIManager) {
+        console.log("UIManager disponible:", window.UIManager);
+        if (typeof window.UIManager.setupCategorySearch === 'function') {
+            console.log("setupCategorySearch disponible:", true);
+        } else {
+            console.log("setupCategorySearch n'est pas disponible");
+        }
     } else {
-        console.log("setupCategorySearch n'est pas disponible");
+        console.log("UIManager n'est pas disponible");
     }
     
     if (typeof CategoryManager === 'undefined') {
@@ -107,3 +112,5 @@ function loadContent(section) {
             contentArea.innerHTML = '<p>Sélectionnez une option dans la barre latérale</p>';
     }
 }
+
+

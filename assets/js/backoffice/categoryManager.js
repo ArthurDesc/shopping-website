@@ -1,4 +1,5 @@
-window.CategoryManager = (function(UIManager) {
+window.CategoryManager = (function() {
+    console.log("UIManager au début de categoryManager.js:", window.UIManager);
     function loadCategories() {
         console.log("Début de loadCategories()");
         let categoriesContainer = document.getElementById('categories-container');
@@ -47,8 +48,8 @@ window.CategoryManager = (function(UIManager) {
             </div>
         `;
   
-        if (UIManager && typeof UIManager.setupDropdown === 'function') {
-            UIManager.setupDropdown();
+        if (window.UIManager && typeof window.UIManager.setupDropdown === 'function') {
+            window.UIManager.setupDropdown();
         } else {
             console.warn("UIManager.setupDropdown n'est pas disponible");
             // Implémentez ici une version par défaut de setupDropdown si nécessaire
@@ -87,22 +88,36 @@ window.CategoryManager = (function(UIManager) {
             });
 
             console.log("Fin du remplissage des catégories");
-            console.log("UIManager disponible :", !!UIManager);
-            console.log("UIManager.setupCategorySearch disponible :", UIManager && typeof UIManager.setupCategorySearch === 'function');
+            if (window.UIManager) {
+                console.log("UIManager disponible :", true);
+                console.log("UIManager.setupCategorySearch disponible :", typeof window.UIManager.setupCategorySearch === 'function');
+                console.log("UIManager complet:", window.UIManager);
+                
+                if (typeof window.UIManager.setupCategorySearch === 'function') {
+                    console.log("Planification de l'appel à UIManager.setupCategorySearch");
+                    setTimeout(() => {
+                        console.log("Appel de UIManager.setupCategorySearch");
+                        window.UIManager.setupCategorySearch();
+                    }, 0);
+                } else {
+                    console.warn("UIManager.setupCategorySearch n'est pas disponible");
+                    console.log("Contenu de UIManager :", window.UIManager);
+                }
+            } else {
+                console.warn("UIManager n'est pas disponible");
+            }
 
-            console.log("UIManager complet:", UIManager);
-            console.log("UIManager.setupCategorySearch:", UIManager.setupCategorySearch);
-            console.log("UIManager.setupDropdown:", UIManager.setupDropdown);
+            console.log("UIManager.setupDropdown:", window.UIManager.setupDropdown);
 
-            if (UIManager && typeof UIManager.setupCategorySearch === 'function') {
+            if (window.UIManager && typeof window.UIManager.setupCategorySearch === 'function') {
                 console.log("Planification de l'appel à UIManager.setupCategorySearch");
                 setTimeout(() => {
                     console.log("Appel de UIManager.setupCategorySearch");
-                    UIManager.setupCategorySearch();
+                    window.UIManager.setupCategorySearch();
                 }, 0);
             } else {
                 console.warn("UIManager.setupCategorySearch n'est pas disponible");
-                console.log("Contenu de UIManager :", UIManager);
+                console.log("Contenu de UIManager :", window.UIManager);
             }
         })
         .catch(error => {
@@ -196,4 +211,4 @@ window.CategoryManager = (function(UIManager) {
         deleteCategory: deleteCategory,
         addNewSubCategory: addNewSubCategory
     };
-})(window.UIManager || {});
+})();
