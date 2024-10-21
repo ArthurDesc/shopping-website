@@ -35,7 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ...
 }
 
-$conn->close();
+// Ne fermez pas la connexion ici, car elle est encore nécessaire pour _header.php
+// $conn->close();
+
 include '../includes/_header.php';
 ?>
 
@@ -97,9 +99,8 @@ include '../includes/_header.php';
 </div>
 </main>
 
-<?php include '../includes/_footer.php'; ?>
-
-<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-</body>
-</html>
+<?php 
+include '../includes/_footer.php';
+// Fermez la connexion après avoir inclus tous les fichiers nécessaires
+$conn->close();
+?>
