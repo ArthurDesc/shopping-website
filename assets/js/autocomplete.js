@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     searchInput.addEventListener('input', debounce(function() {
-        const query = this.value.trim();
+        const query = this.value ? this.value.trim() : ''; // Vérification ajoutée
         if (query.length >= 2) {
             fetchAutocompleteResults(query);
         } else {
@@ -18,7 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function fetchAutocompleteResults(query) {
         fetch(`${BASE_URL}includes/autocomplete.php?q=${encodeURIComponent(query)}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+                return response.json();
+            })
             .then(data => {
                 displayAutocompleteResults(data);
             })
@@ -31,8 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayAutocompleteResults(results) {
         autocompleteResults.innerHTML = '';
         if (results.length > 0) {
-            const ul = document.createElement('ul');
-            ul.className = 'py-2';
             results.forEach(result => {
                 const li = document.createElement('li');
                 li.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
@@ -43,9 +46,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Optionnel : rediriger vers la page du produit
                     // window.location.href = `${BASE_URL}pages/detail.php?id=${result.id_produit}`;
                 });
-                ul.appendChild(li);
+                autocompleteResults.appendChild(li);
             });
-            autocompleteResults.appendChild(ul);
             showAutocompleteResults();
         } else {
             hideAutocompleteResults();
