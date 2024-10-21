@@ -99,27 +99,27 @@ if (!defined('BASE_URL')) {
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="space-y-4">
                 <div>
                     <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                    <input type="text" id="nom" name="nom" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="text" id="nom" name="nom" required class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
                     <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="text" id="prenom" name="prenom" required class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="email" id="email" name="email" required class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
                     <label for="motdepasse" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-                    <input type="password" id="motdepasse" name="motdepasse" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="password" id="motdepasse" name="motdepasse" required class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
                     <label for="confirmer_motdepasse" class="block text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
-                    <input type="password" id="confirmer_motdepasse" name="confirmer_motdepasse" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="password" id="confirmer_motdepasse" name="confirmer_motdepasse" required class="form-input mt-1 block w-full">
                 </div>
 
                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
