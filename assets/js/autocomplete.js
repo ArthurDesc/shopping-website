@@ -1,16 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('autocomplete.js chargé');
     const searchInput = document.getElementById('search-input');
     const autocompleteResults = document.getElementById('autocomplete-results');
 
     if (!searchInput || !autocompleteResults) {
-        console.error('Éléments de recherche manquants:', { searchInput, autocompleteResults });
+        console.error('Éléments de recherche manquants');
         return;
     }
 
     searchInput.addEventListener('input', debounce(function() {
         const query = this.value.trim();
-        console.log('Requête de recherche:', query);
         if (query.length >= 2) {
             fetchAutocompleteResults(query);
         } else {
@@ -18,21 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 300));
 
-    document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !autocompleteResults.contains(e.target)) {
-            hideAutocompleteResults();
-        }
-    });
-
     function fetchAutocompleteResults(query) {
-        console.log('Fetching results for:', query);
         fetch(`${BASE_URL}includes/autocomplete.php?q=${encodeURIComponent(query)}`)
-            .then(response => {
-                console.log('Réponse reçue:', response);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Données reçues:', data);
                 displayAutocompleteResults(data);
             })
             .catch(error => {
@@ -59,10 +46,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 ul.appendChild(li);
             });
             autocompleteResults.appendChild(ul);
-            autocompleteResults.classList.remove('hidden');
+            showAutocompleteResults();
         } else {
             hideAutocompleteResults();
         }
+    }
+
+    function showAutocompleteResults() {
+        autocompleteResults.classList.remove('hidden');
     }
 
     function hideAutocompleteResults() {
@@ -71,13 +62,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function debounce(func, wait) {
         let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
+        return function(...args) {
             clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+            timeout = setTimeout(() => func.apply(this, args), wait);
         };
     }
+
+    // Fermer les résultats d'autocomplétion lors d'un clic en dehors
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !autocompleteResults.contains(e.target)) {
+            hideAutocompleteResults();
+        }
+    });
 });
