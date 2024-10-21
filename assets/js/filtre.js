@@ -1,18 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Le DOM est chargé, le script s'exécute.");
 
-    const filterInputs = document.querySelectorAll('#filterForm input[type="checkbox"]');
+    const filterInputs = document.querySelectorAll('input[type="checkbox"][name^="categories"], input[type="checkbox"][name^="marques"], input[type="checkbox"][name^="collections"]');
     const products = document.querySelectorAll('.products_list > div > div');
+    const activeFiltersContainer = document.getElementById('activeFilters');
+    const toggleFiltersButton = document.getElementById('toggleFilters');
+    const filterMenu = document.getElementById('filterMenu');
+
+    // Fonction pour afficher/masquer le menu des filtres
+    function toggleFilterMenu() {
+        filterMenu.classList.toggle('hidden');
+    }
+
+    // Écouteur d'événements pour le bouton de filtres
+    toggleFiltersButton.addEventListener('click', toggleFilterMenu);
 
     // Ajouter un écouteur d'événements à chaque case à cocher
     filterInputs.forEach(input => {
-        input.addEventListener('change', applyFilters);
+        input.addEventListener('change', function() {
+            applyFilters();
+            updateActiveFilters();
+        });
     });
 
     function getSelectedValues(name) {
-        const selectedValues = Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
-        console.log(`Valeurs sélectionnées pour ${name}:`, selectedValues);
-        return selectedValues;
+        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
     }
 
     function applyFilters() {
@@ -43,8 +55,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Appliquer les filtres dès le chargement de la page
+    function updateActiveFilters() {
+        activeFiltersContainer.innerHTML = '';
+        filterInputs.forEach(checkbox => {
+            if (checkbox.checked) {
+                const label = checkbox.nextElementSibling.textContent.trim();
+                const tag = document.createElement('span');
+                tag.className = 'filter-tag bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full';
+                tag.innerHTML = `
+                    ${label}
+                    <svg class="inline-block ml-1 w-4 h-4 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+                tag.querySelector('svg').addEventListener('click', () => {
+                    checkbox.checked = false;
+                    applyFilters();
+                    updateActiveFilters();
+                });
+                activeFiltersContainer.appendChild(tag);
+            }
+        });
+    }
+
+    // Appliquer les filtres initiaux
     applyFilters();
+    updateActiveFilters();
 });
 
 window.applyFilters = function() {

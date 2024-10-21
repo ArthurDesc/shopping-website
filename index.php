@@ -53,46 +53,20 @@ include './includes/_header.php';
   <h2 id="nouveautes" class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/octa.png'); ?>" alt="Nocta" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nocta</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?marque=Adidas'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/adidas.png'); ?>" alt="Adidas" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Adidas</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?marque=Nike'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/nike.png'); ?>" alt="Nike" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Nike</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?marque=NorthFace'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/northFace.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">the north face</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?marque=Puma'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/neyma.png'); ?>" alt="Puma" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Puma</button>
-          </div>
-        </a>
-      </div>
+      <?php
+      $marques = ['Puma', 'Adidas', 'Nike', 'NorthFace', 'underarmour'];
+      foreach ($marques as $marque) :
+      ?>
+        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?marque=' . $marque); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/' . strtolower($marque) . '.png'); ?>" alt="<?php echo $marque; ?>" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
+            <div class="absolute bottom-2 right-2 z-10">
+              <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-600 group-hover:text-white"><?php echo $marque; ?></button>
+            </div>
+          </a>
+        </div>
+      <?php endforeach; ?>
     </div>
   </div>
 
@@ -214,14 +188,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {
-            const headerOffset = 60; // Hauteur de votre header fixe
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const headerOffset = 10; // Hauteur de votre header fixe
+            const carouselHeight = document.querySelector('.swiper-container').offsetHeight;
+            const windowHeight = window.innerHeight;
+            
+            // Calculer la position de défilement pour que le bord inférieur du carrousel soit au bord supérieur de l'écran
+            const scrollPosition = targetElement.offsetTop - windowHeight + carouselHeight + headerOffset;
 
             gsap.to(window, {
                 duration: 1, 
                 scrollTo: {
-                    y: offsetPosition,
+                    y: scrollPosition,
                     autoKill: false
                 },
                 ease: "power2.inOut"
@@ -234,9 +211,42 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
 
-
-
-
-
-
-
+<style>
+  .nouveautes-container {
+    position: relative;
+    overflow: visible !important;
+  }
+  
+  .nouveautes-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #3B82F6;
+    transform: translateY(-50%);
+    z-index: -1;
+  }
+  
+  .nouveautes-container .flex > div {
+    position: relative;
+  }
+  
+  .nouveautes-container .flex > div::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -6px;
+    width: 12px;
+    height: 12px;
+    background-color: #3B82F6;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  
+  .nouveautes-container .flex > div:first-child::before {
+    display: none;
+  }
+</style>
