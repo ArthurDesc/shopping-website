@@ -286,15 +286,20 @@ body.sidebar-open::after {
 
 /* Styles pour les champs de saisie des formulaires */
 .form-input {
-  border: 2px solid #3B82F6; /* Bleu */
+  border: 1px solid #D1D5DB; /* Bordure grise légère par défaut */
   border-radius: 0.375rem; /* Arrondi des coins */
   padding: 0.5rem 1rem;
   width: 100%;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Ombre légère par défaut */
+}
+
+.form-input:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre un peu plus prononcée au survol */
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #2563EB; /* Bleu plus foncé au focus */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Ombre bleue au focus */
+  border-color: #3B82F6; /* Bordure bleue quand l'input est actif */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Ombre bleue quand l'input est actif */
 }
