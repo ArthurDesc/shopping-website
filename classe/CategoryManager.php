@@ -87,7 +87,9 @@ class CategoryManager {
     public function getAllCategories() {
         $sql = "SELECT id_categorie, nom, parent_id FROM categories ORDER BY parent_id IS NULL DESC, nom ASC";
         $result = $this->conn->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $categories = $result->fetch_all(MYSQLI_ASSOC);
+        error_log("Catégories récupérées : " . json_encode($categories));
+        return $categories;
     }
 
     public function getCategory($id) {

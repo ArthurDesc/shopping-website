@@ -171,7 +171,11 @@ function switchTab(clickedTab, tabId) {
             });
         });
         console.log("Avant loadCategories()");
-        CategoryManager.loadCategories();
+        if (typeof CategoryManager !== 'undefined' && CategoryManager.loadCategories) {
+            CategoryManager.loadCategories();
+        } else {
+            console.error("CategoryManager n'est pas défini ou ne contient pas la méthode loadCategories");
+        }
         console.log("Après loadCategories()");
       break;
     default:
@@ -657,3 +661,8 @@ function loadCategories() {
 }
 
 // Fin du fichier tabManager.js
+
+// À la fin du fichier tabManager.js
+if (typeof CategoryManager === 'undefined') {
+    console.error("CategoryManager n'est pas défini. Assurez-vous que categoryManager.js est chargé avant tabManager.js");
+}
