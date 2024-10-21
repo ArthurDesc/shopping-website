@@ -39,7 +39,7 @@ include './includes/_header.php';
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
     
-    <!-- Nouveau bouton d'ancrage -->
+    <!-- Nouveau hjg bouton d'ancrage -->
     <div class="absolute bottom-16 sm:bottom-12 md:bottom-8 left-1/2 transform -translate-x-1/2 z-10">
       <a href="#nouveautes" class="bg-white bg-opacity-80 text-blue-600 px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm md:text-base rounded-full shadow-md hover:bg-blue-600 hover:text-white transition duration-300 flex items-center space-x-2">
         <span>Découvrir plus</span>
@@ -63,8 +63,8 @@ include './includes/_header.php';
             <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
             <div class="absolute bottom-2 right-2 z-10">
               <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-600 group-hover:text-white"><?php echo $marque; ?></button>
-            </div>
-          </a>
+              </div>
+            </a>
         </div>
       <?php endforeach; ?>
     </div>
