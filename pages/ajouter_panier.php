@@ -50,7 +50,17 @@ if (isset($_GET['id_produit'])) {
 
     // Check if the product is already in the cart
     if (isset($_SESSION['panier'][$key])) {
-        $_SESSION['panier'][$key]['quantite']++;
+        // Ensure the product entry is an array before incrementing
+        if (is_array($_SESSION['panier'][$key])) {
+            $_SESSION['panier'][$key]['quantite']++;
+        } else {
+            // Reinitialize if it was incorrectly set as a scalar
+            $_SESSION['panier'][$key] = [
+                'id_produit' => $id,
+                'quantite' => 1,
+                'taille' => $taille
+            ];
+        }
     } else {
         $_SESSION['panier'][$key] = [
             'id_produit' => $id,
