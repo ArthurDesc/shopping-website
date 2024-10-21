@@ -11,29 +11,29 @@ function switchTab(clickedTab, tabId) {
     );
     tab.classList.add(
       "text-gray-500",
-      "hover:text-gray-600",
-      "hover:bg-gray-50",
-      "border-transparent"
-    );
-  });
-  clickedTab.classList.remove(
-    "text-gray-500",
-    "hover:text-gray-600",
-    "hover:bg-gray-50",
-    "border-transparent"
-  );
-  clickedTab.classList.add(
-    "text-blue-600",
-    "bg-gray-100",
-    "border-blue-600",
-    "active"
-  );
+"hover:text-gray-600",
+"hover:bg-gray-50",
+"border-transparent"
+);
+});
+clickedTab.classList.remove(
+"text-gray-500",
+"hover:text-gray-600",
+"hover:bg-gray-50",
+"border-transparent"
+);
+clickedTab.classList.add(
+"text-blue-600",
+"bg-gray-100",
+"border-blue-600",
+"active"
+);
 
-  const tabContent = document.getElementById("tab-content");
-  switch (tabId) {
-    case "modifier":
-      ArticleManager.loadArticles();
-      break;
+const tabContent = document.getElementById("tab-content");
+switch (tabId) {
+case "modifier":
+ArticleManager.loadArticles();
+break;
     case "ajouter":
       tabContent.innerHTML = `
                 <form id="addArticleForm" class="gradient-blue p-4 sm:p-6 rounded-lg shadow-md w-full mx-auto max-w-4xl" enctype="multipart/form-data">
@@ -140,15 +140,11 @@ function switchTab(clickedTab, tabId) {
             method: "POST",
             body: formData,
           })
-            .then((response) => response.text())
-            .then((text) => {
-              console.log("Réponse brute du serveur:", text); // Pour le débogage
-              try {
-                return JSON.parse(text);
-              } catch (e) {
-                console.error("Erreur de parsing JSON:", e);
-                throw new Error("La réponse du serveur n'est pas un JSON valide: " + text);
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
               }
+              return response.json();
             })
             .then((data) => {
               console.log("Données reçues:", data);
@@ -163,27 +159,21 @@ function switchTab(clickedTab, tabId) {
               }
             })
             .catch((error) => {
-              console.error("Erreur complète:", error);
+              console.error("Erreur:", error);
               showToast(
-                "Une erreur s'est produite lors de l'ajout de l'article: " + error.message,
+                "Une erreur s'est produite lors de l'ajout de l'article.",
                 "error"
               );
             });
         });
         console.log("Avant loadCategories()");
-        if (typeof CategoryManager !== 'undefined' && CategoryManager.loadCategories) {
-            CategoryManager.loadCategories();
-        } else {
-            console.error("CategoryManager n'est pas défini ou ne contient pas la méthode loadCategories");
-        }
+        loadCategories();
         console.log("Après loadCategories()");
       break;
     default:
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
   }
 }
-
-// Nouvelle fonction switchCategoryTab
 function switchCategoryTab(clickedTab, tabId) {
   document
     .querySelectorAll('a[onclick^="switchCategoryTab"]')
@@ -228,6 +218,7 @@ function switchCategoryTab(clickedTab, tabId) {
       `;
       loadCategoriesList();
       break;
+   
     case "ajouter":
       tabContent.innerHTML = `
         <div x-data="{ openTab: null }" class="w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl">
@@ -623,42 +614,122 @@ window.editArticle = ArticleManager.editArticle;
 window.addNewCategory = CategoryManager.addNewCategory;
 
 function loadCategories() {
-  console.log("Début de loadCategories()");
-  const categoriesContainer = document.getElementById('categories-container');
-  const categoriesList = document.getElementById('categories-list');
+    console.log("Début de loadCategories()");
+    const categoriesContainer = document.getElementById('categories-container');
 
-  if (!categoriesContainer) {
-    console.error("L'élément 'categories-container' n'a pas été trouvé");
-    return;
-  }
-
-  if (!categoriesList) {
-    console.error("L'élément 'categories-list' n'a pas été trouvé");
-    return;
-  }
-
-  console.log("Éléments trouvés, tentative de mise à jour du contenu");
-
-  // Le reste de votre code pour charger les catégories...
-
-  fetch('/shopping-website/admin/backofficeV2.php', {
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
+    if (!categoriesContainer) {
+        console.log("L'élément 'categories-container' n'a pas été trouvé, création en cours...");
+        categoriesContainer = document.createElement('div');
+        categoriesContainer.id = 'categories-container';
+        document.querySelector('#tab-content').appendChild(categoriesContainer);
     }
-  })
-  .then(response => response.json())
-  .then(categories => {
-    console.log("Catégories reçues:", categories);
-    categoriesList.innerHTML = ''; // Vider la liste existante
 
-    categories.forEach(category => {
-      // Votre code pour ajouter chaque catégorie...
+    console.log("Éléments trouvés ou créés, tentative de mise à jour du contenu");
+
+    categoriesContainer.innerHTML = `
+        <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" class="w-full inline-flex items-center justify-between px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
+            Sélectionner les catégories 
+            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+            </svg>
+        </button>
+
+        <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-full md:w-60 mt-2 absolute">
+            <div class="p-3">
+                <label for="input-group-search" class="sr-only">Rechercher</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="input-group-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Rechercher une catégorie">
+                </div>
+            </div>
+            <ul id="categories-list" class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700" aria-labelledby="dropdownSearchButton">
+                <!-- Les catégories seront ajoutées ici dynamiquement -->
+            </ul>
+        </div>
+    `;
+
+    const categoriesList = document.getElementById('categories-list');
+
+    fetch('/shopping-website/admin/backofficeV2.php', {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(categories => {
+        console.log("Catégories reçues:", categories);
+
+        categories.forEach(category => {
+            console.log("Ajout de la catégorie:", category);
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="flex items-center p-2 rounded hover:bg-gray-100">
+                    <input id="category-${category.id_categorie}" type="checkbox" name="categories[]" value="${category.id_categorie}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="category-${category.id_categorie}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded">${category.nom}</label>
+                </div>
+            `;
+            categoriesList.appendChild(li);
+        });
+
+        console.log("Fin du remplissage des catégories");
+        setupCategorySearch();
+        setupDropdown();
+    })
+    .catch(error => {
+        console.error("Erreur lors du chargement des catégories:", error);
     });
-  })
-  .catch(error => {
-    console.error("Erreur lors du chargement des catégories:", error);
-  });
+
+    console.log("Fin de loadCategories()");
 }
+
+function setupCategorySearch() {
+    const searchInput = document.getElementById('input-group-search');
+    const categoriesList = document.getElementById('categories-list');
+
+    if (searchInput && categoriesList) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const categoryItems = categoriesList.querySelectorAll('li');
+
+            categoryItems.forEach(item => {
+                const categoryName = item.textContent.toLowerCase();
+                if (categoryName.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+}
+
+function setupDropdown() {
+    const dropdownButton = document.getElementById('dropdownSearchButton');
+    const dropdownMenu = document.getElementById('dropdownSearch');
+
+    if (dropdownButton && dropdownMenu) {
+        dropdownButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    }
+}
+
+// N'oubliez pas d'exposer ces fonctions globalement si nécessaire
+window.loadCategories = loadCategories;
+window.setupCategorySearch = setupCategorySearch;
+window.setupDropdown = setupDropdown;
+window.switchTab = switchTab;
 
 // Fin du fichier tabManager.js
 
