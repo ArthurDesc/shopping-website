@@ -295,28 +295,35 @@ $review_count = $rating_summary['review_count'];
                     $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
                     ?>
                     <div class="mt-4 space-y-2">
-                        <form action="<?php echo BASE_URL; ?>pages/panier.php" method="post" id="product-form">
-                            <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                            <input type="hidden" name="action" value="ajouter">
-                            
-                            <select name="taille" class="w-full mb-2 p-2 border rounded" required>
-                                <option value="">Choisissez une taille</option>
-                                <?php foreach ($tailles_disponibles as $taille): ?>
-                                    <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            
-                            <div class="flex space-x-2">
-                                <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
-                                <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">Acheter maintenant</button>
-                            </div>
-                        </form>
+                        <!-- Check if product ID is set -->
+                        <?php if (!isset($produit['id_produit'])): ?>
+                            <p>Erreur : Aucun ID de produit fourni.</p>
+                        <?php else: ?>
+                            <form action="ajouter_panier.php" method="post" id="product-form">
+                                <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
+                                <input type="hidden" name="action" value="ajouter">
+                                <select name="taille" class="w-full mb-2 p-2 border rounded" required>
+                                    <option value="">Choisissez une taille</option>
+                                    <?php foreach ($tailles_disponibles as $taille): ?>
+                                        <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="flex space-x-2">
+                                    <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">
+                                        Ajouter au panier
+                                    </button>
+                                    <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">
+                                        Acheter maintenant
+                                    </button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
                     </div>
 
-                    <script>
+                     <script>
                     function acheterMaintenant() {
                         var form = document.getElementById('product-form');
-                        form.action.value = 'acheter';
+                        form.action = 'process_paiement.php'; // Redirige vers la page de paiement
                         form.submit();
                     }
                     </script>
@@ -560,6 +567,41 @@ $review_count = $rating_summary['review_count'];
             }
         });
     });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartButton = document.querySelector('button[name="ajouter_au_panier"]');
+
+            addToCartButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log('Bouton cliqué');
+
+                const form = document.getElementById('product-form');
+                const formData = new FormData(form);
+
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
+                }
+
+                fetch('ajouter_panier.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Réponse du serveur:', data);
+                    if (data.success) {
+                        alert('Produit ajouté au panier avec succès!');
+                    } else {
+                        alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                });
+            });
+        });
     </script>
 </body>
 
