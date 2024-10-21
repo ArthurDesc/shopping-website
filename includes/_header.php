@@ -320,7 +320,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
           </li>
         </ul>
       </nav>
-    </div>
+    </div> 
 
     <!-- Barre de recherche déroulante sticky avec autocomplétion -->
     <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md border-t border-gray-200">
