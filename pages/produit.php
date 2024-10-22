@@ -304,7 +304,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 <section class="products_list">
     <?php 
     if (!empty($produits)) {
-        echo '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mt-6">';
+        echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
         foreach ($produits as $produit) {
             $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
             
@@ -531,3 +531,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
