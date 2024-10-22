@@ -312,18 +312,21 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 $image_url = $image_base_path . 'default_product.jpg';
             }
     ?>
-        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 product-card" 
+        <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full" 
              data-categories="<?php echo htmlspecialchars(implode(',', $produit->getCategories())); ?>"
              data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>"
              data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
-            <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block">
-                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="w-full h-48 object-cover mb-4">
-                <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
-                <p class="text-gray-600 mb-2"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
-                <p class="text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
+            <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
+                <div class="relative pb-[125%] flex-grow">
+                    <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
+                </div>
+                <div class="p-3 flex-shrink-0">
+                    <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
+                    <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
+                </div>
             </a>
-            <div class="mt-2 flex justify-between items-center">
-                <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="text-blue-500 hover:underline">Voir détails</a>
+            <div class="px-3 pb-3 mt-auto flex justify-between items-center">
+                <p class="text-sm text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
                 <form method="post" action="" class="add-to-cart-form">
                     <input type="hidden" name="id_produit" value="<?php echo $produit->getId(); ?>">
                     <button type="button" class="open-modal-btn" data-product-id="<?php echo $produit->getId(); ?>">
