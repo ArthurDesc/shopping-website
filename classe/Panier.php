@@ -9,13 +9,15 @@ class Panier {
         $this->items = $_SESSION['panier'] ?? [];
     }
 
-    public function ajouter($id_produit, $quantite = 1) {
-        if (isset($this->items[$id_produit])) {
-            $this->items[$id_produit] += $quantite;
+    public function ajouter($id_produit, $quantite = 1, $taille = null) {
+        $key = $id_produit . ($taille ? '_' . $taille : '');
+        if (isset($this->items[$key])) {
+            $this->items[$key] += $quantite;
         } else {
-            $this->items[$id_produit] = $quantite;
+            $this->items[$key] = $quantite;
         }
         $this->sauvegarder();
+        return true;
     }
 
     public function retirer($id_produit) {
@@ -35,4 +37,3 @@ class Panier {
         $_SESSION['panier'] = $this->items;
     }
 }
-

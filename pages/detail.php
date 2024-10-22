@@ -5,6 +5,8 @@ require_once '../classe/produit.php';
 require_once '../classe/ArticleManager.php';
 require_once '../classe/AdminManager.php';
 require_once '../includes/product_functions.php';
+require_once "../classe/Panier.php";
+
 
 // Créez une instance de AdminManager
 $adminManager = new AdminManager($conn);
@@ -546,7 +548,6 @@ $review_count = $rating_summary['review_count'];
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Produit ajouté au panier !');
                     updateCartCount(data.cartCount);
                 } else {
                     alert('Erreur : ' + data.message);
