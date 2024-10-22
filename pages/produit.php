@@ -215,7 +215,7 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                 <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="text-blue-500 hover:underline">Voir détails</a>
                 <form method="post" action="" class="add-to-cart-form">
                     <input type="hidden" name="id_produit" value="<?php echo $produit->getId(); ?>">
-                    <button type="submit" name="ajouter_au_panier" class="add-to-cart-btn" data-product-id="<?php echo $produit->getId(); ?>">
+                    <button type="button" class="open-modal-btn" data-product-id="<?php echo $produit->getId(); ?>">
                         <img src="<?php echo url('assets/images/addCart.png'); ?>" alt="Ajouter au panier" class="w-6 h-6">
                     </button>
                 </form>
@@ -248,5 +248,96 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/filterToggle.js" defer></script>
+
+<!-- Modal pour choisir la taille -->
+<div id="sizeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3 text-center">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Choisissez une taille</h3>
+            <div class="mt-2 px-7 py-3">
+                <select id="productSize" class="w-full px-3 py-2 border rounded-md">
+                    <!-- Les options seront ajoutées dynamiquement -->
+                </select>
+            </div>
+            <div class="items-center px-4 py-3">
+                <button id="addToCartBtn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    Ajouter au panier
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('sizeModal');
+    const sizeSelect = document.getElementById('productSize');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    let currentProductId = null;
+
+    // Ouvrir le modal
+    document.querySelectorAll('.open-modal-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            currentProductId = this.getAttribute('data-product-id');
+            // Ici, vous devriez charger les tailles disponibles pour ce produit
+            // Pour cet exemple, nous utiliserons des tailles statiques
+            sizeSelect.innerHTML = `
+                <option value="">Choisissez une taille</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+            `;
+            modal.classList.remove('hidden');
+        });
+    });
+
+    // Fermer le modal en cliquant en dehors
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+
+    // Ajouter au panier
+    addToCartBtn.addEventListener('click', function() {
+        const selectedSize = sizeSelect.value;
+        if (!selectedSize) {
+            alert('Veuillez choisir une taille');
+            return;
+        }
+
+        // Envoyer la requête AJAX pour ajouter au panier
+        fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `id_produit=${currentProductId}&taille=${selectedSize}&quantite=1`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                modal.classList.add('hidden');
+                // Mettre à jour le compteur du panier si nécessaire
+                updateCartCount(data.cartCount);
+            } else {
+                alert('Erreur : ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+        });
+    });
+
+    function updateCartCount(count) {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = count;
+        }
+    }
+});
+</script>
 </body>
 </html>
