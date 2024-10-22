@@ -43,122 +43,88 @@ if (isset($_POST['update'])) {
 include '../includes/_header.php';
 ?>
 
-<main>
-<section class="p-4 bg-white shadow-md rounded-lg">
-    <div class="flex flex-col lg:flex-row">
-        <!-- Colonne de gauche -->
-        <div class="w-full lg:w-3/4 mb-4 lg:mb-0 lg:pr-4">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-blue-500 text-white">
-                        <tr>
-                            <th class="p-3">Image</th>
-                            <th class="p-3">Nom</th>
-                            <th class="p-3">Prix</th>
-                            <th class="p-3">Quantité</th>
-                            <th class="p-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $total = 0;
-                        $contenuPanier = $panier->getContenu();
+<main class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Votre Panier</h1>
+    <div class="flex flex-col lg:flex-row lg:space-x-8">
+        <!-- Liste des produits -->
+        <div class="w-full lg:w-2/3 mb-8 lg:mb-0">
+            <?php 
+            $total = 0;
+            $contenuPanier = $panier->getContenu();
 
-                        if (empty($contenuPanier)) {
-                            // Si le panier est vide, afficher un message approprié
-                            echo '<tr><td colspan="5">';
-                            echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; 
-                            echo '<h2 class="text-2xl font-bold mb-4 text-red-600">Panier vide !</h2>'; 
-                            echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">'; 
-                            echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>'; 
-                            echo '<div class="flex flex-col space-y-4">'; 
-                            echo '<a href="produit.php" class="bg-blue-600 text-white px-1 py-3 rounded-full hover:bg-blue-700 transition duration-200">Continuer vos achats</a>'; 
-                            echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez-vous pour récupérer votre panier</a>'; 
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</td></tr>';
-                        } else {
-                            // Récupérer les produits dans le panier
-                            $ids = array_map(function($key) {
-                                return explode('_', $key)[0]; // Prend seulement l'ID du produit, pas la taille
-                            }, array_keys($contenuPanier));
-                            $ids = array_unique($ids); // Supprime les doublons potentiels
-        
-                            $placeholders = implode(',', array_fill(0, count($ids), '?'));
-                            $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
-                            $stmt = $conn->prepare($sql);
-                            $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            
-                            while ($product = $result->fetch_assoc()) {
-                                // Pour chaque produit, cherchez toutes les variantes (tailles) dans le panier
-                                foreach ($contenuPanier as $key => $quantity) {
-                                    list($id, $taille) = explode('_', $key . '_'); // Ajoute un '_' pour gérer les cas sans taille
-                                    if ($id == $product['id_produit']) {
-                                        $product_total = $product['prix'] * intval($quantity);
-                                        $total += $product_total;
+            if (empty($contenuPanier)) {
+                echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; 
+                echo '<h2 class="text-2xl font-bold mb-4 text-red-600">Panier vide !</h2>'; 
+                echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">'; 
+                echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>'; 
+                echo '<div class="flex flex-col space-y-4">'; 
+                echo '<a href="produit.php" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-200">Continuer vos achats</a>'; 
+                echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez-vous pour récupérer votre panier</a>'; 
+                echo '</div>';
+                echo '</div>';
+            } else {
+                $ids = array_map(function($key) {
+                    return explode('_', $key)[0];
+                }, array_keys($contenuPanier));
+                $ids = array_unique($ids);
 
-                                        // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                                        $img = $product['image_url'] ?? '';
-                                        $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
+                $placeholders = implode(',', array_fill(0, count($ids), '?'));
+                $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                while ($product = $result->fetch_assoc()) {
+                    foreach ($contenuPanier as $key => $quantity) {
+                        list($id, $taille) = explode('_', $key . '_');
+                        if ($id == $product['id_produit']) {
+                            $product_total = $product['prix'] * intval($quantity);
+                            $total += $product_total;
 
-                                        // Vérifier si l'URL de l'image est un tableau ou une chaîne de caractères
-                                        if (is_array($img)) {
-                                            $img = htmlspecialchars($img[0] ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
-                                        } else {
-                                            $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
-                                        }
-                                        ?>
-                                        <tr class="hover:bg-blue-100 transition duration-200">
-                                            <td class="p-2">
-                                                <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover rounded">
-                                            </td>
-                                            <td class="p-2"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></td>
-                                            <td class="p-2"><?= number_format($product['prix'], 2); ?>€</td>
-                                            <td class="p-2">
-                                                <form method="post" action="">
-                                                    <input type="hidden" name="id_produit" value="<?= $key ?>">
-                                                    <div class="flex items-center">
-                                                        <button type="submit" name="action" value="decrease" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-l">-</button>
-                                                        <span class="mx-2"><?= $quantity ?></span>
-                                                        <button type="submit" name="action" value="increase" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-r">+</button>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                            <td class="p-2">
-                                                <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 transition duration-200">
-                                                    <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="30" height="30">
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <?php 
-                                    }
-                                }
+                            $img = $product['image_url'] ?? '';
+                            $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
+
+                            if (is_array($img)) {
+                                $img = htmlspecialchars($img[0] ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
+                            } else {
+                                $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
                             }
-                        } // End of else
-                        ?>
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-200">
-                            <th colspan="4" class="p-3 text-right">Total :</th>
-                            <th class="p-3"><?= number_format($total, 2); ?>€</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                            ?>
+                            <div class="flex items-center border-b border-gray-200 py-4">
+                                <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
+                                <div class="flex-grow">
+                                    <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
+                                    <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
+                                    <form method="post" action="" class="flex items-center mt-2">
+                                        <input type="hidden" name="id_produit" value="<?= $key ?>">
+                                        <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
+                                        <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
+                                        <button type="submit" name="action" value="increase" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-r">+</button>
+                                    </form>
+                                </div>
+                                <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
+                                    <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="24" height="24">
+                                </a>
+                            </div>
+                            <?php 
+                        }
+                    }
+                }
+            }
+            ?>
         </div>
         
-        <!-- Colonne de droite -->
-        <div class="w-full lg:w-1/4">
-            <div class="p-4 bg-gray-50 rounded-lg shadow-lg lg:sticky lg:top-4">
+        <!-- Résumé du panier -->
+        <div class="w-full lg:w-1/3">
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-bold mb-4">Résumé du Panier</h2>
                 <div class="mb-4">
                     <p class="text-lg">Total à payer :</p>
                     <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
                 </div>
                 <div class="flex flex-col space-y-2">
-                    <a href="process_paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($ids) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($ids) ? 'onclick="return false;"' : '' ?>>Payer</a>
+                    <a href="process_paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($contenuPanier) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($contenuPanier) ? 'onclick="return false;"' : '' ?>>Payer</a>
                     <a href="produit.php" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-200 text-center">Continuer vos achats</a>
                     <?php if (!isset($_SESSION['id_utilisateur'])) { 
                         echo '<a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>';
@@ -167,11 +133,6 @@ include '../includes/_header.php';
             </div>
         </div>
     </div>
-</section>
-    
-    <script src="../assets/js/scripts.js" defer></script>
-    <script src="../assets/js/navbar.js" defer></script>
 </main>
 
-<?php include '../includes/_footer.php'; // Ensure the correct file path and add a semicolon
-
+<?php include '../includes/_footer.php'; ?>
