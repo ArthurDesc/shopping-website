@@ -312,7 +312,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 $image_url = $image_base_path . 'default_product.jpg';
             }
     ?>
-        <div class="bg-white rounded-lg shadow-md p-4" 
+        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 product-card" 
              data-categories="<?php echo htmlspecialchars(implode(',', $produit->getCategories())); ?>"
              data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>"
              data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
