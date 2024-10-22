@@ -250,7 +250,7 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 <script src="<?php echo BASE_URL; ?>assets/js/filterToggle.js" defer></script>
 
 <!-- Modal pour choisir la taille -->
-<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
+<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex" style="display: none;">
   <div class="modal-background relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg">
     <div class="modal">
       <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
@@ -279,7 +279,7 @@ $(document).ready(function() {
             <option value="L">L</option>
             <option value="XL">XL</option>
         `);
-        $('#modal-container').removeClass('out').addClass('five');
+        $('#modal-container').show().removeClass('out').addClass('five');
         $('body').addClass('modal-active');
     });
 
@@ -292,10 +292,10 @@ $(document).ready(function() {
 
     function closeModal() {
         $('#modal-container').removeClass('five').addClass('out');
+        $('body').removeClass('modal-active');
         setTimeout(function() {
-            $('#modal-container').removeClass('out');
-            $('body').removeClass('modal-active');
-        }, 500);
+            $('#modal-container').removeClass('out').hide();
+        }, 500); // Correspond à la durée de l'animation
     }
 
     // Ajouter au panier
@@ -341,6 +341,13 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 

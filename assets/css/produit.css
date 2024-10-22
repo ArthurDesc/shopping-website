@@ -11,6 +11,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: background-color 0.5s ease;
 }
 
 #modal-container.five {
@@ -35,11 +36,16 @@
   animation: roadRunnerIn .3s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
 
-#modal-container.five.out .modal-background {
+#modal-container.out {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.5s ease;
+}
+
+#modal-container.out .modal-background {
   animation: fadeOut .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
 
-#modal-container.five.out .modal-background .modal {
+#modal-container.out .modal-background .modal {
   animation: roadRunnerOut .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
 
@@ -49,8 +55,8 @@
 }
 
 @keyframes fadeOut {
-  0% { background: rgba(0,0,0,.7); }
-  100% { background: rgba(0,0,0,.0); }
+  0% { background: rgba(255, 255, 255, 0.904); }
+  100% { background: rgba(255, 255, 255, 0); }
 }
 
 @keyframes roadRunnerIn {
@@ -69,4 +75,9 @@
   0% { transform: scale(1); }
   99.9% { transform: scale(1); }
   100% { transform: scale(0); }
+}
+
+.modal-background .modal {
+  position: relative;
+  z-index: 1;
 }
