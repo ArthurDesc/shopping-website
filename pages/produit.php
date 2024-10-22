@@ -109,12 +109,42 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     exit();
 }
 
-// Au début du fichier produit.php, après avoir démarré la session
+// Au dbut du fichier produit.php, après avoir démarré la session
 
 // Récupérer les paramètres de l'URL
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cette ligne
+
+$query_categories_actives = "
+    SELECT DISTINCT c1.id_categorie as id_categorie_principale, c1.nom as nom_categorie_principale,
+                    c2.id_categorie as id_sous_categorie, c2.nom as nom_sous_categorie
+    FROM categories c1
+    LEFT JOIN categories c2 ON c2.parent_id = c1.id_categorie
+    INNER JOIN produit_categorie pc ON (pc.id_categorie = c1.id_categorie OR pc.id_categorie = c2.id_categorie)
+    INNER JOIN produits p ON pc.id_produit = p.id_produit
+    WHERE c1.parent_id IS NULL
+    ORDER BY c1.nom, c2.nom
+";
+
+$result_categories_actives = mysqli_query($conn, $query_categories_actives);
+
+$categories_actives = array();
+while ($row = mysqli_fetch_assoc($result_categories_actives)) {
+    $id_principale = $row['id_categorie_principale'];
+    if (!isset($categories_actives[$id_principale])) {
+        $categories_actives[$id_principale] = [
+            'nom' => $row['nom_categorie_principale'],
+            'sous_categories' => []
+        ];
+    }
+    if ($row['id_sous_categorie']) {
+        $categories_actives[$id_principale]['sous_categories'][] = [
+            'id' => $row['id_sous_categorie'],
+            'nom' => $row['nom_sous_categorie']
+        ];
+    }
+}
 ?>
 <style>
     .filter-dropdown {
@@ -158,7 +188,7 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
                     <!-- Catégories -->
-                    <div class="border-b">
+                    <div class="filter-section">
                         <div @click="openTab = openTab === 'categories' ? null : 'categories'" class="flex items-center justify-between cursor-pointer py-4">
                             <span class="font-semibold text-gray-600">Catégories</span>
                             <svg :class="{'rotate-180': openTab === 'categories'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -167,29 +197,33 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                         </div>
                         <div x-show="openTab === 'categories'" x-collapse>
                             <div class="py-4 pl-4">
-                                <?php foreach ($categories as $id_categorie => $category): ?>
-                                    <div class="flex items-center mb-2">
-                                        <input type="checkbox" 
-                                               id="cat_<?php echo $id_categorie; ?>" 
-                                               name="categories[]" 
-                                               value="<?php echo $id_categorie; ?>" 
-                                               class="mr-2"
-                                               <?php echo ($filtre->hasCategory($id_categorie)) ? 'checked' : ''; ?>>
-                                        <label for="cat_<?php echo $id_categorie; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
-                                    </div>
-                                    <?php if (!empty($category['sous_categories'])): ?>
-                                        <?php foreach ($category['sous_categories'] as $sous_categorie): ?>
-                                            <div class="flex items-center mb-2 ml-4">
-                                                <input type="checkbox" 
-                                                       id="cat_<?php echo $sous_categorie['id']; ?>" 
-                                                       name="categories[]" 
-                                                       value="<?php echo $sous_categorie['id']; ?>" 
-                                                       class="mr-2"
-                                                       <?php echo ($filtre->hasCategory($sous_categorie['id'])) ? 'checked' : ''; ?>>
-                                                <label for="cat_<?php echo $sous_categorie['id']; ?>"><?php echo htmlspecialchars($sous_categorie['nom']); ?></label>
+                                <?php foreach ($categories_actives as $id_principale => $categorie_principale): ?>
+                                    <div class="mb-2">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" 
+                                                   id="cat_<?php echo htmlspecialchars($id_principale); ?>" 
+                                                   name="categories[]" 
+                                                   value="<?php echo htmlspecialchars($id_principale); ?>" 
+                                                   class="mr-2"
+                                                   <?php echo ($filtre->hasCategory($id_principale)) ? 'checked' : ''; ?>>
+                                            <label for="cat_<?php echo htmlspecialchars($id_principale); ?>" class="font-semibold"><?php echo htmlspecialchars($categorie_principale['nom']); ?></label>
+                                        </div>
+                                        <?php if (!empty($categorie_principale['sous_categories'])): ?>
+                                            <div class="ml-4 mt-1">
+                                                <?php foreach ($categorie_principale['sous_categories'] as $sous_categorie): ?>
+                                                    <div class="flex items-center mb-1">
+                                                        <input type="checkbox" 
+                                                               id="cat_<?php echo htmlspecialchars($sous_categorie['id']); ?>" 
+                                                               name="categories[]" 
+                                                               value="<?php echo htmlspecialchars($sous_categorie['id']); ?>" 
+                                                               class="mr-2"
+                                                               <?php echo ($filtre->hasCategory($sous_categorie['id'])) ? 'checked' : ''; ?>>
+                                                        <label for="cat_<?php echo htmlspecialchars($sous_categorie['id']); ?>"><?php echo htmlspecialchars($sous_categorie['nom']); ?></label>
+                                                    </div>
+                                                <?php endforeach; ?>
                                             </div>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -428,4 +462,3 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
-
