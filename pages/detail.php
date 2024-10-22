@@ -5,6 +5,8 @@ require_once '../classe/produit.php';
 require_once '../classe/ArticleManager.php';
 require_once '../classe/AdminManager.php';
 require_once '../includes/product_functions.php';
+require_once "../classe/Panier.php";
+
 
 // Créez une instance de AdminManager
 $adminManager = new AdminManager($conn);
@@ -299,21 +301,23 @@ $review_count = $rating_summary['review_count'];
                         <?php if (!isset($produit['id_produit'])): ?>
                             <p>Erreur : Aucun ID de produit fourni.</p>
                         <?php else: ?>
-                            <form action="ajouter_panier.php" method="post" id="product-form">
+                            <form id="add-to-cart-form" class="mt-4 space-y-2">
                                 <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                <input type="hidden" name="action" value="ajouter">
                                 <select name="taille" class="w-full mb-2 p-2 border rounded" required>
                                     <option value="">Choisissez une taille</option>
                                     <?php foreach ($tailles_disponibles as $taille): ?>
                                         <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
                                     <?php endforeach; ?>
                                 </select>
+                                <select name="quantite" class="w-full mb-2 p-2 border rounded" required>
+                                    <option value="">Choisissez une quantité</option>
+                                    <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
+                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                    <?php endfor; ?>
+                                </select>
                                 <div class="flex space-x-2">
-                                    <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">
+                                    <button type="submit" id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">
                                         Ajouter au panier
-                                    </button>
-                                    <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">
-                                        Acheter maintenant
                                     </button>
                                 </div>
                             </form>
@@ -464,7 +468,7 @@ $review_count = $rating_summary['review_count'];
     </div>
 
     <?php if ($isEditMode): ?>
-        <script>
+        <script src="../assets/js/editMode.js">
             function updateField(field, newValue) {
                 fetch('/shopping-website/admin/update_article.php', {
                     method: 'POST',
@@ -522,86 +526,50 @@ $review_count = $rating_summary['review_count'];
 
     <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
     <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/detail.js" defer></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const starRating = document.getElementById('star-rating');
-        const stars = starRating.querySelectorAll('.star-icon');
-        const noteInput = document.getElementById('note-input');
-        const form = document.getElementById('avis-form');
-
-        stars.forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = this.getAttribute('data-rating');
-                noteInput.value = rating;
-                highlightStars(rating);
-            });
-
-            star.addEventListener('mouseover', function() {
-                const rating = this.getAttribute('data-rating');
-                highlightStars(rating);
-            });
-
-            star.addEventListener('mouseout', function() {
-                const currentRating = noteInput.value || 0;
-                highlightStars(currentRating);
-            });
-        });
-
-        function highlightStars(rating) {
-            stars.forEach(star => {
-                const starRating = star.getAttribute('data-rating');
-                if (starRating <= rating) {
-                    star.classList.remove('text-gray-300');
-                    star.classList.add('text-yellow-400');
-                } else {
-                    star.classList.remove('text-yellow-400');
-                    star.classList.add('text-gray-300');
-                }
-            });
-        }
+        const form = document.getElementById('add-to-cart-form');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
 
         form.addEventListener('submit', function(e) {
-            if (!noteInput.value) {
-                e.preventDefault();
-                alert('Veuillez sélectionner une note avant de soumettre votre avis.');
-            }
-        });
-    });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartButton = document.querySelector('button[name="ajouter_au_panier"]');
+            e.preventDefault();
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = 'Ajout en cours...';
 
-            addToCartButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                console.log('Bouton cliqué');
+            const formData = new FormData(form);
 
-                const form = document.getElementById('product-form');
-                const formData = new FormData(form);
-
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
+            fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCount(data.cartCount);
+                } else {
+                    alert('Erreur : ' + data.message);
                 }
-
-                fetch('ajouter_panier.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Réponse du serveur:', data);
-                    if (data.success) {
-                        alert('Produit ajouté au panier avec succès!');
-                    } else {
-                        alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
-                });
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+            })
+            .finally(() => {
+                addToCartBtn.disabled = false;
+                addToCartBtn.textContent = 'Ajouter au panier';
             });
         });
+
+        function updateCartCount(count) {
+            const cartCountElement = document.getElementById('cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        }
+    });
     </script>
 </body>
 

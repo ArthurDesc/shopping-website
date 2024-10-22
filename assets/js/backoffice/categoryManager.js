@@ -212,3 +212,4 @@ window.CategoryManager = (function() {
         addNewSubCategory: addNewSubCategory
     };
 })();
+

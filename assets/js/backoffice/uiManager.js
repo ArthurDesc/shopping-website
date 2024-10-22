@@ -60,6 +60,7 @@ window.UIManager = _UIManager;
 // Ajoutez ces lignes pour déboguer
 console.log("UIManager initialisé :", window.UIManager);
 console.log("setupCategorySearch disponible :", typeof window.UIManager.setupCategorySearch === 'function');
+console.log("setupDropdown disponible :", typeof window.UIManager.setupDropdown === 'function');
 
 /*
 window.UIManager = {

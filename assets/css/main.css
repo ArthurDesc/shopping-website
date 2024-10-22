@@ -269,6 +269,7 @@ body.sidebar-open::after {
 }
 
 
+
 /* Styles pour les champs de saisie des formulaires */
 .form-input {
   border: 1px solid #D1D5DB; /* Bordure grise légère par défaut */

@@ -1,47 +1,41 @@
-<?php 
+<?php
 ob_start(); // Démarre la mise en mémoire tampon de sortie
-session_start();
 include_once "../includes/_db.php";
+require_once "../includes/session.php";
+require_once "../classe/Panier.php";
+
+$panier = new Panier();
 
 // Traitement de la mise à jour de la quantité
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
     $id_update = $_POST['id_produit'];
-    
+
     // Vérifier l'action (augmentation ou diminution)
     if ($_POST['action'] === 'increase') {
-        $_SESSION['panier'][$id_update] = isset($_SESSION['panier'][$id_update]) ? $_SESSION['panier'][$id_update] + 1 : 1;
+        $panier->augmenterQuantite($id_update);
     } elseif ($_POST['action'] === 'decrease') {
-        if (isset($_SESSION['panier'][$id_update]) && $_SESSION['panier'][$id_update] > 1) {
-            $_SESSION['panier'][$id_update]--;
-        } else {
-            unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
-        }
+        $panier->diminuerQuantite($id_update);
     }
     header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
     exit(); // Terminer le script après la redirection
 }
 
-// Initialiser le panier si ce n'est pas déjà fait
-if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
-    $_SESSION['panier'] = []; // Initialisation du panier comme tableau vide
-}
-
-// Supprimer les produits si la variable 'del' existe
+// Supprimer les produits
 if (isset($_GET['del'])) {
     $id_del = $_GET['del'];
-    unset($_SESSION['panier'][$id_del]);
+    $panier->retirerProduit($id_del);
 }
 
-// Mettre à jour la quantité du produit si le formulaire est soumis
+// Mettre à jour la quantité du produit
 if (isset($_POST['update'])) {
     $id_update = $_POST['id_produit'];
     $quantity = $_POST['quantite'];
-    
+
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
-        $_SESSION['panier'][$id_update] = intval($quantity);
+        $panier->mettreAJourQuantite($id_update, intval($quantity));
     } else {
-        unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité n'est pas valide
+        $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
     }
 }
 
@@ -49,123 +43,145 @@ if (isset($_POST['update'])) {
 include '../includes/_header.php';
 ?>
 
-<main>
-<section class="p-4 bg-white shadow-md rounded-lg">
-    <div class="flex flex-col lg:flex-row">
-        <!-- Colonne de gauche -->
-        <div class="w-full lg:w-3/4 mb-4 lg:mb-0 lg:pr-4">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-blue-500 text-white">
-                        <tr>
-                            <th class="p-3">Image</th>
-                            <th class="p-3">Nom</th>
-                            <th class="p-3">Prix</th>
-                            <th class="p-3">Quantité</th>
-                            <th class="p-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $total = 0;
-                        $ids = array_keys($_SESSION['panier']);
 
-                        if (empty($ids)) {
-                            // Si le panier est vide, afficher un message approprié
-                            echo '<tr><td colspan="5">';
-                            echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; 
-                            echo '<h2 class="text-2xl font-bold mb-4 text-red-600">Panier vide !</h2>'; 
-                            echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">'; 
-                            echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>'; 
-                            echo '<div class="flex flex-col space-y-4">'; 
-                            echo '<a href="produit.php" class="bg-blue-600 text-white px-1 py-3 rounded-full hover:bg-blue-700 transition duration-200">Continuer vos achats</a>'; 
-                            echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez-vous pour récupérer votre panier</a>'; 
-                            echo '</div>';
-                            echo '</div>';
-                            echo '</td></tr>';
-                        } else {
-                            // Récupérer les produits dans le panier
-                            $products = mysqli_query($conn, "SELECT * FROM produits WHERE id_produit IN (".implode(',', $ids).")");
 
-                            foreach ($products as $product) {
-                                // Quantité du produit dans le panier
-                                $quantity = $_SESSION['panier'][$product['id_produit']];
-                                $product_total = $product['prix'] * intval($quantity);
-                                $total += $product_total;
+<main class="flex-grow container mx-auto px-4 py-8 mt-16"> 
+    <?php 
+    $total = 0;
+    $contenuPanier = $panier->getContenu();
+    ?>
+    <div class="flex flex-col lg:flex-row lg:space-x-8">
+        <!-- Liste des produits -->
+        <div class="w-full <?= !empty($contenuPanier) ? 'lg:w-2/3' : '' ?> mb-8 lg:mb-0">
+            <?php
+            if (empty($contenuPanier)) {
+                echo '<div class="text-center p-6">';
+                echo '<h2 class="text-2xl font-bold mb-4 text-blue-400">Panier vide !</h2>';
+                echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">';
+                echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>';
+                echo '<div class="flex flex-col items-center space-y-4">';
+                echo '<a href="produit.php" class="btn btn-small">Continuer vos achats</a>'; // Ajout de la classe btn-small
+                if (!isset($_SESSION['id_utilisateur'])) {
+                    echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline">Connectez-vous pour récupérer votre panier</a>';
+                }
+                echo '</div>';
+                echo '</div>';
+            } else {
+                $ids = array_map(function ($key) {
+                    return explode('_', $key)[0];
+                }, array_keys($contenuPanier));
+                $ids = array_unique($ids);
 
-                                // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                                $img = $product['image_url'] ?? '';
-                                $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
+                $placeholders = implode(',', array_fill(0, count($ids), '?'));
+                $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
-                                // Vérifier si l'URL de l'image est un tableau ou une chaîne de caractères
-                                if (is_array($img)) {
-                                    // Si c'est un tableau, prendre la première image
-                                    $img = htmlspecialchars($img[0] ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
-                                } else {
-                                    // Si c'est une chaîne, la traiter normalement
-                                    $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
-                                }
-                                ?>
-                                <tr class="hover:bg-blue-100 transition duration-200">
-                                    <td class="p-2">
-                                        <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover rounded">
-                                    </td>
-                                    <td class="p-2"><?= $nom ?></td>
-                                    <td class="p-2"><?= number_format($product['prix'], 2); ?>€</td>
-                                    <td class="p-2">
-                                        <form method="post" action="">
-                                            <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
-                                            <div class="flex items-center">
-                                                <button type="submit" name="action" value="decrease" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-l">-</button>
-                                                <span class="mx-2"><?= $quantity ?></span>
-                                                <button type="submit" name="action" value="increase" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-r">+</button>
-                                            </div>
-                                        </form>
-                                    </td>
-                                    <td class="p-2">
-                                        <a href="panier.php?del=<?= $product['id_produit']; ?>" class="text-red-500 hover:text-red-700 transition duration-200">
-                                            <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="30" height="30">
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php 
-                            } // End of foreach
-                        } // End of else
-                        ?>
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-200">
-                            <th colspan="4" class="p-3 text-right">Total :</th>
-                            <th class="p-3"><?= number_format($total, 2); ?>€</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                while ($product = $result->fetch_assoc()) {
+                    foreach ($contenuPanier as $key => $quantity) {
+                        list($id, $taille) = explode('_', $key . '_');
+                        if ($id == $product['id_produit']) {
+                            $product_total = $product['prix'] * intval($quantity);
+                            $total += $product_total;
+
+                            $img = $product['image_url'] ?? '';
+                            $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
+
+                            if (is_array($img)) {
+                                $img = htmlspecialchars($img[0] ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
+                            } else {
+                                $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
+                            }
+            ?>
+                            <div class="flex items-center border-b border-gray-200 py-4">
+                                <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
+                                <div class="flex-grow">
+                                    <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
+                                    <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
+                                    <form method="post" action="" class="flex items-center mt-2">
+                                        <input type="hidden" name="id_produit" value="<?= $key ?>">
+                                        <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
+                                        <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
+                                        <button type="submit" name="action" value="increase" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-r">+</button>
+                                    </form>
+                                </div>
+                                <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </a>
+                            </div>
+            <?php
+                        }
+                    }
+                }
+            }
+            ?>
         </div>
-        
-        <!-- Colonne de droite -->
-        <div class="w-full lg:w-1/4">
-            <div class="p-4 bg-gray-50 rounded-lg shadow-lg lg:sticky lg:top-4">
+
+        <?php if (!empty($contenuPanier)): ?>
+        <!-- Résumé du panier -->
+        <div class="w-full lg:w-1/3">
+            <div class="bg-gray-50 rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-bold mb-4">Résumé du Panier</h2>
                 <div class="mb-4">
                     <p class="text-lg">Total à payer :</p>
                     <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
                 </div>
                 <div class="flex flex-col space-y-2">
-                    <a href="process_paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($ids) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($ids) ? 'onclick="return false;"' : '' ?>>Payer</a>
-                    <a href="produit.php" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-200 text-center">Continuer vos achats</a>
-                    <?php if (!isset($_SESSION['id_utilisateur'])) { 
-                        echo '<a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>';
-                    } ?>
+                    <a href="process_paiement.php" class="button button-green">
+                        Procéder au paiement
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                        </svg>
+                    </a>
+                    <a href="produit.php" class="button">
+                        Continuer vos achats
+                        
+                    </a>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
-</section>
-    
-    <script src="../assets/js/scripts.js" defer></script>
-    <script src="../assets/js/navbar.js" defer></script>
 </main>
 
-<?php include '../includes/_footer.php'; // Ensure the correct file path and add a semicolon
+<!-- Ajout d'un espace supplémentaire avant le footer -->
+<div class="mt-20"></div>
+
+<?php include '../includes/_footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.learn-more');
+    buttons.forEach(button => {
+        const textWidth = button.querySelector('.button-text').offsetWidth;
+        button.style.width = `${textWidth + 60}px`; // 60px pour le cercle et un peu d'espace
+    });
+});
+</script>
+
+<style>
+    .glow-button {
+        position: relative;
+        overflow: hidden;
+    }
+    .glow-button::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 80%);
+        transform: translate(
+            calc(var(--mouse-x, 0) - 50%),
+            calc(var(--mouse-y, 0) - 50%)
+        );
+    }
+</style>
+
+
 
