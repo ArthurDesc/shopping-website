@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../functions/url.php';
 require_once __DIR__ . '/../classe/AdminManager.php';
+require_once __DIR__ . '/../classe/Panier.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/_db.php';
 $adminManager = new AdminManager($conn); // Assurez-vous que $conn est disponible
