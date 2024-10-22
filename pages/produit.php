@@ -208,9 +208,9 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
             </a>
             <div class="mt-2 flex justify-between items-center">
                 <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="text-blue-500 hover:underline">Voir détails</a>
-                <form method="post" action="">
+                <form method="post" action="" class="add-to-cart-form">
                     <input type="hidden" name="id_produit" value="<?php echo $produit->getId(); ?>">
-                    <button type="submit" name="ajouter_au_panier" class="add-to-cart">
+                    <button type="submit" name="ajouter_au_panier" class="add-to-cart-btn" data-product-id="<?php echo $produit->getId(); ?>">
                         <img src="<?php echo url('assets/images/addCart.png'); ?>" alt="Ajouter au panier" class="w-6 h-6">
                     </button>
                 </form>
@@ -240,5 +240,6 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
+<script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
 </body>
 </html>
