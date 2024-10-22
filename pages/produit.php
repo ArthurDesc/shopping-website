@@ -173,55 +173,47 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
                     <!-- Catégories -->
-                    <div x-data="{ isOpen: false, search: '' }">
-                        <div @click="isOpen = !isOpen" class="flex items-center justify-between cursor-pointer py-4">
+                    <div id="categories-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="categories-toggle">
                             <span class="font-semibold text-gray-600">Catégories</span>
-                            <svg :class="{'rotate-180': isOpen}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="isOpen" x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0 transform scale-y-90"
-                             x-transition:enter-end="opacity-100 transform scale-y-100"
-                             x-transition:leave="transition ease-in duration-300"
-                             x-transition:leave-start="opacity-100 transform scale-y-100"
-                             x-transition:leave-end="opacity-0 transform scale-y-90">
-                            <div class="py-4 pl-4">
-                                <input 
-                                    x-model="search" 
-                                    type="text" 
-                                    placeholder="Rechercher une catégorie" 
-                                    class="w-full px-3 py-2 border rounded-md mb-4"
-                                >
+                        <div id="categories-content" class="py-4 pl-4" style="display: none;">
+                            <input 
+                                type="text" 
+                                id="categories-search"
+                                placeholder="Rechercher une catégorie" 
+                                class="w-full px-3 py-2 border rounded-md mb-4"
+                            >
+                            <div id="categories-list">
                                 <?php foreach ($categories as $id => $category): ?>
-                                    <div x-show="!search || '<?= strtolower($category['nom']) ?>'.includes(search.toLowerCase())">
-                                        <div class="mb-2">
-                                            <div class="flex items-center">
-                                                <input type="checkbox" 
-                                                       id="cat_<?= htmlspecialchars($id) ?>" 
-                                                       name="categories[]" 
-                                                       value="<?= htmlspecialchars($id) ?>" 
-                                                       class="mr-2"
-                                                       <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
-                                                <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
-                                            </div>
-                                            <?php if (!empty($category['sous_categories'])): ?>
-                                                <div class="ml-4 mt-1">
-                                                    <?php foreach ($category['sous_categories'] as $sous_cat): ?>
-                                                        <div x-show="!search || '<?= strtolower($sous_cat['nom']) ?>'.includes(search.toLowerCase()) || '<?= strtolower($category['nom']) ?>'.includes(search.toLowerCase())" 
-                                                             class="flex items-center mb-1">
-                                                            <input type="checkbox" 
-                                                                   id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                                   name="categories[]" 
-                                                                   value="<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                                   class="mr-2"
-                                                                   <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
-                                                            <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
-                                                        </div>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            <?php endif; ?>
+                                    <div class="mb-2">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" 
+                                                   id="cat_<?= htmlspecialchars($id) ?>" 
+                                                   name="categories[]" 
+                                                   value="<?= htmlspecialchars($id) ?>" 
+                                                   class="mr-2"
+                                                   <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
+                                            <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
                                         </div>
+                                        <?php if (!empty($category['sous_categories'])): ?>
+                                            <div class="ml-4 mt-1">
+                                                <?php foreach ($category['sous_categories'] as $sous_cat): ?>
+                                                    <div class="flex items-center mb-1">
+                                                        <input type="checkbox" 
+                                                               id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                               name="categories[]" 
+                                                               value="<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                               class="mr-2"
+                                                               <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                        <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -457,6 +449,51 @@ $(document).ready(function() {
             cartCountElement.text(count);
         }
     }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoriesFilter = document.getElementById('categories-filter');
+    const toggleButton = document.getElementById('categories-toggle');
+    const filterContent = document.getElementById('categories-content');
+    const searchInput = document.getElementById('categories-search');
+    const categoriesList = document.getElementById('categories-list');
+
+    // Toggle du dropdown
+    toggleButton.addEventListener('click', function() {
+        if (filterContent.style.display === 'none' || filterContent.style.display === '') {
+            filterContent.style.display = 'block';
+            toggleButton.querySelector('svg').classList.add('rotate-180');
+        } else {
+            filterContent.style.display = 'none';
+            toggleButton.querySelector('svg').classList.remove('rotate-180');
+        }
+    });
+
+    // Fonction de recherche
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const categories = categoriesList.querySelectorAll('.mb-2');
+
+        categories.forEach(category => {
+            const categoryName = category.querySelector('label').textContent.toLowerCase();
+            const subCategories = category.querySelectorAll('.ml-4 .flex');
+            let shouldShow = categoryName.includes(searchTerm);
+
+            subCategories.forEach(subCategory => {
+                const subCategoryName = subCategory.querySelector('label').textContent.toLowerCase();
+                if (subCategoryName.includes(searchTerm)) {
+                    shouldShow = true;
+                    subCategory.style.display = 'flex';
+                } else {
+                    subCategory.style.display = 'none';
+                }
+            });
+
+            category.style.display = shouldShow ? 'block' : 'none';
+        });
+    });
 });
 </script>
 </body>
