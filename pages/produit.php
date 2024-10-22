@@ -5,6 +5,8 @@ require_once "../classe/Panier.php";
 require_once "../classe/Produit.php";
 require_once "../classe/Filtre.php";
 require_once "../functions/url.php";
+require_once "../classe/CategoryManager.php";
+$categoryManager = new CategoryManager($conn);
 
 $panier = new Panier();
 
@@ -12,8 +14,7 @@ $panier = new Panier();
 $image_base_path = '../assets/images/produits/';
 
 // Récupérer toutes les catégories
-$categories_query = mysqli_query($conn, "SELECT * FROM categories");
-$categories = mysqli_fetch_all($categories_query, MYSQLI_ASSOC);
+$categories = $categoryManager->getAllCategories();
 
 // Récupérer toutes les marques uniques
 $marques_query = mysqli_query($conn, "SELECT DISTINCT marque FROM produits WHERE marque IS NOT NULL AND marque != ''");
@@ -54,7 +55,7 @@ $result = mysqli_stmt_get_result($stmt);
 
 $produits = array();
 while ($row = mysqli_fetch_assoc($result)) {
-    $produits[] = new Produit(
+    $produit = new Produit(
         $row['id_produit'],
         $row['nom'],
         $row['prix'],
@@ -64,6 +65,13 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['stock'],
         $row['tailles_disponibles']
     );
+    
+    // Récupérer les catégories pour ce produit
+    $productCategories = $categoryManager->getProductCategories($row['id_produit']);
+    $categorieIds = array_column($productCategories, 'id_categorie');
+    $produit->setCategories($categorieIds);
+    
+    $produits[] = $produit;
 }
 
 // Récupération des catégories et sous-catégories
@@ -157,15 +165,15 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                         </div>
                         <div x-show="openTab === 'categories'" x-collapse>
                             <div class="py-4 pl-4">
-                                <?php foreach ($categories as $id_categorie => $category): ?>
+                                <?php foreach ($categories as $category): ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="cat_<?php echo $id_categorie; ?>" 
+                                               id="cat_<?php echo $category['id_categorie']; ?>" 
                                                name="categories[]" 
-                                               value="<?php echo $id_categorie; ?>" 
+                                               value="<?php echo $category['id_categorie']; ?>" 
                                                class="mr-2"
-                                               <?php echo ($filtre->hasCategory($id_categorie)) ? 'checked' : ''; ?>>
-                                        <label for="cat_<?php echo $id_categorie; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
+                                               <?php echo ($filtre->hasCategory($category['id_categorie'])) ? 'checked' : ''; ?>>
+                                        <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
                                     </div>
                                     <?php if (!empty($category['sous_categories'])): ?>
                                         <?php foreach ($category['sous_categories'] as $sous_categorie): ?>
@@ -275,8 +283,8 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
             }
     ?>
         <div class="bg-white rounded-lg shadow-md p-4" 
-             data-categories="<?php echo htmlspecialchars($row['categories'] ?? ''); ?>"
-             data-collection="<?php echo htmlspecialchars($row['collection'] ?? ''); ?>"
+             data-categories="<?php echo htmlspecialchars(implode(',', $produit->getCategories())); ?>"
+             data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>"
              data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
             <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block">
                 <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="w-full h-48 object-cover mb-4">
@@ -316,11 +324,12 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 
 <!-- Ajoutez ce script juste avant la fermeture de la balise body -->
 
-<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
+
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/filterToggle.js" defer></script>
+<script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
 
 <!-- Modal pour choisir la taille -->
 <div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex" style="display: none;">
@@ -414,3 +423,4 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
+

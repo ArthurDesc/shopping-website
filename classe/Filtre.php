@@ -99,6 +99,10 @@ class Filtre {
         $conditions = [];
         $params = [];
 
+        $sql = "SELECT p.*, GROUP_CONCAT(pc.id_categorie) as categories 
+                FROM produits p
+                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit";
+
         if (!empty($this->categories)) {
             $placeholders = implode(',', array_fill(0, count($this->categories), '?'));
             $conditions[] = "pc.id_categorie IN ($placeholders)";
@@ -127,13 +131,20 @@ class Filtre {
             $params[] = $this->prixMax;
         }
 
-        $sql = "SELECT DISTINCT p.* FROM produits p 
-                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit";
-
         if (!empty($conditions)) {
             $sql .= " WHERE " . implode(' AND ', $conditions);
         }
 
+        $sql .= " GROUP BY p.id_produit";
+
         return ['sql' => $sql, 'params' => $params];
+    }
+
+    public function resetFiltres() {
+        $this->categories = [];
+        $this->marques = [];
+        $this->collections = [];
+        $this->prixMin = null;
+        $this->prixMax = null;
     }
 }
