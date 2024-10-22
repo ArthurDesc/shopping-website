@@ -3,6 +3,7 @@ session_start();
 require_once "../includes/_db.php";
 require_once "../classe/Panier.php";
 require_once "../classe/Produit.php";
+require_once "../classe/Filtre.php";
 require_once "../functions/url.php";
 
 $panier = new Panier();
@@ -22,7 +23,73 @@ $marques = mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
 $collections_query = mysqli_query($conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
 $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 
+// Récupération des produits
+$filtre = new Filtre();
 
+// Appliquer les filtres en fonction des paramètres GET
+if (isset($_GET['categories'])) {
+    $filtre->setCategories($_GET['categories']);
+}
+if (isset($_GET['marques'])) {
+    $filtre->setMarques($_GET['marques']);
+}
+if (isset($_GET['collections'])) {
+    $filtre->setCollections($_GET['collections']);
+}
+if (isset($_GET['prix_min']) && isset($_GET['prix_max'])) {
+    $filtre->setPrixRange($_GET['prix_min'], $_GET['prix_max']);
+}
+
+// Récupération des produits
+$requete = $filtre->getRequeteSQL();
+$stmt = mysqli_prepare($conn, $requete['sql']);
+
+if (!empty($requete['params'])) {
+    $types = str_repeat('s', count($requete['params']));
+    mysqli_stmt_bind_param($stmt, $types, ...$requete['params']);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+$produits = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $produits[] = new Produit(
+        $row['id_produit'],
+        $row['nom'],
+        $row['prix'],
+        $row['image_url'],
+        $row['marque'],
+        $row['description'],
+        $row['stock'],
+        $row['tailles_disponibles']
+    );
+}
+
+// Récupération des catégories et sous-catégories
+$query_categories = "SELECT c1.id_categorie, c1.nom AS categorie_principale, c2.id_categorie AS id_sous_categorie, c2.nom AS sous_categorie
+          FROM categories c1
+          LEFT JOIN categories c2 ON c2.parent_id = c1.id_categorie
+          WHERE c1.parent_id IS NULL
+          ORDER BY c1.nom, c2.nom";
+
+$result_categories = mysqli_query($conn, $query_categories);
+
+$categories = array();
+while ($row = mysqli_fetch_assoc($result_categories)) {
+    if (!isset($categories[$row['id_categorie']])) {
+        $categories[$row['id_categorie']] = array(
+            'nom' => $row['categorie_principale'],
+            'sous_categories' => array()
+        );
+    }
+    if ($row['id_sous_categorie']) {
+        $categories[$row['id_categorie']]['sous_categories'][] = array(
+            'id' => $row['id_sous_categorie'],
+            'nom' => $row['sous_categorie']
+        );
+    }
+}
 
 if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     $id_produit = $_POST['id_produit'];
@@ -97,7 +164,7 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                                                name="categories[]" 
                                                value="<?php echo $category['id_categorie']; ?>" 
                                                class="mr-2"
-                                               <?php echo ($categorie_filter && $category['id_categorie'] == $categorie_filter) ? 'checked' : ''; ?>>
+                                               <?php echo ($filtre->hasCategory($category['id_categorie'])) ? 'checked' : ''; ?>>
                                         <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
                                     </div>
                                 <?php endforeach; ?>
@@ -122,7 +189,7 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                                                name="marques[]" 
                                                value="<?php echo htmlspecialchars($marque['marque']); ?>" 
                                                class="mr-2"
-                                               <?php echo ($marque_filter && strtolower($marque['marque']) == strtolower($marque_filter)) ? 'checked' : ''; ?>>
+                                               <?php echo ($filtre->hasMarque($marque['marque'])) ? 'checked' : ''; ?>>
                                         <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
                                     </div>
                                 <?php endforeach; ?>
@@ -147,7 +214,7 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                                                name="collections[]" 
                                                value="<?php echo htmlspecialchars($collection['collection']); ?>" 
                                                class="mr-2"
-                                               <?php echo ($collection_filter && strtolower($collection['collection']) == strtolower($collection_filter)) ? 'checked' : ''; ?>>
+                                               <?php echo ($filtre->hasCollection($collection['collection'])) ? 'checked' : ''; ?>>
                                         <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
                                     </div>
                                 <?php endforeach; ?>
@@ -185,16 +252,9 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 
 <section class="products_list">
     <?php 
-    $req = mysqli_query($conn, "SELECT p.*, GROUP_CONCAT(c.id_categorie) as categories 
-                                FROM produits p 
-                                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
-                                GROUP BY p.id_produit, p.nom, p.image_url, p.description, p.prix, p.stock, p.taille, p.marque, p.date_ajout, p.collection");
-    
-    if ($req->num_rows > 0) {
+    if (!empty($produits)) {
         echo '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mt-6">';
-        while ($row = mysqli_fetch_assoc($req)) { 
-            $produit = new Produit($row['id_produit'], $row['nom'], $row['prix'], $row['image_url'], $row['marque']);
+        foreach ($produits as $produit) {
             $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
             
             if (!file_exists($image_url) || empty($produit->getImageUrl())) {
@@ -202,14 +262,14 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
             }
     ?>
         <div class="bg-white rounded-lg shadow-md p-4" 
-             data-categories="<?php echo htmlspecialchars($row['categories']); ?>"
+             data-categories="<?php echo htmlspecialchars($row['categories'] ?? ''); ?>"
              data-collection="<?php echo htmlspecialchars($row['collection'] ?? ''); ?>"
              data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
             <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block">
                 <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="w-full h-48 object-cover mb-4">
                 <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
                 <p class="text-gray-600 mb-2"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
-                <p class="text-blue-600 font-bold"><?php echo number_format($produit->getPrix(), 2); ?> €</p>
+                <p class="text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
             </a>
             <div class="mt-2 flex justify-between items-center">
                 <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="text-blue-500 hover:underline">Voir détails</a>
@@ -341,16 +401,4 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
