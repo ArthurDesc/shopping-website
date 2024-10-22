@@ -185,16 +185,18 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
         <!-- Liste des produits à droite -->
         <div class="w-full md:w-3/4">
             <div class="flex flex-col mb-4 mt-4">
-                <h2 class="text-xl font-semibold mb-2">
-                    <span id="filterTitle">Tous les articles</span>
-                </h2>
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-semibold mb-2">
+                        <span id="filterTitle">Tous les articles</span>
+                    </h2>
+                    <!-- Bouton pour afficher les filtres en version mobile -->
+                    <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-3 py-1 text-sm rounded">
+                        Filtres
+                    </button>
+                </div>
                 <div id="activeFilters" class="flex flex-wrap gap-2 mb-2">
                     <!-- Les étiquettes seront ajoutées ici dynamiquement -->
                 </div>
-                <!-- Bouton pour afficher les filtres en version mobile -->
-                <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-4 py-2 text-sm rounded mt-2">
-                    Filtres
-                </button>
             </div>
 
             <section class="products_list">
@@ -261,5 +263,6 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 <script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 <script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
+<script src="<?php echo BASE_URL; ?>assets/js/filterToggle.js" defer></script>
 </body>
 </html>

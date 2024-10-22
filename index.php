@@ -41,7 +41,7 @@ include './includes/_header.php';
     
     <!-- Nouveau bouton d'ancrage -->
     <div class="absolute bottom-16 sm:bottom-12 md:bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-      <a href="#nouveautes" class="bg-white bg-opacity-80 text-blue-600 px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm md:text-base rounded-full shadow-md hover:bg-blue-600 hover:text-white transition duration-300 flex items-center space-x-2">
+      <a href="#nouveautes" class="bg-blue-600 bg-opacity-80 text-white px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm md:text-base rounded-full shadow-md hover:bg-blue-600 hover:text-white transition duration-300 flex items-center space-x-2">
         <span>Découvrir plus</span>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -62,7 +62,7 @@ include './includes/_header.php';
             <img src="<?php echo url('assets/images/' . strtolower($marque) . '.png'); ?>" alt="<?php echo $marque; ?>" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-105">
             <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
             <div class="absolute bottom-2 right-2 z-10">
-              <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-600 group-hover:text-white"><?php echo $marque; ?></button>
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600"><?php echo $marque; ?></button>
               </div>
             </a>
         </div>
@@ -77,7 +77,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Football</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Football</button>
           </div>
         </a>
       </div>
@@ -85,7 +85,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Basketball</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Basketball</button>
           </div>
         </a>
       </div>
@@ -93,7 +93,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Running</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Running</button>
           </div>
         </a>
       </div>
@@ -101,7 +101,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Handball</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Handball</button>
           </div>
         </a>
       </div>
@@ -109,7 +109,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Rugby</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Rugby</button>
           </div>
         </a>
       </div>
@@ -123,7 +123,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?collection=Homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/homme.jpg'); ?>" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Homme</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Homme</button>
           </div>
         </a>
       </div>
@@ -131,7 +131,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?collection=Femme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/femme.jpg'); ?>" alt="Femme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Femme</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Femme</button>
           </div>
         </a>
       </div>
@@ -139,7 +139,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?collection=Enfant'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/enfant.jpg'); ?>" alt="Enfant" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Enfant</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Enfant</button>
           </div>
         </a>
       </div>
@@ -153,7 +153,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?promotion=camp'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/camp.jpeg'); ?>" alt="Homme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
           </div>
         </a>
       </div>
@@ -161,7 +161,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?promotion=airmax-sunder'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/airmax-sunder.jpg'); ?>" alt="Femme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
           </div>
         </a>
       </div>
@@ -169,7 +169,7 @@ include './includes/_header.php';
         <a href="<?php echo url('pages/produit.php?promotion=kids'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/kids.jpg'); ?>" alt="Enfant" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-white text-blue-600 text-sm px-4 py-1 rounded-full transition duration-300 shadow-md hover:bg-blue-600 hover:text-white">Promotion</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-700 group-hover:text-white">Promotion</button>
           </div>
         </a>
       </div>
