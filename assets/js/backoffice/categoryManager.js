@@ -1,18 +1,25 @@
-const CategoryManager = (function(UIManager) {
+window.CategoryManager = (function() {
+    console.log("UIManager au début de categoryManager.js:", window.UIManager);
     function loadCategories() {
         console.log("Début de loadCategories()");
-        const categoriesContainer = document.getElementById('categories-container');
-        const categoriesList = document.getElementById('categories-list');
+        let categoriesContainer = document.getElementById('categories-container');
+        let categoriesList = document.getElementById('categories-list');
 
         if (!categoriesContainer) {
-            console.error("categoriesContainer non trouvé");
-            return;
+            console.log("L'élément 'categories-container' n'a pas été trouvé, création en cours...");
+            categoriesContainer = document.createElement('div');
+            categoriesContainer.id = 'categories-container';
+            document.querySelector('#tab-content').appendChild(categoriesContainer);
         }
 
         if (!categoriesList) {
-            console.error("categoriesList non trouvé");
-            return;
+            console.log("L'élément 'categories-list' n'a pas été trouvé, création en cours...");
+            categoriesList = document.createElement('ul');
+            categoriesList.id = 'categories-list';
+            categoriesContainer.appendChild(categoriesList);
         }
+
+        console.log("Éléments trouvés ou créés, tentative de mise à jour du contenu");
 
         categoriesContainer.innerHTML = `
             <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" class="w-full inline-flex items-center justify-between px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
@@ -41,15 +48,22 @@ const CategoryManager = (function(UIManager) {
             </div>
         `;
   
-        // Appeler setupDropdown immédiatement après avoir ajouté le HTML
-        UIManager.setupDropdown();
+        if (window.UIManager && typeof window.UIManager.setupDropdown === 'function') {
+            window.UIManager.setupDropdown();
+        } else {
+            console.warn("UIManager.setupDropdown n'est pas disponible");
+            // Implémentez ici une version par défaut de setupDropdown si nécessaire
+        }
 
         fetch('/shopping-website/admin/backofficeV2.php', {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log("Réponse reçue:", response);
+            return response.json();
+        })
         .then(categories => {
             console.log("Catégories reçues:", categories);
             categoriesList.innerHTML = ''; // Vider la liste existante
@@ -74,7 +88,37 @@ const CategoryManager = (function(UIManager) {
             });
 
             console.log("Fin du remplissage des catégories");
-            UIManager.setupCategorySearch();
+            if (window.UIManager) {
+                console.log("UIManager disponible :", true);
+                console.log("UIManager.setupCategorySearch disponible :", typeof window.UIManager.setupCategorySearch === 'function');
+                console.log("UIManager complet:", window.UIManager);
+                
+                if (typeof window.UIManager.setupCategorySearch === 'function') {
+                    console.log("Planification de l'appel à UIManager.setupCategorySearch");
+                    setTimeout(() => {
+                        console.log("Appel de UIManager.setupCategorySearch");
+                        window.UIManager.setupCategorySearch();
+                    }, 0);
+                } else {
+                    console.warn("UIManager.setupCategorySearch n'est pas disponible");
+                    console.log("Contenu de UIManager :", window.UIManager);
+                }
+            } else {
+                console.warn("UIManager n'est pas disponible");
+            }
+
+            console.log("UIManager.setupDropdown:", window.UIManager.setupDropdown);
+
+            if (window.UIManager && typeof window.UIManager.setupCategorySearch === 'function') {
+                console.log("Planification de l'appel à UIManager.setupCategorySearch");
+                setTimeout(() => {
+                    console.log("Appel de UIManager.setupCategorySearch");
+                    window.UIManager.setupCategorySearch();
+                }, 0);
+            } else {
+                console.warn("UIManager.setupCategorySearch n'est pas disponible");
+                console.log("Contenu de UIManager :", window.UIManager);
+            }
         })
         .catch(error => {
             console.error("Erreur lors du chargement des catégories:", error);
@@ -162,10 +206,10 @@ const CategoryManager = (function(UIManager) {
     }
 
     return {
-        init: init,
         loadCategories: loadCategories,
         addNewCategory: addNewCategory,
         deleteCategory: deleteCategory,
         addNewSubCategory: addNewSubCategory
     };
-})(UIManager);
+})();
+

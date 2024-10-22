@@ -168,3 +168,4 @@ include '../includes/_header.php';
 </main>
 
 <?php include '../includes/_footer.php'; // Ensure the correct file path and add a semicolon
+

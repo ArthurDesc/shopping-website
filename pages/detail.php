@@ -295,28 +295,35 @@ $review_count = $rating_summary['review_count'];
                     $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
                     ?>
                     <div class="mt-4 space-y-2">
-                        <form action="<?php echo BASE_URL; ?>pages/panier.php" method="post" id="product-form">
-                            <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                            <input type="hidden" name="action" value="ajouter">
-                            
-                            <select name="taille" class="w-full mb-2 p-2 border rounded" required>
-                                <option value="">Choisissez une taille</option>
-                                <?php foreach ($tailles_disponibles as $taille): ?>
-                                    <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            
-                            <div class="flex space-x-2">
-                                <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">Ajouter au panier</button>
-                                <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">Acheter maintenant</button>
-                            </div>
-                        </form>
+                        <!-- Check if product ID is set -->
+                        <?php if (!isset($produit['id_produit'])): ?>
+                            <p>Erreur : Aucun ID de produit fourni.</p>
+                        <?php else: ?>
+                            <form action="ajouter_panier.php" method="post" id="product-form">
+                                <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
+                                <input type="hidden" name="action" value="ajouter">
+                                <select name="taille" class="w-full mb-2 p-2 border rounded" required>
+                                    <option value="">Choisissez une taille</option>
+                                    <?php foreach ($tailles_disponibles as $taille): ?>
+                                        <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="flex space-x-2">
+                                    <button type="submit" name="ajouter_au_panier" class="flex-1 bg-gray-200 text-blue-600 font-semibold py-2 rounded">
+                                        Ajouter au panier
+                                    </button>
+                                    <button type="button" onclick="acheterMaintenant()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">
+                                        Acheter maintenant
+                                    </button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
                     </div>
 
-                    <script>
+                     <script>
                     function acheterMaintenant() {
                         var form = document.getElementById('product-form');
-                        form.action.value = 'acheter';
+                        form.action = 'process_paiement.php'; // Redirige vers la page de paiement
                         form.submit();
                     }
                     </script>
@@ -457,7 +464,7 @@ $review_count = $rating_summary['review_count'];
     </div>
 
     <?php if ($isEditMode): ?>
-        <script>
+        <script src="../assets/js/editMode.js">
             function updateField(field, newValue) {
                 fetch('/shopping-website/admin/update_article.php', {
                     method: 'POST',
@@ -515,52 +522,10 @@ $review_count = $rating_summary['review_count'];
 
     <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
     <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const starRating = document.getElementById('star-rating');
-        const stars = starRating.querySelectorAll('.star-icon');
-        const noteInput = document.getElementById('note-input');
-        const form = document.getElementById('avis-form');
+    <script src="<?php echo BASE_URL; ?>assets/js/detail.js" defer></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 
-        stars.forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = this.getAttribute('data-rating');
-                noteInput.value = rating;
-                highlightStars(rating);
-            });
-
-            star.addEventListener('mouseover', function() {
-                const rating = this.getAttribute('data-rating');
-                highlightStars(rating);
-            });
-
-            star.addEventListener('mouseout', function() {
-                const currentRating = noteInput.value || 0;
-                highlightStars(currentRating);
-            });
-        });
-
-        function highlightStars(rating) {
-            stars.forEach(star => {
-                const starRating = star.getAttribute('data-rating');
-                if (starRating <= rating) {
-                    star.classList.remove('text-gray-300');
-                    star.classList.add('text-yellow-400');
-                } else {
-                    star.classList.remove('text-yellow-400');
-                    star.classList.add('text-gray-300');
-                }
-            });
-        }
-
-        form.addEventListener('submit', function(e) {
-            if (!noteInput.value) {
-                e.preventDefault();
-                alert('Veuillez sélectionner une note avant de soumettre votre avis.');
-            }
-        });
-    });
-    </script>
+    
 </body>
 
 </html>
