@@ -165,15 +165,15 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                         </div>
                         <div x-show="openTab === 'categories'" x-collapse>
                             <div class="py-4 pl-4">
-                                <?php foreach ($categories as $category): ?>
+                                <?php foreach ($categories as $id_categorie => $category): ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="cat_<?php echo $category['id_categorie']; ?>" 
+                                               id="cat_<?php echo $id_categorie; ?>" 
                                                name="categories[]" 
-                                               value="<?php echo $category['id_categorie']; ?>" 
+                                               value="<?php echo $id_categorie; ?>" 
                                                class="mr-2"
-                                               <?php echo ($filtre->hasCategory($category['id_categorie'])) ? 'checked' : ''; ?>>
-                                        <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
+                                               <?php echo ($filtre->hasCategory($id_categorie)) ? 'checked' : ''; ?>>
+                                        <label for="cat_<?php echo $id_categorie; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
                                     </div>
                                     <?php if (!empty($category['sous_categories'])): ?>
                                         <?php foreach ($category['sous_categories'] as $sous_categorie): ?>
