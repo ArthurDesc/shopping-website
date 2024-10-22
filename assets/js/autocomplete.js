@@ -1,79 +1,61 @@
+// assets/js/autocomplete.js
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const autocompleteResults = document.getElementById('autocomplete-results');
 
     if (!searchInput || !autocompleteResults) {
-        console.error('Éléments de recherche manquants');
-        return;
+        console.error('Éléments de recherche manquants:', { searchInput, autocompleteResults });
+        return; // Arrêter l'exécution si les éléments n'existent pas
     }
 
-    searchInput.addEventListener('input', debounce(function() {
-        const query = this.value ? this.value.trim() : ''; // Vérification ajoutée
-        if (query.length >= 2) {
-            fetchAutocompleteResults(query);
-        } else {
-            hideAutocompleteResults();
-        }
-    }, 300));
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
 
-    function fetchAutocompleteResults(query) {
+        if (query.length < 2) {
+            autocompleteResults.innerHTML = ''; // Réinitialiser les résultats
+            autocompleteResults.classList.add('hidden'); // Cacher les résultats
+            return;
+        }
+
         fetch(`${BASE_URL}includes/autocomplete.php?q=${encodeURIComponent(query)}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Erreur réseau');
+                    throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                displayAutocompleteResults(data);
+                autocompleteResults.innerHTML = ''; // Réinitialiser les résultats
+                autocompleteResults.classList.remove('hidden'); // Afficher les résultats
+
+                if (data.length > 0) {
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item.nom; // Assurez-vous que 'nom' est la clé correcte
+                        div.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
+
+                        div.addEventListener('click', function() {
+                            searchInput.value = item.nom; // Remplir le champ de recherche
+                            autocompleteResults.classList.add('hidden'); // Cacher les résultats
+                            // Optionnel : soumettre le formulaire de recherche
+                            document.querySelector('form').submit();
+                        });
+
+                        autocompleteResults.appendChild(div); // Ajouter le résultat à la liste
+                    });
+                } else {
+                    autocompleteResults.classList.add('hidden'); // Cacher si aucune suggestion
+                }
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération des résultats:', error);
-                hideAutocompleteResults();
+                autocompleteResults.classList.add('hidden'); // Cacher les résultats en cas d'erreur
             });
-    }
+    });
 
-    function displayAutocompleteResults(results) {
-        autocompleteResults.innerHTML = '';
-        if (results.length > 0) {
-            results.forEach(result => {
-                const li = document.createElement('li');
-                li.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
-                li.textContent = result.nom;
-                li.addEventListener('click', () => {
-                    searchInput.value = result.nom;
-                    hideAutocompleteResults();
-                    // Optionnel : rediriger vers la page du produit
-                    // window.location.href = `${BASE_URL}pages/detail.php?id=${result.id_produit}`;
-                });
-                autocompleteResults.appendChild(li);
-            });
-            showAutocompleteResults();
-        } else {
-            hideAutocompleteResults();
-        }
-    }
-
-    function showAutocompleteResults() {
-        autocompleteResults.classList.remove('hidden');
-    }
-
-    function hideAutocompleteResults() {
-        autocompleteResults.classList.add('hidden');
-    }
-
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
-    // Fermer les résultats d'autocomplétion lors d'un clic en dehors
-    document.addEventListener('click', function(e) {
-        if (!searchInput.contains(e.target) && !autocompleteResults.contains(e.target)) {
-            hideAutocompleteResults();
+    document.addEventListener('click', function(event) {
+        if (!searchInput.contains(event.target) && !autocompleteResults.contains(event.target)) {
+            autocompleteResults.classList.add('hidden'); // Cacher les résultats
         }
     });
 });

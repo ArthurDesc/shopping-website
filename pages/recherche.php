@@ -17,6 +17,13 @@ $image_base_path = '../assets/images/produits/';
     <div class="mt-6 flex justify-between items-center">
         <h2 class="text-xl font-semibold">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
     </div>
+    
+    <!-- Champ de recherche avec autocomplétion -->
+    <div class="relative">
+        <input type="text" id="search-input" class="w-full px-4 py-2 border rounded" placeholder="Rechercher..." value="<?php echo htmlspecialchars($search); ?>" />
+        <div id="autocomplete-results" class="absolute left-0 right-0 top-full bg-white border border-gray-300 rounded-b-lg shadow-lg z-10 hidden"></div>
+    </div>
+
     <section class="products_list">
         <?php 
         if ($result->num_rows > 0) {

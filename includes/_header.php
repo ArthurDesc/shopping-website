@@ -341,6 +341,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <!-- Assurez-vous que BASE_URL est correctement défini -->
 <script>
 const BASE_URL = '<?php echo BASE_URL; ?>';
+const AUTOCOMPLETE_URL = '<?php echo BASE_URL; ?>includes/autocomplete.php';
 </script>
 
 <!-- Vérifiez que les chemins vers les fichiers sont corrects -->
