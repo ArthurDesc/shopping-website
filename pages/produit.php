@@ -218,24 +218,27 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                     </div>
 
                     <!-- Marques -->
-                    <div class="border-b">
-                        <div @click="openTab = openTab === 'marques' ? null : 'marques'" class="flex items-center justify-between cursor-pointer py-4">
+                    <div id="marques-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="marques-toggle">
                             <span class="font-semibold text-gray-600">Marques</span>
-                            <svg :class="{'rotate-180': openTab === 'marques'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'marques'" x-collapse>
-                            <div class="py-4 pl-4">
+                        <div id="marques-content" class="py-2 pl-4" style="display: none;">
+                            <div class="search__container mb-6">
+                                <input class="search__input" type="text" id="marques-search" placeholder="Filtrer">
+                            </div>
+                            <div id="marques-list">
                                 <?php foreach ($marques as $marque): ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                               id="marque_<?= htmlspecialchars($marque['marque']) ?>" 
                                                name="marques[]" 
-                                               value="<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                               value="<?= htmlspecialchars($marque['marque']) ?>" 
                                                class="mr-2"
-                                               <?php echo ($filtre->hasMarque($marque['marque'])) ? 'checked' : ''; ?>>
-                                        <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
+                                               <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
+                                        <label for="marque_<?= htmlspecialchars($marque['marque']) ?>"><?= htmlspecialchars($marque['marque']) ?></label>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -491,8 +494,40 @@ document.addEventListener('DOMContentLoaded', function() {
             category.style.display = shouldShow ? 'block' : 'none';
         });
     });
+
+    // Nouvelle partie pour les marques
+    const marquesFilter = document.getElementById('marques-filter');
+    const marquesToggle = document.getElementById('marques-toggle');
+    const marquesContent = document.getElementById('marques-content');
+    const marquesSearch = document.getElementById('marques-search');
+    const marquesList = document.getElementById('marques-list');
+
+    // Toggle du dropdown des marques
+    marquesToggle.addEventListener('click', function() {
+        if (marquesContent.style.display === 'none' || marquesContent.style.display === '') {
+            marquesContent.style.display = 'block';
+            marquesToggle.querySelector('svg').classList.add('rotate-180');
+        } else {
+            marquesContent.style.display = 'none';
+            marquesToggle.querySelector('svg').classList.remove('rotate-180');
+        }
+    });
+
+    // Fonction de recherche pour les marques
+    marquesSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const marques = marquesList.querySelectorAll('.flex');
+
+        marques.forEach(marque => {
+            const marqueName = marque.querySelector('label').textContent.toLowerCase();
+            if (marqueName.includes(searchTerm)) {
+                marque.style.display = 'flex';
+            } else {
+                marque.style.display = 'none';
+            }
+        });
+    });
 });
 </script>
 </body>
 </html>
-
