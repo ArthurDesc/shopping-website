@@ -63,7 +63,9 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['marque'],
         $row['description'],
         $row['stock'],
-        $row['tailles_disponibles']
+        $row['tailles_disponibles'],
+        [],  // catégories, à remplir plus tard
+        $row['collection']  // ajoutez cette ligne
     );
     
     // Récupérer les catégories pour ce produit
@@ -228,15 +230,18 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                         </div>
                         <div x-show="openTab === 'collections'" x-collapse>
                             <div class="py-4 pl-4">
-                                <?php foreach ($collections as $collection): ?>
+                                <?php
+                                $staticCollections = ['Homme', 'Femme', 'Enfant'];
+                                foreach ($staticCollections as $collection): 
+                                ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               id="collection_<?php echo htmlspecialchars($collection); ?>" 
                                                name="collections[]" 
-                                               value="<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               value="<?php echo htmlspecialchars($collection); ?>" 
                                                class="mr-2"
-                                               <?php echo ($filtre->hasCollection($collection['collection'])) ? 'checked' : ''; ?>>
-                                        <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
+                                               <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
+                                        <label for="collection_<?php echo htmlspecialchars($collection); ?>"><?php echo htmlspecialchars($collection); ?></label>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
