@@ -180,13 +180,10 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div id="categories-content" class="py-4 pl-4" style="display: none;">
-                            <input 
-                                type="text" 
-                                id="categories-search"
-                                placeholder="Rechercher une catégorie" 
-                                class="w-full px-3 py-2 border rounded-md mb-4"
-                            >
+                        <div id="categories-content" class="py-2 pl-4" style="display: none;">
+                            <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
+                                <input class="search__input" type="text" id="categories-search" placeholder="Filtrer">
+                            </div>
                             <div id="categories-list">
                                 <?php foreach ($categories as $id => $category): ?>
                                     <div class="mb-2">
@@ -498,3 +495,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
