@@ -250,94 +250,100 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 <script src="<?php echo BASE_URL; ?>assets/js/filterToggle.js" defer></script>
 
 <!-- Modal pour choisir la taille -->
-<div id="sizeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3 text-center">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Choisissez une taille</h3>
-            <div class="mt-2 px-7 py-3">
-                <select id="productSize" class="w-full px-3 py-2 border rounded-md">
-                    <!-- Les options seront ajoutées dynamiquement -->
-                </select>
-            </div>
-            <div class="items-center px-4 py-3">
-                <button id="addToCartBtn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    Ajouter au panier
-                </button>
-            </div>
-        </div>
+<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex">
+  <div class="modal-background relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg">
+    <div class="modal">
+      <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
+      <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
+        <!-- Les options seront ajoutées dynamiquement -->
+      </select>
+      <button id="addToCartBtn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+        Ajouter au panier
+      </button>
     </div>
+  </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('sizeModal');
-    const sizeSelect = document.getElementById('productSize');
-    const addToCartBtn = document.getElementById('addToCartBtn');
+$(document).ready(function() {
     let currentProductId = null;
 
     // Ouvrir le modal
-    document.querySelectorAll('.open-modal-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            currentProductId = this.getAttribute('data-product-id');
-            // Ici, vous devriez charger les tailles disponibles pour ce produit
-            // Pour cet exemple, nous utiliserons des tailles statiques
-            sizeSelect.innerHTML = `
-                <option value="">Choisissez une taille</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-            `;
-            modal.classList.remove('hidden');
-        });
+    $('.open-modal-btn').click(function(){
+        currentProductId = $(this).data('product-id');
+        // Charger les tailles disponibles pour ce produit
+        $('#productSize').html(`
+            <option value="">Choisissez une taille</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+        `);
+        $('#modal-container').removeClass('out').addClass('five');
+        $('body').addClass('modal-active');
     });
 
-    // Fermer le modal en cliquant en dehors
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
+    // Fermer le modal
+    $('#modal-container').click(function(e){
+        if ($(e.target).is('#modal-container')) {
+            closeModal();
         }
     });
 
+    function closeModal() {
+        $('#modal-container').removeClass('five').addClass('out');
+        setTimeout(function() {
+            $('#modal-container').removeClass('out');
+            $('body').removeClass('modal-active');
+        }, 500);
+    }
+
     // Ajouter au panier
-    addToCartBtn.addEventListener('click', function() {
-        const selectedSize = sizeSelect.value;
+    $('#addToCartBtn').click(function() {
+        const selectedSize = $('#productSize').val();
         if (!selectedSize) {
             alert('Veuillez choisir une taille');
             return;
         }
 
         // Envoyer la requête AJAX pour ajouter au panier
-        fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+        $.ajax({
+            url: '<?php echo BASE_URL; ?>ajax/add_to_cart.php',
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+            data: {
+                id_produit: currentProductId,
+                taille: selectedSize,
+                quantite: 1
             },
-            body: `id_produit=${currentProductId}&taille=${selectedSize}&quantite=1`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                modal.classList.add('hidden');
-                // Mettre à jour le compteur du panier si nécessaire
-                updateCartCount(data.cartCount);
-            } else {
-                alert('Erreur : ' + data.message);
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    closeModal();
+                    // Mettre à jour le compteur du panier si nécessaire
+                    updateCartCount(data.cartCount);
+                } else {
+                    alert('Erreur : ' + data.message);
+                }
+            },
+            error: function() {
+                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
             }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
         });
     });
 
     function updateCartCount(count) {
-        const cartCountElement = document.getElementById('cart-count');
-        if (cartCountElement) {
-            cartCountElement.textContent = count;
+        const cartCountElement = $('#cart-count');
+        if (cartCountElement.length) {
+            cartCountElement.text(count);
         }
     }
 });
 </script>
 </body>
 </html>
+
+
+
+
+
+
