@@ -1,20 +1,11 @@
 <?php 
 session_start();
-$collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
-$categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
-$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null;
+require_once "../includes/_db.php";
+require_once "../classe/Panier.php";
+require_once "../classe/Produit.php";
+require_once "../functions/url.php";
 
-if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-}
-
-// Connexion à la base de données
-require_once "../includes/_db.php"; 
- 
-// Initialiser la session panier si elle n'existe pas
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = array();
-}
+$panier = new Panier();
 
 // Définir le chemin de base pour les images des produits
 $image_base_path = '../assets/images/produits/';
@@ -31,22 +22,11 @@ $marques = mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
 $collections_query = mysqli_query($conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
 $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 
-// Ajoutez cette fonction pour gérer l'ajout au panier
-function ajouterAuPanier($id_produit) {
-    if (!isset($_SESSION['panier'])) {
-        $_SESSION['panier'] = [];
-    }
-    if (isset($_SESSION['panier'][$id_produit])) {
-        $_SESSION['panier'][$id_produit]++;
-    } else {
-        $_SESSION['panier'][$id_produit] = 1;
-    }
-}
 
-// Vérifiez si un produit a été ajouté au panier
+
 if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     $id_produit = $_POST['id_produit'];
-    ajouterAuPanier($id_produit);
+    $panier->ajouter($id_produit);
     // Redirigez vers la même page pour éviter les soumissions multiples
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
@@ -57,7 +37,7 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 // Récupérer les paramètres de l'URL
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
-
+$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cette ligne
 ?>
 <style>
     .filter-dropdown {
@@ -197,55 +177,54 @@ $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
                 </button>
             </div>
 
-            <section class="products_list">
-                <?php 
-                // Requête pour récupérer tous les produits avec leurs catégories
-                $req = mysqli_query($conn, "SELECT p.*, GROUP_CONCAT(c.id_categorie) as categories 
-                                            FROM produits p 
-                                            LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                                            LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
-                                            GROUP BY p.id_produit, p.nom, p.image_url, p.description, p.prix, p.stock, p.taille, p.marque, p.date_ajout, p.collection");
-                
-                if ($req->num_rows > 0) {
-                    echo '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mt-6">';
-                    while ($row = mysqli_fetch_assoc($req)) { 
-                        // Construire le chemin de l'image
-                        $image_url = $image_base_path . ($row['image_url'] ?? 'default_product.jpg');
-                        
-                        // Vérifier si l'image existe, sinon utiliser l'image par défaut
-                        if (!file_exists($image_url) || empty($row['image_url'])) {
-                            $image_url = $image_base_path . 'default_product.jpg';
-                        }
-                ?>
-                    <div class="bg-white rounded-lg shadow-md p-4" 
-                         data-categories="<?php echo htmlspecialchars(implode(',', explode(',', $row['categories']))); ?>"
-                         data-collection="<?php echo htmlspecialchars($row['collection'] ?? ''); ?>"
-                         data-brand="<?php echo htmlspecialchars($row['marque'] ?? ''); ?>">
-                        <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block">
-                            <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="w-full h-48 object-cover mb-4">
-                            <?php echo "<!-- Debug: Image path: $image_url -->"; ?>
-                            <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($row['nom']); ?></h3>
-                            <p class="text-gray-600 mb-2"><?php echo htmlspecialchars($row['marque']); ?></p>
-                            <p class="text-blue-600 font-bold"><?php echo number_format($row['prix'], 2); ?> €</p>
-                        </a>
-                        <div class="mt-2 flex justify-between items-center">
-                            <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="text-blue-500 hover:underline">Voir détails</a>
-                            <form method="post" action="">
-                                <input type="hidden" name="id_produit" value="<?php echo $row['id_produit']; ?>">
-                                <button type="submit" name="ajouter_au_panier" class="add-to-cart">
-                                    <img src="<?php echo BASE_URL; ?>assets/images/addCart.png" alt="Ajouter au panier" class="w-6 h-6">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                <?php 
-                    }
-                    echo '</div>';
-                } else {
-                    echo "<p>Aucun produit disponible.</p>";
-                }
-                ?>
-            </section>
+
+<section class="products_list">
+    <?php 
+    $req = mysqli_query($conn, "SELECT p.*, GROUP_CONCAT(c.id_categorie) as categories 
+                                FROM produits p 
+                                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
+                                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
+                                GROUP BY p.id_produit, p.nom, p.image_url, p.description, p.prix, p.stock, p.taille, p.marque, p.date_ajout, p.collection");
+    
+    if ($req->num_rows > 0) {
+        echo '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mt-6">';
+        while ($row = mysqli_fetch_assoc($req)) { 
+            $produit = new Produit($row['id_produit'], $row['nom'], $row['prix'], $row['image_url'], $row['marque']);
+            $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
+            
+            if (!file_exists($image_url) || empty($produit->getImageUrl())) {
+                $image_url = $image_base_path . 'default_product.jpg';
+            }
+    ?>
+        <div class="bg-white rounded-lg shadow-md p-4" 
+             data-categories="<?php echo htmlspecialchars($row['categories']); ?>"
+             data-collection="<?php echo htmlspecialchars($row['collection'] ?? ''); ?>"
+             data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
+            <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block">
+                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="w-full h-48 object-cover mb-4">
+                <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
+                <p class="text-gray-600 mb-2"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
+                <p class="text-blue-600 font-bold"><?php echo number_format($produit->getPrix(), 2); ?> €</p>
+            </a>
+            <div class="mt-2 flex justify-between items-center">
+                <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="text-blue-500 hover:underline">Voir détails</a>
+                <form method="post" action="">
+                    <input type="hidden" name="id_produit" value="<?php echo $produit->getId(); ?>">
+                    <button type="submit" name="ajouter_au_panier" class="add-to-cart">
+                        <img src="<?php echo url('assets/images/addCart.png'); ?>" alt="Ajouter au panier" class="w-6 h-6">
+                    </button>
+                </form>
+            </div>
+        </div>
+    <?php 
+        }
+        echo '</div>';
+    } else {
+        echo "<p>Aucun produit disponible.</p>";
+    }
+    ?>
+</section>
+
         </div>
     </div>
 </div>
