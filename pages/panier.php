@@ -2,6 +2,9 @@
 ob_start(); // Démarre la mise en mémoire tampon de sortie
 session_start();
 include_once "../includes/_db.php";
+require_once "../classe/Panier.php";
+
+$panier = new Panier();
 
 // Traitement de la mise à jour de la quantité
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
@@ -9,39 +12,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isse
     
     // Vérifier l'action (augmentation ou diminution)
     if ($_POST['action'] === 'increase') {
-        $_SESSION['panier'][$id_update] = isset($_SESSION['panier'][$id_update]) ? $_SESSION['panier'][$id_update] + 1 : 1;
+        $panier->augmenterQuantite($id_update);
     } elseif ($_POST['action'] === 'decrease') {
-        if (isset($_SESSION['panier'][$id_update]) && $_SESSION['panier'][$id_update] > 1) {
-            $_SESSION['panier'][$id_update]--;
-        } else {
-            unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité devient 0
-        }
+        $panier->diminuerQuantite($id_update);
     }
     header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
     exit(); // Terminer le script après la redirection
 }
 
-// Initialiser le panier si ce n'est pas déjà fait
-if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {
-    $_SESSION['panier'] = []; // Initialisation du panier comme tableau vide
-}
-
-// Supprimer les produits si la variable 'del' existe
+// Supprimer les produits
 if (isset($_GET['del'])) {
     $id_del = $_GET['del'];
-    unset($_SESSION['panier'][$id_del]);
+    $panier->retirerProduit($id_del);
 }
 
-// Mettre à jour la quantité du produit si le formulaire est soumis
+// Mettre à jour la quantité du produit
 if (isset($_POST['update'])) {
     $id_update = $_POST['id_produit'];
     $quantity = $_POST['quantite'];
     
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
-        $_SESSION['panier'][$id_update] = intval($quantity);
+        $panier->mettreAJourQuantite($id_update, intval($quantity));
     } else {
-        unset($_SESSION['panier'][$id_update]); // Retirer le produit si la quantité n'est pas valide
+        $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
     }
 }
 
@@ -68,9 +62,9 @@ include '../includes/_header.php';
                     <tbody>
                         <?php 
                         $total = 0;
-                        $ids = array_keys($_SESSION['panier']);
+                        $contenuPanier = $panier->getContenu();
 
-                        if (empty($ids)) {
+                        if (empty($contenuPanier)) {
                             // Si le panier est vide, afficher un message approprié
                             echo '<tr><td colspan="5">';
                             echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; 
@@ -85,51 +79,63 @@ include '../includes/_header.php';
                             echo '</td></tr>';
                         } else {
                             // Récupérer les produits dans le panier
-                            $products = mysqli_query($conn, "SELECT * FROM produits WHERE id_produit IN (".implode(',', $ids).")");
+                            $ids = array_map(function($key) {
+                                return explode('_', $key)[0]; // Prend seulement l'ID du produit, pas la taille
+                            }, array_keys($contenuPanier));
+                            $ids = array_unique($ids); // Supprime les doublons potentiels
+        
+                            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+                            $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            
+                            while ($product = $result->fetch_assoc()) {
+                                // Pour chaque produit, cherchez toutes les variantes (tailles) dans le panier
+                                foreach ($contenuPanier as $key => $quantity) {
+                                    list($id, $taille) = explode('_', $key . '_'); // Ajoute un '_' pour gérer les cas sans taille
+                                    if ($id == $product['id_produit']) {
+                                        $product_total = $product['prix'] * intval($quantity);
+                                        $total += $product_total;
 
-                            foreach ($products as $product) {
-                                // Quantité du produit dans le panier
-                                $quantity = $_SESSION['panier'][$product['id_produit']];
-                                $product_total = $product['prix'] * intval($quantity);
-                                $total += $product_total;
+                                        // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
+                                        $img = $product['image_url'] ?? '';
+                                        $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
 
-                                // Utilisation de 'htmlspecialchars()' avec vérification des valeurs nulles
-                                $img = $product['image_url'] ?? '';
-                                $nom = htmlspecialchars($product['nom'] ?? '', ENT_QUOTES, 'UTF-8');
-
-                                // Vérifier si l'URL de l'image est un tableau ou une chaîne de caractères
-                                if (is_array($img)) {
-                                    // Si c'est un tableau, prendre la première image
-                                    $img = htmlspecialchars($img[0] ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
-                                } else {
-                                    // Si c'est une chaîne, la traiter normalement
-                                    $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
+                                        // Vérifier si l'URL de l'image est un tableau ou une chaîne de caractères
+                                        if (is_array($img)) {
+                                            $img = htmlspecialchars($img[0] ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
+                                        } else {
+                                            $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
+                                        }
+                                        ?>
+                                        <tr class="hover:bg-blue-100 transition duration-200">
+                                            <td class="p-2">
+                                                <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover rounded">
+                                            </td>
+                                            <td class="p-2"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></td>
+                                            <td class="p-2"><?= number_format($product['prix'], 2); ?>€</td>
+                                            <td class="p-2">
+                                                <form method="post" action="">
+                                                    <input type="hidden" name="id_produit" value="<?= $key ?>">
+                                                    <div class="flex items-center">
+                                                        <button type="submit" name="action" value="decrease" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-l">-</button>
+                                                        <span class="mx-2"><?= $quantity ?></span>
+                                                        <button type="submit" name="action" value="increase" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-r">+</button>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                            <td class="p-2">
+                                                <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 transition duration-200">
+                                                    <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="30" height="30">
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php 
+                                    }
                                 }
-                                ?>
-                                <tr class="hover:bg-blue-100 transition duration-200">
-                                    <td class="p-2">
-                                        <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-20 h-20 object-cover rounded">
-                                    </td>
-                                    <td class="p-2"><?= $nom ?></td>
-                                    <td class="p-2"><?= number_format($product['prix'], 2); ?>€</td>
-                                    <td class="p-2">
-                                        <form method="post" action="">
-                                            <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
-                                            <div class="flex items-center">
-                                                <button type="submit" name="action" value="decrease" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-l">-</button>
-                                                <span class="mx-2"><?= $quantity ?></span>
-                                                <button type="submit" name="action" value="increase" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded-r">+</button>
-                                            </div>
-                                        </form>
-                                    </td>
-                                    <td class="p-2">
-                                        <a href="panier.php?del=<?= $product['id_produit']; ?>" class="text-red-500 hover:text-red-700 transition duration-200">
-                                            <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="30" height="30">
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php 
-                            } // End of foreach
+                            }
                         } // End of else
                         ?>
                     </tbody>
