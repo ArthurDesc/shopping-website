@@ -1,7 +1,7 @@
-<?php 
+<?php
 ob_start(); // Démarre la mise en mémoire tampon de sortie
-session_start();
 include_once "../includes/_db.php";
+require_once "../includes/session.php";
 require_once "../classe/Panier.php";
 
 $panier = new Panier();
@@ -9,7 +9,7 @@ $panier = new Panier();
 // Traitement de la mise à jour de la quantité
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
     $id_update = $_POST['id_produit'];
-    
+
     // Vérifier l'action (augmentation ou diminution)
     if ($_POST['action'] === 'increase') {
         $panier->augmenterQuantite($id_update);
@@ -30,7 +30,7 @@ if (isset($_GET['del'])) {
 if (isset($_POST['update'])) {
     $id_update = $_POST['id_produit'];
     $quantity = $_POST['quantite'];
-    
+
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
         $panier->mettreAJourQuantite($id_update, intval($quantity));
@@ -43,27 +43,31 @@ if (isset($_POST['update'])) {
 include '../includes/_header.php';
 ?>
 
-<main class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-6">Votre Panier</h1>
+
+
+<main class="flex-grow container mx-auto px-4 py-8 mt-16"> 
+    <?php 
+    $total = 0;
+    $contenuPanier = $panier->getContenu();
+    ?>
     <div class="flex flex-col lg:flex-row lg:space-x-8">
         <!-- Liste des produits -->
-        <div class="w-full lg:w-2/3 mb-8 lg:mb-0">
-            <?php 
-            $total = 0;
-            $contenuPanier = $panier->getContenu();
-
+        <div class="w-full <?= !empty($contenuPanier) ? 'lg:w-2/3' : '' ?> mb-8 lg:mb-0">
+            <?php
             if (empty($contenuPanier)) {
-                echo '<div class="text-center p-6 bg-gray-100 rounded-lg shadow-md">'; 
-                echo '<h2 class="text-2xl font-bold mb-4 text-red-600">Panier vide !</h2>'; 
-                echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">'; 
-                echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>'; 
-                echo '<div class="flex flex-col space-y-4">'; 
-                echo '<a href="produit.php" class="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-200">Continuer vos achats</a>'; 
-                echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline inline-block">Connectez-vous pour récupérer votre panier</a>'; 
+                echo '<div class="text-center p-6">';
+                echo '<h2 class="text-2xl font-bold mb-4 text-blue-400">Panier vide !</h2>';
+                echo '<img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">';
+                echo '<p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>';
+                echo '<div class="flex flex-col items-center space-y-4">';
+                echo '<a href="produit.php" class="btn btn-small">Continuer vos achats</a>'; // Ajout de la classe btn-small
+                if (!isset($_SESSION['id_utilisateur'])) {
+                    echo '<a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline">Connectez-vous pour récupérer votre panier</a>';
+                }
                 echo '</div>';
                 echo '</div>';
             } else {
-                $ids = array_map(function($key) {
+                $ids = array_map(function ($key) {
                     return explode('_', $key)[0];
                 }, array_keys($contenuPanier));
                 $ids = array_unique($ids);
@@ -74,7 +78,7 @@ include '../includes/_header.php';
                 $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                
+
                 while ($product = $result->fetch_assoc()) {
                     foreach ($contenuPanier as $key => $quantity) {
                         list($id, $taille) = explode('_', $key . '_');
@@ -90,7 +94,7 @@ include '../includes/_header.php';
                             } else {
                                 $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
                             }
-                            ?>
+            ?>
                             <div class="flex items-center border-b border-gray-200 py-4">
                                 <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
                                 <div class="flex-grow">
@@ -104,17 +108,20 @@ include '../includes/_header.php';
                                     </form>
                                 </div>
                                 <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
-                                    <img src="../assets/images/supprimer-removebg-preview.png" alt="Supprimer" width="24" height="24">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
                                 </a>
                             </div>
-                            <?php 
+            <?php
                         }
                     }
                 }
             }
             ?>
         </div>
-        
+
+        <?php if (!empty($contenuPanier)): ?>
         <!-- Résumé du panier -->
         <div class="w-full lg:w-1/3">
             <div class="bg-gray-50 rounded-lg shadow-lg p-6">
@@ -124,15 +131,57 @@ include '../includes/_header.php';
                     <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
                 </div>
                 <div class="flex flex-col space-y-2">
-                    <a href="process_paiement.php" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-200 text-center <?= empty($contenuPanier) ? 'opacity-50 cursor-not-allowed' : '' ?>" <?= empty($contenuPanier) ? 'onclick="return false;"' : '' ?>>Payer</a>
-                    <a href="produit.php" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-200 text-center">Continuer vos achats</a>
-                    <?php if (!isset($_SESSION['id_utilisateur'])) { 
-                        echo '<a href="auth.php" class="text-blue-600 underline text-sm text-center">Se connecter pour récupérer votre panier</a>';
-                    } ?>
+                    <a href="process_paiement.php" class="button button-green">
+                        Procéder au paiement
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                        </svg>
+                    </a>
+                    <a href="produit.php" class="button">
+                        Continuer vos achats
+                        
+                    </a>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </main>
 
+<!-- Ajout d'un espace supplémentaire avant le footer -->
+<div class="mt-20"></div>
+
 <?php include '../includes/_footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.learn-more');
+    buttons.forEach(button => {
+        const textWidth = button.querySelector('.button-text').offsetWidth;
+        button.style.width = `${textWidth + 60}px`; // 60px pour le cercle et un peu d'espace
+    });
+});
+</script>
+
+<style>
+    .glow-button {
+        position: relative;
+        overflow: hidden;
+    }
+    .glow-button::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 80%);
+        transform: translate(
+            calc(var(--mouse-x, 0) - 50%),
+            calc(var(--mouse-y, 0) - 50%)
+        );
+    }
+</style>
+
+
+

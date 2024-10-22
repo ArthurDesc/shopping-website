@@ -61,7 +61,10 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 </style>
 <?php require_once '../includes/_header.php'; ?>
 
-<div class="container mx-auto px-4">
+<!-- Ajoutez cette div pour créer l'espace supplémentaire -->
+<div class="mt-16"></div> <!-- Vous pouvez ajuster la valeur (16) selon vos besoins -->
+
+<main class="container mx-auto px-4">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
         <div id="filterForm" x-data="{ openTab: null }" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto overflow-y-auto">
@@ -229,7 +232,8 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 
         </div>
     </div>
-</div>
+</main>
+
 <?php include '../includes/_footer.php'; ?>
 
 <!-- Scripts -->
