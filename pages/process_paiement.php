@@ -68,6 +68,26 @@ try {
     // Gestion des autres erreurs
     echo 'Erreur générale : ' . $e->getMessage();
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $paymentMethodId = $_POST['paymentMethodId'];
+
+    try {
+        // Créer un PaymentIntent
+        $paymentIntent = \Stripe\PaymentIntent::create([
+            'amount' => $total_amount, // Assurez-vous que $total_amount est correctement calculé
+            'currency' => 'eur',
+            'payment_method' => $paymentMethodId,
+            'confirmation_method' => 'manual',
+            'confirm' => true,
+        ]);
+
+        echo json_encode(['message' => 'Paiement réussi !']);
+    } catch (\Stripe\Exception\ApiErrorException $e) {
+        echo json_encode(['message' => 'Erreur : ' . $e->getMessage()]);
+    }
+    exit;
+}
 ?><!DOCTYPE html>
 <html lang="en">
 <head>

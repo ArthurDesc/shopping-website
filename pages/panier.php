@@ -84,9 +84,20 @@ include '../includes/_header.php';
                             echo '</div>';
                             echo '</td></tr>';
                         } else {
-                            // Récupérer les produits dans le panier
-                            $products = mysqli_query($conn, "SELECT * FROM produits WHERE id_produit IN (".implode(',', $ids).")");
+                            // Utiliser des points d'interrogation pour les valeurs dynamiques
+                            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+                            $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
+                            $stmt = $conn->prepare($sql);
 
+                            // Lier les paramètres
+                            $types = str_repeat('i', count($ids)); // 'i' pour integer
+                            $stmt->bind_param($types, ...$ids);
+
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $products = $result->fetch_all(MYSQLI_ASSOC);
+
+                            // Traitement des produits
                             foreach ($products as $product) {
                                 // Quantité du produit dans le panier
                                 $quantity = $_SESSION['panier'][$product['id_produit']];
@@ -165,7 +176,51 @@ include '../includes/_header.php';
     
     <script src="../assets/js/scripts.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </main>
+
+<form id="payment-form">
+    <div id="card-element">
+        <!-- Stripe Elements will create input elements here -->
+    </div>
+    <button id="submit">Payer</button>
+    <div id="payment-result"></div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O'); // Remplacez par votre clé publique Stripe
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+        });
+
+        if (error) {
+            document.getElementById('payment-result').innerText = error.message;
+        } else {
+            // Envoyer le paymentMethod.id à votre serveur pour le traitement
+            const formData = new FormData();
+            formData.append('paymentMethodId', paymentMethod.id);
+
+            const response = await fetch('process_paiement.php', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            document.getElementById('payment-result').innerText = result.message;
+        }
+    });
+});
+</script>
 
 <?php include '../includes/_footer.php'; // Ensure the correct file path and add a semicolon
 
