@@ -112,6 +112,17 @@ class CategoryManager {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getProductCategories($product_id) {
+        $sql = "SELECT c.* FROM categories c 
+                JOIN produit_categorie pc ON c.id_categorie = pc.id_categorie 
+                WHERE pc.id_produit = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $product_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getLastError() {
         return $this->lastError;
     }

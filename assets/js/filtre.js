@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const marque = product.dataset.brand || '';
             const collection = product.dataset.collection || '';
 
-            const categoryMatch = selectedFilters.categories.length === 0 || selectedFilters.categories.some(cat => categories.includes(cat));
+            const categoryMatch = selectedFilters.categories.length === 0 || 
+                selectedFilters.categories.some(cat => categories.includes(cat));
             const marqueMatch = selectedFilters.marques.length === 0 || selectedFilters.marques.includes(marque);
             const collectionMatch = selectedFilters.collections.length === 0 || selectedFilters.collections.includes(collection);
 
@@ -99,7 +100,8 @@ window.applyFilters = function() {
         const marque = product.dataset.brand || '';
         const collection = product.dataset.collection || '';
 
-        const categoryMatch = selectedFilters.categories.length === 0 || selectedFilters.categories.some(cat => categories.includes(cat));
+        const categoryMatch = selectedFilters.categories.length === 0 || 
+            selectedFilters.categories.some(cat => categories.includes(cat));
         const marqueMatch = selectedFilters.marques.length === 0 || selectedFilters.marques.includes(marque);
         const collectionMatch = selectedFilters.collections.length === 0 || selectedFilters.collections.includes(collection);
 
