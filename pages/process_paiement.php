@@ -29,6 +29,7 @@ if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
+        // Créer d'abord l'intention de paiement
         $paymentIntent = \Stripe\PaymentIntent::create([
             'amount' => $total_amount * 100, // Montant en cents
             'currency' => 'eur',
@@ -36,6 +37,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'enabled' => true,
             ],
         ]);
+
+        // Si l'utilisateur est connecté, enregistrer dans la base de données
+        if (isset($_SESSION['id_utilisateur'])) {
+            try {
+                // Insérer dans la table paiements
+                $stmt = $conn->prepare("INSERT INTO paiements (
+                    montant, 
+                    date_paiement, 
+                    methode_paiement, 
+                    statut_paiement, 
+                    transaction_id, 
+                    id_utilisateur
+                ) VALUES (?, NOW(), 'carte', 'en_attente', ?, ?)");
+                
+                $stmt->bind_param(
+                    "dsi",
+                    $total_amount,
+                    $paymentIntent->id,
+                    $_SESSION['id_utilisateur']
+                );
+                $stmt->execute();
+            } catch (Exception $e) {
+                // Log l'erreur mais continuer le processus de paiement
+                error_log("Erreur SQL: " . $e->getMessage());
+            }
+        }
 
         echo json_encode(['clientSecret' => $paymentIntent->client_secret]);
     } catch (\Stripe\Exception\ApiErrorException $e) {
@@ -89,16 +116,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     const result = await response.json();
                     console.log('Server response:', result);
                     if (result.clientSecret) {
-                        const { error: stripeError } = await stripe.confirmCardPayment(result.clientSecret, {
-                            payment_method: paymentMethod.id,
-                        });
-                        if (stripeError) {
-                            document.getElementById('payment-result').innerText = stripeError.message;
+                        const { error: confirmError } = await stripe.confirmCardPayment(
+                            result.clientSecret,
+                            {
+                                payment_method: paymentMethod.id,
+                            }
+                        );
+
+                        if (confirmError) {
+                            document.getElementById('payment-result').innerText = confirmError.message;
                         } else {
                             document.getElementById('payment-result').innerText = 'Paiement réussi !';
+                            // Vider le panier en appelant une page PHP
+                            await fetch('vider_panier.php');
+                            // Redirection vers la page de confirmation
+                            window.location.href = 'confirmation_paiement.php';
                         }
                     } else {
-                        document.getElementById('payment-result').innerText = result.message || 'Erreur inconnue';
+                        throw new Error(result.message || 'Erreur inconnue');
                     }
                 }
             });
