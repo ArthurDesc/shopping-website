@@ -59,7 +59,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
             </button>
             <nav class="hidden md:flex space-x-4 ml-4">
               <div class="relative group">
-                <a href="<?php echo BASE_URL; ?>pages/homme.php" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                <a href="<?php echo BASE_URL; ?>pages/produit.php?category=homme" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Homme
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -92,7 +92,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
                 </div>
               </div>
               <div class="relative group">
-                <a href="<?php echo BASE_URL; ?>pages/femme.php" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                <a href="<?php echo BASE_URL; ?>pages/produit.php?category=femme" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Femme
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -125,7 +125,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
                 </div>
               </div>
               <div class="relative group">
-                <a href="<?php echo BASE_URL; ?>pages/enfant.php" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                <a href="<?php echo BASE_URL; ?>pages/produit.php?category=enfant" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Enfant
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -158,7 +158,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
                 </div>
               </div>
               <div class="relative group">
-                <a href="<?php echo BASE_URL; ?>pages/sport.php" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                <a href="<?php echo BASE_URL; ?>pages/produit.php?category=sport" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Sport
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1" :class="{'rotate-180': open}">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -343,13 +343,16 @@ $total = array_sum($_SESSION['panier'] ?? []);
     </div>
   </div>
 
-  <!-- Le reste de votre contenu ici -->
-
-  <script>
+  <!-- Assurez-vous que BASE_URL est correctement défini -->
+<script>
 const BASE_URL = '<?php echo BASE_URL; ?>';
+const AUTOCOMPLETE_URL = '<?php echo BASE_URL; ?>includes/autocomplete.php';
 </script>
+
+<!-- Vérifiez que les chemins vers les fichiers sont corrects -->
 <script src="<?php echo BASE_URL; ?>assets/js/autocomplete.js"></script>
-<script src="/shopping-website/assets/js/filtreToggle.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/filtreToggle.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/filtre.js"></script>
 
 
 
