@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Réponse du serveur:', data);
                 if (data.success) {
-                    alert('Produit ajouté au panier avec succès!');
                 } else {
                     alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
                 }

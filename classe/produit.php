@@ -1,34 +1,68 @@
 <?php
-
 class Produit {
-    private $conn;
+    private $id;
+    private $nom;
+    private $prix;
+    private $image_url;
+    private $marque;
+    private $description;
+    private $stock;
+    private $tailles_disponibles;
+    private $categories;
+    private $collection;
 
-    public function __construct($conn) {
-        $this->conn = $conn;
+    public function __construct($id, $nom, $prix, $image_url, $marque, $description = '', $stock = 0, $tailles_disponibles = '', $categories = [], $collection = '') {
+        $this->id = $id;
+        $this->nom = $nom;
+        $this->prix = $prix;
+        $this->image_url = $image_url;
+        $this->marque = $marque;
+        $this->description = $description;
+        $this->stock = $stock;
+        $this->tailles_disponibles = $tailles_disponibles;
+        $this->setCategories($categories);
+        $this->collection = $collection;
     }
 
-    public function obtenirTousLesProduits() {
-        $req = mysqli_query($this->conn, "SELECT p.*, GROUP_CONCAT(c.id_categorie) as categories 
-                                          FROM produits p 
-                                          LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                                          LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
-                                          GROUP BY p.id_produit, p.nom, p.image_url, p.description, p.prix, p.stock, p.taille, p.marque, p.date_ajout, p.collection");
-        return $req;
+    public function getId() { return $this->id; }
+    public function getNom() { return $this->nom; }
+    public function getPrix() { return $this->prix; }
+    public function getImageUrl() { return $this->image_url; }
+    public function getMarque() { return $this->marque; }
+    public function getDescription() { return $this->description; }
+    public function getStock() { return $this->stock; }
+    public function getTaillesDisponibles() { return $this->tailles_disponibles; }
+    public function getCategories() { return $this->categories; }
+
+    public function setPrix($prix) {
+        $this->prix = $prix;
     }
 
-    public function obtenirCategories() {
-        $categories_query = mysqli_query($this->conn, "SELECT * FROM categories");
-        return mysqli_fetch_all($categories_query, MYSQLI_ASSOC);
+    public function setStock($stock) {
+        $this->stock = $stock;
     }
 
-    public function obtenirMarques() {
-        $marques_query = mysqli_query($this->conn, "SELECT DISTINCT marque FROM produits WHERE marque IS NOT NULL AND marque != ''");
-        return mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
+    public function setCategories($categories) {
+        $this->categories = is_array($categories) ? $categories : explode(',', $categories);
     }
 
-    public function obtenirCollections() {
-        $collections_query = mysqli_query($this->conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
-        return mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
+    public function estDisponible() {
+        return $this->stock > 0;
+    }
+
+    public function getTaillesDisponiblesArray() {
+        return explode(',', $this->tailles_disponibles);
+    }
+
+    public function formatPrix() {
+        return number_format($this->prix, 2, ',', ' ') . ' €';
+    }
+
+    public function hasCategory($categoryId) {
+        return in_array($categoryId, $this->categories);
+    }
+
+    public function getCollection() {
+        return $this->collection;
     }
 }
-
