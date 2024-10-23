@@ -329,7 +329,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 <p class="text-sm text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
                 <form method="post" action="" class="add-to-cart-form">
                     <input type="hidden" name="id_produit" value="<?php echo $produit->getId(); ?>">
-                    <button type="button" class="open-modal-btn" data-product-id="<?php echo $produit->getId(); ?>">
+                    <button type="button" class="open-modal-btn" data-product-id="<?php echo $produit->getId(); ?>" data-product-price="<?php echo $produit->getPrix(); ?>">
                         <img src="<?php echo url('assets/images/addCart.png'); ?>" alt="Ajouter au panier" class="w-6 h-6">
                     </button>
                 </form>
@@ -376,9 +376,25 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
         <button id="cancelBtn" class="w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
           Annuler
         </button>
-        <button id="addToCartBtn" class="w-full sm:flex-1 px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-          Ajouter au panier
-        </button>
+        <div class="cart-add-button" id="addToCartBtn" data-tooltip="">
+          <div class="cart-add-button-wrapper">
+            <div class="cart-add-button-text">Ajouter au panier</div>
+            <span class="cart-add-button-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-cart2"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"
+                ></path>
+              </svg>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -387,10 +403,12 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 <script>
 $(document).ready(function() {
     let currentProductId = null;
+    let currentProductPrice = null;
 
     // Ouvrir le modal
     $('.open-modal-btn').click(function(){
         currentProductId = $(this).data('product-id');
+        currentProductPrice = $(this).data('product-price');
         
         // Charger les tailles disponibles pour ce produit
         $('#productSize').html(`
@@ -400,6 +418,9 @@ $(document).ready(function() {
             <option value="L">L</option>
             <option value="XL">XL</option>
         `);
+        
+        // Mettre à jour le prix dans le tooltip
+        $('#addToCartBtn').attr('data-tooltip', `${currentProductPrice} €`);
         
         $('#modal-container').addClass('active');
     });
