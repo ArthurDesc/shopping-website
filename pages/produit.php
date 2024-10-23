@@ -365,9 +365,9 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 <script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
 
 <!-- Modal pour choisir la taille -->
-<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-smoke-light flex" style="display: none;">
-  <div class="modal-background relative p-8 bg-white w-full max-w-md m-auto flex-col flex rounded-lg">
-    <div class="modal">
+<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
+    <div class="p-6">
       <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
       <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
         <!-- Les options seront ajoutées dynamiquement -->
@@ -386,6 +386,7 @@ $(document).ready(function() {
     // Ouvrir le modal
     $('.open-modal-btn').click(function(){
         currentProductId = $(this).data('product-id');
+        
         // Charger les tailles disponibles pour ce produit
         $('#productSize').html(`
             <option value="">Choisissez une taille</option>
@@ -394,8 +395,8 @@ $(document).ready(function() {
             <option value="L">L</option>
             <option value="XL">XL</option>
         `);
-        $('#modal-container').show().removeClass('out').addClass('five');
-        $('body').addClass('modal-active');
+        
+        $('#modal-container').addClass('active');
     });
 
     // Fermer le modal
@@ -406,11 +407,7 @@ $(document).ready(function() {
     });
 
     function closeModal() {
-        $('#modal-container').removeClass('five').addClass('out');
-        $('body').removeClass('modal-active');
-        setTimeout(function() {
-            $('#modal-container').removeClass('out').hide();
-        }, 500); // Correspond à la durée de l'animation
+        $('#modal-container').removeClass('active');
     }
 
     // Ajouter au panier
@@ -534,4 +531,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
-
