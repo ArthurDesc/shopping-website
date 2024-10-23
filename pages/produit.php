@@ -3,7 +3,10 @@ session_start();
 require_once "../includes/_db.php";
 require_once "../classe/Panier.php";
 require_once "../classe/Produit.php";
+require_once "../classe/Filtre.php";
 require_once "../functions/url.php";
+require_once "../classe/CategoryManager.php";
+$categoryManager = new CategoryManager($conn);
 
 $panier = new Panier();
 
@@ -11,8 +14,7 @@ $panier = new Panier();
 $image_base_path = '../assets/images/produits/';
 
 // Récupérer toutes les catégories
-$categories_query = mysqli_query($conn, "SELECT * FROM categories");
-$categories = mysqli_fetch_all($categories_query, MYSQLI_ASSOC);
+$categories = $categoryManager->getAllCategories();
 
 // Récupérer toutes les marques uniques
 $marques_query = mysqli_query($conn, "SELECT DISTINCT marque FROM produits WHERE marque IS NOT NULL AND marque != ''");
@@ -22,7 +24,82 @@ $marques = mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
 $collections_query = mysqli_query($conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
 $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 
+// Récupération des produits
+$filtre = new Filtre();
 
+// Appliquer les filtres en fonction des paramètres GET
+if (isset($_GET['categories'])) {
+    $filtre->setCategories($_GET['categories']);
+}
+if (isset($_GET['marques'])) {
+    $filtre->setMarques($_GET['marques']);
+}
+if (isset($_GET['collections'])) {
+    $filtre->setCollections($_GET['collections']);
+}
+if (isset($_GET['prix_min']) && isset($_GET['prix_max'])) {
+    $filtre->setPrixRange($_GET['prix_min'], $_GET['prix_max']);
+}
+
+// Récupération des produits
+$requete = $filtre->getRequeteSQL();
+$stmt = mysqli_prepare($conn, $requete['sql']);
+
+if (!empty($requete['params'])) {
+    $types = str_repeat('s', count($requete['params']));
+    mysqli_stmt_bind_param($stmt, $types, ...$requete['params']);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+$produits = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $produit = new Produit(
+        $row['id_produit'],
+        $row['nom'],
+        $row['prix'],
+        $row['image_url'],
+        $row['marque'],
+        $row['description'],
+        $row['stock'],
+        $row['tailles_disponibles'],
+        [],  // catégories, à remplir plus tard
+        $row['collection']  // ajoutez cette ligne
+    );
+    
+    // Récupérer les catégories pour ce produit
+    $productCategories = $categoryManager->getProductCategories($row['id_produit']);
+    $categorieIds = array_column($productCategories, 'id_categorie');
+    $produit->setCategories($categorieIds);
+    
+    $produits[] = $produit;
+}
+
+// Récupération des catégories et sous-catégories
+$query_categories = "SELECT c1.id_categorie, c1.nom AS categorie_principale, c2.id_categorie AS id_sous_categorie, c2.nom AS sous_categorie
+          FROM categories c1
+          LEFT JOIN categories c2 ON c2.parent_id = c1.id_categorie
+          WHERE c1.parent_id IS NULL
+          ORDER BY c1.nom, c2.nom";
+
+$result_categories = mysqli_query($conn, $query_categories);
+
+$categories = array();
+while ($row = mysqli_fetch_assoc($result_categories)) {
+    if (!isset($categories[$row['id_categorie']])) {
+        $categories[$row['id_categorie']] = array(
+            'nom' => $row['categorie_principale'],
+            'sous_categories' => array()
+        );
+    }
+    if ($row['id_sous_categorie']) {
+        $categories[$row['id_categorie']]['sous_categories'][] = array(
+            'id' => $row['id_sous_categorie'],
+            'nom' => $row['sous_categorie']
+        );
+    }
+}
 
 if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     $id_produit = $_POST['id_produit'];
@@ -32,12 +109,27 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     exit();
 }
 
-// Au début du fichier produit.php, après avoir démarré la session
+// Au dbut du fichier produit.php, après avoir démarré la session
 
 // Récupérer les paramètres de l'URL
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
 $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cette ligne
+
+$query_categories_actives = "
+    SELECT DISTINCT c.id_categorie, c.nom
+    FROM categories c
+    INNER JOIN produit_categorie pc ON c.id_categorie = pc.id_categorie
+    INNER JOIN produits p ON pc.id_produit = p.id_produit
+    ORDER BY c.nom
+";
+
+$result_categories_actives = mysqli_query($conn, $query_categories_actives);
+
+$categories_actives = array();
+while ($row = mysqli_fetch_assoc($result_categories_actives)) {
+    $categories_actives[] = $row;
+}
 ?>
 <style>
     .filter-dropdown {
@@ -80,25 +172,47 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                 
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
+                    <!-- Déplacez la barre de recherche ici, en dehors de la section des catégories -->
+                    <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
+                        <input class="search__input" type="text" id="categories-search" placeholder="Rechercher des produits">
+                    </div>
+
                     <!-- Catégories -->
-                    <div class="border-b">
-                        <div @click="openTab = openTab === 'categories' ? null : 'categories'" class="flex items-center justify-between cursor-pointer py-4">
+                    <div id="categories-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="categories-toggle">
                             <span class="font-semibold text-gray-600">Catégories</span>
-                            <svg :class="{'rotate-180': openTab === 'categories'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'categories'" x-collapse>
-                            <div class="py-4 pl-4">
-                                <?php foreach ($categories as $category): ?>
-                                    <div class="flex items-center mb-2">
-                                        <input type="checkbox" 
-                                               id="cat_<?php echo $category['id_categorie']; ?>" 
-                                               name="categories[]" 
-                                               value="<?php echo $category['id_categorie']; ?>" 
-                                               class="mr-2"
-                                               <?php echo ($categorie_filter && $category['id_categorie'] == $categorie_filter) ? 'checked' : ''; ?>>
-                                        <label for="cat_<?php echo $category['id_categorie']; ?>"><?php echo htmlspecialchars($category['nom']); ?></label>
+                        <div id="categories-content" class="py-2 pl-4" style="display: none;">
+                            <div id="categories-list">
+                                <?php foreach ($categories as $id => $category): ?>
+                                    <div class="mb-2">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" 
+                                                   id="cat_<?= htmlspecialchars($id) ?>" 
+                                                   name="categories[]" 
+                                                   value="<?= htmlspecialchars($id) ?>" 
+                                                   class="mr-2"
+                                                   <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
+                                            <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
+                                        </div>
+                                        <?php if (!empty($category['sous_categories'])): ?>
+                                            <div class="ml-4 mt-1">
+                                                <?php foreach ($category['sous_categories'] as $sous_cat): ?>
+                                                    <div class="flex items-center mb-1">
+                                                        <input type="checkbox" 
+                                                               id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                               name="categories[]" 
+                                                               value="<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                               class="mr-2"
+                                                               <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                        <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -106,24 +220,24 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                     </div>
 
                     <!-- Marques -->
-                    <div class="border-b">
-                        <div @click="openTab = openTab === 'marques' ? null : 'marques'" class="flex items-center justify-between cursor-pointer py-4">
+                    <div id="marques-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="marques-toggle">
                             <span class="font-semibold text-gray-600">Marques</span>
-                            <svg :class="{'rotate-180': openTab === 'marques'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'marques'" x-collapse>
-                            <div class="py-4 pl-4">
+                        <div id="marques-content" class="py-2 pl-4" style="display: none;">
+                            <div id="marques-list">
                                 <?php foreach ($marques as $marque): ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="marque_<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                               id="marque_<?= htmlspecialchars($marque['marque']) ?>" 
                                                name="marques[]" 
-                                               value="<?php echo htmlspecialchars($marque['marque']); ?>" 
+                                               value="<?= htmlspecialchars($marque['marque']) ?>" 
                                                class="mr-2"
-                                               <?php echo ($marque_filter && strtolower($marque['marque']) == strtolower($marque_filter)) ? 'checked' : ''; ?>>
-                                        <label for="marque_<?php echo htmlspecialchars($marque['marque']); ?>"><?php echo htmlspecialchars($marque['marque']); ?></label>
+                                               <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
+                                        <label for="marque_<?= htmlspecialchars($marque['marque']) ?>"><?= htmlspecialchars($marque['marque']) ?></label>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -140,15 +254,18 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
                         </div>
                         <div x-show="openTab === 'collections'" x-collapse>
                             <div class="py-4 pl-4">
-                                <?php foreach ($collections as $collection): ?>
+                                <?php
+                                $staticCollections = ['Homme', 'Femme', 'Enfant'];
+                                foreach ($staticCollections as $collection): 
+                                ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="collection_<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               id="collection_<?php echo htmlspecialchars($collection); ?>" 
                                                name="collections[]" 
-                                               value="<?php echo htmlspecialchars($collection['collection']); ?>" 
+                                               value="<?php echo htmlspecialchars($collection); ?>" 
                                                class="mr-2"
-                                               <?php echo ($collection_filter && strtolower($collection['collection']) == strtolower($collection_filter)) ? 'checked' : ''; ?>>
-                                        <label for="collection_<?php echo htmlspecialchars($collection['collection']); ?>"><?php echo htmlspecialchars($collection['collection']); ?></label>
+                                               <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
+                                        <label for="collection_<?php echo htmlspecialchars($collection); ?>"><?php echo htmlspecialchars($collection); ?></label>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -185,37 +302,33 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 
 <section class="products_list">
     <?php 
-    $req = mysqli_query($conn, "SELECT p.*, GROUP_CONCAT(c.id_categorie) as categories 
-                                FROM produits p 
-                                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
-                                GROUP BY p.id_produit, p.nom, p.image_url, p.description, p.prix, p.stock, p.taille, p.marque, p.date_ajout, p.collection");
-    
-    if ($req->num_rows > 0) {
-        echo '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mt-6">';
-        while ($row = mysqli_fetch_assoc($req)) { 
-            $produit = new Produit($row['id_produit'], $row['nom'], $row['prix'], $row['image_url'], $row['marque']);
+    if (!empty($produits)) {
+        echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
+        foreach ($produits as $produit) {
             $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
             
             if (!file_exists($image_url) || empty($produit->getImageUrl())) {
                 $image_url = $image_base_path . 'default_product.jpg';
             }
     ?>
-        <div class="bg-white rounded-lg shadow-md p-4" 
-             data-categories="<?php echo htmlspecialchars($row['categories']); ?>"
-             data-collection="<?php echo htmlspecialchars($row['collection'] ?? ''); ?>"
+        <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full" 
+             data-categories="<?php echo htmlspecialchars(implode(',', $produit->getCategories())); ?>"
+             data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>"
              data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
-            <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block">
-                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="w-full h-48 object-cover mb-4">
-                <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
-                <p class="text-gray-600 mb-2"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
-                <p class="text-blue-600 font-bold"><?php echo number_format($produit->getPrix(), 2); ?> €</p>
+            <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
+                <div class="relative pb-[125%] flex-grow">
+                    <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
+                </div>
+                <div class="p-3 flex-shrink-0">
+                    <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
+                    <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
+                </div>
             </a>
-            <div class="mt-2 flex justify-between items-center">
-                <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="text-blue-500 hover:underline">Voir détails</a>
+            <div class="px-3 pb-3 mt-auto flex justify-between items-center">
+                <p class="text-sm text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
                 <form method="post" action="" class="add-to-cart-form">
                     <input type="hidden" name="id_produit" value="<?php echo $produit->getId(); ?>">
-                    <button type="submit" name="ajouter_au_panier" class="add-to-cart-btn" data-product-id="<?php echo $produit->getId(); ?>">
+                    <button type="button" class="open-modal-btn" data-product-id="<?php echo $produit->getId(); ?>">
                         <img src="<?php echo url('assets/images/addCart.png'); ?>" alt="Ajouter au panier" class="w-6 h-6">
                     </button>
                 </form>
@@ -243,10 +356,191 @@ $marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cet
 
 <!-- Ajoutez ce script juste avant la fermeture de la balise body -->
 
-<script src="<?php echo BASE_URL; ?>assets/js/script.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/filtre.js" defer></script>
+
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/filterToggle.js" defer></script>
+<script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
+
+<!-- Modal pour choisir la taille -->
+<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
+    <div class="p-6">
+      <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
+      <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
+        <!-- Les options seront ajoutées dynamiquement -->
+      </select>
+      <button id="addToCartBtn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+        Ajouter au panier
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    let currentProductId = null;
+
+    // Ouvrir le modal
+    $('.open-modal-btn').click(function(){
+        currentProductId = $(this).data('product-id');
+        
+        // Charger les tailles disponibles pour ce produit
+        $('#productSize').html(`
+            <option value="">Choisissez une taille</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+        `);
+        
+        $('#modal-container').addClass('active');
+    });
+
+    // Fermer le modal
+    $('#modal-container').click(function(e){
+        if ($(e.target).is('#modal-container')) {
+            closeModal();
+        }
+    });
+
+    function closeModal() {
+        $('#modal-container').removeClass('active');
+    }
+
+    // Ajouter au panier
+    $('#addToCartBtn').click(function() {
+        const selectedSize = $('#productSize').val();
+        if (!selectedSize) {
+            alert('Veuillez choisir une taille');
+            return;
+        }
+
+        // Envoyer la requête AJAX pour ajouter au panier
+        $.ajax({
+            url: '<?php echo BASE_URL; ?>ajax/add_to_cart.php',
+            method: 'POST',
+            data: {
+                id_produit: currentProductId,
+                taille: selectedSize,
+                quantite: 1
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    closeModal();
+                    // Mettre à jour le compteur du panier si nécessaire
+                    updateCartCount(data.cartCount);
+                } else {
+                    alert('Erreur : ' + data.message);
+                }
+            },
+            error: function() {
+                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+            }
+        });
+    });
+
+    function updateCartCount(count) {
+        const cartCountElement = $('#cart-count');
+        if (cartCountElement.length) {
+            cartCountElement.text(count);
+        }
+    }
+
+    // Fonction de recherche pour les produits
+    $('#categories-search').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        $('.product-card').each(function() {
+            const productName = $(this).find('h3').text().toLowerCase();
+            // Vérifiez si le nom du produit commence par le terme de recherche
+            if (productName.startsWith(searchTerm)) {
+                $(this).show(); // Afficher le produit si le nom commence par le terme de recherche
+            } else {
+                $(this).hide(); // Masquer le produit s'il ne commence pas par le terme de recherche
+            }
+        });
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categoriesFilter = document.getElementById('categories-filter');
+    const toggleButton = document.getElementById('categories-toggle');
+    const filterContent = document.getElementById('categories-content');
+    const searchInput = document.getElementById('categories-search');
+    const categoriesList = document.getElementById('categories-list');
+
+    // Toggle du dropdown
+    toggleButton.addEventListener('click', function() {
+        if (filterContent.style.display === 'none' || filterContent.style.display === '') {
+            filterContent.style.display = 'block';
+            toggleButton.querySelector('svg').classList.add('rotate-180');
+        } else {
+            filterContent.style.display = 'none';
+            toggleButton.querySelector('svg').classList.remove('rotate-180');
+        }
+    });
+
+    // Fonction de recherche
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const categories = categoriesList.querySelectorAll('.mb-2');
+
+        categories.forEach(category => {
+            const categoryName = category.querySelector('label').textContent.toLowerCase();
+            const subCategories = category.querySelectorAll('.ml-4 .flex');
+            let shouldShow = categoryName.includes(searchTerm);
+
+            subCategories.forEach(subCategory => {
+                const subCategoryName = subCategory.querySelector('label').textContent.toLowerCase();
+                if (subCategoryName.includes(searchTerm)) {
+                    shouldShow = true;
+                    subCategory.style.display = 'flex';
+                } else {
+                    subCategory.style.display = 'none';
+                }
+            });
+
+            category.style.display = shouldShow ? 'block' : 'none';
+        });
+    });
+
+    // Nouvelle partie pour les marques
+    const marquesFilter = document.getElementById('marques-filter');
+    const marquesToggle = document.getElementById('marques-toggle');
+    const marquesContent = document.getElementById('marques-content');
+    const marquesSearch = document.getElementById('marques-search');
+    const marquesList = document.getElementById('marques-list');
+
+    // Toggle du dropdown des marques
+    marquesToggle.addEventListener('click', function() {
+        if (marquesContent.style.display === 'none' || marquesContent.style.display === '') {
+            marquesContent.style.display = 'block';
+            marquesToggle.querySelector('svg').classList.add('rotate-180');
+        } else {
+            marquesContent.style.display = 'none';
+            marquesToggle.querySelector('svg').classList.remove('rotate-180');
+        }
+    });
+
+    // Fonction de recherche pour les marques
+    marquesSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const marques = marquesList.querySelectorAll('.flex');
+
+        marques.forEach(marque => {
+            const marqueName = marque.querySelector('label').textContent.toLowerCase();
+            if (marqueName.includes(searchTerm)) {
+                marque.style.display = 'flex';
+            } else {
+                marque.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
