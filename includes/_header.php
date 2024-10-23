@@ -214,27 +214,27 @@ $total = array_sum($_SESSION['panier'] ?? []);
             </button>
 
             <a href="<?php echo url('pages/panier.php'); ?>" aria-label="Voir le panier" class="relative">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-  </svg>
-  <span id="cart-count" class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 <?php echo $total > 0 ? 'bg-green-600' : 'bg-red-600'; ?> rounded-full">
-    <?php echo $total; ?>
-  </span>
-</a>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+              </svg>
+              <span id="cart-count" class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 <?php echo $total > 0 ? 'bg-green-600' : 'bg-red-600'; ?> rounded-full">
+                <?php echo $total; ?>
+              </span>
+            </a>
             <a href="<?php echo url('pages/profil.php'); ?>" class="relative inline-block">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-  </svg>
-  <?php if (isset($_SESSION['id_utilisateur'])): ?>
-    <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-      <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
-    <?php else: ?>
-      <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
-    <?php endif; ?>
-  <?php else: ?>
-    <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-  <?php endif; ?>
-</a>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                  <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
+                <?php else: ?>
+                  <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
+                <?php endif; ?>
+              <?php else: ?>
+                <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              <?php endif; ?>
+            </a>
           </div>
         </div>
       </div>
@@ -325,10 +325,10 @@ $total = array_sum($_SESSION['panier'] ?? []);
           </li>
         </ul>
       </nav>
-    </div> 
+    </div>
 
     <!-- Barre de recherche déroulante sticky avec autocomplétion -->
-    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-hidden flex items-center h-0 shadow-md border-t border-gray-200">
+    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-visible flex items-center h-0 shadow-md border-t border-gray-200">
       <div class="container mx-auto px-4">
         <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex items-center relative">
           <input type="text" name="q" id="search-input" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
@@ -342,4 +342,5 @@ $total = array_sum($_SESSION['panier'] ?? []);
       </div>
     </div>
   </div>
-     
+
+  
