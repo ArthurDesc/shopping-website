@@ -1,31 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
   const headerContainer = document.getElementById('header-container');
-  const searchToggle = document.getElementById('search-toggle');
-  const searchBar = document.getElementById('search-bar');
   const menuToggle = document.getElementById('menu-toggle');
   const sidebar = document.getElementById('sidebar');
   const closeSidebarButton = document.getElementById('close-sidebar');
-  let isSearchBarOpen = false;
+  const searchInput = document.getElementById('search');
+  const autocompleteResults = document.getElementById('autocomplete-results');
   let isSidebarOpen = false;
   let lastScrollTop = 0;
 
-  // Ajoutez ces nouvelles variables
-  const searchInput = document.getElementById('search-input');
-  const autocompleteResults = document.getElementById('autocomplete-results');
-
-  // Fonction pour gérer l'affichage/masquage du header et de la barre de recherche
+  // Fonction pour gérer l'affichage/masquage du header
   function handleScroll() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > lastScrollTop && scrollTop > 200 && !isSidebarOpen) {
       headerContainer.style.transform = 'translateY(-100%)';
-      if (isSearchBarOpen) {
-        searchBar.style.transform = 'translateY(-100%)';
-      }
     } else {
       headerContainer.style.transform = 'translateY(0)';
-      if (isSearchBarOpen) {
-        searchBar.style.transform = 'translateY(0)';
-      }
     }
     lastScrollTop = scrollTop;
   }
@@ -33,30 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Écouteur d'événement pour le scroll
   window.addEventListener('scroll', handleScroll);
 
-  // Fonction pour fermer la barre de recherche
-  function closeSearchBar() {
-    isSearchBarOpen = false;
-    searchBar.style.height = '0';
-    searchBar.style.transform = 'translateY(-100%)';
-    searchBar.classList.remove('shadow-md', 'open');
-    hideAutocompleteResults(); // Cacher les résultats d'autocomplétion
-  }
-
-  // Fonction pour ouvrir la barre de recherche
-  function openSearchBar() {
-    isSearchBarOpen = true;
-    searchBar.style.height = '60px'; // Hauteur initiale
-    searchBar.style.transform = 'translateY(0)';
-    searchBar.classList.add('shadow-md', 'open');
-    hideAutocompleteResults(); // Réinitialiser l'autocomplétion
-  }
-
   // Fonction pour ouvrir la sidebar
   function openSidebar() {
     isSidebarOpen = true;
     sidebar.classList.add('open');
     document.body.style.overflow = 'hidden';
-    headerContainer.style.transform = 'translateY(0)'; // Assurez-vous que le header est visible
+    headerContainer.style.transform = 'translateY(0)';
   }
 
   // Fonction pour fermer la sidebar
@@ -64,21 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     isSidebarOpen = false;
     sidebar.classList.remove('open');
     document.body.style.overflow = '';
-    handleScroll(); // Réappliquez la logique de défilement après la fermeture
-  }
-
-  // Gestion de la barre de recherche
-  if (searchToggle && searchBar) {
-    searchToggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (isSearchBarOpen) {
-        closeSearchBar();
-      } else {
-        openSearchBar();
-        closeSidebar();
-      }
-    });
+    handleScroll();
   }
 
   // Gestion du menu burger
@@ -87,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       e.stopPropagation();
       openSidebar();
-      closeSearchBar();
     });
   }
 
@@ -105,22 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Fermer le sidebar et la barre de recherche en cliquant à l'extérieur
+  // Fermer le sidebar en cliquant à l'extérieur
   document.addEventListener('click', function(e) {
     if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
       closeSidebar();
     }
-    if (!searchBar.contains(e.target) && !searchToggle.contains(e.target)) {
-      closeSearchBar();
-    }
   });
 
-  // Empêcher la propagation des clics à l'intérieur du sidebar et de la barre de recherche
+  // Empêcher la propagation des clics à l'intérieur du sidebar
   sidebar.addEventListener('click', function(e) {
-    e.stopPropagation();
-  });
-
-  searchBar.addEventListener('click', function(e) {
     e.stopPropagation();
   });
 
@@ -164,32 +113,30 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         autocompleteResults.appendChild(div);
       });
-      autocompleteResults.classList.remove('hidden');
-      
-      // Calculer la nouvelle hauteur
-      const resultHeight = 60; // Hauteur de chaque résultat
-      const maxResults = 5; // Nombre maximum de résultats à afficher
-      const totalResultsHeight = Math.min(results.length, maxResults) * resultHeight;
-      const newHeight = 60 + totalResultsHeight; // 60px pour l'input + hauteur des résultats
-      
-      // Animer l'ouverture de la barre de recherche
-      searchBar.style.height = `${newHeight}px`;
+      showAutocompleteResults();
     } else {
       hideAutocompleteResults();
     }
   }
 
+  // Fonction pour afficher les résultats d'autocomplétion
+  function showAutocompleteResults() {
+    const inputRect = searchInput.getBoundingClientRect();
+    autocompleteResults.style.top = `${inputRect.bottom}px`;
+    autocompleteResults.style.left = `${inputRect.left}px`;
+    autocompleteResults.style.width = `${inputRect.width}px`;
+    autocompleteResults.classList.remove('hidden');
+  }
+
   // Fonction pour cacher les résultats d'autocomplétion
   function hideAutocompleteResults() {
     autocompleteResults.classList.add('hidden');
-    if (isSearchBarOpen) {
-      searchBar.style.height = '60px'; // Remettre la hauteur initiale
-    }
   }
 
   // Ajoutez un écouteur d'événements pour l'input de recherche
   if (searchInput) {
     searchInput.addEventListener('input', debounce(handleAutocomplete, 300));
+    searchInput.addEventListener('focus', handleAutocomplete);
   }
 
   // Fonction debounce pour limiter les appels à l'API
@@ -204,4 +151,11 @@ document.addEventListener('DOMContentLoaded', function() {
       timeout = setTimeout(later, wait);
     };
   }
+
+  // Fermer les résultats d'autocomplétion en cliquant en dehors
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !autocompleteResults.contains(e.target)) {
+      hideAutocompleteResults();
+    }
+  });
 });

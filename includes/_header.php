@@ -42,12 +42,13 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
+  
 
 </head>
 
 
 <body class="flex flex-col min-h-full pt-[55px]">
-  <div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
+<div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-3 px-2 bg-white shadow-md">
         <div class="flex items-center justify-between w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
@@ -61,9 +62,6 @@ $total = array_sum($_SESSION['panier'] ?? []);
               <div class="relative group">
                 <a href="<?php echo BASE_URL; ?>pages/produit.php?category=homme" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Homme
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
                 </a>
                 <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
@@ -94,9 +92,6 @@ $total = array_sum($_SESSION['panier'] ?? []);
               <div class="relative group">
                 <a href="<?php echo BASE_URL; ?>pages/produit.php?category=femme" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Femme
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
                 </a>
                 <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
@@ -127,9 +122,6 @@ $total = array_sum($_SESSION['panier'] ?? []);
               <div class="relative group">
                 <a href="<?php echo BASE_URL; ?>pages/produit.php?category=enfant" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Enfant
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
                 </a>
                 <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
@@ -160,9 +152,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
               <div class="relative group">
                 <a href="<?php echo BASE_URL; ?>pages/produit.php?category=sport" class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                   Sport
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1" :class="{'rotate-180': open}">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
+
                 </a>
                 <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300">
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
@@ -207,11 +197,16 @@ $total = array_sum($_SESSION['panier'] ?? []);
           </div>
 
           <div class="flex justify-end items-center space-x-4 w-1/3">
-            <button id="search-toggle" class="hidden md:block text-black hover:text-blue-600 focus:outline-none">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-              </svg>
-            </button>
+            <div id="wrap" class="hidden md:block">
+              <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" autocomplete="on">
+                <input id="search" name="q" type="text" placeholder="Que recherchez-vous ?">
+                <button id="search_submit" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                </button>
+              </form>
+            </div>
 
             <a href="<?php echo url('pages/panier.php'); ?>" aria-label="Voir le panier" class="relative">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
@@ -327,20 +322,4 @@ $total = array_sum($_SESSION['panier'] ?? []);
       </nav>
     </div>
 
-    <!-- Barre de recherche déroulante sticky avec autocomplétion -->
-    <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-visible flex items-center h-0 shadow-md border-t border-gray-200">
-      <div class="container mx-auto px-4">
-        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex items-center relative">
-          <input type="text" name="q" id="search-input" placeholder="Rechercher..." class="w-full px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-300">
-          <button type="submit" class="ml-2 text-gray-500 hover:text-blue-500 focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </button>
-          <div id="autocomplete-results" class="absolute left-0 right-0 top-full bg-white border border-gray-300 rounded-b-lg shadow-lg z-10 hidden"></div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  
+    <!-- Conteneur pour les résultats d'autocomplétion -->
