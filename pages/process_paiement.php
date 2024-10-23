@@ -10,16 +10,11 @@ require_once '../includes/_db.php'; // Assurez-vous que ce chemin est correct
 // Configuration de Stripe
 \Stripe\Stripe::setApiKey('sk_test_51Q7Hl1P5XJmDt2UG2j3o2mIobvzMWo0XoZ8Md4YeqakLP682h9aEuYczQfUzjEMEdt6SyLUENnbgTmZPNotX2rEa00cMDNxsLs'); // Remplace par ta clé secrète
 
-// Vérifier si le montant est présent
-$total_amount = 0; // Montant total en cents
-$line_items = []; // Initialiser un tableau pour les lignes de produits
-
-// Vérifier si le panier est utilisé
+// Calculer le montant total
+$total_amount = 0;
 if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
-    var_dump($_SESSION['panier']); // Debug: Afficher le contenu du panier
     foreach ($_SESSION['panier'] as $id_produit => $quantity) {
-        // Récupérer le prix du produit
-        $query = "SELECT prix, nom FROM produits WHERE id_produit = ?"; // Ajout du nom du produit
+        $query = "SELECT prix FROM produits WHERE id_produit = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $id_produit);
         $stmt->execute();
@@ -27,62 +22,22 @@ if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
         $product = $result->fetch_assoc();
 
         if ($product) {
-            $total_amount += $product['prix'] * $quantity; // Calculer le montant total
-            // Ajouter les informations du produit pour la session de checkout
-            $line_items[] = [
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => $product['nom'], // Utiliser le nom du produit
-                    ],
-                    'unit_amount' => $product['prix'] * 100, // Montant en cents
-                ],
-                'quantity' => $quantity,
-            ];
+            $total_amount += $product['prix'] * $quantity;
         }
     }
 }
 
-if (empty($line_items)) {
-    // Rediriger ou afficher un message d'erreur si le panier est vide
-    echo 'Erreur : Aucun produit dans le panier.';
-    exit; // Arrêter l'exécution du script
-}
-
-try {
-    // Créer une session de checkout
-    $checkout_session = \Stripe\Checkout\Session::create([
-        'line_items' => $line_items, // Utiliser les lignes de produits récupérées
-        'mode' => 'payment',
-        'success_url' => 'http://localhost/shopping-website/pages/confirmation_paiement.php',
-        'cancel_url' => 'http://localhost/shopping-website/pages/cancel.php',
-    ]);
-
-    // Redirection vers la session de checkout
-    header("Location: " . $checkout_session->url);
-    exit;
-} catch (\Stripe\Exception\CardException $e) {
-    // Gestion des erreurs de carte
-    echo 'Erreur : ' . $e->getError()->message;
-} catch (Exception $e) {
-    // Gestion des autres erreurs
-    echo 'Erreur générale : ' . $e->getMessage();
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $paymentMethodId = $_POST['paymentMethodId'];
-
     try {
-        // Créer un PaymentIntent
         $paymentIntent = \Stripe\PaymentIntent::create([
-            'amount' => $total_amount, // Assurez-vous que $total_amount est correctement calculé
+            'amount' => $total_amount * 100, // Montant en cents
             'currency' => 'eur',
-            'payment_method' => $paymentMethodId,
-            'confirmation_method' => 'manual',
-            'confirm' => true,
+            'automatic_payment_methods' => [
+                'enabled' => true,
+            ],
         ]);
 
-        echo json_encode(['message' => 'Paiement réussi !']);
+        echo json_encode(['clientSecret' => $paymentIntent->client_secret]);
     } catch (\Stripe\Exception\ApiErrorException $e) {
         echo json_encode(['message' => 'Erreur : ' . $e->getMessage()]);
     }
@@ -93,45 +48,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Paiement</title>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
-<form id="payment-form" action="process_paiement.php" method="POST" class="mt-6">
+    <form id="payment-form" class="mt-6">
         <div id="card-element" class="border p-4 rounded"></div>
         <button id="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Payer</button>
         <div id="payment-result" class="mt-4"></div>
     </form>
 
     <script>
-        const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O'); // Remplacez par votre clé publique Stripe
-        const elements = stripe.elements();
-        const cardElement = elements.create('card');
-        cardElement.mount('#card-element');
+        document.addEventListener('DOMContentLoaded', function() {
+            const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O');
+            const elements = stripe.elements();
+            const cardElement = elements.create('card');
+            cardElement.mount('#card-element');
 
-        const form = document.getElementById('payment-form');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const { paymentMethod, error } = await stripe.createPaymentMethod({
-                type: 'card',
-                card: cardElement,
-            });
+            const form = document.getElementById('payment-form');
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
 
-            if (error) {
-                document.getElementById('payment-result').innerText = error.message;
-            } else {
-                // Envoyer le paymentMethod.id à votre serveur pour le traitement
-                const formData = new FormData();
-                formData.append('paymentMethodId', paymentMethod.id);
-                
-                // Envoyer les données au fichier process_paiement.php
-                const response = await fetch('process_paiement.php', {
-                    method: 'POST',
-                    body: formData,
+                const { paymentMethod, error } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
                 });
 
-                const result = await response.json();
-                document.getElementById('payment-result').innerText = result.message;
-            }
+                if (error) {
+                    console.error('Error creating payment method:', error);
+                    document.getElementById('payment-result').innerText = error.message;
+                } else {
+                    const formData = new FormData();
+                    formData.append('paymentMethodId', paymentMethod.id);
+
+                    const response = await fetch('process_paiement.php', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const result = await response.json();
+                    console.log('Server response:', result);
+                    if (result.clientSecret) {
+                        const { error: stripeError } = await stripe.confirmCardPayment(result.clientSecret, {
+                            payment_method: paymentMethod.id,
+                        });
+                        if (stripeError) {
+                            document.getElementById('payment-result').innerText = stripeError.message;
+                        } else {
+                            document.getElementById('payment-result').innerText = 'Paiement réussi !';
+                        }
+                    } else {
+                        document.getElementById('payment-result').innerText = result.message || 'Erreur inconnue';
+                    }
+                }
+            });
         });
     </script>
 </body>

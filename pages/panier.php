@@ -163,7 +163,15 @@ include '../includes/_header.php';
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O'); // Remplacez par votre clé publique Stripe
+    const showPaymentFormButton = document.getElementById('show-payment-form');
+    const paymentForm = document.getElementById('payment-form');
+
+    showPaymentFormButton.addEventListener('click', function() {
+        paymentForm.style.display = 'block'; // Afficher le formulaire
+        showPaymentFormButton.style.display = 'none'; // Masquer le bouton
+    });
+
+    const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O');
     const elements = stripe.elements();
     const cardElement = elements.create('card');
     cardElement.mount('#card-element');
@@ -171,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('payment-form');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        console.log('Form submitted');
 
         const { paymentMethod, error } = await stripe.createPaymentMethod({
             type: 'card',
@@ -178,9 +187,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (error) {
+            console.error('Error creating payment method:', error);
             document.getElementById('payment-result').innerText = error.message;
         } else {
-            // Envoyer le paymentMethod.id à votre serveur pour le traitement
+            console.log('Payment method created:', paymentMethod);
+
             const formData = new FormData();
             formData.append('paymentMethodId', paymentMethod.id);
 
@@ -190,6 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const result = await response.json();
+            console.log('Server response:', result);
             document.getElementById('payment-result').innerText = result.message;
         }
     });
@@ -230,6 +242,15 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     }
 </style>
+
+<style>
+    #payment-form {
+        display: none; /* Masquer le formulaire par défaut */
+    }
+</style>
+
+
+
 
 
 
