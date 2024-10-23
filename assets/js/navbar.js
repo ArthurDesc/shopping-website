@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
   let isSidebarOpen = false;
   let lastScrollTop = 0;
 
+  // Ajoutez ces nouvelles variables
+  const searchInput = document.getElementById('search-input');
+  const autocompleteResults = document.getElementById('autocomplete-results');
+
   // Fonction pour gérer l'affichage/masquage du header et de la barre de recherche
   function handleScroll() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -35,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchBar.style.height = '0';
     searchBar.style.transform = 'translateY(-100%)';
     searchBar.classList.remove('shadow-md', 'open');
+    hideAutocompleteResults(); // Cacher les résultats d'autocomplétion
   }
 
   // Fonction pour ouvrir la barre de recherche
@@ -43,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchBar.style.height = '60px';
     searchBar.style.transform = 'translateY(0)';
     searchBar.classList.add('shadow-md', 'open');
+    hideAutocompleteResults(); // Réinitialiser l'autocomplétion
   }
 
   // Fonction pour ouvrir la sidebar
@@ -124,5 +130,66 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       closeSidebar();
     });
+  }
+
+  // Fonction pour l'autocomplétion
+  function handleAutocomplete() {
+    const query = searchInput.value.trim();
+    if (query.length > 0) {
+      fetch(`${BASE_URL}includes/autocomplete.php?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+          displayAutocompleteResults(data);
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des résultats:', error);
+          hideAutocompleteResults();
+        });
+    } else {
+      hideAutocompleteResults();
+    }
+  }
+
+  // Fonction pour afficher les résultats d'autocomplétion
+  function displayAutocompleteResults(results) {
+    autocompleteResults.innerHTML = '';
+    if (results.length > 0) {
+      results.forEach(result => {
+        const div = document.createElement('div');
+        div.textContent = result.name;
+        div.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
+        div.addEventListener('click', () => {
+          searchInput.value = result.name;
+          hideAutocompleteResults();
+        });
+        autocompleteResults.appendChild(div);
+      });
+      autocompleteResults.classList.remove('hidden');
+    } else {
+      hideAutocompleteResults();
+    }
+  }
+
+  // Fonction pour cacher les résultats d'autocomplétion
+  function hideAutocompleteResults() {
+    autocompleteResults.classList.add('hidden');
+  }
+
+  // Ajoutez un écouteur d'événements pour l'input de recherche
+  if (searchInput) {
+    searchInput.addEventListener('input', debounce(handleAutocomplete, 300));
+  }
+
+  // Fonction debounce pour limiter les appels à l'API
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
 });

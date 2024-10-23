@@ -23,11 +23,16 @@
   </div>
 </footer>
 
+<script>
+const BASE_URL = '<?php echo BASE_URL; ?>';
+</script>
+
 <script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/filtreToggle.js'); ?>" defer></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+<script src="<?php echo url('assets/js/autocomplete.js'); ?>" defer></script>
 
 </body>
 </html>
