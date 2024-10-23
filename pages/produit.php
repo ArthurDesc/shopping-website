@@ -174,7 +174,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 <div class="flex-grow overflow-y-auto px-4">
                     <!-- Déplacez la barre de recherche ici, en dehors de la section des catégories -->
                     <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
-                        <input class="search__input" type="text" id="categories-search" placeholder="Rechercher des produits">
+                        <input class="search__input " type="text" id="categories-search" placeholder="Rechercher">
                     </div>
 
                     <!-- Catégories -->
