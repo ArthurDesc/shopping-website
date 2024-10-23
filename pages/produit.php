@@ -369,14 +369,16 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
   <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
     <div class="p-6">
       <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
+      <!-- Ajoutez cette ligne pour le message d'erreur -->
+      <div id="sizeError" class="text-red-500 text-sm mb-2 hidden"></div>
       <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
         <!-- Les options seront ajoutées dynamiquement -->
       </select>
       <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
-        <button id="cancelBtn" class="w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
+        <button id="cancelBtn" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
           Annuler
         </button>
-        <div class="cart-add-button" id="addToCartBtn" data-tooltip="">
+        <div class="cart-add-button button-shadow" id="addToCartBtn" data-tooltip="">
           <div class="cart-add-button-wrapper">
             <div class="cart-add-button-text">Ajouter au panier</div>
             <span class="cart-add-button-icon">
@@ -439,17 +441,22 @@ $(document).ready(function() {
 
     function closeModal() {
         $('#modal-container').removeClass('active');
-        // Réinitialiser la sélection de taille
+        // Réinitialiser la sélection de taille et le message d'erreur
         $('#productSize').val('');
+        $('#sizeError').addClass('hidden');
     }
 
     // Ajouter au panier
     $('#addToCartBtn').click(function() {
         const selectedSize = $('#productSize').val();
         if (!selectedSize) {
-            alert('Veuillez choisir une taille');
+            // Afficher le message d'erreur dans le modal
+            $('#sizeError').text('Veuillez choisir une taille').removeClass('hidden');
             return;
         }
+
+        // Cacher le message d'erreur si une taille est sélectionnée
+        $('#sizeError').addClass('hidden');
 
         // Envoyer la requête AJAX pour ajouter au panier
         $.ajax({
@@ -474,6 +481,11 @@ $(document).ready(function() {
                 alert('Une erreur s\'est produite lors de l\'ajout au panier.');
             }
         });
+    });
+
+    // Réinitialiser le message d'erreur lorsqu'une taille est sélectionnée
+    $('#productSize').change(function() {
+        $('#sizeError').addClass('hidden');
     });
 
     function updateCartCount(count) {
