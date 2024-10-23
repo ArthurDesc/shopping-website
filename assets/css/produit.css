@@ -1,5 +1,6 @@
     /* ... vos styles existants ... */
 
+/* Styles pour le modal */
 #modal-container {
   display: none;
   position: fixed;
@@ -7,177 +8,145 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.719);
+  background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  transition: background-color 0.5s ease;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-#modal-container.five {
+#modal-container.active {
   display: flex;
+  opacity: 1;
 }
 
 .modal-background {
   background: white;
   width: 90%;
   max-width: 500px;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.3s ease;
 }
 
-#modal-container.five .modal-background {
-  animation: fadeIn .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+#modal-container.active .modal-background {
+  transform: scale(1);
+  opacity: 1;
 }
-
-#modal-container.five .modal-background .modal {
-  transform: translateX(-1500px);
-  animation: roadRunnerIn .3s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
-}
-
-#modal-container.out {
-  background-color: rgba(0, 0, 0, 0);
-  transition: background-color 0.5s ease;
-}
-
-#modal-container.out .modal-background {
-  animation: fadeOut .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
-}
-
-#modal-container.out .modal-background .modal {
-  animation: roadRunnerOut .5s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
-}
-
-@keyframes fadeIn {
-  0% { background: rgba(255, 255, 255, 0.486); }
-  100% { background: rgba(255, 255, 255, 0.904); }
-}
-
-@keyframes fadeOut {
-  0% { background: rgba(255, 255, 255, 0.904); }
-  100% { background: rgba(255, 255, 255, 0); }
-}
-
-@keyframes roadRunnerIn {
-  0% { transform: translateX(-1500px) skewX(30deg) scaleX(1.3); }
-  70% { transform: translateX(30px) skewX(0deg) scaleX(.9); }
-  100% { transform: translateX(0px) skewX(0deg) scaleX(1); }
-}
-
-@keyframes roadRunnerOut {
-  0% { transform: translateX(0px) skewX(0deg) scaleX(1); }
-  30% { transform: translateX(-30px) skewX(-5deg) scaleX(.9); }
-  100% { transform: translateX(1500px) skewX(30deg) scaleX(1.3); }
-}
-
-@keyframes quickScaleDown {
-  0% { transform: scale(1); }
-  99.9% { transform: scale(1); }
-  100% { transform: scale(0); }
-}
-
-.modal-background .modal {
-  position: relative;
-  z-index: 1;
-}
-@import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
 
 /* Styles pour l'effet de survol des articles */
 .product-card {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .product-card img {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .product-card:hover img {
-    transform: scale(1.03);
+  transform: scale(1.03);
 }
 
 .product-card .text-blue-600 {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .product-card:hover .text-blue-600 {
-    color: #2563EB; /* Un bleu plus vif au survol */
+  color: #2563EB;
 }
 
+/* Styles pour la barre de recherche */
 .search__container {
-    padding-top: 0;
-    margin-bottom: 1.5rem; /* Augmentez cette valeur pour plus d'espace */
-}
-
-.search__title {
-    font-size: 22px;
-    font-weight: 900;
-    text-align: center;
-    color: #ff8b88;
+  padding-top: 0;
+  margin-bottom: 1.5rem;
 }
 
 .search__input {
-    width: 100%;
-    padding: 12px 24px;
-    background-color: transparent;
-    transition: transform 250ms ease-in-out;
-    font-size: 14px;
-    line-height: 18px;
-    color: #575756;
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%233B82F6' d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: 18px 18px;
-    background-position: 95% center;
-    border-radius: 50px;
-    border: 1px solid #3B82F6; /* Changé de #575756 à #3B82F6 (bleu) */
-    transition: all 250ms ease-in-out;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
+  width: 100%;
+  padding: 12px 24px;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  line-height: 18px;
+  color: #575756;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%233B82F6' d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  background-position: 95% center;
+  border-radius: 50px;
+  border: 1px solid #3B82F6;
 }
 
 .search__input::placeholder {
-    color: rgba(87, 87, 86, 0.8);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+  color: rgba(87, 87, 86, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
-.search__input:hover,
 .search__input:focus {
-    padding: 12px 0;
-    outline: 0;
-    border: 1px solid transparent;
-    border-bottom: 1px solid #3B82F6; /* Changé de #575756 à #3B82F6 (bleu) */
-    border-radius: 0;
-    background-position: 100% center;
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%233B82F6' d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+  outline: none;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }
 
-.credits__container {
-    margin-top: 24px;
-}
-
-.credits__text {
-    text-align: center;
-    font-size: 13px;
-    line-height: 18px;
-}
-
-.credits__link {
-    color: #ff8b88;
-    text-decoration: none;
-    transition: color 250ms ease-in;
-}
-
-.credits__link:hover,
-.credits__link:focus {
-    color: #ff5652;
-}
-
+/* Styles pour la liste des catégories */
 #categories-list {
-    margin-top: 1.5rem; /* Augmentez cette valeur pour plus d'espace */
+  margin-top: 1.5rem;
+}
+
+/* Styles pour l'input de tailles */
+#productSize {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #3B82F6;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #2563EB;
+  background-color: #EFF6FF;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233B82F6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+#productSize:focus {
+  outline: none;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+#productSize option {
+  color: #2563EB;
+  background-color: white;
+}
+
+/* Style pour le bouton d'ajout au panier */
+#addToCartBtn {
+  width: 100%;
+  padding: 12px;
+  background-color: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#addToCartBtn:hover {
+  background-color: #2563EB;
 }
