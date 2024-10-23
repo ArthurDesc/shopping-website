@@ -396,3 +396,52 @@
 .button-shadow:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
+
+.open-modal-btn svg {
+    color: #3B82F6; /* Couleur bleue de Tailwind */
+}
+
+.open-modal-btn:hover svg {
+    color: #2563EB; /* Couleur bleue plus foncée au survol */
+}
+
+.cart-icon-adjust {
+    margin-top: 2px; /* Ajustez cette valeur selon vos besoins */
+}
+
+.cart-icon-adjust svg {
+    vertical-align: middle;
+}
+
+.product-price-cart-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+}
+
+.product-cart-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.product-cart-icon {
+    width: 24px;
+    height: 24px;
+    color: #3B82F6; /* Couleur bleue de Tailwind */
+}
+
+.product-cart-button:hover .product-cart-icon {
+    color: #2563EB; /* Couleur bleue plus foncée au survol */
+}
