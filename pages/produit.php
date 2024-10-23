@@ -180,9 +180,10 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div id="categories-content" class="py-2 pl-4" style="display: none;">
-                            <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
-                                <input class="search__input" type="text" id="categories-search" placeholder="Filtrer">
+                        <div id="categories-content" class="py-1 pl-4" style="display: none;">
+                            <!-- Pour la recherche de catégories -->
+                            <div class="search__container">
+                                <input class="search__input" type="text" id="categories-search" placeholder="Rechercher">
                             </div>
                             <div id="categories-list">
                                 <?php foreach ($categories as $id => $category): ?>
@@ -225,9 +226,10 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div id="marques-content" class="py-2 pl-4" style="display: none;">
-                            <div class="search__container mb-6">
-                                <input class="search__input" type="text" id="marques-search" placeholder="Filtrer">
+                        <div id="marques-content" class="py-1 pl-4" style="display: none;">
+                            <!-- Pour la recherche de marques -->
+                            <div class="search__container">
+                                <input class="search__input" type="text" id="marques-search" placeholder="Rechercher">
                             </div>
                             <div id="marques-list">
                                 <?php foreach ($marques as $marque): ?>
