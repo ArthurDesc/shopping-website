@@ -365,16 +365,21 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 <script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
 
 <!-- Modal pour choisir la taille -->
-<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center hidden">
+<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0">
   <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
     <div class="p-6">
       <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
       <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
         <!-- Les options seront ajoutées dynamiquement -->
       </select>
-      <button id="addToCartBtn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-        Ajouter au panier
-      </button>
+      <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
+        <button id="cancelBtn" class="w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
+          Annuler
+        </button>
+        <button id="addToCartBtn" class="w-full sm:flex-1 px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+          Ajouter au panier
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -406,8 +411,15 @@ $(document).ready(function() {
         }
     });
 
+    // Ajouter cette fonction pour le bouton Annuler
+    $('#cancelBtn').click(function() {
+        closeModal();
+    });
+
     function closeModal() {
         $('#modal-container').removeClass('active');
+        // Réinitialiser la sélection de taille
+        $('#productSize').val('');
     }
 
     // Ajouter au panier
