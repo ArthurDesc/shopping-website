@@ -60,7 +60,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
               </svg>
             </button>
 
-<nav class="hidden md:flex space-x-4 ml-4">
+<nav class="hidden md:flex space-x-8 ml-4">
   <?php
   $categories = [
     'homme' => ['Vêtements', 'Chaussures', 'Accessoires'],
@@ -74,9 +74,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
     <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
       <button class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
         <?php echo ucfirst($category); ?>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
+    
       </button>
       <div x-show="open" 
            x-transition:enter="transition ease-out duration-200" 
@@ -242,6 +240,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   </div>
 
   
+
 
 
 
