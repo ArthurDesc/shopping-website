@@ -67,35 +67,51 @@
 /* Styles pour la barre de recherche */
 .search__container {
   padding-top: 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.search__title {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  color: #3B82F6;
+  margin-bottom: 12px;
 }
 
 .search__input {
   width: 100%;
   padding: 12px 24px;
   background-color: transparent;
-  transition: all 0.3s ease;
+  transition: transform 250ms ease-in-out;
   font-size: 14px;
   line-height: 18px;
   color: #575756;
+  background-color: transparent;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%233B82F6' d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: 18px 18px;
   background-position: 95% center;
   border-radius: 50px;
   border: 1px solid #3B82F6;
+  transition: all 250ms ease-in-out;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 .search__input::placeholder {
-  color: rgba(87, 87, 86, 0.8);
+  color: rgba(59, 130, 246, 0.8);
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
 
+.search__input:hover,
 .search__input:focus {
-  outline: none;
-  border-color: #2563EB;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  padding: 12px 0;
+  outline: 0;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #3B82F6;
+  border-radius: 0;
+  background-position: 100% center;
 }
 
 /* Styles pour la liste des catégories */
@@ -133,7 +149,125 @@
   background-color: white;
 }
 
-/* Style pour le bouton d'ajout au panier */
+/* Nouveau style pour le bouton Ajouter au panier */
+.button {
+  --width: 180px;
+  --height: 40px;
+  --tooltip-height: 35px;
+  --tooltip-width: 90px;
+  --gap-between-tooltip-to-button: 18px;
+  --button-color: #3B82F6;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: var(--button-color);
+  position: relative;
+  text-align: center;
+  border-radius: 0.5em;
+  font-family: "Arial";
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.button::before {
+  position: absolute;
+  content: attr(data-tooltip);
+  width: var(--tooltip-width);
+  height: var(--tooltip-height);
+  background-color: #555;
+  font-size: 0.9rem;
+  color: #fff;
+  border-radius: 0.25em;
+  line-height: var(--tooltip-height);
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
+  left: calc(50% - var(--tooltip-width) / 2);
+}
+
+.button::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: #555;
+  left: calc(50% - 10px);
+  bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
+}
+
+.button::after,
+.button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-wrapper,
+.text,
+.icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.text {
+  top: 0;
+}
+
+.text,
+.icon {
+  transition: top 0.5s;
+}
+
+.icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.button:hover {
+  background: #2563EB;
+}
+
+.button:hover .text {
+  top: -100%;
+}
+
+.button:hover .icon {
+  top: 0;
+}
+
+.button:hover:before,
+.button:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.button:hover:after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.button:hover:before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}
+
+/* Vous pouvez supprimer ou commenter le style existant pour #addToCartBtn si vous ne l'utilisez plus */
+/*
 #addToCartBtn {
   width: 100%;
   padding: 12px;
@@ -149,4 +283,185 @@
 
 #addToCartBtn:hover {
   background-color: #2563EB;
+}
+*/
+
+.cart-add-button {
+  --width: 180px;
+  --height: 40px;
+  --tooltip-height: 35px;
+  --tooltip-width: 90px;
+  --gap-between-tooltip-to-button: 18px;
+  --button-color: #3B82F6;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: var(--button-color);
+  position: relative;
+  text-align: center;
+  border-radius: 0.5em;
+  font-family: "Arial";
+  transition: background 0.3s;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cart-add-button::before {
+  position: absolute;
+  content: attr(data-tooltip);
+  width: var(--tooltip-width);
+  height: var(--tooltip-height);
+  background-color: #555;
+  font-size: 0.9rem;
+  color: #fff;
+  border-radius: 0.25em;
+  line-height: var(--tooltip-height);
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
+  left: calc(50% - var(--tooltip-width) / 2);
+}
+
+.cart-add-button::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: #555;
+  left: calc(50% - 10px);
+  bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
+}
+
+.cart-add-button::after,
+.cart-add-button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.cart-add-button-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-add-button-wrapper,
+.cart-add-button-text,
+.cart-add-button-icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.cart-add-button-text {
+  top: 0;
+}
+
+.cart-add-button-text,
+.cart-add-button-icon {
+  transition: top 0.5s;
+}
+
+.cart-add-button-icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-add-button-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.cart-add-button:hover {
+  background: #2563EB;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cart-add-button:hover .cart-add-button-text {
+  top: -100%;
+}
+
+.cart-add-button:hover .cart-add-button-icon {
+  top: 0;
+}
+
+.cart-add-button:hover:before,
+.cart-add-button:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cart-add-button:hover:after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.cart-add-button:hover:before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}
+
+.button-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.button-shadow:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.open-modal-btn svg {
+    color: #3B82F6; /* Couleur bleue de Tailwind */
+}
+
+.open-modal-btn:hover svg {
+    color: #2563EB; /* Couleur bleue plus foncée au survol */
+}
+
+.cart-icon-adjust {
+    margin-top: 2px; /* Ajustez cette valeur selon vos besoins */
+}
+
+.cart-icon-adjust svg {
+    vertical-align: middle;
+}
+
+.product-price-cart-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+}
+
+.product-cart-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.product-cart-icon {
+    width: 24px;
+    height: 24px;
+    color: #3B82F6; /* Couleur bleue de Tailwind */
+}
+
+.product-cart-button:hover .product-cart-icon {
+    color: #2563EB; /* Couleur bleue plus foncée au survol */
+}
+
+#categories-content, #marques-content {
+    padding-top: 0.25rem;
 }

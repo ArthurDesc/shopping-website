@@ -173,9 +173,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
                     <!-- Déplacez la barre de recherche ici, en dehors de la section des catégories -->
-                    <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
-                        <input class="search__input " type="text" id="categories-search" placeholder="Rechercher">
-                    </div>
+                    
 
                     <!-- Catégories -->
                     <div id="categories-filter" class="filter-section">
@@ -296,6 +294,10 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 </div>
                 <div id="activeFilters" class="flex flex-wrap gap-2 mb-2">
                     <!-- Les étiquettes seront ajoutées ici dynamiquement -->
+                </div>
+
+                <div class="search__container mb-4"> <!-- Augmentez cette valeur pour plus d'espace -->
+                    <input class="search__input" type="text" id="searchInput" placeholder="Filtrer">
                 </div>
             </div>
 
@@ -459,6 +461,19 @@ $(document).ready(function() {
                 $(this).show(); // Afficher le produit si le nom commence par le terme de recherche
             } else {
                 $(this).hide(); // Masquer le produit s'il ne commence pas par le terme de recherche
+            }
+        });
+    });
+
+    $('#searchInput').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        $('.product-card').each(function() {
+            const productName = $(this).find('h3').text().toLowerCase();
+            // Vérifiez si le nom du produit contient le terme de recherche
+            if (productName.includes(searchTerm)) {
+                $(this).show(); // Afficher le produit si le nom contient le terme de recherche
+            } else {
+                $(this).hide(); // Masquer le produit s'il ne contient pas le terme de recherche
             }
         });
     });
