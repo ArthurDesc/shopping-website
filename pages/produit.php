@@ -306,9 +306,17 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 </div>
             </div>
             
-            <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
-                        <input class="search__input " type="text" id="products-search" placeholder="Rechercher des produits">
-                    </div>
+
+    <div class="wave-group " >
+  <input required="" type="text" class="input" id="products-search">
+  <span class="bar"></span>
+  <label class="label">
+    <span class="label-char" style="--index: 0">N</span>
+    <span class="label-char" style="--index: 1">a</span>
+    <span class="label-char" style="--index: 2">m</span>
+    <span class="label-char" style="--index: 3">e</span>
+  </label>
+</div>
 
 <section class="products_list">
     <?php 
