@@ -266,7 +266,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                                name="collections[]" 
                                                value="<?php echo htmlspecialchars($collection); ?>" 
                                                class="mr-2"
-                                               <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
+                                               <?php echo in_array($collection, $filtre->getCollections()) ? 'checked' : ''; ?>>
                                         <label for="filter-<?php echo htmlspecialchars($collection); ?>"><?php echo htmlspecialchars($collection); ?></label>
                                     </div>
                                 <?php endforeach; ?>
@@ -617,3 +617,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
