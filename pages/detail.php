@@ -231,13 +231,7 @@ $review_count = $rating_summary['review_count'];
                         </div>
                     </div>
 
-                    <!-- Quantité -->
-                    <select class="w-full border rounded px-2 py-1 text-sm">
-                        <option>Quantité</option>
-                        <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
-                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                        <?php endfor; ?>
-                    </select>
+                    
 
                     <!-- Marque -->
                     <div class="flex items-center">
@@ -303,20 +297,20 @@ $review_count = $rating_summary['review_count'];
                         <?php else: ?>
                             <form id="add-to-cart-form" class="mt-4 space-y-2">
                                 <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                <select name="taille" class="w-full mb-2 p-2 border rounded" required>
+                                <select id="productSize" class="product-select w-full mb-2 p-2 border rounded-md" required>
                                     <option value="">Choisissez une taille</option>
                                     <?php foreach ($tailles_disponibles as $taille): ?>
                                         <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <select name="quantite" class="w-full mb-2 p-2 border rounded" required>
+                                <select id="productQuantity" class="product-select w-full mb-2 p-2 border rounded-md" required>
                                     <option value="">Choisissez une quantité</option>
                                     <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
                                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                     <?php endfor; ?>
                                 </select>
                                 <div class="flex space-x-2">
-                                    <button type="submit" id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">
+                                    <button type="submit" id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                                         Ajouter au panier
                                     </button>
                                 </div>
@@ -528,6 +522,8 @@ $review_count = $rating_summary['review_count'];
     <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
     <script src="<?php echo BASE_URL; ?>assets/js/detail.js" defer></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
+
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -569,6 +565,58 @@ $review_count = $rating_summary['review_count'];
                 cartCountElement.textContent = count;
             }
         }
+    });
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        let currentProductId = null;
+
+        // Ouvrir le modal lorsque le bouton "Ajouter au panier" est cliqué
+        $('.open-modal-btn').click(function() {
+            currentProductId = $(this).data('product-id');
+            $('#modal-container').removeClass('hidden'); // Afficher le modal
+        });
+
+        // Ajouter au panier
+        $('#addToCartBtn').click(function() {
+            const selectedSize = $('#productSize').val();
+            const selectedQuantity = $('#productQuantity').val();
+
+            if (!selectedSize) {
+                alert('Veuillez choisir une taille');
+                return;
+            }
+
+            if (!selectedQuantity) {
+                alert('Veuillez choisir une quantité');
+                return;
+            }
+
+            // Envoyer la requête AJAX pour ajouter au panier
+            $.ajax({
+                url: '<?php echo BASE_URL; ?>ajax/add_to_cart.php',
+                method: 'POST',
+                data: {
+                    id_produit: currentProductId,
+                    taille: selectedSize,
+                    quantite: selectedQuantity
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        closeModal();
+                        // Mettre à jour le compteur du panier si nécessaire
+                        updateCartCount(data.cartCount);
+                    } else {
+                        alert('Erreur : ' + data.message);
+                    }
+                },
+                error: function() {
+                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                }
+            });
+        });
     });
     </script>
 </body>
