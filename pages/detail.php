@@ -320,9 +320,9 @@ $review_count = $rating_summary['review_count'];
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <label for="quantite" class="block text-sm font-medium text-gray-700 mr-2">Quantité :</label>
-                                        <select id="quantite" name="quantite" class="form-select block w-20 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" required>
+                                    <div class="quantity-container">
+                                        <label for="quantite" class="quantity-label">Quantité :</label>
+                                        <select id="quantite" name="quantite" class="quantity-select" required>
                                             <option value="">0</option>
                                             <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
                                                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>

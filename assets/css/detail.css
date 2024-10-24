@@ -8,3 +8,43 @@ input[type="radio"] + span {
   transition: all 0.2s;
 }
 
+.quantity-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4B5563;
+    margin-right: 0.5rem;
+    line-height: 2.5rem; /* Ajusté pour correspondre à la hauteur du select */
+}
+
+.quantity-select {
+    width: 5rem;
+    height: 2.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid #3B82F6;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: #2563EB;
+    font-size: 0.875rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233B82F6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+}
+
+.quantity-select:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.quantity-select option {
+    background-color: white;
+    color: #2563EB;
+}
