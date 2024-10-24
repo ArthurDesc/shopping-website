@@ -133,6 +133,26 @@ $(document).ready(function() {
     console.log("Nombre de produits trouvés :", $('.product-card').length);
     console.log("Nombre de filtres trouvés :", $('input[type="checkbox"][name^="categories"], input[type="checkbox"][name^="marques"], input[type="checkbox"][name^="collections"]').length);
 
+    // Fonction pour lire les paramètres de l'URL
+    function getURLParameters() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            collections: params.get('collections') ? params.get('collections').split(',') : [],
+            categories: params.get('categories') ? params.get('categories').split(',') : [],
+            marques: params.get('marques') ? params.get('marques').split(',') : []
+        };
+    }
+
+    // Fonction pour cocher les cases en fonction des paramètres de l'URL
+    function setCheckboxesFromURL() {
+        const params = getURLParameters();
+        ['collections', 'categories', 'marques'].forEach(filterType => {
+            params[filterType].forEach(value => {
+                $(`input[name="${filterType}[]"][value="${value}"]`).prop('checked', true);
+            });
+        });
+    }
+
     function applyFilters() {
         console.log("Fonction applyFilters appelée");
 
@@ -147,8 +167,6 @@ $(document).ready(function() {
             marques: selectedMarques,
             searchTerm: searchTerm
         });
-
-        let visibleProducts = 0;
 
         $('.product-card').each(function() {
             const $product = $(this);
@@ -173,13 +191,9 @@ $(document).ready(function() {
             console.log(`Le produit doit-il être affiché ? ${shouldShow}`);
 
             $product.toggle(shouldShow);
-
-            if (shouldShow) {
-                visibleProducts++;
-            }
         });
 
-        console.log(`Nombre de produits visibles après filtrage : ${visibleProducts}`);
+        console.log(`Nombre de produits visibles après filtrage : ${$('.product-card:visible').length}`);
     }
 
     function getSelectedValues(name) {
@@ -201,6 +215,9 @@ $(document).ready(function() {
         console.log(`Nouvelle URL : ${newURL}`);
         history.pushState(null, '', newURL);
     }
+
+    // Cocher les cases en fonction des paramètres de l'URL au chargement de la page
+    setCheckboxesFromURL();
 
     // Appliquer les filtres initiaux
     applyFilters();
