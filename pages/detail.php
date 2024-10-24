@@ -141,9 +141,13 @@ $review_count = $rating_summary['review_count'];
 
                     <!-- Image du produit -->
                     <div class="flex-grow">
-                        <img src="<?php echo htmlspecialchars($image_url); ?>"
-                             alt="<?php echo htmlspecialchars($produit['nom']); ?>"
-                             class="w-full h-auto object-cover rounded-lg">
+                        <div class="image-container">
+                            <div class="card">
+                                <img src="<?php echo htmlspecialchars($image_url); ?>"
+                                     alt="<?php echo htmlspecialchars($produit['nom']); ?>"
+                                     class="product-image">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -344,7 +348,7 @@ $review_count = $rating_summary['review_count'];
                         var form = document.getElementById('product-form');
                         form.action = 'process_paiement.php'; // Redirige vers la page de paiement
                         form.submit();
-                    }
+                    </script>
                     </script>
                 </div>
             </div>

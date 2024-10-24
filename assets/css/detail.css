@@ -48,3 +48,23 @@ input[type="radio"] + span {
     background-color: white;
     color: #2563EB;
 }
+
+.image-container {
+    perspective: 1000px;
+    position: relative;
+    overflow: visible; /* Permet à l'image de dépasser */
+}
+
+.card {
+    transition: transform 0.3s ease;
+    transform-origin: center;
+    will-change: transform; /* Améliore les performances */
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Ajoute une ombre pour l'effet 3D */
+}

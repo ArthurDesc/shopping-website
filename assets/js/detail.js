@@ -72,3 +72,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+document.querySelectorAll('.image-container').forEach(container => {
+    const card = container.querySelector('.card');
+
+    container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const xPos = (rect.width / 2 - (e.clientX - rect.left)) / 10;
+        const yPos = (rect.height / 2 - (e.clientY - rect.top)) / 10;
+
+        card.style.transform = `rotateX(${yPos}deg) rotateY(${xPos}deg)`;
+    });
+
+    container.addEventListener('mouseenter', () => {
+        card.style.transition = "none";
+    });
+
+    container.addEventListener('mouseleave', () => {
+        card.style.transition = "transform 0.3s";
+        card.style.transform = "none";
+    });
+});
