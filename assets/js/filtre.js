@@ -144,3 +144,18 @@ window.applyFilters = function() {
         }
     });
 }
+
+$(document).ready(function() {
+    // Fonction de recherche pour les produits
+    $('#products-search').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        $('.product-card').each(function() {
+            const productName = $(this).find('h3').text().toLowerCase();
+            if (productName.includes(searchTerm)) {
+                $(this).show(); // Afficher le produit si le nom contient le terme de recherche
+            } else {
+                $(this).hide(); // Masquer le produit s'il ne contient pas le terme de recherche
+            }
+        });
+    });
+});
