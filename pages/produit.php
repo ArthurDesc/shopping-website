@@ -172,10 +172,8 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
-                    <!-- Déplacez la barre de recherche ici, en dehors de la section des catégories -->
-                    <div class="search__container mb-6"> <!-- Augmentez cette valeur pour plus d'espace -->
-                        <input class="search__input" type="text" id="categories-search" placeholder="Rechercher des produits">
-                    </div>
+                    <!-- Déplacez la barre de recherche ici, en bas de tous les articles -->
+                   
 
                     <!-- Catégories -->
                     <div id="categories-filter" class="filter-section">
@@ -297,6 +295,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                     <h2 class="text-xl font-semibold mb-2">
                         <span id="filterTitle">Tous les articles</span>
                     </h2>
+                   
                     <!-- Bouton pour afficher les filtres en version mobile -->
                     <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-3 py-1 text-sm rounded">
                         Filtres
@@ -306,7 +305,18 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                     <!-- Les étiquettes seront ajoutées ici dynamiquement -->
                 </div>
             </div>
+            
 
+    <div class="wave-group " >
+  <input required="" type="text" class="input" id="products-search">
+  <span class="bar"></span>
+  <label class="label">
+    <span class="label-char" style="--index: 0">N</span>
+    <span class="label-char" style="--index: 1">a</span>
+    <span class="label-char" style="--index: 2">m</span>
+    <span class="label-char" style="--index: 3">e</span>
+  </label>
+</div>
 
 <section class="products_list">
     <?php 
@@ -508,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fonction de recherche pour les produits
-    $('#categories-search').on('input', function() {
+    $('#products-search').on('input', function() {
         const searchTerm = $(this).val().toLowerCase();
         $('.product-card').each(function() {
             const productName = $(this).find('h3').text().toLowerCase();
