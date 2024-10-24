@@ -7,7 +7,8 @@
   font-size: 16px;
   padding: 10px 10px 10px 5px;
   display: block;
-  width: 400px;
+  width: 100%; /* Reste à 100% pour une meilleure réactivité */
+  max-width: 900px; /* Largeur maximale pour la version ordinateur */
   border: none;
   border-bottom: 1px solid #3B82F6;
   background: transparent;
@@ -43,31 +44,31 @@
 .wave-group .bar {
   position: relative;
   display: block;
-  width: 200px;
+  width: 100%; /* Reste à 100% pour une meilleure réactivité */
+  max-width: 900px; /* Largeur maximale pour correspondre à .input */
 }
 
-.wave-group .bar:before,.wave-group .bar:after {
+.wave-group .bar:before, .wave-group .bar:after {
   content: '';
   height: 2px;
-  width: 0;
+  width: 100%; /* Changement pour que les barres occupent toute la largeur */
   bottom: 1px;
   position: absolute;
   background: #3B82F6;
   transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
 }
 
 .wave-group .bar:before {
-  left: 50%;
+  left: 0; /* Commence à gauche */
+  width: 0; /* Initialement à 0 pour l'animation */
 }
 
 .wave-group .bar:after {
-  right: 50%;
+  right: 0; /* Finit à droite */
+  width: 0; /* Initialement à 0 pour l'animation */
 }
 
 .wave-group .input:focus ~ .bar:before,
 .wave-group .input:focus ~ .bar:after {
-  width: 50%;
+  width: 100%; /* L'animation s'étend jusqu'au bout de l'input */
 }
-
