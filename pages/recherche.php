@@ -24,8 +24,8 @@ $image_base_path = '../assets/images/produits/';
         <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
         <!-- Remplacement de la barre de recherche -->
         <form method="get" action="" class="flex items-center mt-4 sm:mt-0">
-            <div class="wave-group flex items-center"> <!-- Ajout de flex ici -->
-                <input required type="text" name="q" id="input" class="input" value="<?php echo htmlspecialchars($search); ?>" style="width: 100%; max-width: 600px; padding-right: 40px;"> <!-- Agrandi la barre de recherche pour la version ordinateur -->
+            <div class="nouvelle-wave-group flex items-center"> <!-- Ajout de flex ici -->
+                <input required type="text" name="q" id="nouvelle-input" class="input" value="<?php echo htmlspecialchars($search); ?>" style="width: 100%; max-width: 600px; padding-right: 40px;"> <!-- Agrandi la barre de recherche pour la version ordinateur -->
                 <span class="bar"></span>
                 <label class="label">
                     <span class="label-char" style="--index: 0">R</span>

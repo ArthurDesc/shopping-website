@@ -72,3 +72,84 @@
 .wave-group .input:focus ~ .bar:after {
   width: 100%; /* L'animation s'étend jusqu'au bout de l'input */
 }
+
+
+
+
+
+
+
+/* From Uiverse.io by AbanoubMagdy1 */ 
+.nouvelle-wave-group {
+  position: relative;
+}
+
+.nouvelle-wave-group .nouvelle-input {
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 100%; /* Reste à 100% pour une meilleure réactivité */
+  max-width: 900px; /* Largeur maximale pour la version ordinateur */
+  border: none;
+  border-bottom: 1px solid #3B82F6;
+  background: transparent;
+}
+
+.nouvelle-wave-group .nouvelle-input:focus {
+  outline: none;
+}
+
+.nouvelle-wave-group .nouvelle-label {
+  color: #3B82F6;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  display: flex;
+}
+
+.nouvelle-wave-group .nouvelle-label-char {
+  transition: 0.2s ease all;
+  transition-delay: calc(var(--index) * .05s);
+}
+
+.nouvelle-wave-group .nouvelle-input:focus ~ .nouvelle-label .nouvelle-label-char,
+.nouvelle-wave-group .nouvelle-input:valid ~ .nouvelle-label .nouvelle-label-char {
+  transform: translateY(-20px);
+  font-size: 14px;
+  color: #3B82F6;
+}
+
+.nouvelle-wave-group .nouvelle-bar {
+  position: relative;
+  display: block;
+  width: 100%; /* Reste à 100% pour une meilleure réactivité */
+  max-width: 900px; /* Largeur maximale pour correspondre à .nouvelle-input */
+}
+
+.nouvelle-wave-group .nouvelle-bar:before, .nouvelle-wave-group .nouvelle-bar:after {
+  content: '';
+  height: 2px;
+  width: 100%; /* Changement pour que les barres occupent toute la largeur */
+  bottom: 1px;
+  position: absolute;
+  background: #3B82F6;
+  transition: 0.2s ease all;
+}
+
+.nouvelle-wave-group .nouvelle-bar:before {
+  left: 0; /* Commence à gauche */
+  width: 0; /* Initialement à 0 pour l'animation */
+}
+
+.nouvelle-wave-group .nouvelle-bar:after {
+  right: 0; /* Finit à droite */
+  width: 0; /* Initialement à 0 pour l'animation */
+}
+
+.nouvelle-wave-group .nouvelle-input:focus ~ .nouvelle-bar:before,
+.nouvelle-wave-group .nouvelle-input:focus ~ .nouvelle-bar:after {
+  width: 100%; /* L'animation s'étend jusqu'au bout de l'input */
+}
