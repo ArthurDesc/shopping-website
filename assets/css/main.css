@@ -289,3 +289,27 @@ body.sidebar-open::after {
   border-color: #3B82F6; /* Bordure bleue quand l'input est actif */
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); /* Ombre bleue quand l'input est actif */
 }
+
+#autocomplete-results {
+  position: absolute;
+  top: 100%; /* Positionne juste en dessous de la navbar */
+  left: 0;
+  right: 0;
+  max-height: 300px; /* Ajustez selon vos besoins */
+  overflow-y: auto;
+  z-index: 1000;
+  transition: max-height 0.3s ease-in-out;
+}
+
+#autocomplete-results div {
+  height: 60px; /* Hauteur fixe pour chaque résultat */
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#autocomplete-results div:hover {
+  background-color: #f3f4f6;
+}

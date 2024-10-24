@@ -215,4 +215,20 @@ class ArticleManager {
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
+
+    public function searchArticles($query) {
+        $sql = "SELECT nom FROM produits WHERE nom LIKE ? LIMIT 5";
+        $stmt = $this->conn->prepare($sql);
+        $searchQuery = "%$query%";
+        $stmt->bind_param("s", $searchQuery);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $suggestions = [];
+        while ($row = $result->fetch_assoc()) {
+            $suggestions[] = ['name' => $row['nom']];
+        }
+
+        return $suggestions;
+    }
 }

@@ -126,4 +126,18 @@ class CategoryManager {
     public function getLastError() {
         return $this->lastError;
     }
+
+    public function getHeaderCategories() {
+        return [
+            'homme' => ['Vêtements', 'Chaussures', 'Accessoires'],
+            'femme' => ['Vêtements', 'Chaussures', 'Accessoires'],
+            'enfant' => ['Vêtements', 'Chaussures', 'Accessoires'],
+            'sport' => ['Football', 'Basketball', 'Running', 'Tennis']
+        ];
+    }
+
+    public function getCategoryIdByName($name) {
+        // Cette méthode devrait retourner l'ID de la catégorie basé sur son nom
+        // Implémentez la logique pour faire correspondre les noms aux IDs de votre base de données
+    }
 }

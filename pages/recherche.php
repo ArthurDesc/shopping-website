@@ -2,6 +2,12 @@
 require_once '../includes/_db.php';
 require_once '../includes/_header.php';
 
+
+// Vérifier si une session est déjà active
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Démarrer la session si elle n'est pas déjà active
+}
+
 $search = isset($_GET['q']) ? $_GET['q'] : '';
 $stmt = $conn->prepare("SELECT * FROM produits WHERE nom LIKE ? OR description LIKE ?");
 $searchTerm = '%' . $search . '%';
@@ -18,12 +24,26 @@ $image_base_path = '../assets/images/produits/';
         <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
         <!-- Remplacement de la barre de recherche -->
         <form method="get" action="" class="flex items-center mt-4 sm:mt-0">
-            <div class="input-container">
-                <input type="text" name="q" id="input" required value="<?php echo htmlspecialchars($search); ?>">
-                <label for="input" class="label">Rechercher un produit...</label>
-                <div class="underline"></div>
+            <div class="wave-group">
+                <input required type="text" name="q" id="input" class="input" value="<?php echo htmlspecialchars($search); ?>" style="width: 100%; max-width: 600px; padding-right: 40px;"> <!-- Agrandi la barre de recherche pour la version ordinateur -->
+                <span class="bar"></span>
+                <label class="label">
+                    <span class="label-char" style="--index: 0">R</span>
+                    <span class="label-char" style="--index: 1">e</span>
+                    <span class="label-char" style="--index: 2">c</span>
+                    <span class="label-char" style="--index: 3">h</span>
+                    <span class="label-char" style="--index: 4">e</span>
+                    <span class="label-char" style="--index: 5">r</span>
+                    <span class="label-char" style="--index: 6">c</span>
+                    <span class="label-char" style="--index: 7">h</span>
+                    <span class="label-char" style="--index: 8">e</span>
+                </label>
+                <button type="submit" class="search-button" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"> <!-- Positionnement de l'icône -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </button>
             </div>
-           
         </form>
     </div>
     

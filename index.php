@@ -50,7 +50,7 @@ include './includes/_header.php';
     </div>
   </div>
 
-  <h2 id="nouveautes" class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés</h2>
+  <h2 id="nouveautes" class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés du moment</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
       <?php
@@ -70,7 +70,7 @@ include './includes/_header.php';
     </div>
   </div>
 
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Sports</h2>
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Touts pour votre sports</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
@@ -146,7 +146,7 @@ include './includes/_header.php';
     </div>
   </div>
 
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Promotions</h2>
+  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les promotions</h2>
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">

@@ -1,61 +1,65 @@
-// assets/js/autocomplete.js
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const autocompleteResults = document.getElementById('autocomplete-results');
 
     if (!searchInput || !autocompleteResults) {
-        console.error('Éléments de recherche manquants:', { searchInput, autocompleteResults });
-        return; // Arrêter l'exécution si les éléments n'existent pas
+        console.error('Éléments de recherche manquants');
+        return;
     }
 
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', debounce(function() {
         const query = this.value.trim();
-
-        if (query.length < 2) {
-            autocompleteResults.innerHTML = ''; // Réinitialiser les résultats
-            autocompleteResults.classList.add('hidden'); // Cacher les résultats
-            return;
+        if (query.length > 0) {
+            fetchAutocompleteResults(query);
+        } else {
+            hideAutocompleteResults();
         }
+    }, 300));
 
+    function fetchAutocompleteResults(query) {
         fetch(`${BASE_URL}includes/autocomplete.php?q=${encodeURIComponent(query)}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                autocompleteResults.innerHTML = ''; // Réinitialiser les résultats
-                autocompleteResults.classList.remove('hidden'); // Afficher les résultats
-
-                if (data.length > 0) {
-                    data.forEach(item => {
-                        const div = document.createElement('div');
-                        div.textContent = item.nom; // Assurez-vous que 'nom' est la clé correcte
-                        div.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
-
-                        div.addEventListener('click', function() {
-                            searchInput.value = item.nom; // Remplir le champ de recherche
-                            autocompleteResults.classList.add('hidden'); // Cacher les résultats
-                            // Optionnel : soumettre le formulaire de recherche
-                            document.querySelector('form').submit();
-                        });
-
-                        autocompleteResults.appendChild(div); // Ajouter le résultat à la liste
-                    });
-                } else {
-                    autocompleteResults.classList.add('hidden'); // Cacher si aucune suggestion
-                }
+                displayAutocompleteResults(data);
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération des résultats:', error);
-                autocompleteResults.classList.add('hidden'); // Cacher les résultats en cas d'erreur
+                hideAutocompleteResults();
             });
-    });
+    }
 
-    document.addEventListener('click', function(event) {
-        if (!searchInput.contains(event.target) && !autocompleteResults.contains(event.target)) {
-            autocompleteResults.classList.add('hidden'); // Cacher les résultats
+    function displayAutocompleteResults(results) {
+        autocompleteResults.innerHTML = '';
+        if (results.length > 0) {
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.textContent = result.name;
+                div.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer');
+                div.addEventListener('click', () => {
+                    searchInput.value = result.name;
+                    hideAutocompleteResults();
+                });
+                autocompleteResults.appendChild(div);
+            });
+            autocompleteResults.classList.remove('hidden');
+        } else {
+            hideAutocompleteResults();
         }
-    });
+    }
+
+    function hideAutocompleteResults() {
+        autocompleteResults.classList.add('hidden');
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
 });

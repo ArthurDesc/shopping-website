@@ -465,3 +465,108 @@
 #categories-content, #marques-content {
     padding-top: 0.25rem;
 }
+
+
+/* From Uiverse.io by AbanoubMagdy1 */ 
+.wave-group {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.wave-group .input {
+  outline: none; 
+  font-size: 16px;
+  padding: 10px 40px 10px 5px; /* Augmentez le padding droit pour laisser de la place à l'icône */
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #3B82F6;
+  background: transparent;
+}
+
+.wave-group .search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;  /* Réduit de 24px à 18px */
+  height: 18px; /* Réduit de 24px à 18px */
+  color: #3B82F6;
+  transition: 0.2s ease all;
+  pointer-events: none;
+}
+
+.wave-group .input:focus ~ .search-icon,
+.wave-group .input:valid ~ .search-icon {
+  transform: translateY(-100%);
+  color: #3B82F6;
+}
+
+.wave-group .label {
+  color: #3B82F6;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  display: flex;
+}
+
+.wave-group .label-char {
+  transition: 0.2s ease all;
+  transition-delay: calc(var(--index) * .05s);
+}
+
+.wave-group .input:focus ~ label .label-char,
+.wave-group .input:valid ~ label .label-char {
+  transform: translateY(-20px);
+  font-size: 14px;
+  color: #3B82F6;
+}
+
+.wave-group .bar {
+  position: relative;
+  display: block;
+  width: 900px; /* Augmenté de 200px à 300px */
+}
+
+.wave-group .bar:before,.wave-group .bar:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #3B82F6;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.wave-group .bar:before {
+  left: 50%;
+}
+
+.wave-group .bar:after {
+  right: 50%;
+}
+
+.wave-group .input:focus ~ .bar:before,
+.wave-group .input:focus ~ .bar:after {
+  width: 50%;
+}
+
+@media (max-width: 768px) {
+  .wave-group .input {
+    font-size: 14px;
+    padding-right: 35px; /* Ajustez le padding pour les petits écrans */
+  }
+  
+  .wave-group .search-icon {
+    width: 16px;  /* Encore plus petit pour les écrans mobiles */
+    height: 16px;
+  }
+}
+
