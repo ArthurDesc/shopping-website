@@ -1,0 +1,57 @@
+/* Styles communs pour les sélecteurs */
+.product-select {
+    background-color: #eaf4ff; /* Couleur de fond claire */
+    border: 2px solid #007bff; /* Bordure bleue plus épaisse */
+    border-radius: 0.375rem; /* Coins arrondis */
+    padding: 0.5rem; /* Espacement interne */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition pour les effets */
+    color: #007bff; /* Couleur du texte */
+    font-size: 1rem; /* Taille de la police */
+}
+
+/* Effet au focus */
+.product-select:focus {
+    border-color: #0056b3; /* Bordure plus foncée au focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Ombre bleue au focus */
+    outline: none; /* Supprimer le contour par défaut */
+}
+
+/* Style pour le texte du sélecteur */
+.product-select option {
+    color: #007bff; /* Couleur du texte des options */
+}
+
+.add-to-cart-btn {
+    position: relative; /* Pour positionner les éléments enfants */
+    overflow: hidden; /* Pour cacher les éléments qui débordent */
+}
+
+/* Texte principal */
+.main-text {
+    display: block; /* Affiche le texte principal */
+}
+
+/* Icône et prix cachés par défaut */
+.icon, .price {
+    position: absolute; /* Positionnement absolu */
+    left: 50%; /* Centrer horizontalement */
+    transform: translateX(-50%); /* Ajuster pour centrer */
+    opacity: 0; /* Cacher par défaut */
+    transition: opacity 0.3s ease; /* Transition pour l'opacité */
+}
+
+/* Afficher l'icône et le prix au survol */
+.add-to-cart-btn:hover .icon,
+.add-to-cart-btn:hover .price {
+    opacity: 1; /* Afficher au survol */
+}
+
+/* Positionner l'icône légèrement au-dessus */
+.icon {
+    top: -20px; /* Ajustez la position selon vos besoins */
+}
+
+/* Positionner le prix légèrement au-dessus */
+.price {
+    top: -40px; /* Ajustez la position selon vos besoins */
+}
