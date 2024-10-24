@@ -131,22 +131,90 @@ include '../includes/_header.php';
                     <p class="text-2xl font-bold text-green-600"><?= number_format($total, 2); ?>€</p>
                 </div>
                 <div class="flex flex-col space-y-2">
-                    <a href="process_paiement.php" class="button button-green">
-                        Procéder au paiement
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                        </svg>
-                    </a>
+                    <?php if(isset($_SESSION['id_utilisateur'])): ?>
+                        <a href="process_paiement.php" class="button button-green">
+                            Procéder au paiement
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                            </svg>
+                        </a>
+                    <?php else: ?>
+                        <a href="auth.php" class="button button-green">
+                            Se connecter pour payer
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                            </svg>
+                        </a>
+                    <?php endif; ?>
                     <a href="produit.php" class="button">
                         Continuer vos achats
-                        
                     </a>
                 </div>
             </div>
         </div>
         <?php endif; ?>
     </div>
+</section>
+    
+    <script src="../assets/js/scripts.js" defer></script>
+    <script src="../assets/js/navbar.js" defer></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </main>
+
+<form id="payment-form">
+    <div id="card-element">
+        <!-- Stripe Elements will create input elements here -->
+    </div>
+    <button id="submit">Payer</button>
+    <div id="payment-result"></div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showPaymentFormButton = document.getElementById('show-payment-form');
+    const paymentForm = document.getElementById('payment-form');
+
+    showPaymentFormButton.addEventListener('click', function() {
+        paymentForm.style.display = 'block'; // Afficher le formulaire
+        showPaymentFormButton.style.display = 'none'; // Masquer le bouton
+    });
+
+    const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O');
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        console.log('Form submitted');
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+        });
+
+        if (error) {
+            console.error('Error creating payment method:', error);
+            document.getElementById('payment-result').innerText = error.message;
+        } else {
+            console.log('Payment method created:', paymentMethod);
+
+            const formData = new FormData();
+            formData.append('paymentMethodId', paymentMethod.id);
+
+            const response = await fetch('process_paiement.php', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            console.log('Server response:', result);
+            document.getElementById('payment-result').innerText = result.message;
+        }
+    });
+});
+</script>
 
 <!-- Ajout d'un espace supplémentaire avant le footer -->
 <div class="mt-20"></div>
@@ -182,6 +250,15 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     }
 </style>
+
+<style>
+    #payment-form {
+        display: none; /* Masquer le formulaire par défaut */
+    }
+</style>
+
+
+
 
 
 
