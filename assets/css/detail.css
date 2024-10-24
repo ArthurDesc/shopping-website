@@ -21,37 +21,3 @@
     color: #007bff; /* Couleur du texte des options */
 }
 
-.add-to-cart-btn {
-    position: relative; /* Pour positionner les éléments enfants */
-    overflow: hidden; /* Pour cacher les éléments qui débordent */
-}
-
-/* Texte principal */
-.main-text {
-    display: block; /* Affiche le texte principal */
-}
-
-/* Icône et prix cachés par défaut */
-.icon, .price {
-    position: absolute; /* Positionnement absolu */
-    left: 50%; /* Centrer horizontalement */
-    transform: translateX(-50%); /* Ajuster pour centrer */
-    opacity: 0; /* Cacher par défaut */
-    transition: opacity 0.3s ease; /* Transition pour l'opacité */
-}
-
-/* Afficher l'icône et le prix au survol */
-.add-to-cart-btn:hover .icon,
-.add-to-cart-btn:hover .price {
-    opacity: 1; /* Afficher au survol */
-}
-
-/* Positionner l'icône légèrement au-dessus */
-.icon {
-    top: -20px; /* Ajustez la position selon vos besoins */
-}
-
-/* Positionner le prix légèrement au-dessus */
-.price {
-    top: -40px; /* Ajustez la position selon vos besoins */
-}

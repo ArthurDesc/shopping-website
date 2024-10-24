@@ -309,14 +309,10 @@ $review_count = $rating_summary['review_count'];
                                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                     <?php endfor; ?>
                                 </select>
-                                <div class="relative group flex items-center">
-                                    <button type="submit" id="add-to-cart-btn" class="bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition duration-200 flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart mr-2">
-                                            <path d="M4.5 0a.5.5 0 0 1 .5.5V1h7V.5a.5.5 0 0 1 1 0V1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1.5l-1.5 8H5.5l-1.5-8H1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h1V.5a.5.5 0 0 1 .5-.5zM5.5 2h5l1.5 8H5.5L4 2zm1 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0zm6 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0z"/>
-                                        </svg>
+                                <div class="flex space-x-2">
+                                    <button type="submit" id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                                         Ajouter au panier
                                     </button>
-                                    <span class="absolute left-0 transform -translate-y-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($produit['prix']); ?></span>
                                 </div>
                             </form>
                         <?php endif; ?>
