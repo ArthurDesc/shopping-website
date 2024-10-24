@@ -68,9 +68,10 @@ $headerCategories = $categoryManager->getHeaderCategories();
 <nav class="hidden md:flex space-x-8 ml-4">
   <?php foreach ($headerCategories as $category => $subcategories) : ?>
     <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-      <button class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+      <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category)); ?>" 
+         class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
         <?php echo ucfirst($category); ?>
-      </button>
+      </a>
       <div x-show="open" 
            x-transition:enter="transition ease-out duration-200" 
            x-transition:enter-start="opacity-0 transform scale-95" 
@@ -80,11 +81,8 @@ $headerCategories = $categoryManager->getHeaderCategories();
            x-transition:leave-end="opacity-0 transform scale-95" 
            class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
         <?php foreach ($subcategories as $subcategory) : ?>
-          <?php
-          $categoryId = $categoryManager->getCategoryIdByName($category);
-          $subcategoryId = $categoryManager->getCategoryIdByName($subcategory);
-          ?>
-          <a href="<?php echo url("pages/produit.php?category={$categoryId}&subcategory={$subcategoryId}"); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category) . "&category=" . urlencode($subcategory)); ?>" 
+             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
             <?php echo $subcategory; ?>
           </a>
         <?php endforeach; ?>
@@ -160,62 +158,61 @@ $headerCategories = $categoryManager->getHeaderCategories();
               Tous les articles
             </a>
           </li>
-          <!-- Répétez ce bloc pour chaque catégorie (Homme, Femme, Enfants, Sports) -->
           <li>
-            <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
+            <a href="<?php echo url('pages/produit.php?collection=homme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
               Homme
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-homme">
-              <li><a href="#" class="block py-2">T-shirts</a></li>
-              <li><a href="#" class="block py-2">Shorts</a></li>
-              <li><a href="#" class="block py-2">Joggings</a></li>
-              <li><a href="#" class="block py-2">Chaussures</a></li>
-              <li><a href="#" class="block py-2">Accessoires</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=shorts'); ?>" class="block py-2">Shorts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=joggings'); ?>" class="block py-2">Joggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=accessoires'); ?>" class="block py-2">Accessoires</a></li>
             </ul>
           </li>
           <li>
-            <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
+            <a href="<?php echo url('pages/produit.php?collection=femme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
               Femme
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-femme">
-              <li><a href="#" class="block py-2">T-shirts</a></li>
-              <li><a href="#" class="block py-2">Joggings</a></li>
-              <li><a href="#" class="block py-2">Leggings</a></li>
-              <li><a href="#" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=joggings'); ?>" class="block py-2">Joggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=leggings'); ?>" class="block py-2">Leggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=chaussures'); ?>" class="block py-2">Chaussures</a></li>
             </ul>
           </li>
           <li>
-            <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
+            <a href="<?php echo url('pages/produit.php?collection=enfants'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
               Enfants
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-enfants">
-              <li><a href="#" class="block py-2">T-shirts</a></li>
-              <li><a href="#" class="block py-2">Shorts</a></li>
-              <li><a href="#" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=enfants&category=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=enfants&category=shorts'); ?>" class="block py-2">Shorts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=enfants&category=chaussures'); ?>" class="block py-2">Chaussures</a></li>
             </ul>
           </li>
           <li>
-            <a href="#" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
+            <a href="<?php echo url('pages/produit.php?collection=sports'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
               Sports
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-sports">
-              <li><a href="#" class="block py-2">Football</a></li>
-              <li><a href="#" class="block py-2">Basketball</a></li>
-              <li><a href="#" class="block py-2">Running</a></li>
-              <li><a href="#" class="block py-2">Rugby</a></li>
-              <li><a href="#" class="block py-2">Handball</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=football'); ?>" class="block py-2">Football</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=basketball'); ?>" class="block py-2">Basketball</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=running'); ?>" class="block py-2">Running</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=rugby'); ?>" class="block py-2">Rugby</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=handball'); ?>" class="block py-2">Handball</a></li>
             </ul>
           </li>
         </ul>
@@ -239,6 +236,8 @@ $headerCategories = $categoryManager->getHeaderCategories();
   </div>
 
   
+
+
 
 
 

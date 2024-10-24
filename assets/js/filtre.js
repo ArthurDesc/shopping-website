@@ -7,6 +7,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleFiltersButton = document.getElementById('toggleFilters');
     const filterMenu = document.getElementById('filterMenu');
 
+    // Fonction pour obtenir les paramètres de l'URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Fonction pour cocher les filtres basés sur l'URL
+    function checkFiltersFromUrl() {
+        const collection = getUrlParameter('collection');
+        const category = getUrlParameter('category');
+
+        if (collection) {
+            const collectionCheckbox = document.querySelector(`input[name="collections[]"][value="${collection}"i]`);
+            if (collectionCheckbox) {
+                collectionCheckbox.checked = true;
+            }
+        }
+
+        if (category) {
+            const categoryCheckbox = document.querySelector(`input[name="categories[]"][value="${category}"i]`);
+            if (categoryCheckbox) {
+                categoryCheckbox.checked = true;
+            }
+        }
+    }
+
+    // Appeler la fonction pour cocher les filtres basés sur l'URL
+    checkFiltersFromUrl();
+
     // Fonction pour afficher/masquer le menu des filtres
     function toggleFilterMenu() {
         filterMenu.classList.toggle('hidden');
@@ -84,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateActiveFilters();
 });
 
+// Garder la fonction globale si nécessaire
 window.applyFilters = function() {
     console.log("Fonction applyFilters appelée");
 

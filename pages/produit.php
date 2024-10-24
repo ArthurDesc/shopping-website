@@ -27,22 +27,22 @@ $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 // Récupération des produits
 $filtre = new Filtre();
 
-// Appliquer les filtres en fonction des paramètres GET
-if (isset($_GET['categories'])) {
-    $filtre->setCategories($_GET['categories']);
-}
-if (isset($_GET['marques'])) {
-    $filtre->setMarques($_GET['marques']);
-}
-if (isset($_GET['collections'])) {
-    $filtre->setCollections($_GET['collections']);
-}
-if (isset($_GET['prix_min']) && isset($_GET['prix_max'])) {
-    $filtre->setPrixRange($_GET['prix_min'], $_GET['prix_max']);
+// Récupérer le paramètre de collection (Homme, Femme ou Enfant)
+if (isset($_GET['collection'])) {
+    $collection = $_GET['collection'];
+    $filtre->setCollections([$collection]);
 }
 
-// Récupération des produits
+// Récupérer le paramètre de catégorie si présent
+if (isset($_GET['category'])) {
+    $category = $_GET['category'];
+    $filtre->setCategories([$category]);
+}
+
+// Obtenir la requête SQL et les paramètres
 $requete = $filtre->getRequeteSQL();
+
+// Préparer et exécuter la requête
 $stmt = mysqli_prepare($conn, $requete['sql']);
 
 if (!empty($requete['params'])) {
@@ -53,8 +53,10 @@ if (!empty($requete['params'])) {
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-$produits = array();
+// Traiter les résultats
+$produits = [];
 while ($row = mysqli_fetch_assoc($result)) {
+    // Créer des objets Produit et les ajouter au tableau $produits
     $produit = new Produit(
         $row['id_produit'],
         $row['nom'],
@@ -64,15 +66,9 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['description'],
         $row['stock'],
         $row['tailles_disponibles'],
-        [],  // catégories, à remplir plus tard
-        $row['collection']  // ajoutez cette ligne
+        explode(',', $row['categories']),
+        $row['collection']
     );
-    
-    // Récupérer les catégories pour ce produit
-    $productCategories = $categoryManager->getProductCategories($row['id_produit']);
-    $categorieIds = array_column($productCategories, 'id_categorie');
-    $produit->setCategories($categorieIds);
-    
     $produits[] = $produit;
 }
 
@@ -266,12 +262,12 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                 ?>
                                     <div class="flex items-center mb-2">
                                         <input type="checkbox" 
-                                               id="collection_<?php echo htmlspecialchars($collection); ?>" 
+                                               id="filter-<?php echo htmlspecialchars($collection); ?>" 
                                                name="collections[]" 
                                                value="<?php echo htmlspecialchars($collection); ?>" 
                                                class="mr-2"
                                                <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
-                                        <label for="collection_<?php echo htmlspecialchars($collection); ?>"><?php echo htmlspecialchars($collection); ?></label>
+                                        <label for="filter-<?php echo htmlspecialchars($collection); ?>"><?php echo htmlspecialchars($collection); ?></label>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
