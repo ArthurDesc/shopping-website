@@ -78,8 +78,8 @@ document.querySelectorAll('.image-container').forEach(container => {
 
     container.addEventListener('mousemove', (e) => {
         const rect = container.getBoundingClientRect();
-        const xPos = (rect.width / 2 - (e.clientX - rect.left)) / 10;
-        const yPos = (rect.height / 2 - (e.clientY - rect.top)) / 10;
+        const xPos = (rect.width / 2 - (e.clientX - rect.left)) / 30; // Réduit l'effet
+        const yPos = (rect.height / 2 - (e.clientY - rect.top)) / 30; // Réduit l'effet
 
         card.style.transform = `rotateX(${yPos}deg) rotateY(${xPos}deg)`;
     });

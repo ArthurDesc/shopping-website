@@ -68,3 +68,10 @@ input[type="radio"] + span {
     object-position: center;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Ajoute une ombre pour l'effet 3D */
 }
+
+.montserrat-bold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700; /* Gras */
+  font-style: normal;
+}
