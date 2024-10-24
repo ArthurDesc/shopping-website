@@ -1,0 +1,23 @@
+/* Styles communs pour les sélecteurs */
+.product-select {
+    background-color: #eaf4ff; /* Couleur de fond claire */
+    border: 2px solid #007bff; /* Bordure bleue plus épaisse */
+    border-radius: 0.375rem; /* Coins arrondis */
+    padding: 0.5rem; /* Espacement interne */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition pour les effets */
+    color: #007bff; /* Couleur du texte */
+    font-size: 1rem; /* Taille de la police */
+}
+
+/* Effet au focus */
+.product-select:focus {
+    border-color: #0056b3; /* Bordure plus foncée au focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Ombre bleue au focus */
+    outline: none; /* Supprimer le contour par défaut */
+}
+
+/* Style pour le texte du sélecteur */
+.product-select option {
+    color: #007bff; /* Couleur du texte des options */
+}
+
