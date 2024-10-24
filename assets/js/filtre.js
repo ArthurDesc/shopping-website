@@ -38,51 +38,70 @@ $(document).ready(function() {
     // Appliquer les filtres
     function applyFilters() {
         console.log("Applying filters");
-        var filters = getFilterFromURL();
+        var filters = {
+            categories: getSelectedValues('categories'),
+            marques: getSelectedValues('marques'),
+            collections: getSelectedValues('collections')
+        };
         console.log("Filters:", filters);
-        var visibleCount = 0;
+
         $grid.isotope({
             filter: function() {
                 var $this = $(this);
                 var isMatched = true;
+                
                 for (var key in filters) {
-                    if (!filters[key].length) continue;
-                    var attr = $this.attr('data-' + key.slice(0, -1)); // Enlever le 's' final
-                    isMatched = isMatched && (filters[key].indexOf(attr) != -1);
+                    if (filters[key].length > 0) {
+                        var productValue = $this.data(key.slice(0, -1)); // Enlever le 's' final
+                        if (Array.isArray(productValue)) {
+                            isMatched = isMatched && filters[key].some(value => productValue.includes(value));
+                        } else {
+                            isMatched = isMatched && filters[key].includes(productValue);
+                        }
+                    }
                 }
-                if (isMatched) visibleCount++;
+                
                 return isMatched;
             }
         });
-        console.log("Visible items after filtering:", visibleCount);
+
+        console.log("Filters applied, visible items:", $grid.data('isotope').filteredItems.length);
+    }
+
+    function getSelectedValues(name) {
+        return $(`input[name="${name}[]"]:checked`).map(function() {
+            return $(this).val();
+        }).get();
     }
 
     // Initialiser les checkboxes à partir de l'URL
-    var initialFilters = getFilterFromURL();
-    for (var key in initialFilters) {
-        initialFilters[key].forEach(function(value) {
-            var $checkbox = $('input[name="' + key + '[]"][value="' + value + '"]');
-            $checkbox.prop('checked', true);
-            console.log("Checkbox initialized:", key, value, "Found:", $checkbox.length);
-        });
+    function initializeCheckboxes() {
+        var initialFilters = getFilterFromURL();
+        for (var key in initialFilters) {
+            initialFilters[key].forEach(function(value) {
+                var $checkbox = $('input[name="' + key + '[]"][value="' + value + '"]');
+                $checkbox.prop('checked', true);
+                console.log("Checkbox initialized:", key, value, "Found:", $checkbox.length);
+            });
+        }
     }
 
     // Gérer les changements de checkbox
     $('input[type="checkbox"]').on('change', function() {
-        var $checkbox = $(this);
-        var filterGroup = $checkbox.attr('name').replace('[]', '');
-        var filters = getFilterFromURL();
-        filters[filterGroup] = $('input[name="' + filterGroup + '[]"]:checked').map(function() {
-            return this.value;
-        }).get();
-        console.log("Checkbox changed:", filterGroup, "New values:", filters[filterGroup]);
-        updateURL(filters);
         applyFilters();
+        updateURL(getFilterFromURL());
     });
 
-    // Appliquer les filtres initiaux
-    console.log("Applying initial filters");
+    // Initialisation
+    initializeCheckboxes();
     applyFilters();
 
     console.log("Filter initialization complete");
+
+    // Fonction pour synchroniser les filtres avec le serveur (à implémenter si nécessaire)
+    function syncFiltersWithServer() {
+        var filters = getFilterFromURL();
+        // Envoyer une requête AJAX au serveur avec les filtres actuels
+        // et mettre à jour l'affichage en conséquence
+    }
 });

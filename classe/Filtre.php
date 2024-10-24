@@ -95,7 +95,7 @@ class Filtre {
         return !empty(array_intersect($this->categories, $produitsCategories));
     }
 
-    public function getRequeteSQL() {
+    public function getRequeteSQL($countOnly = false) {
         $conditions = [];
         $params = [];
 
@@ -137,6 +137,14 @@ class Filtre {
 
         $sql .= " GROUP BY p.id_produit";
 
+        if ($countOnly) {
+            $sql = "SELECT COUNT(DISTINCT p.id_produit) as total FROM produits p
+                    LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit";
+            if (!empty($conditions)) {
+                $sql .= " WHERE " . implode(' AND ', $conditions);
+            }
+        }
+
         return ['sql' => $sql, 'params' => $params];
     }
 
@@ -146,5 +154,28 @@ class Filtre {
         $this->collections = [];
         $this->prixMin = null;
         $this->prixMax = null;
+    }
+
+    public function getFiltresActifs() {
+        return [
+            'categories' => $this->categories,
+            'marques' => $this->marques,
+            'collections' => $this->collections,
+            'prixMin' => $this->prixMin,
+            'prixMax' => $this->prixMax
+        ];
+    }
+
+    public function setFiltres($filtres) {
+        if (isset($filtres['categories'])) $this->setCategories($filtres['categories']);
+        if (isset($filtres['marques'])) $this->setMarques($filtres['marques']);
+        if (isset($filtres['collections'])) $this->setCollections($filtres['collections']);
+        if (isset($filtres['prixMin']) && isset($filtres['prixMax'])) {
+            $this->setPrixRange($filtres['prixMin'], $filtres['prixMax']);
+        }
+    }
+
+    public function toJson() {
+        return json_encode($this->getFiltresActifs());
     }
 }
