@@ -470,23 +470,38 @@
 /* From Uiverse.io by AbanoubMagdy1 */ 
 .wave-group {
   position: relative;
-  width: 100%; /* Utilise toute la largeur disponible */
-  max-width: 900px; /* Limite la largeur maximale */
-  margin: 0 auto; /* Centre le groupe si nécessaire */
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .wave-group .input {
+  outline: none; 
   font-size: 16px;
-  padding: 10px 10px 10px 5px;
+  padding: 10px 40px 10px 5px; /* Augmentez le padding droit pour laisser de la place à l'icône */
   display: block;
-  width: 100%; /* Utilise toute la largeur du parent */
+  width: 100%;
   border: none;
   border-bottom: 1px solid #3B82F6;
   background: transparent;
 }
 
-.wave-group .input:focus {
-  outline: none;
+.wave-group .search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;  /* Réduit de 24px à 18px */
+  height: 18px; /* Réduit de 24px à 18px */
+  color: #3B82F6;
+  transition: 0.2s ease all;
+  pointer-events: none;
+}
+
+.wave-group .input:focus ~ .search-icon,
+.wave-group .input:valid ~ .search-icon {
+  transform: translateY(-100%);
+  color: #3B82F6;
 }
 
 .wave-group .label {
@@ -515,7 +530,7 @@
 .wave-group .bar {
   position: relative;
   display: block;
-  width: 100%; /* Utilise toute la largeur du parent */
+  width: 900px; /* Augmenté de 200px à 300px */
 }
 
 .wave-group .bar:before,.wave-group .bar:after {
@@ -543,5 +558,15 @@
   width: 50%;
 }
 
-
+@media (max-width: 768px) {
+  .wave-group .input {
+    font-size: 14px;
+    padding-right: 35px; /* Ajustez le padding pour les petits écrans */
+  }
+  
+  .wave-group .search-icon {
+    width: 16px;  /* Encore plus petit pour les écrans mobiles */
+    height: 16px;
+  }
+}
 
