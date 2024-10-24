@@ -43,35 +43,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const addToCartButton = document.querySelector('button[name="ajouter_au_panier"]');
+document.addEventListener('DOMContentLoaded', function() {
+    const addToCartBtn = document.getElementById('addToCartBtn');
 
-        addToCartButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            console.log('Bouton cliqué');
+    addToCartBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        console.log('Bouton cliqué');
 
-            const form = document.getElementById('product-form');
-            const formData = new FormData(form);
+        const form = document.getElementById('product-form');
+        const formData = new FormData(form);
 
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
+        fetch('ajouter_panier.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Réponse du serveur:', data);
+            if (data.success) {
+                alert('Produit ajouté au panier avec succès !');
+            } else {
+                alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
             }
-
-            fetch('ajouter_panier.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Réponse du serveur:', data);
-                if (data.success) {
-                } else {
-                    alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
-            });
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
         });
     });
+});

@@ -232,8 +232,14 @@ $review_count = $rating_summary['review_count'];
                     </div>
 
                     <!-- Quantité -->
-                    <select class="w-full border rounded px-2 py-1 text-sm">
-                        <option>Quantité</option>
+                    <select class="taille-select" name="taille" class="w-full mb-2 p-2 border rounded" required>
+                        <option value="">Choisissez une taille</option>
+                        <?php foreach ($tailles_disponibles as $taille): ?>
+                            <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <select class="quantite-select" name="quantite" class="w-full mb-2 p-2 border rounded" required>
+                        <option value="">Choisissez une quantité</option>
                         <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
                             <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                         <?php endfor; ?>
