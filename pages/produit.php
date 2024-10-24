@@ -303,14 +303,20 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
             </div>
             
 
-    <div class="wave-group " >
+    <div class="wave-group">
   <input required="" type="text" class="input" id="products-search">
   <span class="bar"></span>
   <label class="label">
-    <span class="label-char" style="--index: 0">N</span>
-    <span class="label-char" style="--index: 1">a</span>
-    <span class="label-char" style="--index: 2">m</span>
-    <span class="label-char" style="--index: 3">e</span>
+    <span class="label-char" style="--index: 0">R</span>
+    <span class="label-char" style="--index: 1">e</span>
+    <span class="label-char" style="--index: 2">c</span>
+    <span class="label-char" style="--index: 3">h</span>
+    <span class="label-char" style="--index: 4">e</span>
+    <span class="label-char" style="--index: 5">r</span>
+    <span class="label-char" style="--index: 6">c</span>
+    <span class="label-char" style="--index: 7">h</span>
+    <span class="label-char" style="--index: 8">e</span>
+    <span class="label-char" style="--index: 9">r</span>
   </label>
 </div>
 

@@ -470,13 +470,16 @@
 /* From Uiverse.io by AbanoubMagdy1 */ 
 .wave-group {
   position: relative;
+  width: 100%; /* Utilise toute la largeur disponible */
+  max-width: 900px; /* Limite la largeur maximale */
+  margin: 0 auto; /* Centre le groupe si nécessaire */
 }
 
 .wave-group .input {
   font-size: 16px;
   padding: 10px 10px 10px 5px;
   display: block;
-  width: 900px; /* Augmenté de 200px à 300px */
+  width: 100%; /* Utilise toute la largeur du parent */
   border: none;
   border-bottom: 1px solid #3B82F6;
   background: transparent;
@@ -512,7 +515,7 @@
 .wave-group .bar {
   position: relative;
   display: block;
-  width: 900px; /* Augmenté de 200px à 300px */
+  width: 100%; /* Utilise toute la largeur du parent */
 }
 
 .wave-group .bar:before,.wave-group .bar:after {
@@ -539,5 +542,6 @@
 .wave-group .input:focus ~ .bar:after {
   width: 50%;
 }
+
 
 
