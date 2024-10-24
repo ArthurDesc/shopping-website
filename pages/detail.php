@@ -116,7 +116,7 @@ $review_count = $rating_summary['review_count'];
     <?php endif; ?>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="bg-white p-4 rounded-lg shadow-md">
+        <div class="bg-white p-4 rounded-lg">
             <!-- En-tête avec bouton retour -->
             <div class="mb-4">
                 <a href="produit.php" class="text-black">
@@ -294,27 +294,32 @@ $review_count = $rating_summary['review_count'];
                         <?php if (!isset($produit['id_produit'])): ?>
                             <p>Erreur : Aucun ID de produit fourni.</p>
                         <?php else: ?>
-                            <form id="add-to-cart-form" class="mt-4 space-y-2">
+                            <form id="add-to-cart-form" class="mt-4">
                                 <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Sélectionner la taille</label>
-                                    <div class="flex space-x-2">
-                                        <?php foreach ($tailles_disponibles as $taille): ?>
-                                            <label class="inline-flex items-center">
-                                                <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
-                                                <span class="px-4 py-2 border rounded cursor-pointer hover:bg-gray-100"><?php echo htmlspecialchars($taille); ?></span>
-                                            </label>
-                                        <?php endforeach; ?>
+                                <div class="flex flex-col md:flex-row md:items-center md:space-x-4">
+                                    <div class="mb-2 md:mb-0 flex-grow">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
+                                        <div class="flex flex-wrap gap-2">
+                                            <?php foreach ($tailles_disponibles as $taille): ?>
+                                                <label class="inline-flex items-center">
+                                                    <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
+                                                    <span class="px-3 py-2 border rounded cursor-pointer hover:bg-gray-100 text-sm"><?php echo htmlspecialchars($taille); ?></span>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <label for="quantite" class="block text-sm font-medium text-gray-700 mr-2">Quantité :</label>
+                                        <select id="quantite" name="quantite" class="form-select block w-20 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm" required>
+                                            <option value="">0</option>
+                                            <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
+                                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                            <?php endfor; ?>
+                                        </select>
                                     </div>
                                 </div>
-                                <select class="quantite-select" name="quantite" required>
-                                    <option value="">Choisissez une quantité</option>
-                                    <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
-                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                    <?php endfor; ?>
-                                </select>
-                                <div class="flex space-x-2">
-                                    <button type="submit" id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded">
+                                <div class="mt-4">
+                                    <button type="submit" id="add-to-cart-btn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
                                         Ajouter au panier
                                     </button>
                                 </div>
