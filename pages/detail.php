@@ -164,12 +164,12 @@ $review_count = $rating_summary['review_count'];
                     editingCollection: false,
                     collection: '<?php echo addslashes(htmlspecialchars($produit['collection'])); ?>'
                 }">
-                    <!-- Titre, Avis et Description -->
+                    <!-- Titre, Avis, Prix et Description -->
                     <div class="flex flex-col space-y-1">
                         <!-- Titre et Avis -->
                         <div class="flex items-center">
                             <!-- Titre -->
-                            <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2> <!-- Ajout de la classe montserrat-bold -->
+                            <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
                             <input x-show="editingTitle"
                                    x-model="title"
                                    @keydown.enter="editingTitle = false; updateTitle(title)"
@@ -203,8 +203,17 @@ $review_count = $rating_summary['review_count'];
                             </div>
                         </div>
 
+                        <!-- Prix -->
+                        <p class="text-xl font-semibold text-gray-800 mt-2" x-show="!editingPrice" x-text="price + ' €'"></p>
+                        <input x-show="editingPrice"
+                               x-model="price"
+                               @keydown.enter="editingPrice = false; updatePrice(price)"
+                               @keydown.escape="editingPrice = false"
+                               class="text-xl font-semibold border-b-2 border-blue-500 focus:outline-none"
+                               type="text">
+
                         <!-- Description -->
-                        <p class="text-gray-600 text-sm" x-show="!editingDescription" x-text="description"></p>
+                        <p class="text-gray-600 text-sm mt-2" x-show="!editingDescription" x-text="description"></p>
                     </div>
 
                     <!-- Informations supplémentaires -->
