@@ -4,6 +4,8 @@ require_once __DIR__ . '/../classe/AdminManager.php';
 require_once __DIR__ . '/../classe/Panier.php';
 require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/_db.php';
+require_once __DIR__ . '/../classe/CategoryManager.php';
+
 $adminManager = new AdminManager($conn); // Assurez-vous que $conn est disponible
 $panier = new Panier();
 $total = $panier->getNombreArticles();
@@ -23,6 +25,9 @@ if (!isset($_SESSION['panier'])) {
 }
 
 $total = array_sum($_SESSION['panier'] ?? []);
+
+$categoryManager = new CategoryManager($conn);
+$headerCategories = $categoryManager->getHeaderCategories();
 ?>
 
 
@@ -61,20 +66,10 @@ $total = array_sum($_SESSION['panier'] ?? []);
             </button>
 
 <nav class="hidden md:flex space-x-8 ml-4">
-  <?php
-  $categories = [
-    'homme' => ['Vêtements', 'Chaussures', 'Accessoires'],
-    'femme' => ['Vêtements', 'Chaussures', 'Accessoires'],
-    'enfant' => ['Vêtements', 'Chaussures', 'Accessoires'],
-    'sport' => ['Football', 'Basketball', 'Running', 'Tennis']
-  ];
-
-  foreach ($categories as $category => $subcategories) :
-  ?>
+  <?php foreach ($headerCategories as $category => $subcategories) : ?>
     <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
       <button class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
         <?php echo ucfirst($category); ?>
-    
       </button>
       <div x-show="open" 
            x-transition:enter="transition ease-out duration-200" 
@@ -85,7 +80,11 @@ $total = array_sum($_SESSION['panier'] ?? []);
            x-transition:leave-end="opacity-0 transform scale-95" 
            class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
         <?php foreach ($subcategories as $subcategory) : ?>
-          <a href="<?php echo url("pages/produit.php?category={$category}&subcategory=" . urlencode($subcategory)); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          <?php
+          $categoryId = $categoryManager->getCategoryIdByName($category);
+          $subcategoryId = $categoryManager->getCategoryIdByName($subcategory);
+          ?>
+          <a href="<?php echo url("pages/produit.php?category={$categoryId}&subcategory={$subcategoryId}"); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
             <?php echo $subcategory; ?>
           </a>
         <?php endforeach; ?>
@@ -240,6 +239,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   </div>
 
   
+
 
 
 
