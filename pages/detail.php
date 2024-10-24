@@ -291,18 +291,22 @@ $review_count = $rating_summary['review_count'];
                     $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
                     ?>
                     <div class="mt-4 space-y-2">
-                        <!-- Assurez-vous que l'ID du produit est défini -->
                         <?php if (!isset($produit['id_produit'])): ?>
                             <p>Erreur : Aucun ID de produit fourni.</p>
                         <?php else: ?>
                             <form id="add-to-cart-form" class="mt-4 space-y-2">
                                 <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                <select class="taille-select" name="taille" required>
-                                    <option value="">Choisissez une taille</option>
-                                    <?php foreach ($tailles_disponibles as $taille): ?>
-                                        <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Sélectionner la taille</label>
+                                    <div class="flex space-x-2">
+                                        <?php foreach ($tailles_disponibles as $taille): ?>
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
+                                                <span class="px-4 py-2 border rounded cursor-pointer hover:bg-gray-100"><?php echo htmlspecialchars($taille); ?></span>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                                 <select class="quantite-select" name="quantite" required>
                                     <option value="">Choisissez une quantité</option>
                                     <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
