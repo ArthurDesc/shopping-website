@@ -273,3 +273,51 @@ $(document).ready(function() {
     initializeFiltersFromURL();
     applyFilters(); // Assurez-vous d'appliquer les filtres après avoir coché les cases
 });
+
+// Assurez-vous que cette fonction est appelée pour tous les éléments de filtre
+function attachFilterListeners() {
+    const filterInputs = document.querySelectorAll('input[type="checkbox"][name^="categories"], input[type="checkbox"][name^="marques"], input[type="checkbox"][name^="collections"]');
+    filterInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            console.log(`Filtre modifié : ${this.name} - ${this.value} - Coché : ${this.checked}`);
+            applyFilters();
+            updateURL();
+        });
+    });
+}
+
+function applyFilters() {
+    console.log("Fonction applyFilters appelée");
+
+    const selectedCollections = getSelectedValues('collections');
+    const selectedCategories = getSelectedValues('categories');
+    const selectedMarques = getSelectedValues('marques');
+
+    console.log("Filtres sélectionnés:", {
+        collections: selectedCollections,
+        categories: selectedCategories,
+        marques: selectedMarques
+    });
+
+    $('.product-card').each(function() {
+        const $product = $(this);
+        const productCollection = $product.data('collection');
+        const productCategories = $product.data('categories') ? $product.data('categories').toString().split(',') : [];
+        const productMarque = $product.data('brand');
+
+        const collectionMatch = selectedCollections.length === 0 || selectedCollections.includes(productCollection);
+        const categoryMatch = selectedCategories.length === 0 || productCategories.some(cat => selectedCategories.includes(cat));
+        const marqueMatch = selectedMarques.length === 0 || selectedMarques.includes(productMarque);
+
+        const shouldShow = collectionMatch && categoryMatch && marqueMatch;
+        $product.toggle(shouldShow);
+    });
+
+    console.log(`Nombre de produits visibles après filtrage : ${$('.product-card:visible').length}`);
+}
+
+// Appelez cette fonction au chargement de la page
+$(document).ready(function() {
+    attachFilterListeners();
+    applyFilters(); // Appliquer les filtres initiaux
+});
