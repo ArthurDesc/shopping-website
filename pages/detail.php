@@ -117,22 +117,34 @@ $review_count = $rating_summary['review_count'];
 
     <div class="container mx-auto px-4 py-8">
         <div class="bg-white p-4 rounded-lg">
-            <!-- En-tête avec bouton retour -->
-            <div class="mb-4">
-                <a href="produit.php" class="text-black">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                </a>
-            </div>
-
             <!-- Contenu principal -->
             <div class="flex flex-col md:flex-row">
-                <!-- Image du produit -->
-                <div class="md:w-1/3 mb-4 md:mb-0">
-                    <img src="<?php echo htmlspecialchars($image_url); ?>"
-                         alt="<?php echo htmlspecialchars($produit['nom']); ?>"
-                         class="w-full h-auto object-cover rounded-lg">
+                <!-- Icône de retour (visible uniquement sur mobile) -->
+                <div class="md:hidden mb-4">
+                    <a href="produit.php" class="text-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Conteneur pour l'icône de retour et l'image -->
+                <div class="flex md:w-1/3">
+                    <!-- Icône de retour (visible uniquement sur desktop) -->
+                    <div class="hidden md:flex md:items-start md:pr-4">
+                        <a href="produit.php" class="text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Image du produit -->
+                    <div class="flex-grow">
+                        <img src="<?php echo htmlspecialchars($image_url); ?>"
+                             alt="<?php echo htmlspecialchars($produit['nom']); ?>"
+                             class="w-full h-auto object-cover rounded-lg">
+                    </div>
                 </div>
 
                 <!-- Détails du produit -->
