@@ -137,18 +137,22 @@ $(document).ready(function() {
     function getURLParameters() {
         const params = new URLSearchParams(window.location.search);
         return {
-            collections: params.get('collections') ? params.get('collections').split(',') : [],
-            categories: params.get('categories') ? params.get('categories').split(',') : [],
-            marques: params.get('marques') ? params.get('marques').split(',') : []
+            collection: params.get('collection') ? [params.get('collection')] : [],
+            category: params.get('category') ? [params.get('category')] : [],
+            marque: params.get('marque') ? [params.get('marque')] : []
         };
     }
 
     // Fonction pour cocher les cases en fonction des paramètres de l'URL
     function setCheckboxesFromURL() {
         const params = getURLParameters();
-        ['collections', 'categories', 'marques'].forEach(filterType => {
-            params[filterType].forEach(value => {
-                $(`input[name="${filterType}[]"][value="${value}"]`).prop('checked', true);
+        Object.entries(params).forEach(([filterType, values]) => {
+            values.forEach(value => {
+                const checkbox = $(`input[name="${filterType}s[]"][value="${value}"]`);
+                if (checkbox.length) {
+                    checkbox.prop('checked', true);
+                    addFilterTag(filterType + 's', value);
+                }
             });
         });
     }
@@ -175,21 +179,12 @@ $(document).ready(function() {
             const productCategories = $product.data('categories') ? $product.data('categories').toString().split(',') : [];
             const productMarque = $product.data('brand');
 
-            console.log("Données du produit:", {
-                name: productName,
-                collection: productCollection,
-                categories: productCategories,
-                marque: productMarque
-            });
-
             const collectionMatch = selectedCollections.length === 0 || selectedCollections.includes(productCollection);
             const categoryMatch = selectedCategories.length === 0 || productCategories.some(cat => selectedCategories.includes(cat));
             const marqueMatch = selectedMarques.length === 0 || selectedMarques.includes(productMarque);
             const searchMatch = productName.includes(searchTerm);
 
             const shouldShow = collectionMatch && categoryMatch && marqueMatch && searchMatch;
-            console.log(`Le produit doit-il être affiché ? ${shouldShow}`);
-
             $product.toggle(shouldShow);
         });
 
@@ -216,6 +211,30 @@ $(document).ready(function() {
         history.pushState(null, '', newURL);
     }
 
+    function addFilterTag(type, value) {
+        const tagId = `${type}-${value}`.replace(/\s+/g, '-').toLowerCase();
+        if ($(`#${tagId}`).length === 0) {
+            const tag = $('<span>')
+                .addClass('filter-tag')
+                .attr('id', tagId)
+                .text(value)
+                .append(
+                    $('<button>')
+                        .addClass('remove-tag')
+                        .html('&times;')
+                        .on('click', function() {
+                            $(`input[name="${type}[]"][value="${value}"]`).prop('checked', false).trigger('change');
+                        })
+                );
+            $('#selected-filters').append(tag);
+        }
+    }
+
+    function removeFilterTag(type, value) {
+        const tagId = `${type}-${value}`.replace(/\s+/g, '-').toLowerCase();
+        $(`#${tagId}`).remove();
+    }
+
     // Cocher les cases en fonction des paramètres de l'URL au chargement de la page
     setCheckboxesFromURL();
 
@@ -225,10 +244,32 @@ $(document).ready(function() {
     // Écouter les changements sur tous les filtres
     $('input[type="checkbox"][name^="categories"], input[type="checkbox"][name^="marques"], input[type="checkbox"][name^="collections"]').on('change', function() {
         console.log(`Filtre modifié : ${this.name} - ${this.value} - Coché : ${this.checked}`);
+        const filterType = this.name.replace('[]', '');
+        if (this.checked) {
+            addFilterTag(filterType, this.value);
+        } else {
+            removeFilterTag(filterType, this.value);
+        }
         applyFilters();
         updateURL();
     });
 
     // Écouter les changements dans la barre de recherche
     $('#products-search').on('input', applyFilters);
+
+    function initializeFiltersFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const urlCollection = urlParams.get('collection');
+        if (urlCollection) {
+            $('input[name="collections[]"]').each(function() {
+                if (this.value.toLowerCase() === urlCollection.toLowerCase()) {
+                    $(this).prop('checked', true);
+                }
+            });
+        }
+    }
+
+    initializeFiltersFromURL();
+    applyFilters(); // Assurez-vous d'appliquer les filtres après avoir coché les cases
 });
