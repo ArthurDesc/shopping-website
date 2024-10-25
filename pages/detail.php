@@ -141,12 +141,10 @@ $review_count = $rating_summary['review_count'];
 
                     <!-- Image du produit -->
                     <div class="flex-grow">
-                        <div class="image-container">
-                            <div class="card">
-                                <img src="<?php echo htmlspecialchars($image_url); ?>"
-                                     alt="<?php echo htmlspecialchars($produit['nom']); ?>"
-                                     class="product-image">
-                            </div>
+                        <div class="image-container aspect-[3/4] overflow-hidden rounded-lg">
+                            <img src="<?php echo htmlspecialchars($image_url); ?>"
+                                 alt="<?php echo htmlspecialchars($produit['nom']); ?>"
+                                 class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>
