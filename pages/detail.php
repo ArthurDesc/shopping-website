@@ -285,7 +285,7 @@ $review_count = $rating_summary['review_count'];
                                         </div>
                                     </div>
                                     <div class="quantity-container mb-2 md:mb-0 w-auto flex items-center">
-                                        <label for="quantite" class="quantity-label mr-2">Quantité</label>
+                                        <label for="quantite" class="quantity-label mr-3">Quantité</label>
                                         <select id="quantite" name="quantite" class="quantity-select" required>
                                             <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
                                                 <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
