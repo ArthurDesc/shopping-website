@@ -212,12 +212,12 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                                 <?php endif; ?>
                             </div>
                             <div class="ml-4 flex-shrink-0">
-                                <p class="text-2xl font-semibold text-gray-800" x-show="!editingPrice" x-text="price + ' €'"></p>
+                                <p class="text-2xl font-bold " x-show="!editingPrice" x-text="price + ' €'"></p>
                                 <input x-show="editingPrice"
                                     x-model="price"
                                     @keydown.enter="editingPrice = false; updatePrice(price)"
                                     @keydown.escape="editingPrice = false"
-                                    class="text-2xl font-semibold text-gray-800 border-b-2 border-blue-500 focus:outline-none"
+                                    class="text-3xl font-bold text-blue-600 border-b-2 border-blue-500 focus:outline-none"
                                     type="text">
                                 <?php if ($isEditMode): ?>
                                     <button @click="editingPrice = !editingPrice" class="text-gray-600 hover:text-blue-500">
