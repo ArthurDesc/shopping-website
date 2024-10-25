@@ -272,7 +272,7 @@ $review_count = $rating_summary['review_count'];
                         <?php else: ?>
                             <form id="add-to-cart-form" class="mt-4">
                                 <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                <div class="flex flex-col md:flex-row md:items-center md:space-x-4">
+                                <div class="flex flex-col md:flex-row md:items-end md:space-x-4"> <!-- Changé items-center en items-end -->
                                     <div class="mb-2 md:mb-0 flex-grow">
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
                                         <div class="flex flex-wrap gap-2">
@@ -284,15 +284,15 @@ $review_count = $rating_summary['review_count'];
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <div class="quantity-container">
-                                        <label for="quantite" class="quantity-label">Quantité :</label>
-                                        <select id="quantite" name="quantite" class="quantity-select" required>
+                                    <div class="quantity-container mb-2 md:mb-0"> <!-- Ajouté mb-2 md:mb-0 -->
+                                        <label for="quantite" class="block text-sm font-medium text-gray-700 mb-1">Quantité</label> <!-- Ajouté block et mb-1 -->
+                                        <select id="quantite" name="quantite" class="quantity-select border rounded-lg px-7 py-1" required> <!-- Ajusté les classes -->
                                             <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
                                                 <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
                                             <?php endfor; ?>
                                         </select>
                                     </div>
-                                    <div class="add-to-cart-button mt-4 md:mt-0"> <!-- Ajout de classes pour l'alignement -->
+                                    <div class="add-to-cart-button mt-4 md:mt-0"> <!-- Gardé mt-4 md:mt-0 -->
                                         <div class="add-to-cart-button-wrapper">
                                             <div class="add-to-cart-text">Ajouter au panier</div>
                                             <span class="add-to-cart-icon">
