@@ -1,22 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const starRating = document.getElementById('star-rating');
-    const stars = starRating.querySelectorAll('.star-icon');
-    const noteInput = document.getElementById('note-input');
-    const form = document.getElementById('avis-form');
+    const starRating = document.getElementById('comment-form');
+    const stars = starRating.querySelectorAll('input[name="note"]');
+    const noteInput = document.createElement('input');
+    noteInput.type = 'hidden';
+    noteInput.name = 'note';
+    starRating.appendChild(noteInput);
 
     stars.forEach(star => {
-        star.addEventListener('click', function() {
-            const rating = this.getAttribute('data-rating');
+        star.addEventListener('change', function() {
+            const rating = this.value;
             noteInput.value = rating;
             highlightStars(rating);
         });
 
-        star.addEventListener('mouseover', function() {
-            const rating = this.getAttribute('data-rating');
+        star.nextElementSibling.addEventListener('mouseover', function() {
+            const rating = this.previousElementSibling.value;
             highlightStars(rating);
         });
 
-        star.addEventListener('mouseout', function() {
+        star.nextElementSibling.addEventListener('mouseout', function() {
             const currentRating = noteInput.value || 0;
             highlightStars(currentRating);
         });
@@ -24,18 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function highlightStars(rating) {
         stars.forEach(star => {
-            const starRating = star.getAttribute('data-rating');
-            if (starRating <= rating) {
-                star.classList.remove('text-gray-300');
-                star.classList.add('text-yellow-400');
+            const starLabel = star.nextElementSibling;
+            const starIcon = starLabel.querySelector('svg');
+            if (star.value <= rating) {
+                starIcon.classList.remove('text-gray-300');
+                starIcon.classList.add('text-yellow-400');
             } else {
-                star.classList.remove('text-yellow-400');
-                star.classList.add('text-gray-300');
+                starIcon.classList.remove('text-yellow-400');
+                starIcon.classList.add('text-gray-300');
             }
         });
     }
 
-    form.addEventListener('submit', function(e) {
+    starRating.addEventListener('submit', function(e) {
         if (!noteInput.value) {
             e.preventDefault();
             alert('Veuillez sélectionner une note avant de soumettre votre avis.');

@@ -67,4 +67,28 @@ class Avis {
     public function isNoteValide() {
         return $this->note >= 1 && $this->note <= 5;
     }
+
+    public function toArray() {
+        return [
+            'id' => $this->id_avis,
+            'id_produit' => $this->id_produit,
+            'id_utilisateur' => $this->id_utilisateur,
+            'note' => $this->note,
+            'commentaire' => $this->commentaire,
+            'date_creation' => $this->date_creation,
+            'nom_utilisateur' => $this->nom_utilisateur
+        ];
+    }
+
+    public static function fromArray($data) {
+        return new self(
+            $data['id_avis'],
+            $data['id_produit'],
+            $data['id_utilisateur'],
+            $data['note'],
+            $data['commentaire'],
+            $data['date_creation'],
+            $data['nom_utilisateur']
+        );
+    }
 }
