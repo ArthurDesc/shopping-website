@@ -1,0 +1,228 @@
+input[type="radio"]:checked + span {
+  border-color: #3B82F6;
+  background-color: #EFF6FF;
+  color: #2563EB;
+}
+
+input[type="radio"] + span {
+  transition: all 0.2s;
+}
+
+.quantity-container {
+    display: flex;
+    flex-direction: row; /* Changé de column à row */
+    align-items: center; /* Centré verticalement */
+    justify-content: flex-start; /* Aligné à gauche */
+}
+
+.quantity-label {
+    font-size: 1rem; /* Augmenté pour correspondre à la nouvelle taille du select */
+    font-weight: 500;
+    color: #4B5563;
+    margin-right: 0.75rem; /* Légèrement augmenté */
+    line-height: 1.75rem; /* Ajusté pour correspondre à la nouvelle hauteur */
+}
+
+.quantity-select {
+    width: 6rem;  /* Augmenté de 5rem à 6rem */
+    height: 3rem; /* Augmenté de 2.5rem à 3rem */
+    padding: 0 0.75rem; /* Augmenté le padding horizontal */
+    border: 1px solid #3B82F6;
+    border-radius: 0.5rem; /* Légèrement augmenté pour correspondre à la nouvelle taille */
+    background-color: white;
+    color: #2563EB;
+    font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233B82F6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center; /* Ajusté pour la nouvelle taille */
+    background-repeat: no-repeat;
+    background-size: 1.75em 1.75em; /* Légèrement augmenté */
+}
+
+.quantity-select:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.quantity-select option {
+    background-color: white;
+    color: #2563EB;
+}
+
+.image-container {
+    perspective: 1000px;
+    position: relative;
+    overflow: visible; /* Permet à l'image de dépasser */
+}
+
+.card {
+    transition: transform 0.3s ease;
+    transform-origin: center;
+    will-change: transform; /* Améliore les performances */
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Ajoute une ombre pour l'effet 3D */
+}
+
+.montserrat-bold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700; /* Gras */
+  font-style: normal;
+}
+
+.add-to-cart-button {
+  --width: 200px; /* Augmenté de 150px à 200px */
+  --height: 50px; /* Augmenté de 40px à 50px */
+  --tooltip-height: 35px;
+  --tooltip-width: 90px;
+  --gap-between-tooltip-to-button: 18px;
+  --button-color: #2f7bf5;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: var(--button-color);
+  position: relative;
+  text-align: center;
+  border-radius: 0.5em;
+  font-family: "Arial", sans-serif;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.add-to-cart-button::after,
+.add-to-cart-button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.add-to-cart-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem; /* Augmenté la taille de la police */
+  font-weight: bold; /* Ajouté du gras pour plus de visibilité */
+}
+
+.add-to-cart-button-wrapper,
+.add-to-cart-text,
+.add-to-cart-icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.add-to-cart-text {
+  top: 0;
+}
+
+.add-to-cart-text,
+.add-to-cart-icon {
+  transition: top 0.5s;
+}
+
+.add-to-cart-icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-icon svg {
+  width: 28px; /* Augmenté de 24px à 28px */
+  height: 28px; /* Augmenté de 24px à 28px */
+}
+
+.add-to-cart-button:hover {
+  background: #2563EB;
+  cursor: pointer; /* Assurez-vous que le curseur reste en mode pointer au survol */
+}
+
+.add-to-cart-button:hover .add-to-cart-text {
+  top: -100%;
+}
+
+.add-to-cart-button:hover .add-to-cart-icon {
+  top: 0;
+}
+
+.add-to-cart-button:hover:before,
+.add-to-cart-button:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-to-cart-button:hover:after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.add-to-cart-button:hover:before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}
+
+.tab-container {
+    display: flex;
+    position: relative;
+    background-color: #f3f4f6;
+    box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+    padding: 0.5rem;
+    border-radius: 99px;
+    z-index: 1;
+}
+
+.tab {
+    display: none;
+}
+
+.tab_label {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 99px;
+    color: #4b5563;
+    position: relative;
+    z-index: 3;
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+.tab:checked + .tab_label {
+    color: #2563EB;
+    font-weight: bold;
+}
+
+.indicator {
+    position: absolute;
+    height: calc(100% - 1rem);
+    border-radius: 99px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    z-index: 2;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.back-arrow-icon {
+    transition: stroke 0.3s ease;
+}
+
+a:hover .back-arrow-icon {
+    stroke: #3B82F6; /* Couleur bleue de Tailwind (blue-500) */
+}

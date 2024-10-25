@@ -120,7 +120,8 @@
 }
 
 /* Styles pour l'input de tailles */
-#productSize {
+.taille-select,
+.quantite-select {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
@@ -138,13 +139,15 @@
   background-size: 16px;
 }
 
-#productSize:focus {
+.taille-select:focus,
+.quantite-select:focus {
   outline: none;
   border-color: #2563EB;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }
 
-#productSize option {
+.taille-select option,
+.quantite-select option {
   color: #2563EB;
   background-color: white;
 }
@@ -570,3 +573,12 @@
   }
 }
 
+input[type="radio"]:checked + span {
+  border-color: #3B82F6;
+  background-color: #EFF6FF;
+  color: #2563EB;
+}
+
+input[type="radio"] + span {
+  transition: background-color 0.3s, color 0.3s;
+}
