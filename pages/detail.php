@@ -410,9 +410,9 @@ $collection = $categoryManager->getCollection($id_produit);
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <div class="flex-grow">
-                            <textarea id="commentaire" name="commentaire" rows="4" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Écrivez votre commentaire ici..."></textarea>
-                            <button type="submit" class="comment-submit-btn mt-2">
+                        <div class="flex-grow flex items-start space-x-4">
+                            <textarea id="commentaire" name="commentaire" rows="4" class="flex-grow px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Écrivez votre commentaire ici..."></textarea>
+                            <button type="submit" class="comment-submit-btn">
                                 <div class="comment-btn-outline"></div>
                                 <div class="comment-btn-state comment-btn-state--default">
                                     <div class="comment-btn-icon">

@@ -571,3 +571,26 @@ a:hover .back-arrow-icon {
   }
 }
 
+#commentaire {
+    flex-grow: 1;
+    margin-right: 1rem;
+    resize: none; /* Empêche le redimensionnement */
+    border: 2px solid #3B82F6; /* Bordure bleue */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #2D3748; /* Couleur de texte foncée */
+    background-color: #EBF8FF; /* Fond bleu très clair */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#commentaire:focus {
+    outline: none;
+    border-color: #2563EB; /* Bleu plus foncé lors du focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Ombre bleue lors du focus */
+}
+
+#commentaire::placeholder {
+    color: #718096; /* Couleur du placeholder */
+}
