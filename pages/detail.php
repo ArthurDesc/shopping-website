@@ -373,10 +373,9 @@ $collection = $categoryManager->getCollection($id_produit);
 
                     <div id="tab2-content" class="tab-pane">
                         <!-- Contenu de l'onglet Avis -->
-                        <h3 class="text-xl font-semibold mb-4">Avis des clients</h3>
                         <?php if (!empty($avis_produit)): ?>
                             <?php foreach ($avis_produit as $avis): ?>
-                                <div class="mb-4 p-4 border rounded">
+                                <div class="mb-6 p-6 border rounded-xl shadow-lg bg-white"> <!-- Modifications ici -->
                                     <div class="flex justify-between items-center mb-2">
                                         <span class="font-semibold"><?php echo htmlspecialchars($avis->getNomUtilisateur()); ?></span>
                                         <span class="text-sm text-gray-500"><?php echo $avis->getFormattedDate(); ?></span>
@@ -394,7 +393,7 @@ $collection = $categoryManager->getCollection($id_produit);
                                             <?php endif; ?>
                                         <?php endfor; ?>
                                     </div>
-                                    <p><?php echo htmlspecialchars($avis->getCommentaire()); ?></p>
+                                    <p class="text-gray-700"><?php echo htmlspecialchars($avis->getCommentaire()); ?></p> <!-- Ajout de la classe text-gray-700 -->
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -406,9 +405,11 @@ $collection = $categoryManager->getCollection($id_produit);
                 <form action="<?php echo BASE_URL; ?>ajax/add_comment.php" method="POST" id="comment-form">
                     <div class="flex items-start space-x-4">
                         <div class="flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                            </svg>
+                            <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center shadow-md overflow-hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
                         </div>
                         <div class="flex-grow flex items-start space-x-4">
                             <textarea id="commentaire" name="commentaire" rows="4" class="flex-grow px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Écrivez votre commentaire ici..."></textarea>
