@@ -284,9 +284,9 @@ $review_count = $rating_summary['review_count'];
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
-                                    <div class="quantity-container mb-2 md:mb-0"> <!-- Ajouté mb-2 md:mb-0 -->
-                                        <label for="quantite" class="block text-sm font-medium text-gray-700 mb-1">Quantité</label> <!-- Ajouté block et mb-1 -->
-                                        <select id="quantite" name="quantite" class="quantity-select border rounded-lg px-7 py-1" required> <!-- Ajusté les classes -->
+                                    <div class="quantity-container mb-2 md:mb-0 w-auto flex items-center"> <!-- Modifié w-24 en w-auto et ajouté flex items-center -->
+                                        <label for="quantite" class="quantity-label mr-2">Quantité</label> <!-- Ajouté mr-2 pour l'espacement -->
+                                        <select id="quantite" name="quantite" class="quantity-select" required>
                                             <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
                                                 <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
                                             <?php endfor; ?>

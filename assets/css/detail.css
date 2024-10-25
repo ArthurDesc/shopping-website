@@ -10,16 +10,17 @@ input[type="radio"] + span {
 
 .quantity-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row; /* Changé de column à row */
+    align-items: center; /* Centré verticalement */
+    justify-content: flex-start; /* Aligné à gauche */
 }
 
 .quantity-label {
     font-size: 0.875rem;
     font-weight: 500;
     color: #4B5563;
-    margin-right: 0.5rem;
-    line-height: 2.5rem; /* Ajusté pour correspondre à la hauteur du select */
+    margin-right: 0.5rem; /* Ajouté une marge à droite */
+    line-height: 1.5rem;
 }
 
 .quantity-select {
