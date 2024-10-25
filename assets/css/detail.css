@@ -174,10 +174,11 @@ input[type="radio"] + span {
 .tab-container {
   display: flex;
   position: relative;
-  background-color: #fff;
+  background-color: #f3f4f6; /* Fond légèrement gris pour le conteneur */
   box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
   padding: 0.75rem;
   border-radius: 99px;
+  z-index: 1;
 }
 
 .tab {
@@ -189,18 +190,24 @@ input[type="radio"] + span {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   border-radius: 99px;
+  color: #4b5563; /* Couleur de texte par défaut */
+  position: relative;
+  z-index: 3; /* Augmente le z-index pour s'assurer que le texte est au-dessus des autres éléments */
 }
 
 .tab:checked + .tab_label {
-  color: #185ee0;
+  color: #2563EB; /* Couleur de texte bleu foncé pour l'onglet actif */
+  font-weight: bold;
 }
 
 .indicator {
   position: absolute;
   height: 3rem;
   border-radius: 99px;
-  background-color: #e6efff;
+  background-color: #ffffff; /* Fond blanc pour l'indicateur */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère pour l'effet de profondeur */
   transition: all 0.3s ease-in-out;
+  z-index: 2; /* Assurez-vous que l'indicateur est en dessous du texte mais au-dessus du conteneur */
 }
 
 .tab--1:checked ~ .indicator {

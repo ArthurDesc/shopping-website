@@ -494,6 +494,7 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
     document.addEventListener('DOMContentLoaded', function() {
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-pane');
+        const tabContainer = document.querySelector('.tab-container');
 
         tabs.forEach(tab => {
             tab.addEventListener('change', function() {
@@ -501,7 +502,11 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                 tabContents.forEach(content => {
                     content.classList.remove('active');
                 });
-                document.getElementById(tabId + '-content').classList.add('active');
+                const activeContent = document.getElementById(tabId + '-content');
+                activeContent.classList.add('active');
+
+                // Faire défiler la page vers les onglets
+                tabContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
