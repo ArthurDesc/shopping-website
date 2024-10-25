@@ -167,25 +167,27 @@ $review_count = $rating_summary['review_count'];
                     <!-- Titre, Avis, Prix et Description -->
                     <div class="flex flex-col space-y-1">
                         <!-- Titre et Avis -->
-                        <div class="flex items-center">
+                        <div class="flex items-center justify-between">
                             <!-- Titre -->
-                            <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
-                            <input x-show="editingTitle"
-                                   x-model="title"
-                                   @keydown.enter="editingTitle = false; updateTitle(title)"
-                                   @keydown.escape="editingTitle = false"
-                                   class="text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none"
-                                   type="text">
-                            <?php if ($isEditMode): ?>
-                                <button @click="editingTitle = !editingTitle" class="ml-2 text-gray-600 hover:text-blue-500">
-                                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </button>
-                            <?php endif; ?>
+                            <div class="flex items-center">
+                                <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
+                                <input x-show="editingTitle"
+                                       x-model="title"
+                                       @keydown.enter="editingTitle = false; updateTitle(title)"
+                                       @keydown.escape="editingTitle = false"
+                                       class="text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none"
+                                       type="text">
+                                <?php if ($isEditMode): ?>
+                                    <button @click="editingTitle = !editingTitle" class="ml-2 text-gray-600 hover:text-blue-500">
+                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
 
                             <!-- Étoiles et nombre d'avis -->
-                            <div class="flex items-center ml-4">
+                            <div class="flex items-center">
                                 <div class="flex items-center">
                                     <?php
                                     for ($i = 1; $i <= 5; $i++) {
@@ -204,12 +206,12 @@ $review_count = $rating_summary['review_count'];
                         </div>
 
                         <!-- Prix -->
-                        <p class="text-xl font-semibold text-gray-800 mt-2" x-show="!editingPrice" x-text="price + ' €'"></p>
+                        <p class="text-2xl font-semibold text-gray-800" x-show="!editingPrice" x-text="price + ' €'"></p>
                         <input x-show="editingPrice"
                                x-model="price"
                                @keydown.enter="editingPrice = false; updatePrice(price)"
                                @keydown.escape="editingPrice = false"
-                               class="text-xl font-semibold border-b-2 border-blue-500 focus:outline-none"
+                               class="text-2xl font-semibold border-b-2 border-blue-500 focus:outline-none"
                                type="text">
 
                         <!-- Description -->
@@ -217,7 +219,7 @@ $review_count = $rating_summary['review_count'];
                     </div>
 
                     <!-- Informations supplémentaires -->
-                    <div class="flex flex-col space-y-1 mt-1">
+                    <div class="flex flex-col space-y-3 mt-1">
                         <!-- Marque -->
                         <div class="flex items-center">
                             <span class="font-semibold">Marque:</span>
@@ -258,7 +260,7 @@ $review_count = $rating_summary['review_count'];
                                             <?php foreach ($tailles_disponibles as $taille): ?>
                                                 <label class="inline-flex items-center">
                                                     <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
-                                                    <span class="px-3 py-2 border rounded cursor-pointer hover:bg-gray-100 text-sm"><?php echo htmlspecialchars($taille); ?></span>
+                                                    <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span> <!-- Augmenté la taille -->
                                                 </label>
                                             <?php endforeach; ?>
                                         </div>
