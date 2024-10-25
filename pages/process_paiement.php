@@ -29,44 +29,92 @@ if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Créer d'abord l'intention de paiement
+        // Démarrer une transaction
+        $conn->begin_transaction();
+
+        // Créer l'intention de paiement Stripe
         $paymentIntent = \Stripe\PaymentIntent::create([
-            'amount' => $total_amount * 100, // Montant en cents
+            'amount' => (int)($total_amount * 100),
             'currency' => 'eur',
             'automatic_payment_methods' => [
                 'enabled' => true,
             ],
         ]);
 
-        // Si l'utilisateur est connecté, enregistrer dans la base de données
-        if (isset($_SESSION['id_utilisateur'])) {
-            try {
-                // Insérer dans la table paiements
-                $stmt = $conn->prepare("INSERT INTO paiements (
-                    montant, 
-                    date_paiement, 
-                    methode_paiement, 
-                    statut_paiement, 
-                    transaction_id, 
-                    id_utilisateur
-                ) VALUES (?, NOW(), 'carte', 'en_attente', ?, ?)");
-                
-                $stmt->bind_param(
-                    "dsi",
-                    $total_amount,
-                    $paymentIntent->id,
-                    $_SESSION['id_utilisateur']
-                );
-                $stmt->execute();
-            } catch (Exception $e) {
-                // Log l'erreur mais continuer le processus de paiement
-                error_log("Erreur SQL: " . $e->getMessage());
+        // 1. Créer la commande
+        $stmt = $conn->prepare("INSERT INTO commandes (date_commande, montant_total, id_utilisateur, statut) VALUES (NOW(), ?, ?, 'validé')");
+        $stmt->bind_param("di", $total_amount, $_SESSION['id_utilisateur']);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Erreur lors de la création de la commande");
+        }
+        $id_commande = $conn->insert_id;
+
+        // 2. Créer le paiement
+        $stmt = $conn->prepare("INSERT INTO paiements (
+            montant, 
+            date_paiement, 
+            methode_paiement, 
+            statut_paiement, 
+            transaction_id, 
+            id_commande, 
+            id_utilisateur
+        ) VALUES (?, NOW(), 'carte', 'réussi', ?, ?, ?)");
+        
+        $stmt->bind_param("dsii", 
+            $total_amount, 
+            $paymentIntent->id,
+            $id_commande,
+            $_SESSION['id_utilisateur']
+        );
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Erreur lors de l'enregistrement du paiement");
+        }
+
+        // 3. Créer les lignes de commande et mettre à jour les stocks
+        foreach ($_SESSION['panier'] as $id_produit => $quantity) {
+            // Vérifier le stock disponible
+            $stmt = $conn->prepare("SELECT prix, stock FROM produits WHERE id_produit = ?");
+            $stmt->bind_param("i", $id_produit);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $product = $result->fetch_assoc();
+
+            if (!$product || $product['stock'] < $quantity) {
+                throw new Exception("Stock insuffisant pour le produit ID: " . $id_produit);
+            }
+
+            // Insérer la ligne de commande
+            $stmt = $conn->prepare("INSERT INTO commande_produit (id_commande, id_produit, quantite, prix_unitaire) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("iiid", $id_commande, $id_produit, $quantity, $product['prix']);
+            
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur lors de l'enregistrement des produits commandés");
+            }
+
+            // Mettre à jour le stock
+            $stmt = $conn->prepare("UPDATE produits SET stock = stock - ? WHERE id_produit = ?");
+            $stmt->bind_param("ii", $quantity, $id_produit);
+            
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur lors de la mise à jour du stock");
             }
         }
 
+        // Si tout s'est bien passé, valider la transaction
+        $conn->commit();
+
+        // Retourner le client secret pour Stripe
         echo json_encode(['clientSecret' => $paymentIntent->client_secret]);
-    } catch (\Stripe\Exception\ApiErrorException $e) {
-        echo json_encode(['message' => 'Erreur : ' . $e->getMessage()]);
+
+    } catch (Exception $e) {
+        // En cas d'erreur, annuler toutes les modifications
+        $conn->rollback();
+        
+        error_log("Erreur lors du traitement du paiement: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['message' => 'Une erreur est survenue: ' . $e->getMessage()]);
     }
     exit;
 }
