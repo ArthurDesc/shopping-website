@@ -535,7 +535,6 @@ $review_count = $rating_summary['review_count'];
                     .then(data => {
                         if (data.success) {
                             updateCartCount(data.cartCount);
-                            aert('Produit ajouté au panier avec succès!');
                         } else {
                             alert('Erreur : ' + data.message);
                         }

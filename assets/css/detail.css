@@ -78,8 +78,8 @@ input[type="radio"] + span {
 }
 
 .add-to-cart-button {
-  --width: 150px;
-  --height: 40px;
+  --width: 200px; /* Augmenté de 150px à 200px */
+  --height: 50px; /* Augmenté de 40px à 50px */
   --tooltip-height: 35px;
   --tooltip-width: 90px;
   --gap-between-tooltip-to-button: 18px;
@@ -93,10 +93,8 @@ input[type="radio"] + span {
   border-radius: 0.5em;
   font-family: "Arial", sans-serif;
   transition: background 0.3s;
-  cursor: pointer; /* Ajout du curseur pointer par défaut */
+  cursor: pointer;
 }
-
-
 
 .add-to-cart-button::after,
 .add-to-cart-button::before {
@@ -109,6 +107,8 @@ input[type="radio"] + span {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.1rem; /* Augmenté la taille de la police */
+  font-weight: bold; /* Ajouté du gras pour plus de visibilité */
 }
 
 .add-to-cart-button-wrapper,
@@ -140,8 +140,8 @@ input[type="radio"] + span {
 }
 
 .add-to-cart-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 28px; /* Augmenté de 24px à 28px */
+  height: 28px; /* Augmenté de 24px à 28px */
 }
 
 .add-to-cart-button:hover {
