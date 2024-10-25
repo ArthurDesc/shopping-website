@@ -218,3 +218,11 @@ input[type="radio"] + span {
 .tab-pane.active {
     display: block;
 }
+
+.back-arrow-icon {
+    transition: stroke 0.3s ease;
+}
+
+a:hover .back-arrow-icon {
+    stroke: #3B82F6; /* Couleur bleue de Tailwind (blue-500) */
+}

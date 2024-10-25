@@ -130,8 +130,8 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
             <div class="flex flex-col md:flex-row">
                 <!-- Icône de retour (visible uniquement sur mobile) -->
                 <div class="md:hidden mb-4">
-                    <a href="produit.php" class="text-black">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <a href="produit.php" class="text-black hover:text-blue-500 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 back-arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                     </a>
@@ -141,8 +141,8 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                 <div class="flex md:w-1/3">
                     <!-- Icône de retour (visible uniquement sur desktop) -->
                     <div class="hidden md:flex md:items-start md:pr-4">
-                        <a href="produit.php" class="text-black">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <a href="produit.php" class="text-black hover:text-blue-500 transition-colors duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 back-arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
                         </a>
@@ -522,6 +522,7 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.tab');
             const indicator = document.querySelector('.indicator');
+            const tabContents = document.querySelectorAll('.tab-pane');
 
             function positionIndicator() {
                 const activeTab = document.querySelector('.tab:checked');
@@ -532,8 +533,23 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                 }
             }
 
+            function showTabContent(tabId) {
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                const activeContent = document.getElementById(`${tabId}-content`);
+                if (activeContent) {
+                    activeContent.classList.add('active');
+                    // Ajout du défilement automatique
+                    activeContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
             tabs.forEach(tab => {
-                tab.addEventListener('change', positionIndicator);
+                tab.addEventListener('change', function() {
+                    positionIndicator();
+                    showTabContent(this.id);
+                });
             });
 
             // Position initiale de l'indicateur
