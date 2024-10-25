@@ -358,7 +358,7 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                         <!-- Contenu de l'onglet Détails -->
                         <h3 class="text-xl font-semibold mb-4">Détails du produit</h3>
                         <p class="mb-4"><?php echo htmlspecialchars($produit['description']); ?></p>
-                        
+
                         <div class="flex flex-col space-y-4">
                             <!-- La marque a été déplacée, donc vous pouvez supprimer ou commenter cette partie -->
                             <!-- 
@@ -399,9 +399,13 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                                     <div class="flex items-center mb-2">
                                         <?php for ($i = 1; $i <= 5; $i++): ?>
                                             <?php if ($i <= $avis->getNote()): ?>
-                                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                </svg>
                                             <?php else: ?>
-                                                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                </svg>
                                             <?php endif; ?>
                                         <?php endfor; ?>
                                     </div>
@@ -499,25 +503,25 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                     const formData = new FormData(form);
 
                     fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            updateCartCount(data.cartCount);
-                        } else {
-                            alert('Erreur : ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                        alert('Une erreur s\'est produite lors de l\'ajout au panier.');
-                    })
-                    .finally(() => {
-                        addToCartBtn.disabled = false;
-                        addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajouter au panier';
-                    });
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                updateCartCount(data.cartCount);
+                            } else {
+                                alert('Erreur : ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                        })
+                        .finally(() => {
+                            addToCartBtn.disabled = false;
+                            addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajouter au panier';
+                        });
                 });
             } else {
                 console.error('Le formulaire ou le bouton d\'ajout au panier n\'a pas été trouvé.');
@@ -533,28 +537,29 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-pane');
-        const tabContainer = document.querySelector('.tab-container');
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const indicator = document.querySelector('.indicator');
 
-        tabs.forEach(tab => {
-            tab.addEventListener('change', function() {
-                const tabId = this.id;
-                tabContents.forEach(content => {
-                    content.classList.remove('active');
-                });
-                const activeContent = document.getElementById(tabId + '-content');
-                activeContent.classList.add('active');
+            function positionIndicator() {
+                const activeTab = document.querySelector('.tab:checked');
+                if (activeTab) {
+                    const label = activeTab.nextElementSibling;
+                    indicator.style.width = `${label.offsetWidth}px`;
+                    indicator.style.left = `${label.offsetLeft}px`;
+                }
+            }
 
-                // Faire défiler la page vers les onglets
-                tabContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            tabs.forEach(tab => {
+                tab.addEventListener('change', positionIndicator);
             });
-        });
 
-        // Initialisation : afficher le contenu du premier onglet
-        document.getElementById('tab1-content').classList.add('active');
-    });
+            // Position initiale de l'indicateur
+            positionIndicator();
+
+            // Repositionner l'indicateur lors du redimensionnement de la fenêtre
+            window.addEventListener('resize', positionIndicator);
+        });
     </script>
 
 </body>
