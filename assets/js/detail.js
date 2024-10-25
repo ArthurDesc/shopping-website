@@ -94,3 +94,92 @@ document.querySelectorAll('.image-container').forEach(container => {
     });
 });
 
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('add-to-cart-form');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+
+    if (form && addToCartBtn) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            addToCartBtn.disabled = true;
+            addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajout en cours...';
+
+            const formData = new FormData(form);
+
+            fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCartCount(data.cartCount);
+                    } else {
+                        alert('Erreur : ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                })
+                .finally(() => {
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajouter au panier';
+                });
+        });
+    } else {
+        console.error('Le formulaire ou le bouton d\'ajout au panier n\'a pas été trouvé.');
+    }
+
+    function updateCartCount(count) {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = count;
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const indicator = document.querySelector('.indicator');
+    const tabContents = document.querySelectorAll('.tab-pane');
+
+    function positionIndicator() {
+        const activeTab = document.querySelector('.tab:checked');
+        if (activeTab) {
+            const label = activeTab.nextElementSibling;
+            indicator.style.width = `${label.offsetWidth}px`;
+            indicator.style.left = `${label.offsetLeft}px`;
+        }
+    }
+
+    function showTabContent(tabId) {
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+        const activeContent = document.getElementById(`${tabId}-content`);
+        if (activeContent) {
+            activeContent.classList.add('active');
+            // Ajout du défilement automatique
+            activeContent.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('change', function() {
+            positionIndicator();
+            showTabContent(this.id);
+        });
+    });
+
+    // Position initiale de l'indicateur
+    positionIndicator();
+
+    // Repositionner l'indicateur lors du redimensionnement de la fenêtre
+    window.addEventListener('resize', positionIndicator);
+});
