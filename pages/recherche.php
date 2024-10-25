@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Démarre la mise en mémoire tampon de sortie
 require_once '../includes/_db.php';
 require_once '../includes/_header.php';
 
@@ -8,6 +9,13 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start(); // Démarrer la session si elle n'est pas déjà active
 }
 
+if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
+    $id_produit = $_POST['id_produit'];
+    $panier->ajouter($id_produit);
+    // Redirigez vers la même page pour éviter les soumissions multiples
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
 $search = isset($_GET['q']) ? $_GET['q'] : '';
 $stmt = $conn->prepare("SELECT * FROM produits WHERE nom LIKE ? OR description LIKE ?");
 $searchTerm = '%' . $search . '%';
@@ -17,11 +25,14 @@ $result = $stmt->get_result();
 
 // Définir le chemin de base pour les images des produits
 $image_base_path = '../assets/images/produits/';
+
+// Ajouter une variable pour le nombre de résultats
+$nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
 ?>
 
 <div class="container mx-auto px-4">
     <div class="mt-6 flex flex-col sm:flex-row justify-between items-center">
-        <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
+        <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>" (<?php echo $nombre_de_resultats; ?> résultats)</h2>
         <!-- Remplacement de la barre de recherche -->
         <form method="get" action="" class="flex items-center mt-4 sm:mt-0">
             <div class="nouvelle-wave-group flex items-center"> <!-- Ajout de flex ici -->
@@ -90,6 +101,7 @@ $image_base_path = '../assets/images/produits/';
     </section>
 </div>
 
+
 <?php require_once '../includes/_footer.php'; ?>
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -98,3 +110,4 @@ $image_base_path = '../assets/images/produits/';
 
 </body>
 </html>
+
