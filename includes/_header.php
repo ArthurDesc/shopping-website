@@ -45,8 +45,10 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <?php include __DIR__ . '/../includes/_fonts.php';  ?>
   <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
 
