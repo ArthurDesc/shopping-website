@@ -115,6 +115,9 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
 
 $categoryManager = new CategoryManager($conn);
 
+// Récupérer les catégories du produit
+$categories = $categoryManager->getProductCategories($id_produit);
+
 // Récupérer la collection du produit
 $collection = $categoryManager->getCollection($id_produit);
 
@@ -351,16 +354,18 @@ $collection = $categoryManager->getCollection($id_produit);
                             <!-- Collection -->
                             <div class="flex items-center">
                                 <span class="font-semibold">Collection:</span>
-                                <span class="ml-2 text-gray-600"><?php echo htmlspecialchars($collection); ?></span>
+                                <span class="ml-2 text-gray-600"><?php echo htmlspecialchars($collection ?? 'Non spécifiée'); ?></span>
                             </div>
 
                             <!-- Affichage des catégories -->
                             <div class="flex items-center">
                                 <span class="font-semibold">Catégories:</span>
                                 <span class="ml-2 text-gray-600">
-                                    <?php foreach ($categories as $categorie): ?>
-                                        <?php echo htmlspecialchars($categorie['nom']); ?>
-                                    <?php endforeach; ?>
+                                    <?php if (!empty($categories)): ?>
+                                        <?php echo implode(', ', array_map(function($cat) { return htmlspecialchars($cat['nom']); }, $categories)); ?>
+                                    <?php else: ?>
+                                        Aucune catégorie
+                                    <?php endif; ?>
                                 </span>
                             </div>
                         </div>
