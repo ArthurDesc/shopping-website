@@ -6,6 +6,8 @@ require_once '../classe/ArticleManager.php';
 require_once '../classe/AdminManager.php';
 require_once '../includes/product_functions.php';
 require_once "../classe/Panier.php";
+require_once "../classe/Avis.php";
+require_once "../classe/AvisManager.php";
 
 
 // Créez une instance de AdminManager
@@ -103,6 +105,12 @@ function getProductRatingSummary($product_id)
 $rating_summary = getProductRatingSummary($produit['id_produit']);
 $average_rating = $rating_summary['average_rating'] !== null ? round($rating_summary['average_rating'], 1) : 0;
 $review_count = $rating_summary['review_count'];
+
+// Créer une instance de AvisManager
+$avisManager = new AvisManager($conn);
+
+// Récupérer les avis pour ce produit
+$avis_produit = $avisManager->getAvisForProduct($id_produit);
 
 ?>
 
@@ -237,31 +245,6 @@ $review_count = $rating_summary['review_count'];
                         <?php endif; ?>
                     </div>
 
-                    <!-- Informations supplémentaires -->
-                    <div class="flex flex-col space-y-4 mt-4"> <!-- Changé space-y-3 en space-y-4 et ajouté mt-4 -->
-                        <!-- Marque -->
-                        <div class="flex items-center">
-                            <span class="font-semibold">Marque:</span>
-                            <span class="ml-2 text-gray-600" x-text="brand"></span>
-                        </div>
-
-                        <!-- Collection -->
-                        <div class="flex items-center">
-                            <span class="font-semibold">Collection:</span>
-                            <span class="ml-2 text-gray-600" x-text="collection"></span>
-                        </div>
-
-                        <!-- Catégories -->
-                        <div class="flex items-center">
-                            <span class="font-semibold">Catégories:</span>
-                            <span class="ml-2 text-gray-600">
-                                <?php foreach ($categories as $categorie): ?>
-                                    <?php echo htmlspecialchars($categorie['nom']); ?>
-                                <?php endforeach; ?>
-                            </span>
-                        </div>
-                    </div>
-
                     <!-- Boutons d'action -->
                     <?php
                     $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
@@ -316,139 +299,85 @@ $review_count = $rating_summary['review_count'];
                     </script>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Après les détails du produit et avant le formulaire d'ajout au panier -->
-    <div class="mt-8" x-data="{ openReviews: false, showAllReviews: false }">
-        <h3 class="text-xl font-semibold mb-4 cursor-pointer flex items-center ml-2" @click="openReviews = !openReviews">
-            Avis des clients
-            <svg :class="{'rotate-180': openReviews}" class="w-5 h-5 ml-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-        </h3>
+            <!-- Ajoutez cette section pour les onglets -->
+            <div class="mt-8">
+                <div class="tab-container">
+                    <input type="radio" name="tab" id="tab1" class="tab tab--1" checked />
+                    <label class="tab_label" for="tab1">Détails</label>
 
-        <div x-show="openReviews" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="mt-4">
-            <!-- Affichage des avis existants -->
-            <div class="mb-6 space-y-6">
-                <?php
-                $avis = getProductReviews($produit['id_produit']);
-                $avisCount = count($avis);
-                $avisToShow = 3; // Nombre d'avis à afficher initialement
+                    <input type="radio" name="tab" id="tab2" class="tab tab--2" />
+                    <label class="tab_label" for="tab2">Avis</label>
 
-                if (empty($avis)) {
-                    echo "<p class='text-lg'>Aucun avis pour ce produit.</p>";
-                } else {
-                    for ($i = 0; $i < min($avisToShow, $avisCount); $i++) {
-                        $review = $avis[$i];
-                ?>
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                            <div class="flex items-center mb-4">
-                                <div class="flex items-center">
-                                    <?php for ($j = 1; $j <= 5; $j++): ?>
-                                        <svg class="w-6 h-6 <?php echo $j <= $review['note'] ? 'text-yellow-400' : 'text-gray-300'; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                        </svg>
-                                    <?php endfor; ?>
-                                </div>
-                                <span class="ml-3 text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($review['nom_utilisateur']); ?></span>
+                    <div class="indicator"></div>
+                </div>
+
+                <!-- Contenu des onglets -->
+                <div class="tab-content mt-4">
+                    <div id="tab1-content" class="tab-pane active">
+                        <!-- Contenu de l'onglet Détails -->
+                        <h3 class="text-xl font-semibold mb-4">Détails du produit</h3>
+                        <p class="mb-4"><?php echo htmlspecialchars($produit['description']); ?></p>
+                        
+                        <div class="flex flex-col space-y-4">
+                            <!-- Marque -->
+                            <div class="flex items-center">
+                                <span class="font-semibold">Marque:</span>
+                                <span class="ml-2 text-gray-600" x-text="brand"></span>
                             </div>
-                            <p class="text-lg text-gray-700 mb-2"><?php echo htmlspecialchars($review['commentaire']); ?></p>
-                            <?php if (isset($review['date_avis']) && $review['date_avis']): ?>
-                                <p class="text-sm text-gray-500">Publié le <?php echo date('d/m/Y à H:i', strtotime($review['date_avis'])); ?></p>
-                            <?php else: ?>
-                                <p class="text-sm text-gray-500">Date de publication non disponible</p>
-                            <?php endif; ?>
+
+                            <!-- Collection -->
+                            <div class="flex items-center">
+                                <span class="font-semibold">Collection:</span>
+                                <span class="ml-2 text-gray-600" x-text="collection"></span>
+                            </div>
+
+                            <!-- Catégories -->
+                            <div class="flex items-center">
+                                <span class="font-semibold">Catégories:</span>
+                                <span class="ml-2 text-gray-600">
+                                    <?php foreach ($categories as $categorie): ?>
+                                        <?php echo htmlspecialchars($categorie['nom']); ?>
+                                    <?php endforeach; ?>
+                                </span>
+                            </div>
                         </div>
-                        <?php
-                    }
+                    </div>
 
-                    if ($avisCount > $avisToShow) {
-                        echo '<div x-show="!showAllReviews" class="text-center mt-4">';
-                        echo '<button @click="showAllReviews = true" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Voir plus d\'avis</button>';
-                        echo '</div>';
-
-                        echo '<div x-show="showAllReviews" class="space-y-6">';
-                        for ($i = $avisToShow; $i < $avisCount; $i++) {
-                            $review = $avis[$i];
-                        ?>
-                            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                                <div class="flex items-center mb-4">
-                                    <div class="flex items-center">
-                                        <?php for ($j = 1; $j <= 5; $j++): ?>
-                                            <svg class="w-6 h-6 <?php echo $j <= $review['note'] ? 'text-yellow-400' : 'text-gray-300'; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                            </svg>
+                    <div id="tab2-content" class="tab-pane">
+                        <!-- Contenu de l'onglet Avis -->
+                        <h3 class="text-xl font-semibold mb-4">Avis des clients</h3>
+                        <?php if (!empty($avis_produit)): ?>
+                            <?php foreach ($avis_produit as $avis): ?>
+                                <div class="mb-4 p-4 border rounded">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold"><?php echo htmlspecialchars($avis->getNomUtilisateur()); ?></span>
+                                        <span class="text-sm text-gray-500"><?php echo $avis->getFormattedDate(); ?></span>
+                                    </div>
+                                    <div class="flex items-center mb-2">
+                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                            <?php if ($i <= $avis->getNote()): ?>
+                                                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                            <?php else: ?>
+                                                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                            <?php endif; ?>
                                         <?php endfor; ?>
                                     </div>
-                                    <span class="ml-3 text-lg font-semibold text-gray-800"><?php echo htmlspecialchars($review['nom_utilisateur']); ?></span>
+                                    <p><?php echo htmlspecialchars($avis->getCommentaire()); ?></p>
                                 </div>
-                                <p class="text-lg text-gray-700 mb-2"><?php echo htmlspecialchars($review['commentaire']); ?></p>
-                                <?php if (isset($review['date_avis']) && $review['date_avis']): ?>
-                                    <p class="text-sm text-gray-500">Publié le <?php echo date('d/m/Y à H:i', strtotime($review['date_avis'])); ?></p>
-                                <?php else: ?>
-                                    <p class="text-sm text-gray-500">Date de publication non disponible</p>
-                                <?php endif; ?>
-                            </div>
-                <?php
-                        }
-                        echo '<div class="text-center mt-4">';
-                        echo '<button @click="showAllReviews = false" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Voir moins</button>';
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                }
-                ?>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Aucun avis pour ce produit pour le moment.</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
 
-            <!-- Formulaire pour ajouter un avis -->
-            <h4 class="text-lg font-semibold mb-2 ml-2">Donnez votre avis</h4>
-            <form action="<?php echo BASE_URL; ?>pages/ajouter_avis.php" method="POST" id="avis-form" class="text-base">
-                <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 ml-2">Note</label>
-                    <div class="flex items-center" id="star-rating">
-                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                            <svg class="w-8 h-8 text-gray-300 cursor-pointer star-icon" data-rating="<?php echo $i; ?>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                        <?php endfor; ?>
-                    </div>
-                    <input type="hidden" name="note" id="note-input" value="" required>
-                </div>
-                <div class="mb-4">
-                    <div class="bg-white border border-slate-200 grid grid-cols-6 gap-2 rounded-xl p-2 text-sm">
-                        <h1 class="text-center text-slate-200 text-xl font-bold col-span-6">Votre avis</h1>
-                        <textarea name="commentaire" id="commentaire" placeholder="Votre avis..." class="bg-slate-100 text-slate-600 h-28 placeholder:text-slate-600 placeholder:opacity-50 border border-slate-200 col-span-6 resize-none outline-none rounded-lg p-2 duration-300 focus:border-slate-600" required></textarea>
-
-                        <span class="col-span-2"></span>
-                        <button type="submit" class="bg-slate-100 stroke-slate-600 border border-slate-200 col-span-2 flex justify-center rounded-lg p-2 duration-300 hover:border-slate-600 hover:text-white focus:stroke-blue-200 focus:bg-blue-400">
-                            <svg fill="none" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" d="M7.39999 6.32003L15.89 3.49003C19.7 2.22003 21.77 4.30003 20.51 8.11003L17.68 16.6C15.78 22.31 12.66 22.31 10.76 16.6L9.91999 14.08L7.39999 13.24C1.68999 11.34 1.68999 8.23003 7.39999 6.32003Z"></path>
-                                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" d="M10.11 13.6501L13.69 10.0601"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="mt-12">
-        <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <?php
-            // Récupérer les produits associés (à implémenter)
-            $produits_associes = getRelatedProducts($produit['id_produit'], $produit['id_categorie']);
-            foreach ($produits_associes as $produit_associe) {
-                echo "<div class='border p-4 rounded'>";
-                echo "<img src='" . BASE_URL . "assets/images/produits/" . $produit_associe['image_url'] . "' alt='" . $produit_associe['nom'] . "' class='w-full h-48 object-cover mb-2'>";
-                echo "<h4 class='font-semibold'>" . $produit_associe['nom'] . "</h4>";
-                echo "<p class='text-gray-600'>" . number_format($produit_associe['prix'], 2) . " €</p>";
-                echo "<a href='detail.php?id=" . $produit_associe['id_produit'] . "' class='mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded'>Voir le produit</a>";
-                echo "</div>";
-            }
-            ?>
+            <!-- Section Produits associés (en dehors des onglets) -->
+            <div class="mt-8">
+                <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
+                <!-- Ajoutez ici le contenu des produits associés -->
+            </div>
         </div>
     </div>
 
@@ -560,6 +489,27 @@ $review_count = $rating_summary['review_count'];
             }
         });
     </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-pane');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('change', function() {
+                const tabId = this.id;
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId + '-content').classList.add('active');
+            });
+        });
+
+        // Initialisation : afficher le contenu du premier onglet
+        document.getElementById('tab1-content').classList.add('active');
+    });
+    </script>
+
 </body>
 
 </html>
