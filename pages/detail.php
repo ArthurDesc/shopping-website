@@ -238,7 +238,7 @@ $review_count = $rating_summary['review_count'];
                     </div>
 
                     <!-- Informations supplémentaires -->
-                    <div class="flex flex-col space-y-3 mt-1">
+                    <div class="flex flex-col space-y-4 mt-4"> <!-- Changé space-y-3 en space-y-4 et ajouté mt-4 -->
                         <!-- Marque -->
                         <div class="flex items-center">
                             <span class="font-semibold">Marque:</span>
@@ -287,9 +287,8 @@ $review_count = $rating_summary['review_count'];
                                     <div class="quantity-container">
                                         <label for="quantite" class="quantity-label">Quantité :</label>
                                         <select id="quantite" name="quantite" class="quantity-select" required>
-                                            <option value="">0</option>
                                             <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
-                                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
                                             <?php endfor; ?>
                                         </select>
                                     </div>
