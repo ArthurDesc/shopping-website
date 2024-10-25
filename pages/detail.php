@@ -171,9 +171,8 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                     editingCollection: false,
                     collection: '<?php echo addslashes(htmlspecialchars($produit['collection'])); ?>'
                 }">
-                    <!-- Titre, Avis, Prix et Description -->
-                    <div class="flex flex-col space-y-1">
-                        <!-- Titre et Avis -->
+                    <!-- Titre et Avis -->
+                    <div class="flex flex-col space-y-2">
                         <div class="flex items-center justify-between">
                             <!-- Titre -->
                             <div class="flex items-center">
@@ -212,37 +211,60 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                             </div>
                         </div>
 
-                        <!-- Description (déplacée avant le prix) -->
-                        <p class="text-gray-600 text-sm mt-2" x-show="!editingDescription" x-text="description"></p>
-                        <textarea x-show="editingDescription"
-                            x-model="description"
-                            @keydown.enter="editingDescription = false; updateDescription(description)"
-                            @keydown.escape="editingDescription = false"
-                            class="text-sm text-gray-600 w-full border-b-2 border-blue-500 focus:outline-none"
-                            rows="3"></textarea>
-                        <?php if ($isEditMode): ?>
-                            <button @click="editingDescription = !editingDescription" class="text-gray-600 hover:text-blue-500">
-                                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </button>
-                        <?php endif; ?>
+                        <!-- Description et Prix -->
+                        <div class="flex justify-between items-start mt-2">
+                            <div class="flex-grow">
+                                <p class="text-gray-600 text-sm" x-show="!editingDescription" x-text="description"></p>
+                                <textarea x-show="editingDescription"
+                                    x-model="description"
+                                    @keydown.enter="editingDescription = false; updateDescription(description)"
+                                    @keydown.escape="editingDescription = false"
+                                    class="text-sm text-gray-600 w-full border-b-2 border-blue-500 focus:outline-none"
+                                    rows="3"></textarea>
+                                <?php if ($isEditMode): ?>
+                                    <button @click="editingDescription = !editingDescription" class="text-gray-600 hover:text-blue-500">
+                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                            <div class="ml-4 flex-shrink-0">
+                                <p class="text-2xl font-semibold text-gray-800" x-show="!editingPrice" x-text="price + ' €'"></p>
+                                <input x-show="editingPrice"
+                                    x-model="price"
+                                    @keydown.enter="editingPrice = false; updatePrice(price)"
+                                    @keydown.escape="editingPrice = false"
+                                    class="text-2xl font-semibold text-gray-800 border-b-2 border-blue-500 focus:outline-none"
+                                    type="text">
+                                <?php if ($isEditMode): ?>
+                                    <button @click="editingPrice = !editingPrice" class="text-gray-600 hover:text-blue-500">
+                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
 
-                        <!-- Prix (déplacé après la description) -->
-                        <p class="text-2xl font-semibold text-gray-800 mt-2" x-show="!editingPrice" x-text="price + ' €'"></p>
-                        <input x-show="editingPrice"
-                            x-model="price"
-                            @keydown.enter="editingPrice = false; updatePrice(price)"
-                            @keydown.escape="editingPrice = false"
-                            class="text-2xl font-semibold border-b-2 border-blue-500 focus:outline-none"
-                            type="text">
-                        <?php if ($isEditMode): ?>
-                            <button @click="editingPrice = !editingPrice" class="text-gray-600 hover:text-blue-500">
-                                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </button>
-                        <?php endif; ?>
+                        <!-- Marque -->
+                        <div class="flex items-center mt-2">
+                            <span class="font-semibold">Marque:</span>
+                            <span class="ml-2 text-gray-600" x-show="!editingBrand" x-text="brand"></span>
+                            <input x-show="editingBrand"
+                                x-model="brand"
+                                @keydown.enter="editingBrand = false; updateBrand(brand)"
+                                @keydown.escape="editingBrand = false"
+                                class="ml-2 text-gray-600 border-b-2 border-blue-500 focus:outline-none"
+                                type="text">
+                            <?php if ($isEditMode): ?>
+                                <button @click="editingBrand = !editingBrand" class="ml-2 text-gray-600 hover:text-blue-500">
+                                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
                     <!-- Boutons d'action -->
@@ -289,14 +311,6 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                             </form>
                         <?php endif; ?>
                     </div>
-
-                    <script>
-                        function acheterMaintenant() {
-                            var form = document.getElementById('product-form');
-                            form.action = 'process_paiement.php'; // Redirige vers la page de paiement
-                            form.submit();
-                    </script>
-                    </script>
                 </div>
             </div>
 
@@ -320,11 +334,13 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                         <p class="mb-4"><?php echo htmlspecialchars($produit['description']); ?></p>
                         
                         <div class="flex flex-col space-y-4">
-                            <!-- Marque -->
+                            <!-- La marque a été déplacée, donc vous pouvez supprimer ou commenter cette partie -->
+                            <!-- 
                             <div class="flex items-center">
                                 <span class="font-semibold">Marque:</span>
                                 <span class="ml-2 text-gray-600" x-text="brand"></span>
                             </div>
+                            -->
 
                             <!-- Collection -->
                             <div class="flex items-center">

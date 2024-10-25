@@ -16,27 +16,27 @@ input[type="radio"] + span {
 }
 
 .quantity-label {
-    font-size: 0.875rem;
+    font-size: 1rem; /* Augmenté pour correspondre à la nouvelle taille du select */
     font-weight: 500;
     color: #4B5563;
-    margin-right: 0.5rem; /* Ajouté une marge à droite */
-    line-height: 1.5rem;
+    margin-right: 0.75rem; /* Légèrement augmenté */
+    line-height: 1.75rem; /* Ajusté pour correspondre à la nouvelle hauteur */
 }
 
 .quantity-select {
-    width: 5rem;
-    height: 2.5rem;
-    padding: 0 0.5rem;
+    width: 6rem;  /* Augmenté de 5rem à 6rem */
+    height: 3rem; /* Augmenté de 2.5rem à 3rem */
+    padding: 0 0.75rem; /* Augmenté le padding horizontal */
     border: 1px solid #3B82F6;
-    border-radius: 0.375rem;
+    border-radius: 0.5rem; /* Légèrement augmenté pour correspondre à la nouvelle taille */
     background-color: white;
     color: #2563EB;
-    font-size: 0.875rem;
+    font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
     appearance: none;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233B82F6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
+    background-position: right 0.75rem center; /* Ajusté pour la nouvelle taille */
     background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
+    background-size: 1.75em 1.75em; /* Légèrement augmenté */
 }
 
 .quantity-select:focus {
