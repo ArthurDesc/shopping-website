@@ -316,12 +316,38 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
 
             <!-- Ajoutez cette section pour les onglets -->
             <div class="mt-8">
-                <div class="tab-container">
+                <div class="tab-container flex items-center">
                     <input type="radio" name="tab" id="tab1" class="tab tab--1" checked />
                     <label class="tab_label" for="tab1">Détails</label>
 
                     <input type="radio" name="tab" id="tab2" class="tab tab--2" />
-                    <label class="tab_label" for="tab2">Avis</label>
+                    <label class="tab_label flex items-center" for="tab2">
+                        Avis
+                        <span class="ml-2 text-sm font-semibold flex items-center">
+                            <?php if ($review_count > 0): ?>
+                                <span class="flex items-center">
+                                    <?php
+                                    $full_stars = floor($average_rating);
+                                    $half_star = $average_rating - $full_stars >= 0.5;
+                                    $empty_stars = 5 - $full_stars - ($half_star ? 1 : 0);
+
+                                    for ($i = 0; $i < $full_stars; $i++) {
+                                        echo '<svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                                    }
+                                    if ($half_star) {
+                                        echo '<svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clip-path="url(#half-star-clip)"></path><clipPath id="half-star-clip"><rect x="0" y="0" width="10" height="20" /></clipPath></svg>';
+                                    }
+                                    for ($i = 0; $i < $empty_stars; $i++) {
+                                        echo '<svg class="w-3 h-3 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+                                    }
+                                    ?>
+                                </span>
+                                <span class="ml-1">(<?php echo $review_count; ?>)</span>
+                            <?php else: ?>
+                                <span>(Aucun avis)</span>
+                            <?php endif; ?>
+                        </span>
+                    </label>
 
                     <div class="indicator"></div>
                 </div>
