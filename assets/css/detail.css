@@ -75,3 +75,97 @@ input[type="radio"] + span {
   font-weight: 700; /* Gras */
   font-style: normal;
 }
+
+.add-to-cart-button {
+  --width: 150px;
+  --height: 40px;
+  --tooltip-height: 35px;
+  --tooltip-width: 90px;
+  --gap-between-tooltip-to-button: 18px;
+  --button-color: #2f7bf5;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: var(--button-color);
+  position: relative;
+  text-align: center;
+  border-radius: 0.5em;
+  font-family: "Arial", sans-serif;
+  transition: background 0.3s;
+  cursor: pointer; /* Ajout du curseur pointer par défaut */
+}
+
+
+
+.add-to-cart-button::after,
+.add-to-cart-button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.add-to-cart-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-button-wrapper,
+.add-to-cart-text,
+.add-to-cart-icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.add-to-cart-text {
+  top: 0;
+}
+
+.add-to-cart-text,
+.add-to-cart-icon {
+  transition: top 0.5s;
+}
+
+.add-to-cart-icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.add-to-cart-button:hover {
+  background: #2563EB;
+  cursor: pointer; /* Assurez-vous que le curseur reste en mode pointer au survol */
+}
+
+.add-to-cart-button:hover .add-to-cart-text {
+  top: -100%;
+}
+
+.add-to-cart-button:hover .add-to-cart-icon {
+  top: 0;
+}
+
+.add-to-cart-button:hover:before,
+.add-to-cart-button:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-to-cart-button:hover:after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.add-to-cart-button:hover:before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}

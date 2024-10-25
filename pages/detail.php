@@ -89,7 +89,8 @@ $categories = $articleManager->getArticleCategories($id_article);
 $allCategories = $articleManager->getAllCategories();
 
 // Fonction pour obtenir la moyenne des notes et le nombre d'avis
-function getProductRatingSummary($product_id) {
+function getProductRatingSummary($product_id)
+{
     global $conn;
     $sql = "SELECT COALESCE(AVG(note), 0) as average_rating, COUNT(*) as review_count FROM avis WHERE id_produit = ?";
     $stmt = $conn->prepare($sql);
@@ -143,8 +144,8 @@ $review_count = $rating_summary['review_count'];
                     <div class="flex-grow">
                         <div class="image-container aspect-[3/4] overflow-hidden rounded-lg max-w-xs mx-auto"> <!-- Ajout de max-w-xs et mx-auto -->
                             <img src="<?php echo htmlspecialchars($image_url); ?>"
-                                 alt="<?php echo htmlspecialchars($produit['nom']); ?>"
-                                 class="w-full h-full object-cover">
+                                alt="<?php echo htmlspecialchars($produit['nom']); ?>"
+                                class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>
@@ -170,11 +171,11 @@ $review_count = $rating_summary['review_count'];
                             <div class="flex items-center">
                                 <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
                                 <input x-show="editingTitle"
-                                       x-model="title"
-                                       @keydown.enter="editingTitle = false; updateTitle(title)"
-                                       @keydown.escape="editingTitle = false"
-                                       class="text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none"
-                                       type="text">
+                                    x-model="title"
+                                    @keydown.enter="editingTitle = false; updateTitle(title)"
+                                    @keydown.escape="editingTitle = false"
+                                    class="text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none"
+                                    type="text">
                                 <?php if ($isEditMode): ?>
                                     <button @click="editingTitle = !editingTitle" class="ml-2 text-gray-600 hover:text-blue-500">
                                         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -206,11 +207,11 @@ $review_count = $rating_summary['review_count'];
                         <!-- Description (déplacée avant le prix) -->
                         <p class="text-gray-600 text-sm mt-2" x-show="!editingDescription" x-text="description"></p>
                         <textarea x-show="editingDescription"
-                                  x-model="description"
-                                  @keydown.enter="editingDescription = false; updateDescription(description)"
-                                  @keydown.escape="editingDescription = false"
-                                  class="text-sm text-gray-600 w-full border-b-2 border-blue-500 focus:outline-none"
-                                  rows="3"></textarea>
+                            x-model="description"
+                            @keydown.enter="editingDescription = false; updateDescription(description)"
+                            @keydown.escape="editingDescription = false"
+                            class="text-sm text-gray-600 w-full border-b-2 border-blue-500 focus:outline-none"
+                            rows="3"></textarea>
                         <?php if ($isEditMode): ?>
                             <button @click="editingDescription = !editingDescription" class="text-gray-600 hover:text-blue-500">
                                 <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -222,11 +223,11 @@ $review_count = $rating_summary['review_count'];
                         <!-- Prix (déplacé après la description) -->
                         <p class="text-2xl font-semibold text-gray-800 mt-2" x-show="!editingPrice" x-text="price + ' €'"></p>
                         <input x-show="editingPrice"
-                               x-model="price"
-                               @keydown.enter="editingPrice = false; updatePrice(price)"
-                               @keydown.escape="editingPrice = false"
-                               class="text-2xl font-semibold border-b-2 border-blue-500 focus:outline-none"
-                               type="text">
+                            x-model="price"
+                            @keydown.enter="editingPrice = false; updatePrice(price)"
+                            @keydown.escape="editingPrice = false"
+                            class="text-2xl font-semibold border-b-2 border-blue-500 focus:outline-none"
+                            type="text">
                         <?php if ($isEditMode): ?>
                             <button @click="editingPrice = !editingPrice" class="text-gray-600 hover:text-blue-500">
                                 <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -278,7 +279,7 @@ $review_count = $rating_summary['review_count'];
                                             <?php foreach ($tailles_disponibles as $taille): ?>
                                                 <label class="inline-flex items-center">
                                                     <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
-                                                    <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span> <!-- Augmenté la taille -->
+                                                    <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span>
                                                 </label>
                                             <?php endforeach; ?>
                                         </div>
@@ -292,21 +293,33 @@ $review_count = $rating_summary['review_count'];
                                             <?php endfor; ?>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="mt-4">
-                                    <button type="submit" id="add-to-cart-btn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
-                                        Ajouter au panier
-                                    </button>
+                                    <div class="add-to-cart-button mt-4 md:mt-0"> <!-- Ajout de classes pour l'alignement -->
+                                        <div class="add-to-cart-button-wrapper">
+                                            <div class="add-to-cart-text">Ajouter au panier</div>
+                                            <span class="add-to-cart-icon">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-cart2"
+                                                    viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         <?php endif; ?>
                     </div>
 
-                     <script>
-                    function acheterMaintenant() {
-                        var form = document.getElementById('product-form');
-                        form.action = 'process_paiement.php'; // Redirige vers la page de paiement
-                        form.submit();
+                    <script>
+                        function acheterMaintenant() {
+                            var form = document.getElementById('product-form');
+                            form.action = 'process_paiement.php'; // Redirige vers la page de paiement
+                            form.submit();
                     </script>
                     </script>
                 </div>
@@ -318,9 +331,11 @@ $review_count = $rating_summary['review_count'];
     <div class="mt-8" x-data="{ openReviews: false, showAllReviews: false }">
         <h3 class="text-xl font-semibold mb-4 cursor-pointer flex items-center ml-2" @click="openReviews = !openReviews">
             Avis des clients
-            <svg :class="{'rotate-180': openReviews}" class="w-5 h-5 ml-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <svg :class="{'rotate-180': openReviews}" class="w-5 h-5 ml-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
         </h3>
-        
+
         <div x-show="openReviews" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="mt-4">
             <!-- Affichage des avis existants -->
             <div class="mb-6 space-y-6">
@@ -328,13 +343,13 @@ $review_count = $rating_summary['review_count'];
                 $avis = getProductReviews($produit['id_produit']);
                 $avisCount = count($avis);
                 $avisToShow = 3; // Nombre d'avis à afficher initialement
-                
+
                 if (empty($avis)) {
                     echo "<p class='text-lg'>Aucun avis pour ce produit.</p>";
                 } else {
                     for ($i = 0; $i < min($avisToShow, $avisCount); $i++) {
                         $review = $avis[$i];
-                        ?>
+                ?>
                         <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                             <div class="flex items-center mb-4">
                                 <div class="flex items-center">
@@ -355,16 +370,16 @@ $review_count = $rating_summary['review_count'];
                         </div>
                         <?php
                     }
-                    
+
                     if ($avisCount > $avisToShow) {
                         echo '<div x-show="!showAllReviews" class="text-center mt-4">';
                         echo '<button @click="showAllReviews = true" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Voir plus d\'avis</button>';
                         echo '</div>';
-                        
+
                         echo '<div x-show="showAllReviews" class="space-y-6">';
                         for ($i = $avisToShow; $i < $avisCount; $i++) {
                             $review = $avis[$i];
-                            ?>
+                        ?>
                             <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
                                 <div class="flex items-center mb-4">
                                     <div class="flex items-center">
@@ -383,7 +398,7 @@ $review_count = $rating_summary['review_count'];
                                     <p class="text-sm text-gray-500">Date de publication non disponible</p>
                                 <?php endif; ?>
                             </div>
-                            <?php
+                <?php
                         }
                         echo '<div class="text-center mt-4">';
                         echo '<button @click="showAllReviews = false" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Voir moins</button>';
@@ -413,7 +428,7 @@ $review_count = $rating_summary['review_count'];
                     <div class="bg-white border border-slate-200 grid grid-cols-6 gap-2 rounded-xl p-2 text-sm">
                         <h1 class="text-center text-slate-200 text-xl font-bold col-span-6">Votre avis</h1>
                         <textarea name="commentaire" id="commentaire" placeholder="Votre avis..." class="bg-slate-100 text-slate-600 h-28 placeholder:text-slate-600 placeholder:opacity-50 border border-slate-200 col-span-6 resize-none outline-none rounded-lg p-2 duration-300 focus:border-slate-600" required></textarea>
-                        
+
                         <span class="col-span-2"></span>
                         <button type="submit" class="bg-slate-100 stroke-slate-600 border border-slate-200 col-span-2 flex justify-center rounded-lg p-2 duration-300 hover:border-slate-600 hover:text-white focus:stroke-blue-200 focus:bg-blue-400">
                             <svg fill="none" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg">
@@ -449,29 +464,29 @@ $review_count = $rating_summary['review_count'];
         <script src="../assets/js/editMode.js">
             function updateField(field, newValue) {
                 fetch('/shopping-website/admin/update_article.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        id_produit: <?php echo $produit['id_produit']; ?>,
-                        field: field,
-                        new_value: newValue
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id_produit: <?php echo $produit['id_produit']; ?>,
+                            field: field,
+                            new_value: newValue
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log(field + ' mis à jour avec succès');
-                    } else {
-                        console.error('Erreur lors de la mise à jour de ' + field + ':', data.message);
-                        alert('Erreur lors de la mise à jour de ' + field + ': ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Une erreur s\'est produite lors de la mise à jour de ' + field);
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log(field + ' mis à jour avec succès');
+                        } else {
+                            console.error('Erreur lors de la mise à jour de ' + field + ':', data.message);
+                            alert('Erreur lors de la mise à jour de ' + field + ': ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Une erreur s\'est produite lors de la mise à jour de ' + field);
+                    });
             }
 
             // Utilisez cette fonction pour chaque champ
@@ -508,46 +523,46 @@ $review_count = $rating_summary['review_count'];
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('add-to-cart-form');
-        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('add-to-cart-form');
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            addToCartBtn.disabled = true;
-            addToCartBtn.textContent = 'Ajout en cours...';
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addToCartBtn.disabled = true;
+                addToCartBtn.textContent = 'Ajout en cours...';
 
-            const formData = new FormData(form);
+                const formData = new FormData(form);
 
-            fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    updateCartCount(data.cartCount);
-                } else {
-                    alert('Erreur : ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
-            })
-            .finally(() => {
-                addToCartBtn.disabled = false;
-                addToCartBtn.textContent = 'Ajouter au panier';
+                fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateCartCount(data.cartCount);
+                        } else {
+                            alert('Erreur : ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                    })
+                    .finally(() => {
+                        addToCartBtn.disabled = false;
+                        addToCartBtn.textContent = 'Ajouter au panier';
+                    });
             });
-        });
 
-        function updateCartCount(count) {
-            const cartCountElement = document.getElementById('cart-count');
-            if (cartCountElement) {
-                cartCountElement.textContent = count;
+            function updateCartCount(count) {
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.textContent = count;
+                }
             }
-        }
-    });
+        });
     </script>
 </body>
 
