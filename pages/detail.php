@@ -8,6 +8,7 @@ require_once '../includes/product_functions.php';
 require_once "../classe/Panier.php";
 require_once "../classe/Avis.php";
 require_once "../classe/AvisManager.php";
+require_once '../classe/CategoryManager.php';
 
 
 // Créez une instance de AdminManager
@@ -111,6 +112,11 @@ $avisManager = new AvisManager($conn);
 
 // Récupérer les avis pour ce produit
 $avis_produit = $avisManager->getAvisForProduct($id_produit);
+
+$categoryManager = new CategoryManager($conn);
+
+// Récupérer la collection du produit
+$collection = $categoryManager->getCollection($id_produit);
 
 ?>
 
@@ -339,24 +345,16 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                     <div id="tab1-content" class="tab-pane active">
                         <!-- Contenu de l'onglet Détails -->
                         <h3 class="text-xl font-semibold mb-4">Détails du produit</h3>
-                        <p class="mb-4"><?php echo htmlspecialchars($produit['description']); ?></p>
+                        <p class="mb-4" x-text="description"></p>
 
                         <div class="flex flex-col space-y-4">
-                            <!-- La marque a été déplacée, donc vous pouvez supprimer ou commenter cette partie -->
-                            <!-- 
-                            <div class="flex items-center">
-                                <span class="font-semibold">Marque:</span>
-                                <span class="ml-2 text-gray-600" x-text="brand"></span>
-                            </div>
-                            -->
-
                             <!-- Collection -->
                             <div class="flex items-center">
                                 <span class="font-semibold">Collection:</span>
-                                <span class="ml-2 text-gray-600" x-text="collection"></span>
+                                <span class="ml-2 text-gray-600"><?php echo htmlspecialchars($collection); ?></span>
                             </div>
 
-                            <!-- Catégories -->
+                            <!-- Affichage des catégories -->
                             <div class="flex items-center">
                                 <span class="font-semibold">Catégories:</span>
                                 <span class="ml-2 text-gray-600">
@@ -541,7 +539,10 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
                 if (activeContent) {
                     activeContent.classList.add('active');
                     // Ajout du défilement automatique
-                    activeContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    activeContent.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             }
 
@@ -559,7 +560,7 @@ $avis_produit = $avisManager->getAvisForProduct($id_produit);
             window.addEventListener('resize', positionIndicator);
         });
     </script>
-
+    <?php include '../includes/_footer.php'; ?>
 </body>
 
 </html>
