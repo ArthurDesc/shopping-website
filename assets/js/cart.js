@@ -34,10 +34,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateCartUI(cartCount) {
-        // Mettre à jour le nombre d'articles dans le panier dans l'interface utilisateur
         const cartCountElement = document.getElementById('cart-count');
         if (cartCountElement) {
             cartCountElement.textContent = cartCount;
+            
+            // Mise à jour de la couleur du badge du panier
+            if (cartCount > 0) {
+                cartCountElement.classList.remove('bg-red-600');
+                cartCountElement.classList.add('bg-green-600');
+            } else {
+                cartCountElement.classList.remove('bg-green-600');
+                cartCountElement.classList.add('bg-red-600');
+            }
         }
     }
 });

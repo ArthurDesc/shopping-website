@@ -473,16 +473,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addToCartBtn').addEventListener('click', function() {
         const selectedSize = document.getElementById('productSize').value;
         if (!selectedSize) {
-            // Afficher le message d'erreur dans le modal
             document.getElementById('sizeError').textContent = 'Veuillez choisir une taille';
             document.getElementById('sizeError').classList.remove('hidden');
             return;
         }
 
-        // Cacher le message d'erreur si une taille est sélectionnée
         document.getElementById('sizeError').classList.add('hidden');
 
-        // Envoyer la requête AJAX pour ajouter au panier
         fetch('<?php echo url("ajax/add_to_cart.php"); ?>', {
             method: 'POST',
             headers: {
@@ -498,8 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 closeModal();
-                // Mettre à jour le compteur du panier si nécessaire
-                updateCartCount(data.cartCount);
+                updateCartCount(data.cartCount); // Ceci mettra à jour à la fois le nombre et la couleur
             } else {
                 alert('Erreur : ' + data.message);
             }
@@ -516,9 +512,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateCartCount(count) {
-        const cartCountElement = $('#cart-count');
-        if (cartCountElement.length) {
-            cartCountElement.text(count);
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = count;
+            
+            // Mise à jour de la couleur du badge
+            if (count > 0) {
+                cartCountElement.classList.remove('bg-red-600');
+                cartCountElement.classList.add('bg-green-600');
+            } else {
+                cartCountElement.classList.remove('bg-green-600');
+                cartCountElement.classList.add('bg-red-600');
+            }
         }
     }
 
