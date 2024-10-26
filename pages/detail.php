@@ -545,6 +545,12 @@ $collection = $categoryManager->getCollection($id_produit);
 
    
     <?php include '../includes/_footer.php'; ?>
+
+<!-- Toast notification -->
+<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
+    Article ajouté au panier
+</div>
+
 </body>
 
 </html>

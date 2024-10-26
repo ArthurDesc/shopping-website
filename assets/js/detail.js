@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form && addToCartBtn) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            if (isSubmitting) return; // Empêche les soumissions multiples
+            if (isSubmitting) return;
 
             isSubmitting = true;
             addToCartBtn.disabled = true;
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     updateCartCount(data.cartCount);
-                    // Vous pouvez ajouter ici une notification de succès
+                    showToast('Article ajouté au panier');
                 } else {
                     alert('Erreur : ' + data.message);
                 }
@@ -147,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (cartCountElement) {
             cartCountElement.textContent = count;
             
-            // Mise à jour de la couleur du badge
             if (count > 0) {
                 cartCountElement.classList.remove('bg-red-600');
                 cartCountElement.classList.add('bg-green-600');
@@ -156,6 +155,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 cartCountElement.classList.add('bg-red-600');
             }
         }
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
     }
 });
 

@@ -313,3 +313,13 @@ body.sidebar-open::after {
 #autocomplete-results div:hover {
   background-color: #f3f4f6;
 }
+
+#toast {
+  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(-10px);
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}

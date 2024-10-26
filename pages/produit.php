@@ -495,7 +495,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 closeModal();
-                updateCartCount(data.cartCount); // Ceci mettra à jour à la fois le nombre et la couleur
+                updateCartCount(data.cartCount);
+                showToast('Article ajouté au panier'); // Ajout de cette ligne
             } else {
                 alert('Erreur : ' + data.message);
             }
@@ -540,85 +541,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Ajoutez cette nouvelle fonction pour afficher le toast
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('opacity-100');
+        setTimeout(() => {
+            toast.classList.remove('opacity-100');
+        }, 3000);
+    }
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const categoriesFilter = document.getElementById('categories-filter');
-    const toggleButton = document.getElementById('categories-toggle');
-    const filterContent = document.getElementById('categories-content');
-    const searchInput = document.getElementById('categories-search');
-    const categoriesList = document.getElementById('categories-list');
-
-    // Toggle du dropdown
-    toggleButton.addEventListener('click', function() {
-        if (filterContent.style.display === 'none' || filterContent.style.display === '') {
-            filterContent.style.display = 'block';
-            toggleButton.querySelector('svg').classList.add('rotate-180');
-        } else {
-            filterContent.style.display = 'none';
-            toggleButton.querySelector('svg').classList.remove('rotate-180');
-        }
-    });
-
-    // Fonction de recherche
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const categories = categoriesList.querySelectorAll('.mb-2');
-
-        categories.forEach(category => {
-            const categoryName = category.querySelector('label').textContent.toLowerCase();
-            const subCategories = category.querySelectorAll('.ml-4 .flex');
-            let shouldShow = categoryName.includes(searchTerm);
-
-            subCategories.forEach(subCategory => {
-                const subCategoryName = subCategory.querySelector('label').textContent.toLowerCase();
-                if (subCategoryName.includes(searchTerm)) {
-                    shouldShow = true;
-                    subCategory.style.display = 'flex';
-                } else {
-                    subCategory.style.display = 'none';
-                }
-            });
-
-            category.style.display = shouldShow ? 'block' : 'none';
-        });
-    });
-
-    // Nouvelle partie pour les marques
-    const marquesFilter = document.getElementById('marques-filter');
-    const marquesToggle = document.getElementById('marques-toggle');
-    const marquesContent = document.getElementById('marques-content');
-    const marquesSearch = document.getElementById('marques-search');
-    const marquesList = document.getElementById('marques-list');
-
-    // Toggle du dropdown des marques
-    marquesToggle.addEventListener('click', function() {
-        if (marquesContent.style.display === 'none' || marquesContent.style.display === '') {
-            marquesContent.style.display = 'block';
-            marquesToggle.querySelector('svg').classList.add('rotate-180');
-        } else {
-            marquesContent.style.display = 'none';
-            marquesToggle.querySelector('svg').classList.remove('rotate-180');
-        }
-    });
-
-    // Fonction de recherche pour les marques
-    marquesSearch.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const marques = marquesList.querySelectorAll('.flex');
-
-        marques.forEach(marque => {
-            const marqueName = marque.querySelector('label').textContent.toLowerCase();
-            if (marqueName.includes(searchTerm)) {
-                marque.style.display = 'flex';
-            } else {
-                marque.style.display = 'none';
-            }
-        });
-    });
-});
-</script>
+<!-- Toast notification -->
+<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-1100">
+    Article ajouté au panier
+</div>
 </body>
 </html>
