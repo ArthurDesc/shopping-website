@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const formData = new FormData(this);
 
-        fetch('<?php echo BASE_URL; ?>ajax/add_comment.php', {
+        fetch(`${BASE_URL}ajax/add_comment.php`, {
             method: 'POST',
             body: formData
         })

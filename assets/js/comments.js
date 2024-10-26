@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour charger les avis
     function loadAvis() {
-        fetch('<?php echo BASE_URL; ?>ajax/avis_handler.php?action=get&id_produit=<?php echo $id_produit; ?>')
+        fetch(`${BASE_URL}ajax/avis_handler.php?action=get&id_produit=${ID_PRODUIT}`)
             .then(response => response.json())
             .then(avis => {
                 avisList.innerHTML = '';
@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function addAvis(note, commentaire) {
         const formData = new FormData();
         formData.append('action', 'add');
-        formData.append('id_produit', <?php echo $id_produit; ?>);
+        formData.append('id_produit', ID_PRODUIT);
         formData.append('note', note);
         formData.append('commentaire', commentaire);
 
-        fetch('<?php echo BASE_URL; ?>ajax/avis_handler.php', {
+        fetch(`${BASE_URL}ajax/avis_handler.php`, {
             method: 'POST',
             body: formData
         })
@@ -62,12 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const newNote = prompt("Modifier votre note :");
         const newCommentaire = prompt("Modifier votre commentaire :");
         if (newNote && newCommentaire) {
-            fetch('<?php echo BASE_URL; ?>ajax/avis_handler.php', {
+            fetch(`${BASE_URL}ajax/avis_handler.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `action=edit&id_produit=<?php echo $id_produit; ?>&id_avis=${avisId}&note=${encodeURIComponent(newNote)}&commentaire=${encodeURIComponent(newCommentaire)}`
+                body: `action=edit&id_produit=${ID_PRODUIT}&id_avis=${avisId}&note=${encodeURIComponent(newNote)}&commentaire=${encodeURIComponent(newCommentaire)}`
             })
             .then(response => response.json())
             .then(() => loadAvis());
@@ -77,12 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour supprimer un avis
     window.deleteAvis = function(avisId) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet avis ?")) {
-            fetch('<?php echo BASE_URL; ?>ajax/avis_handler.php', {
+            fetch(`${BASE_URL}ajax/avis_handler.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `action=delete&id_produit=<?php echo $id_produit; ?>&id_avis=${avisId}`
+                body: `action=delete&id_produit=${ID_PRODUIT}&id_avis=${avisId}`
             })
             .then(response => response.json())
             .then(() => loadAvis());
