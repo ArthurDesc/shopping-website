@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const formData = new FormData(form);
 
-            fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+            fetch(BASE_URL + 'ajax/add_to_cart.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     if (data.success) {
                         updateCartCount(data.cartCount);
+                        // Vous pouvez ajouter ici une notification de succès
                     } else {
                         alert('Erreur : ' + data.message);
                     }
@@ -140,6 +141,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const cartCountElement = document.getElementById('cart-count');
         if (cartCountElement) {
             cartCountElement.textContent = count;
+            
+            // Mise à jour de la couleur du badge
+            if (count > 0) {
+                cartCountElement.classList.remove('bg-red-600');
+                cartCountElement.classList.add('bg-green-600');
+            } else {
+                cartCountElement.classList.remove('bg-green-600');
+                cartCountElement.classList.add('bg-red-600');
+            }
         }
     }
 });
