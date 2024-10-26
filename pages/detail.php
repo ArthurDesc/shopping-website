@@ -541,7 +541,6 @@ $collection = $categoryManager->getCollection($id_produit);
 
     <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
     <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/detail.js" defer></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 
    
