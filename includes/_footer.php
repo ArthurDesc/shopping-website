@@ -35,8 +35,6 @@
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'detail.php') !== false): ?>
   <!-- À ajouter dans la section head ou avant la fermeture du body -->
-  <script src="<?php echo url('assets/js/backoffice/categorySelector.js'); ?>" defer></script>
-  <script src="<?php echo url('assets/js/backoffice/uiManager.js'); ?>" defer></script>
   <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
   <script src="<?php echo url('assets/js/avis.js'); ?>" defer></script>
   <script type="module" src="<?php echo url('assets/js/comments.js'); ?>"></script>

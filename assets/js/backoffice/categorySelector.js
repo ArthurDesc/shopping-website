@@ -153,8 +153,17 @@ class CategorySelector {
     }
 
     saveCategories() {
+        // Récupérer l'ID du produit depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+            console.error("ID du produit non trouvé");
+            showToast("Erreur: ID du produit non trouvé", "error");
+            return;
+        }
+
         const selectedCategories = this.getSelectedCategories();
-        const productId = document.getElementById('id_produit').value;
 
         fetch('/shopping-website/admin/update_article.php', {
             method: 'POST',

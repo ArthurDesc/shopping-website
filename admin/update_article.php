@@ -64,14 +64,7 @@ $id_produit = $data['id_produit'];
 $field = $data['field'];
 $new_value = $data['new_value'];
 
-// Liste des champs autorisés
-$allowed_fields = ['nom', 'description', 'prix', 'marque', 'collection', 'stock'];
-
-if (!in_array($field, $allowed_fields)) {
-    echo json_encode(['success' => false, 'message' => 'Champ non autorisé']);
-    exit;
-}
-
+// Traitement spécial pour les catégories
 if ($field === 'categories') {
     try {
         // Supprimer les anciennes catégories
@@ -85,13 +78,22 @@ if ($field === 'categories') {
         }
         
         echo json_encode(['success' => true]);
+        exit;
     } catch (PDOException $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        exit;
     }
+}
+
+// Liste des champs autorisés pour les autres mises à jour
+$allowed_fields = ['nom', 'description', 'prix', 'marque', 'collection', 'stock', 'categories'];
+
+if (!in_array($field, $allowed_fields)) {
+    echo json_encode(['success' => false, 'message' => 'Champ non autorisé']);
     exit;
 }
 
-// Préparation de la requête SQL
+// Préparation de la requête SQL pour les autres champs
 $sql = "UPDATE produits SET $field = ? WHERE id_produit = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("si", $new_value, $id_produit);
