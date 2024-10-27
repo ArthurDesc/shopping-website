@@ -105,6 +105,60 @@ document.addEventListener('DOMContentLoaded', function() {
             return 'Date non disponible';
         }
     }
+
+    // Fonction pour modifier un avis
+    window.modifierAvis = function(idAvis) {
+        const commentElement = document.querySelector(`[data-avis-id="${idAvis}"]`);
+        const commentaireActuel = commentElement.querySelector('.commentaire-texte').textContent;
+        const noteActuelle = parseInt(commentElement.getAttribute('data-note'));
+
+        // Créer le formulaire de modification
+        const form = document.createElement('div');
+        form.innerHTML = `
+            <div class="mt-4 space-y-4">
+                <textarea class="w-full px-3 py-2 border rounded-lg">${commentaireActuel}</textarea>
+                <div class="flex items-center space-x-2">
+                    ${createStarRating(noteActuelle)}
+                </div>
+                <div class="flex space-x-2">
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" onclick="sauvegarderModification(${idAvis})">
+                        Sauvegarder
+                    </button>
+                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded" onclick="annulerModification(${idAvis})">
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        `;
+
+        commentElement.querySelector('.commentaire-texte').style.display = 'none';
+        commentElement.appendChild(form);
+    };
+
+    // Fonction pour supprimer un avis
+    window.supprimerAvis = function(idAvis) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')) {
+            fetch('/shopping-website/ajax/delete_avis.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id_avis: idAvis })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector(`[data-avis-id="${idAvis}"]`).remove();
+                } else {
+                    alert('Erreur lors de la suppression : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de la suppression');
+            });
+        }
+    };
 });
 
 async function getAvis(productId) {
