@@ -277,23 +277,7 @@ $collection = $categoryManager->getCollection($id_produit);
                         </div>
                     </div>
 
-                    <!-- Tailles - Masquer en mode édition -->
-                    <?php if (!$isEditMode): ?>
-                        <div class="mt-4">
-                            <label for="size" class="block text-sm font-medium text-gray-700">Taille</label>
-                            <select name="size" id="productSize" class="quantity-select mt-1">
-                                <option value="">Choisissez une taille</option>
-                                <?php
-                                if (!empty($produit['tailles_disponibles'])) {
-                                    $tailles = explode(',', $produit['tailles_disponibles']);
-                                    foreach ($tailles as $taille) {
-                                        echo '<option value="' . htmlspecialchars(trim($taille)) . '">' . htmlspecialchars(trim($taille)) . '</option>';
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
+                
 
                     <!-- Boutons d'action -->
                     <?php
