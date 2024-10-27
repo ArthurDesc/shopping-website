@@ -277,50 +277,76 @@ $collection = $categoryManager->getCollection($id_produit);
                         </div>
                     </div>
 
+                    <!-- Tailles - Masquer en mode édition -->
+                    <?php if (!$isEditMode): ?>
+                        <div class="mt-4">
+                            <label for="size" class="block text-sm font-medium text-gray-700">Taille</label>
+                            <select name="size" id="productSize" class="quantity-select mt-1">
+                                <option value="">Choisissez une taille</option>
+                                <?php
+                                if (!empty($produit['tailles_disponibles'])) {
+                                    $tailles = explode(',', $produit['tailles_disponibles']);
+                                    foreach ($tailles as $taille) {
+                                        echo '<option value="' . htmlspecialchars(trim($taille)) . '">' . htmlspecialchars(trim($taille)) . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+
                     <!-- Boutons d'action -->
                     <?php
-                    $tailles_disponibles = explode(',', $produit['tailles_disponibles']);
+                    $tailles_disponibles = !empty($produit['tailles_disponibles']) 
+                        ? explode(',', $produit['tailles_disponibles']) 
+                        : [];
                     ?>
-                    <div class="mt-4 space-y-2">
-                        <?php if (!isset($produit['id_produit'])): ?>
-                            <p>Erreur : Aucun ID de produit fourni.</p>
-                        <?php else: ?>
-                            <form id="add-to-cart-form" class="mt-4">
-                                <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                <div class="flex flex-col md:flex-row md:items-end md:space-x-4">
-                                    <div class="mb-2 md:mb-0 flex-grow">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
-                                        <div class="flex flex-wrap gap-2">
-                                            <?php foreach ($tailles_disponibles as $taille): ?>
-                                                <label class="inline-flex items-center">
-                                                    <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
-                                                    <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span>
-                                                </label>
-                                            <?php endforeach; ?>
+                    <?php if (!$isEditMode): ?>
+                        <div class="mt-4 space-y-2">
+                            <?php if (!isset($produit['id_produit'])): ?>
+                                <p>Erreur : Aucun ID de produit fourni.</p>
+                            <?php else: ?>
+                                <form id="add-to-cart-form" class="mt-4">
+                                    <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
+                                    <div class="flex flex-col md:flex-row md:items-end md:space-x-4">
+                                        <div class="mb-2 md:mb-0 flex-grow">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
+                                            <div class="flex flex-wrap gap-2">
+                                                <?php if (!empty($tailles_disponibles)): 
+                                                    foreach ($tailles_disponibles as $taille): ?>
+                                                        <label class="inline-flex items-center">
+                                                            <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
+                                                            <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span>
+                                                        </label>
+                                                    <?php endforeach; 
+                                                else: ?>
+                                                    <p>Aucune taille disponible</p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                        <div class="quantity-container mb-2 md:mb-0 w-auto flex items-center">
+                                            <label for="quantite" class="quantity-label mr-3">Quantité</label>
+                                            <select id="quantite" name="quantite" class="quantity-select" required>
+                                                <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
+                                                    <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </div>
+                                        <div class="add-to-cart-button mt-4 md:mt-0">
+                                            <button type="submit" id="add-to-cart-btn" class="add-to-cart-button-wrapper">
+                                                <div class="add-to-cart-text">Ajouter au panier</div>
+                                                <span class="add-to-cart-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="quantity-container mb-2 md:mb-0 w-auto flex items-center">
-                                        <label for="quantite" class="quantity-label mr-3">Quantité</label>
-                                        <select id="quantite" name="quantite" class="quantity-select" required>
-                                            <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
-                                                <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
-                                            <?php endfor; ?>
-                                        </select>
-                                    </div>
-                                    <div class="add-to-cart-button mt-4 md:mt-0">
-                                        <button type="submit" id="add-to-cart-btn" class="add-to-cart-button-wrapper">
-                                            <div class="add-to-cart-text">Ajouter au panier</div>
-                                            <span class="add-to-cart-icon">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
-                                                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
-                                                </svg>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        <?php endif; ?>
-                    </div>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
