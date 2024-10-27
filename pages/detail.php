@@ -432,7 +432,52 @@ $collection = $categoryManager->getCollection($id_produit);
                             <!-- Collection -->
                             <div class="flex items-center">
                                 <span class="font-semibold">Collection:</span>
-                                <span class="ml-2 text-gray-600"><?php echo htmlspecialchars($collection ?? 'Non spécifiée'); ?></span>
+                                <?php if ($isEditMode): ?>
+                                    <div class="ml-2" x-data="{ 
+                                        editingCollection: false,
+                                        collection: '<?php echo htmlspecialchars($collection); ?>',
+                                        tempCollection: '<?php echo htmlspecialchars($collection); ?>'
+                                    }">
+                                        <span x-show="!editingCollection" class="text-gray-600" x-text="collection"></span>
+                                        <div x-show="editingCollection" class="flex items-center space-x-2">
+                                            <select
+                                                x-model="tempCollection"
+                                                class="border-b-2 border-blue-500 focus:outline-none text-gray-600"
+                                            >
+                                                <option value="Homme">Homme</option>
+                                                <option value="Femme">Femme</option>
+                                                <option value="Enfant">Enfant</option>
+                                            </select>
+                                            <button 
+                                                @click="collection = tempCollection; editingCollection = false; updateCollection(tempCollection)"
+                                                class="text-green-500 hover:text-green-700"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                            <button 
+                                                @click="editingCollection = false; tempCollection = collection"
+                                                class="text-red-500 hover:text-red-700"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <button 
+                                            x-show="!editingCollection"
+                                            @click="editingCollection = true"
+                                            class="ml-2 text-gray-600 hover:text-blue-500"
+                                        >
+                                            <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="ml-2 text-gray-600"><?php echo htmlspecialchars($collection ?? 'Non spécifiée'); ?></span>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Affichage des catégories -->
@@ -583,65 +628,6 @@ $collection = $categoryManager->getCollection($id_produit);
 
     <?php include '../includes/_footer.php'; ?>
 
-    <?php if ($isEditMode): ?>
-        <script>
-            // Votre script pour le mode d'édition ici
-        </script>
-        <script src="../assets/js/editMode.js">
-            function updateField(field, newValue) {
-                fetch('/shopping-website/admin/update_article.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id_produit: <?php echo $produit['id_produit']; ?>,
-                            field: field,
-                            new_value: newValue
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            console.log(field + ' mis à jour avec succès');
-                        } else {
-                            console.error('Erreur lors de la mise à jour de ' + field + ':', data.message);
-                            alert('Erreur lors de la mise à jour de ' + field + ': ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                        alert('Une erreur s\'est produite lors de la mise à jour de ' + field);
-                    });
-            }
-
-            // Utilisez cette fonction pour chaque champ
-            function updateTitle(newTitle) {
-                updateField('nom', newTitle);
-            }
-
-            function updateDescription(newDescription) {
-                updateField('description', newDescription);
-            }
-
-            function updatePrice(newPrice) {
-                updateField('prix', newPrice);
-            }
-
-            function updateBrand(newBrand) {
-                updateField('marque', newBrand);
-            }
-
-            function updateCollection(newCollection) {
-                if (['Homme', 'Femme', 'Enfant'].includes(newCollection)) {
-                    updateField('collection', newCollection);
-                } else {
-                    console.error('Collection invalide');
-                    alert('Veuillez choisir une collection valide : Homme, Femme ou Enfant');
-                }
-            }
-        </script>
-    <?php endif; ?>
     
 </body>
 
