@@ -1,100 +1,25 @@
+import { createCommentElement, addComment } from './commentModule.js';
+
 document.addEventListener('DOMContentLoaded', function() {
-    const avisForm = document.getElementById('avis-form');
-    const avisList = document.getElementById('avis-list');
-    
-    // Vérifier si l'élément existe avant d'accéder à sa valeur
-    const idProduitElement = document.getElementById('id_produit');
-    const ID_PRODUIT = idProduitElement ? idProduitElement.value : null;
+    const commentForm = document.getElementById('comment-form');
+    const commentsList = document.getElementById('comments-list');
 
-    if (!ID_PRODUIT) {
-        console.error("L'ID du produit n'a pas été trouvé.");
-        return; // Arrêter l'exécution si l'ID n'est pas disponible
+    if (!commentForm || !commentsList) {
+        console.error("Le formulaire de commentaire ou la liste des commentaires n'a pas été trouvé.");
+        return;
     }
 
-    // Charger les avis existants
-    loadAvis();
-
-    // Gestion de l'ajout d'avis
-    avisForm.addEventListener('submit', function(e) {
+    commentForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const note = document.getElementById('note-input').value;
-        const commentaire = document.getElementById('commentaire').value;
-        addAvis(note, commentaire);
+        const formData = new FormData(this);
+
+        try {
+            const newComment = await addComment(formData);
+            const newCommentElement = createCommentElement(newComment);
+            commentsList.insertBefore(newCommentElement, commentsList.firstChild);
+            commentForm.reset();
+        } catch (error) {
+            alert('Erreur lors de l\'ajout du commentaire : ' + error.message);
+        }
     });
-
-    // Fonction pour charger les avis
-    function loadAvis() {
-        fetch(`${BASE_URL}ajax/avis_handler.php?action=get&id_produit=${ID_PRODUIT}`)
-            .then(response => response.json())
-            .then(avis => {
-                avisList.innerHTML = '';
-                avis.forEach(avis => {
-                    avisList.appendChild(createAvisElement(avis));
-                });
-            });
-    }
-
-    // Fonction pour ajouter un avis
-    function addAvis(note, commentaire) {
-        const formData = new FormData();
-        formData.append('action', 'add');
-        formData.append('id_produit', ID_PRODUIT);
-        formData.append('note', note);
-        formData.append('commentaire', commentaire);
-
-        fetch(`${BASE_URL}ajax/avis_handler.php`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(newAvis => {
-            avisList.prepend(createAvisElement(newAvis));
-            avisForm.reset();
-        });
-    }
-
-    // Fonction pour créer un élément d'avis
-    function createAvisElement(avis) {
-        const div = document.createElement('div');
-        div.className = 'avis';
-        div.innerHTML = `
-            <p>${avis.note}</p>
-            <p>${avis.commentaire}</p>
-            <button onclick="editAvis(${avis.id})">Modifier</button>
-            <button onclick="deleteAvis(${avis.id})">Supprimer</button>
-        `;
-        return div;
-    }
-
-    // Fonction pour modifier un avis
-    window.editAvis = function(avisId) {
-        const newNote = prompt("Modifier votre note :");
-        const newCommentaire = prompt("Modifier votre commentaire :");
-        if (newNote && newCommentaire) {
-            fetch(`${BASE_URL}ajax/avis_handler.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `action=edit&id_produit=${ID_PRODUIT}&id_avis=${avisId}&note=${encodeURIComponent(newNote)}&commentaire=${encodeURIComponent(newCommentaire)}`
-            })
-            .then(response => response.json())
-            .then(() => loadAvis());
-        }
-    }
-
-    // Fonction pour supprimer un avis
-    window.deleteAvis = function(avisId) {
-        if (confirm("Êtes-vous sûr de vouloir supprimer cet avis ?")) {
-            fetch(`${BASE_URL}ajax/avis_handler.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `action=delete&id_produit=${ID_PRODUIT}&id_avis=${avisId}`
-            })
-            .then(response => response.json())
-            .then(() => loadAvis());
-        }
-    }
 });

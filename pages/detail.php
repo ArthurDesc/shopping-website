@@ -439,7 +439,17 @@ $collection = $categoryManager->getCollection($id_produit);
                 <!-- Ajoutez ici le contenu des produits associés -->
             </div>
 
+            <!-- Toast notification -->
+<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
+    Article ajouté au panier
+</div>
+
+    <?php include '../includes/_footer.php'; ?>
+
     <?php if ($isEditMode): ?>
+        <script>
+            // Votre script pour le mode d'édition ici
+        </script>
         <script src="../assets/js/editMode.js">
             function updateField(field, newValue) {
                 fetch('/shopping-website/admin/update_article.php', {
@@ -495,21 +505,7 @@ $collection = $categoryManager->getCollection($id_produit);
             }
         </script>
     <?php endif; ?>
-
-    <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/comments.js" defer></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/avis.js" defer></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
-
-   
-    <?php include '../includes/_footer.php'; ?>
-
-<!-- Toast notification -->
-<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
-    Article ajouté au panier
-</div>
-
+    
 </body>
 
 </html>

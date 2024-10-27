@@ -24,7 +24,7 @@
 </footer>
 
 <script>
-const BASE_URL = '<?php echo BASE_URL; ?>';
+  const BASE_URL = '<?php echo BASE_URL; ?>';
 </script>
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
@@ -35,7 +35,10 @@ const BASE_URL = '<?php echo BASE_URL; ?>';
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'detail.php') !== false): ?>
   <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
+  <script src="<?php echo url('assets/js/avis.js'); ?>" defer></script>
+  <script type="module" src="<?php echo url('assets/js/comments.js'); ?>"></script>
 <?php endif; ?>
+
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
   <script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
@@ -44,4 +47,5 @@ const BASE_URL = '<?php echo BASE_URL; ?>';
 <?php endif; ?>
 
 </body>
+
 </html>
