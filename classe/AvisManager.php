@@ -1,42 +1,56 @@
 <?php
 
 class AvisManager {
-    private $conn;
+    private $db;
 
-    public function __construct($conn) {
-        $this->conn = $conn;
+    public function __construct($db) {
+        $this->db = $db;
     }
 
     public function getAvisForProduct($id_produit) {
-        $avis = [];
-        $sql = "SELECT a.*, u.nom as nom_utilisateur 
-                FROM avis a 
-                JOIN utilisateurs u ON a.id_utilisateur = u.id_utilisateur 
-                WHERE a.id_produit = ? 
-                ORDER BY a.date_creation DESC";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id_produit);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        while ($row = $result->fetch_assoc()) {
-            $avis[] = new Avis(
-                $row['id_avis'],
-                $row['id_produit'],
-                $row['id_utilisateur'],
-                $row['note'],
-                $row['commentaire'],
-                $row['date_creation'],
-                $row['nom_utilisateur']
-            );
+        try {
+            $sql = "SELECT a.*, u.nom as nom_utilisateur 
+                    FROM avis a 
+                    LEFT JOIN utilisateurs u ON a.id_utilisateur = u.id_utilisateur 
+                    WHERE a.id_produit = ? 
+                    ORDER BY a.date_creation DESC";
+            
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) {
+                throw new Exception("Erreur de préparation de la requête");
+            }
+            
+            $stmt->bind_param("i", $id_produit);
+            if (!$stmt->execute()) {
+                throw new Exception("Erreur d'exécution de la requête");
+            }
+            
+            $result = $stmt->get_result();
+            $avis = [];
+            
+            while ($row = $result->fetch_assoc()) {
+                $avis[] = new Avis(
+                    $row['id_avis'],
+                    $row['id_produit'],
+                    $row['id_utilisateur'],
+                    $row['note'],
+                    $row['commentaire'],
+                    $row['date_creation'],
+                    $row['nom_utilisateur'] ?? 'Anonyme'
+                );
+            }
+            
+            return $avis;
+            
+        } catch (Exception $e) {
+            error_log("Erreur dans AvisManager::getAvisForProduct: " . $e->getMessage());
+            throw $e;
         }
-
-        return $avis;
     }
 
     public function addAvis($id_produit, $id_utilisateur, $note, $commentaire) {
         $sql = "INSERT INTO avis (id_produit, id_utilisateur, note, commentaire) VALUES (?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bind_param("iiis", $id_produit, $id_utilisateur, $note, $commentaire);
         
         if ($stmt->execute()) {
@@ -51,7 +65,7 @@ class AvisManager {
                 FROM avis a 
                 JOIN utilisateurs u ON a.id_utilisateur = u.id_utilisateur 
                 WHERE a.id_avis = ?";
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id_avis);
         $stmt->execute();
         $result = $stmt->get_result();

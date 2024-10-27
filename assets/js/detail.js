@@ -91,30 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Fonction pour gérer l'effet de carte 3D
-    function handle3DCardEffect() {
-        document.querySelectorAll('.image-container').forEach(container => {
-            const card = container.querySelector('.card');
-
-            container.addEventListener('mousemove', (e) => {
-                const rect = container.getBoundingClientRect();
-                const xPos = (rect.width / 2 - (e.clientX - rect.left)) / 30; // Réduit l'effet
-                const yPos = (rect.height / 2 - (e.clientY - rect.top)) / 30; // Réduit l'effet
-
-                card.style.transform = `rotateX(${yPos}deg) rotateY(${xPos}deg)`;
-            });
-
-            container.addEventListener('mouseenter', () => {
-                card.style.transition = "none";
-            });
-
-            container.addEventListener('mouseleave', () => {
-                card.style.transition = "transform 0.3s";
-                card.style.transform = "none";
-            });
-        });
-    }
-
     // Fonction pour gérer le formulaire d'ajout au panier
     function handleAddToCartForm() {
         const form = document.getElementById('add-to-cart-form');
@@ -233,52 +209,60 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fonction pour charger les avis
-    function handleAvis() {
-        const avisForm = document.getElementById('avis-form');
-        const avisList = document.getElementById('avis-list');
-        const idProduitElement = document.getElementById('id_produit');
+    async function loadAvis(productId) {
+        try {
+            const response = await fetch(`/shopping-website/ajax/get_avis.php?id_produit=${productId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Erreur lors du chargement des avis:', error);
+            return null;
+        }
+    }
 
-        if (idProduitElement) {
-            const ID_PRODUIT = idProduitElement.value;
-            
-            // Le reste de votre code ici
-            loadAvis();
-            
-            // ...
-        } else {
-            console.error("L'élément avec l'ID 'id_produit' n'a pas été trouvé.");
+    // Fonction pour gérer l'affichage des avis
+    function handleAvis() {
+        const productId = document.getElementById('id_produit').value;
+        if (!productId) {
+            console.error("ID du produit non trouvé");
+            return;
         }
 
-        // ...
+        loadAvis(productId).then(data => {
+            if (data && data.success) {
+                displayAvis(data.avis);
+            } else {
+                console.error('Erreur lors du chargement des avis');
+            }
+        });
     }
 
     // Appel de toutes les fonctions
     handleCommentForm();
     handleAddToCart();
-    handle3DCardEffect();
     handleAddToCartForm();
     handleTabs();
     handleAvis();
 });
 
-function loadAvis() {
-    const idProduit = document.getElementById('id_produit').value;
-    fetch(`/shopping-website/ajax/get_avis.php?id_produit=${idProduit}`)
-        .then(response => response.json())
-        .then(data => {
-            // Supprimez ou commentez la ligne suivante :
-            // console.log('Réponse brute:', data);
-            
-            // Appelez directement la fonction pour afficher les avis
-            displayAvis(data);
-        })
-        .catch(error => console.error('Erreur lors du chargement des avis:', error));
-}
-
 function displayAvis(avis) {
     const avisList = document.getElementById('comments-list');
-    avisList.innerHTML = ''; // Vider la liste actuelle
-    avis.forEach(avis => {
+    if (!avisList) {
+        console.error("La liste des commentaires n'a pas été trouvée");
+        return;
+    }
+
+    // Vider la liste actuelle
+    avisList.innerHTML = '';
+
+    // Trier les avis par date (du plus récent au plus ancien)
+    const sortedAvis = avis.sort((a, b) => new Date(b.date_creation) - new Date(a.date_creation));
+
+    // Ajouter les avis triés
+    sortedAvis.forEach(avis => {
         const avisElement = createAvisElement(avis);
         avisList.appendChild(avisElement);
     });
@@ -286,23 +270,53 @@ function displayAvis(avis) {
 
 function createAvisElement(avis) {
     const div = document.createElement('div');
-    div.className = 'avis mb-4 p-4 border rounded';
+    div.className = 'mb-6 p-6 border rounded-xl shadow-lg bg-white';
+    
+    // Vérification des valeurs avant utilisation
+    const nomUtilisateur = avis.nom_utilisateur || 'Anonyme';
+    const dateCreation = avis.date_creation ? formatDate(avis.date_creation) : 'Date non disponible';
+    const note = parseInt(avis.note) || 0;
+    const commentaire = avis.commentaire || 'Aucun commentaire';
+
     div.innerHTML = `
         <div class="flex justify-between items-center mb-2">
-            <span class="font-bold">${avis.nom_utilisateur}</span>
-            <span class="text-sm text-gray-500">${formatDate(avis.date_creation)}</span>
+            <div class="flex items-center">
+                <span class="font-semibold mr-2">${nomUtilisateur}</span>
+                <div class="flex items-center">
+                    ${createStarRating(note)}
+                </div>
+            </div>
+            <span class="text-sm text-gray-500">${dateCreation}</span>
         </div>
-        <div class="mb-2">${createStarRating(avis.note)}</div>
-        <p>${avis.commentaire}</p>
+        <p class="text-gray-700 mt-2">${commentaire}</p>
     `;
     return div;
 }
 
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    try {
+        const date = new Date(dateString);
+        // Vérifier si la date est valide
+        if (isNaN(date.getTime())) {
+            return 'Date non disponible';
+        }
+        // Format : DD/MM/YYYY HH:mm
+        return date.toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (e) {
+        console.error('Erreur de formatage de date:', e);
+        return 'Date non disponible';
+    }
 }
 
 function createStarRating(note) {
-    return '★'.repeat(note) + '☆'.repeat(5 - note);
+    const fullStar = '<svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+    const emptyStar = '<svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
+    
+    return Array(5).fill('').map((_, index) => index < note ? fullStar : emptyStar).join('');
 }

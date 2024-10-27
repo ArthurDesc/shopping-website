@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
             commentsList.insertBefore(newCommentElement, commentsList.firstChild);
             commentForm.reset();
         } catch (error) {
-            alert('Erreur lors de l\'ajout du commentaire : ' + error.message);
         }
     });
 });

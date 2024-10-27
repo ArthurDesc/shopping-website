@@ -46,9 +46,22 @@ function getAvis($id_produit) {
 
 function addAvis($id_produit) {
     global $conn;
-    $id_utilisateur = $_SESSION['id_utilisateur'];
-    $note = $_POST['note'];
-    $commentaire = $_POST['commentaire'];
+    
+    // Validation des données
+    $id_utilisateur = filter_var($_SESSION['id_utilisateur'], FILTER_VALIDATE_INT);
+    $note = filter_var($_POST['note'], FILTER_VALIDATE_INT);
+    $commentaire = trim(htmlspecialchars($_POST['commentaire']));
+
+    // Vérifications supplémentaires
+    if ($note < 1 || $note > 5) {
+        echo json_encode(['error' => 'Note invalide']);
+        return;
+    }
+
+    if (strlen($commentaire) < 10) {
+        echo json_encode(['error' => 'Le commentaire doit faire au moins 10 caractères']);
+        return;
+    }
 
     $stmt = $conn->prepare("INSERT INTO avis (id_produit, id_utilisateur, note, commentaire) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("iiis", $id_produit, $id_utilisateur, $note, $commentaire);
