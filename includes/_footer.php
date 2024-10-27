@@ -37,6 +37,7 @@
   <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
   <script src="<?php echo url('assets/js/avis.js'); ?>" defer></script>
   <script type="module" src="<?php echo url('assets/js/comments.js'); ?>"></script>
+  <script src="<?php echo url('assets/js/editMode.js'); ?>" defer></script>
 <?php endif; ?>
 
 

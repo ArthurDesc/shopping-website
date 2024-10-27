@@ -160,10 +160,28 @@ $collection = $categoryManager->getCollection($id_produit);
 
                     <!-- Image du produit -->
                     <div class="flex-grow">
-                        <div class="image-container aspect-[3/4] overflow-hidden rounded-lg max-w-xs mx-auto"> <!-- Ajout de max-w-xs et mx-auto -->
+                        <div class="image-container aspect-[3/4] overflow-hidden rounded-lg max-w-xs mx-auto relative">
                             <img src="<?php echo htmlspecialchars($image_url); ?>"
                                 alt="<?php echo htmlspecialchars($produit['nom']); ?>"
                                 class="w-full h-full object-cover">
+                                
+                            <?php if ($isEditMode): ?>
+                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-2 flex justify-center">
+                                    <label for="image-upload" class="cursor-pointer text-white hover:text-blue-300 flex items-center">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="mr-2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                                        </svg>
+                                        Modifier l'image
+                                    </label>
+                                    <input 
+                                        type="file" 
+                                        id="image-upload" 
+                                        accept="image/*"
+                                        class="hidden"
+                                        onchange="updateImage(this.files[0])"
+                                    >
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

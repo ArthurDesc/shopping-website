@@ -685,3 +685,27 @@ a:hover .back-arrow-icon {
         opacity: 0;
     }
 }
+
+/* Styles pour le mode édition */
+.image-container {
+    position: relative;
+    transition: opacity 0.3s ease;
+}
+
+#toast {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.edit-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+.edit-button {
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    transform: scale(1.1);
+}
