@@ -65,7 +65,7 @@ $field = $data['field'];
 $new_value = $data['new_value'];
 
 // Liste des champs autorisés
-$allowed_fields = ['nom', 'description', 'prix', 'marque', 'collection'];
+$allowed_fields = ['nom', 'description', 'prix', 'marque', 'collection', 'stock'];
 
 if (!in_array($field, $allowed_fields)) {
     echo json_encode(['success' => false, 'message' => 'Champ non autorisé']);

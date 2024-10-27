@@ -148,3 +148,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialiser les écouteurs d'événements si nécessaire
     console.log('Mode édition activé');
 });
+
+// Ajouter aux fonctions existantes
+function updateStock(newStock) {
+    // Vérification que le stock est un nombre positif
+    const stockValue = parseInt(newStock);
+    if (isNaN(stockValue) || stockValue < 0) {
+        showToast('Le stock doit être un nombre positif', 'error');
+        return;
+    }
+    
+    updateField('stock', stockValue);
+}
