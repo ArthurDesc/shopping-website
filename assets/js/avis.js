@@ -203,6 +203,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const newCommentaire = commentElement.querySelector('textarea').value.trim();
         const checkedStar = commentElement.querySelector('input[name="rating"]:checked');
         
+        // Sauvegarder les informations existantes
+        const nomUtilisateur = commentElement.querySelector('.font-semibold').textContent;
+        const dateCreation = commentElement.querySelector('.text-sm.text-gray-500').textContent;
+        const actionButtons = commentElement.querySelector('.flex.items-center.gap-2').innerHTML;
+        
         // Validations
         if (newCommentaire.length < 10) {
             alert('Le commentaire doit faire au moins 10 caractères');
@@ -238,26 +243,29 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             
             if (data.success) {
-                // Mettre à jour l'affichage
-                const commentaireElement = commentElement.querySelector('.commentaire-texte');
-                commentaireElement.textContent = newCommentaire;
-                commentaireElement.style.display = 'block';
+                // Recréer tout le contenu avec les informations sauvegardées
+                commentElement.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center">
+                            <span class="font-semibold mr-2">${nomUtilisateur}</span>
+                            <div class="flex items-center">
+                                ${createStarRating(newNote)}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-500">${dateCreation}</span>
+                            ${actionButtons}
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mt-2 commentaire-texte">${newCommentaire}</p>
+                `;
                 
-                // Mettre à jour les étoiles dans le conteneur parent
-                const starsContainer = commentElement.querySelector('.flex.items-center');
-                starsContainer.innerHTML = createStarRating(newNote);
-                
-                // Supprimer le formulaire de modification
-                const form = commentElement.querySelector('div.mt-4.space-y-4').parentNode;
-                if (form) form.remove();
-                
-                // Ajouter une notification de succès
+                // Ajouter la notification de succès
                 const notification = document.createElement('div');
                 notification.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-2 notification';
                 notification.textContent = 'Modification enregistrée avec succès';
                 commentElement.appendChild(notification);
                 
-                // Supprimer la notification après 3 secondes
                 setTimeout(() => {
                     const notif = commentElement.querySelector('.notification');
                     if (notif) notif.remove();
