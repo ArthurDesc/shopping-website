@@ -39,13 +39,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (newComment) {
                     commentsList.insertBefore(newComment, commentsList.firstChild);
                     commentForm.reset();
+                    // Utilisation du nouveau toast
+                    showBottomToast('Votre avis a été ajouté avec succès', 'success');
                 }
             } else {
-                alert(data.message || 'Erreur lors de l\'ajout du commentaire');
+                showBottomToast(data.message || 'Erreur lors de l\'ajout du commentaire', 'error');
             }
         } catch (error) {
             console.error('Erreur détaillée:', error);
-            alert('Une erreur s\'est produite lors de l\'ajout du commentaire');
+            showBottomToast('Une erreur s\'est produite lors de l\'ajout du commentaire', 'error');
         }
     });
 
@@ -351,3 +353,28 @@ function displayAvis(avis) {
     }
 }
 
+function showBottomToast(message, type = "success") {
+    // Créer l'élément toast
+    const toast = document.createElement("div");
+    toast.className = `fixed bottom-5 right-5 p-4 rounded-md text-white ${
+        type === "success" ? "bg-green-500" : "bg-red-500"
+    } shadow-lg transition-opacity duration-500 ease-in-out opacity-0`;
+    toast.style.zIndex = "1000";
+    toast.innerHTML = message;
+  
+    // Ajouter le toast au body
+    document.body.appendChild(toast);
+  
+    // Faire apparaître le toast
+    requestAnimationFrame(() => {
+        toast.style.opacity = "1";
+    });
+  
+    // Faire disparaître le toast après 3 secondes
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 500);
+    }, 3000);
+}

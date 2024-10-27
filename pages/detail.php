@@ -496,6 +496,8 @@ $collection = $categoryManager->getCollection($id_produit);
                 <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
                 <!-- Ajoutez ici le contenu des produits associés -->
             </div>
+            <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
+</div>
 
             <!-- Toast notification -->
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
