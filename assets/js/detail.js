@@ -288,3 +288,57 @@ function showToast(message) {
         }, 3000);
     }
 }
+
+// Ajoutez après la fonction handleTabs
+
+function initializeEditMode() {
+    const editCategoriesContainer = document.getElementById('edit-categories-container');
+    if (!editCategoriesContainer) return;
+
+    // Initialiser le sélecteur de catégories
+    const categorySelector = new CategorySelector('edit-categories-container');
+    categorySelector.init();
+
+    // Pré-sélectionner les catégories existantes
+    const existingCategories = JSON.parse(editCategoriesContainer.dataset.categories || '[]');
+    categorySelector.setSelectedCategories(existingCategories);
+
+    // Ajouter la gestion des catégories au formulaire d'édition
+    const editForm = document.querySelector('#edit-form');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            // Ajouter les catégories sélectionnées
+            const selectedCategories = categorySelector.getSelectedCategories();
+            formData.append('categories', JSON.stringify(selectedCategories));
+
+            // Envoyer les données
+            fetch('/shopping-website/admin/update_article.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Article mis à jour avec succès', 'success');
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    showToast(data.message || 'Erreur lors de la mise à jour', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showToast('Erreur lors de la mise à jour', 'error');
+            });
+        });
+    }
+}
+
+// Ajouter à votre event listener existant
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('edit-categories-container')) {
+        initializeEditMode();
+    }
+});

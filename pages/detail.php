@@ -483,13 +483,23 @@ $collection = $categoryManager->getCollection($id_produit);
                             <!-- Affichage des catégories -->
                             <div class="flex items-center">
                                 <span class="font-semibold">Catégories:</span>
-                                <span class="ml-2 text-gray-600">
-                                    <?php if (!empty($categories)): ?>
-                                        <?php echo implode(', ', array_map(function($cat) { return htmlspecialchars($cat['nom']); }, $categories)); ?>
-                                    <?php else: ?>
-                                        Aucune catégorie
-                                    <?php endif; ?>
-                                </span>
+                                <?php if ($isEditMode): ?>
+                                    <div id="edit-categories-container" class="ml-2 w-full" 
+                                         data-categories='<?php echo json_encode(array_map(function($cat) { 
+                                             return $cat['id_categorie']; 
+                                         }, $categories)); ?>'>
+                                    </div>
+                                <?php else: ?>
+                                    <span class="ml-2 text-gray-600">
+                                        <?php if (!empty($categories)): ?>
+                                            <?php echo implode(', ', array_map(function($cat) { 
+                                                return htmlspecialchars($cat['nom']); 
+                                            }, $categories)); ?>
+                                        <?php else: ?>
+                                            Aucune catégorie
+                                        <?php endif; ?>
+                                    </span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

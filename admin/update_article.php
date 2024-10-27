@@ -72,6 +72,25 @@ if (!in_array($field, $allowed_fields)) {
     exit;
 }
 
+if ($field === 'categories') {
+    try {
+        // Supprimer les anciennes catégories
+        $stmt = $conn->prepare("DELETE FROM produit_categorie WHERE id_produit = ?");
+        $stmt->execute([$id_produit]);
+
+        // Ajouter les nouvelles catégories
+        $stmt = $conn->prepare("INSERT INTO produit_categorie (id_produit, id_categorie) VALUES (?, ?)");
+        foreach ($new_value as $categoryId) {
+            $stmt->execute([$id_produit, $categoryId]);
+        }
+        
+        echo json_encode(['success' => true]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+    exit;
+}
+
 // Préparation de la requête SQL
 $sql = "UPDATE produits SET $field = ? WHERE id_produit = ?";
 $stmt = $conn->prepare($sql);
