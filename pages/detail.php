@@ -127,6 +127,7 @@ $collection = $categoryManager->getCollection($id_produit);
 
 
 <body class="bg-gray-100">
+    <input type="hidden" id="id_produit" name="id_produit" value="<?php echo $id_produit; ?>">
     <?php if ($isEditMode): ?>
         <div class="bg-red-500 text-white text-center py-2 font-bold">
             Mode Admin
