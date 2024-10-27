@@ -103,11 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createStarRating(note, isEditable = false) {
-        let html = '<div class="flex items-center star-rating">';
+        let html = '<div class="flex items-center star-rating" data-note="' + note + '">';
         for (let i = 1; i <= 5; i++) {
             if (isEditable) {
                 html += `
-                    <input type="radio" id="star${i}" name="note" value="${i}" class="hidden" ${i === note ? 'checked' : ''}>
+                    <input type="radio" id="star${i}" name="rating" value="${i}" ${i === note ? 'checked' : ''} class="hidden">
                     <label for="star${i}" class="cursor-pointer">
                         <svg class="w-5 h-5 ${i <= note ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
@@ -200,10 +200,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.sauvegarderModification = async function(idAvis) {
         const commentElement = document.querySelector(`[data-avis-id="${idAvis}"]`);
-        const newCommentaire = commentElement.querySelector('textarea').value;
-        const newNote = parseInt(commentElement.querySelector('.star-rating input:checked').value);
+        const newCommentaire = commentElement.querySelector('textarea').value.trim();
+        const checkedStar = commentElement.querySelector('input[name="rating"]:checked');
+        
+        // Validations
+        if (newCommentaire.length < 10) {
+            alert('Le commentaire doit faire au moins 10 caractères');
+            return;
+        }
+        
+        if (!checkedStar) {
+            alert('Veuillez sélectionner une note');
+            return;
+        }
+        
+        const newNote = parseInt(checkedStar.value);
 
         try {
+            // Ajout d'un indicateur de chargement
+            const saveButton = commentElement.querySelector('button[onclick^="sauvegarderModification"]');
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Sauvegarde...';
+            saveButton.disabled = true;
+
             const response = await fetch('/shopping-website/ajax/update_avis.php', {
                 method: 'POST',
                 headers: {
@@ -220,30 +239,58 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (data.success) {
                 // Mettre à jour l'affichage
-                commentElement.querySelector('.commentaire-texte').textContent = newCommentaire;
-                commentElement.querySelector('.commentaire-texte').style.display = 'block';
+                const commentaireElement = commentElement.querySelector('.commentaire-texte');
+                commentaireElement.textContent = newCommentaire;
+                commentaireElement.style.display = 'block';
                 
-                // Mettre à jour les étoiles
+                // Mettre à jour les étoiles dans le conteneur parent
                 const starsContainer = commentElement.querySelector('.flex.items-center');
                 starsContainer.innerHTML = createStarRating(newNote);
                 
                 // Supprimer le formulaire de modification
-                const form = commentElement.querySelector('div:last-child');
+                const form = commentElement.querySelector('div.mt-4.space-y-4').parentNode;
                 if (form) form.remove();
+                
+                // Ajouter une notification de succès
+                const notification = document.createElement('div');
+                notification.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-2 notification';
+                notification.textContent = 'Modification enregistrée avec succès';
+                commentElement.appendChild(notification);
+                
+                // Supprimer la notification après 3 secondes
+                setTimeout(() => {
+                    const notif = commentElement.querySelector('.notification');
+                    if (notif) notif.remove();
+                }, 3000);
             } else {
-                alert('Erreur lors de la modification : ' + data.message);
+                throw new Error(data.message || 'Erreur lors de la modification');
             }
         } catch (error) {
             console.error('Erreur:', error);
-            alert('Une erreur est survenue lors de la modification');
+            alert('Une erreur est survenue lors de la modification : ' + error.message);
+            
+            // Restaurer le bouton en cas d'erreur
+            if (saveButton) {
+                saveButton.textContent = originalText;
+                saveButton.disabled = false;
+            }
         }
     };
 
     window.annulerModification = function(idAvis) {
         const commentElement = document.querySelector(`[data-avis-id="${idAvis}"]`);
-        commentElement.querySelector('.commentaire-texte').style.display = 'block';
-        const form = commentElement.querySelector('div:last-child');
-        if (form) form.remove();
+        if (!commentElement) return;
+
+        const commentaireElement = commentElement.querySelector('.commentaire-texte');
+        if (commentaireElement) {
+            commentaireElement.style.display = 'block';
+        }
+
+        // Supprimer le formulaire de modification
+        const form = commentElement.querySelector('div.mt-4.space-y-4').parentNode;
+        if (form) {
+            form.remove();
+        }
     };
 });
 
