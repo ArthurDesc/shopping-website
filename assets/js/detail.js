@@ -54,110 +54,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour gérer le bouton d'ajout au panier
     function handleAddToCart() {
+        // Modification des sélecteurs pour correspondre à la structure HTML
+        const form = document.getElementById('add-to-cart-form');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
-        if (!addToCartBtn) {
-            console.warn("Le bouton 'Ajouter au panier' n'a pas été trouvé dans le DOM.");
+        
+        // Debug
+        console.log('Form:', form);
+        console.log('Button:', addToCartBtn);
+        
+        if (!form || !addToCartBtn) {
+            console.warn("Le formulaire ou le bouton d'ajout au panier n'a pas été trouvé.");
             return;
         }
 
-        addToCartBtn.addEventListener('click', function(event) {
-            event.preventDefault();
-            console.log('Bouton cliqué');
-
-            const form = document.getElementById('product-form');
-            if (form) {
-                const formData = new FormData(form);
-
-                fetch('ajouter_panier.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Réponse du serveur:', data);
-                    if (data.success) {
-                        alert('Produit ajouté au panier avec succès !');
-                    } else {
-                        alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
-                });
-            } else {
-                console.error('Le formulaire product-form n\'existe pas');
-            }
-        });
-    }
-
-    // Fonction pour gérer le formulaire d'ajout au panier
-    function handleAddToCartForm() {
-        const form = document.getElementById('add-to-cart-form');
-        const addToCartBtn = document.getElementById('add-to-cart-btn');
         let isSubmitting = false;
 
-        if (form && addToCartBtn) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (isSubmitting) return;
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (isSubmitting) return;
 
-                isSubmitting = true;
-                addToCartBtn.disabled = true;
-                addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajout en cours...';
+            isSubmitting = true;
+            addToCartBtn.disabled = true;
+            const originalText = addToCartBtn.querySelector('.add-to-cart-text').textContent;
+            addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajout en cours...';
 
-                const formData = new FormData(form);
+            const formData = new FormData(this);
+            
+            // Debug
+            console.log('Données envoyées:', Object.fromEntries(formData));
 
-                fetch(BASE_URL + 'ajax/add_to_cart.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        updateCartCount(data.cartCount);
-                        showToast('Article ajouté au panier');
-                    } else {
-                        alert('Erreur : ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
-                })
-                .finally(() => {
-                    isSubmitting = false;
-                    addToCartBtn.disabled = false;
-                    addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajouter au panier';
-                });
-            });
-        } else {
-            console.error('Le formulaire ou le bouton d\'ajout au panier n\'a pas été trouvé.');
-        }
-
-        function updateCartCount(count) {
-            const cartCountElement = document.getElementById('cart-count');
-            if (cartCountElement) {
-                cartCountElement.textContent = count;
-                
-                if (count > 0) {
-                    cartCountElement.classList.remove('bg-red-600');
-                    cartCountElement.classList.add('bg-green-600');
+            fetch('/shopping-website/ajax/add_to_cart.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Réponse du serveur:', data);
+                if (data.success) {
+                    updateCartCount(data.cartCount);
+                    showToast('Article ajouté au panier');
                 } else {
-                    cartCountElement.classList.remove('bg-green-600');
-                    cartCountElement.classList.add('bg-red-600');
+                    alert('Erreur : ' + data.message);
                 }
-            }
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+            })
+            .finally(() => {
+                isSubmitting = false;
+                addToCartBtn.disabled = false;
+                addToCartBtn.querySelector('.add-to-cart-text').textContent = originalText;
+            });
+        });
     }
 
     // Fonction pour gérer les onglets
@@ -243,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Appel de toutes les fonctions
     handleCommentForm();
     handleAddToCart();
-    handleAddToCartForm();
     handleTabs();
     handleAvis();
 });
@@ -319,4 +267,24 @@ function createStarRating(note) {
     const emptyStar = '<svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>';
     
     return Array(5).fill('').map((_, index) => index < note ? fullStar : emptyStar).join('');
+}
+
+function updateCartCount(count) {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+        cartCountElement.classList.toggle('bg-red-600', count === 0);
+        cartCountElement.classList.toggle('bg-green-600', count > 0);
+    }
+}
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
 }
