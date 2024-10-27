@@ -47,33 +47,41 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const addToCartBtn = document.getElementById('addToCartBtn');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
 
-    addToCartBtn.addEventListener('click', function(event) {
-        event.preventDefault();
-        console.log('Bouton cliqué');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            console.log('Bouton cliqué');
 
-        const form = document.getElementById('product-form');
-        const formData = new FormData(form);
+            const form = document.getElementById('product-form');
+            if (form) {
+                const formData = new FormData(form);
 
-        fetch('ajouter_panier.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Réponse du serveur:', data);
-            if (data.success) {
-                alert('Produit ajouté au panier avec succès !');
+                fetch('ajouter_panier.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Réponse du serveur:', data);
+                    if (data.success) {
+                        alert('Produit ajouté au panier avec succès !');
+                    } else {
+                        alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                });
             } else {
-                alert('Erreur lors de l\'ajout du produit au panier: ' + data.message);
+                console.error('Le formulaire product-form n\'existe pas');
             }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
         });
-    });
+    } else {
+        console.error("Le bouton 'Ajouter au panier' n'a pas été trouvé.");
+    }
 });
 
 document.querySelectorAll('.image-container').forEach(container => {
@@ -208,4 +216,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Repositionner l'indicateur lors du redimensionnement de la fenêtre
     window.addEventListener('resize', positionIndicator);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const avisForm = document.getElementById('avis-form');
+    const avisList = document.getElementById('avis-list');
+    const idProduitElement = document.getElementById('id_produit');
+
+    if (idProduitElement) {
+        const ID_PRODUIT = idProduitElement.value;
+        
+        // Le reste de votre code ici
+        loadAvis();
+        
+        // ...
+    } else {
+        console.error("L'élément avec l'ID 'id_produit' n'a pas été trouvé.");
+    }
+
+    // ...
 });

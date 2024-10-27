@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const avisForm = document.getElementById('avis-form');
     const avisList = document.getElementById('avis-list');
+    
+    // Vérifier si l'élément existe avant d'accéder à sa valeur
+    const idProduitElement = document.getElementById('id_produit');
+    const ID_PRODUIT = idProduitElement ? idProduitElement.value : null;
+
+    if (!ID_PRODUIT) {
+        console.error("L'ID du produit n'a pas été trouvé.");
+        return; // Arrêter l'exécution si l'ID n'est pas disponible
+    }
 
     // Charger les avis existants
     loadAvis();
