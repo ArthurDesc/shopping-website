@@ -54,13 +54,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour gérer le bouton d'ajout au panier
     function handleAddToCart() {
-        // Modification des sélecteurs pour correspondre à la structure HTML
         const form = document.getElementById('add-to-cart-form');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
-        
-        // Debug
-        console.log('Form:', form);
-        console.log('Button:', addToCartBtn);
         
         if (!form || !addToCartBtn) {
             console.warn("Le formulaire ou le bouton d'ajout au panier n'a pas été trouvé.");
@@ -79,9 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
             addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajout en cours...';
 
             const formData = new FormData(this);
-            
-            // Debug
-            console.log('Données envoyées:', Object.fromEntries(formData));
 
             fetch('/shopping-website/ajax/add_to_cart.php', {
                 method: 'POST',
@@ -89,17 +81,16 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Réponse du serveur:', data);
                 if (data.success) {
                     updateCartCount(data.cartCount);
-                    showToast('Article ajouté au panier');
+                    showToast('Article ajouté au panier', 'success'); // Utilisation du nouveau toast
                 } else {
-                    alert('Erreur : ' + data.message);
+                    showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
                 }
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                showToast('Une erreur s\'est produite lors de l\'ajout au panier', 'error');
             })
             .finally(() => {
                 isSubmitting = false;
@@ -278,15 +269,26 @@ function updateCartCount(count) {
     }
 }
 
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    if (toast) {
-        toast.textContent = message;
-        toast.classList.add('show');
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-5 right-5 p-4 rounded-md text-white ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } shadow-lg transition-opacity duration-500 ease-in-out opacity-0`;
+    toast.style.zIndex = '1000';
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
         setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
+            document.body.removeChild(toast);
+        }, 500);
+    }, 3000);
 }
 
 // Ajoutez après la fonction handleTabs

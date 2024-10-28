@@ -39,6 +39,8 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
+  <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
+<script src="<?php echo url('assets/js/toast.js'); ?>"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
@@ -47,7 +49,9 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <script src="https://cdn.tailwindcss.com"></script>
   <?php include __DIR__ . '/../includes/_fonts.php';  ?>
   <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
-  <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <?php if (basename($_SERVER['PHP_SELF']) == 'produit.php'): ?>
+    <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <?php endif; ?>
   <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
