@@ -161,7 +161,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 <main class="container mx-auto px-4">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
-        <div id="filterForm" x-data="{ openTab: null }" class="fixed inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:bg-transparent md:z-auto overflow-y-auto">
+        <div id="filterForm" x-data="{ openTab: null }" class="fixed md:static inset-0 bg-white z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:h-fit md:bg-transparent md:z-auto overflow-y-auto">
             <div class="h-full p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-semibold text-lg">Filtres</h3>
@@ -674,6 +674,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
 
 
 

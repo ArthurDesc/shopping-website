@@ -588,8 +588,12 @@ input[type="radio"] + span {
   color: white;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-left: 0; /* Ajout */
-  padding-left: 1rem; /* Ajout */
+  margin-left: 0;
+  padding-left: 1rem;
+  height: fit-content; /* Ajout de cette ligne */
+  min-height: min-content; /* Ajout de cette ligne */
+  position: sticky; /* Modification de la position */
+  top: 1rem;
 }
 
 #filterForm h3,
@@ -795,3 +799,5 @@ input[type="radio"] + span {
   color: white;
   font-size: 0.875rem; /* Réduit légèrement la taille du texte */
 }
+
+
