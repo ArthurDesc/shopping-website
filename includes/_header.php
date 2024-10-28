@@ -33,7 +33,7 @@ $headerCategories = $categoryManager->getHeaderCategories();
 
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr"class="h-full">
 
 <head>
   <meta charset="UTF-8">
@@ -353,4 +353,4 @@ $headerCategories = $categoryManager->getHeaderCategories();
   </script>
 </body>
 
-</html>
+</class=>

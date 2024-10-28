@@ -125,8 +125,8 @@ $collection = $categoryManager->getCollection($id_produit);
 
 <?php include '../includes/_header.php'; ?>
 
+<main class="flex-grow container mx-auto px-4 py-8 mt-16">
 
-<body class="bg-gray-100">
     <input type="hidden" id="id_produit" name="id_produit" value="<?php echo $id_produit; ?>">
     <?php if ($isEditMode): ?>
         <div class="bg-red-500 text-white text-center py-2 font-bold">
@@ -164,22 +164,21 @@ $collection = $categoryManager->getCollection($id_produit);
                             <img src="<?php echo htmlspecialchars($image_url); ?>"
                                 alt="<?php echo htmlspecialchars($produit['nom']); ?>"
                                 class="w-full h-full object-cover">
-                                
+
                             <?php if ($isEditMode): ?>
                                 <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-2 flex justify-center">
                                     <label for="image-upload" class="cursor-pointer text-white hover:text-blue-300 flex items-center">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="mr-2">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
                                         </svg>
                                         Modifier l'image
                                     </label>
-                                    <input 
-                                        type="file" 
-                                        id="image-upload" 
+                                    <input
+                                        type="file"
+                                        id="image-upload"
                                         accept="image/*"
                                         class="hidden"
-                                        onchange="updateImage(this.files[0])"
-                                    >
+                                        onchange="updateImage(this.files[0])">
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -277,12 +276,12 @@ $collection = $categoryManager->getCollection($id_produit);
                         </div>
                     </div>
 
-                
+
 
                     <!-- Boutons d'action -->
                     <?php
-                    $tailles_disponibles = !empty($produit['tailles_disponibles']) 
-                        ? explode(',', $produit['tailles_disponibles']) 
+                    $tailles_disponibles = !empty($produit['tailles_disponibles'])
+                        ? explode(',', $produit['tailles_disponibles'])
                         : [];
                     ?>
                     <?php if ($isEditMode): ?>
@@ -304,15 +303,13 @@ $collection = $categoryManager->getCollection($id_produit);
                                         @keydown.enter="editingStock = false; updateStock(stock)"
                                         @keydown.escape="editingStock = false"
                                         class="w-24 px-2 py-1 border rounded focus:outline-none focus:border-blue-500"
-                                        min="0"
-                                    >
+                                        min="0">
                                 </div>
-                                <button 
+                                <button
                                     @click="editingStock = !editingStock"
-                                    class="text-blue-500 hover:text-blue-700"
-                                >
+                                    class="text-blue-500 hover:text-blue-700">
                                     <svg x-show="!editingStock" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </button>
                             </div>
@@ -329,13 +326,13 @@ $collection = $categoryManager->getCollection($id_produit);
                                         <div class="mb-2 md:mb-0 flex-grow">
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
                                             <div class="flex flex-wrap gap-2">
-                                                <?php if (!empty($tailles_disponibles)): 
+                                                <?php if (!empty($tailles_disponibles)):
                                                     foreach ($tailles_disponibles as $taille): ?>
                                                         <label class="inline-flex items-center">
                                                             <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
                                                             <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span>
                                                         </label>
-                                                    <?php endforeach; 
+                                                    <?php endforeach;
                                                 else: ?>
                                                     <p>Aucune taille disponible</p>
                                                 <?php endif; ?>
@@ -426,36 +423,32 @@ $collection = $categoryManager->getCollection($id_produit);
                                         <div x-show="editingCollection" class="flex items-center space-x-2">
                                             <select
                                                 x-model="tempCollection"
-                                                class="border-b-2 border-blue-500 focus:outline-none text-gray-600"
-                                            >
+                                                class="border-b-2 border-blue-500 focus:outline-none text-gray-600">
                                                 <option value="Homme">Homme</option>
                                                 <option value="Femme">Femme</option>
                                                 <option value="Enfant">Enfant</option>
                                             </select>
-                                            <button 
+                                            <button
                                                 @click="collection = tempCollection; editingCollection = false; updateCollection(tempCollection)"
-                                                class="text-green-500 hover:text-green-700"
-                                            >
+                                                class="text-green-500 hover:text-green-700">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                                 </svg>
                                             </button>
-                                            <button 
+                                            <button
                                                 @click="editingCollection = false; tempCollection = collection"
-                                                class="text-red-500 hover:text-red-700"
-                                            >
+                                                class="text-red-500 hover:text-red-700">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                 </svg>
                                             </button>
                                         </div>
-                                        <button 
+                                        <button
                                             x-show="!editingCollection"
                                             @click="editingCollection = true"
-                                            class="ml-2 text-gray-600 hover:text-blue-500"
-                                        >
+                                            class="ml-2 text-gray-600 hover:text-blue-500">
                                             <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
                                         </button>
                                     </div>
@@ -468,16 +461,16 @@ $collection = $categoryManager->getCollection($id_produit);
                             <div class="flex items-center">
                                 <span class="font-semibold">Catégories:</span>
                                 <?php if ($isEditMode): ?>
-                                    <div id="edit-categories-container" class="ml-2 w-full" 
-                                         data-categories='<?php echo json_encode(array_map(function($cat) { 
-                                             return $cat['id_categorie']; 
-                                         }, $categories)); ?>'>
+                                    <div id="edit-categories-container" class="ml-2 w-full"
+                                        data-categories='<?php echo json_encode(array_map(function ($cat) {
+                                                                return $cat['id_categorie'];
+                                                            }, $categories)); ?>'>
                                     </div>
                                 <?php else: ?>
                                     <span class="ml-2 text-gray-600">
                                         <?php if (!empty($categories)): ?>
-                                            <?php echo implode(', ', array_map(function($cat) { 
-                                                return htmlspecialchars($cat['nom']); 
+                                            <?php echo implode(', ', array_map(function ($cat) {
+                                                return htmlspecialchars($cat['nom']);
                                             }, $categories)); ?>
                                         <?php else: ?>
                                             Aucune catégorie
@@ -493,7 +486,8 @@ $collection = $categoryManager->getCollection($id_produit);
                         <div id="comments-list">
                             <?php if (!empty($avis_produit)): ?>
                                 <?php foreach (array_slice($avis_produit, 0, 5) as $avis): ?> <!-- Limiter l'affichage à 5 avis -->
-                                    <div class="mb-6 p-6 border rounded-xl shadow-lg bg-white" data-avis-id="<?php echo $avis->getIdAvis(); ?>">                                        <div class="flex justify-between items-center mb-2">
+                                    <div class="mb-6 p-6 border rounded-xl shadow-lg bg-white" data-avis-id="<?php echo $avis->getIdAvis(); ?>">
+                                        <div class="flex justify-between items-center mb-2">
                                             <div class="flex items-center">
                                                 <span class="font-semibold mr-2"><?php echo htmlspecialchars($avis->getNomUtilisateur()); ?></span>
                                                 <div class="flex items-center">
@@ -513,14 +507,14 @@ $collection = $categoryManager->getCollection($id_produit);
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm text-gray-500"><?php echo $avis->getFormattedDate(); ?></span>
                                                 <?php if (isset($_SESSION['id_utilisateur']) && $_SESSION['id_utilisateur'] == $avis->getIdUtilisateur()): ?>
-                                                    <button onclick="modifierAvis(<?php echo $avis->getIdAvis(); ?>)" 
-                                                            class="text-blue-600 hover:text-blue-800">
+                                                    <button onclick="modifierAvis(<?php echo $avis->getIdAvis(); ?>)"
+                                                        class="text-blue-600 hover:text-blue-800">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                                         </svg>
                                                     </button>
-                                                    <button onclick="supprimerAvis(<?php echo $avis->getIdAvis(); ?>)" 
-                                                            class="text-red-600 hover:text-red-800">
+                                                    <button onclick="supprimerAvis(<?php echo $avis->getIdAvis(); ?>)"
+                                                        class="text-red-600 hover:text-red-800">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                         </svg>
@@ -533,103 +527,101 @@ $collection = $categoryManager->getCollection($id_produit);
                                 <?php endforeach; ?>
                                 <?php if (count($avis_produit) > 5): ?> <!-- Vérifier s'il y a plus de 5 avis -->
                                     <div class="text-center mt-4">
-    <a href="./avis.php?id_produit=<?php echo $id_produit; ?>" 
-       class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg inline-block">
-        Voir tous les avis (<?php echo count($avis_produit); ?>)
-    </a>
-</div>
+                                        <a href="./avis.php?id_produit=<?php echo $id_produit; ?>"
+                                            class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg inline-block">
+                                            Voir tous les avis (<?php echo count($avis_produit); ?>)
+                                        </a>
+                                    </div>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <p>Aucun avis pour ce produit pour le moment.</p>
                             <?php endif; ?>
                         </div>
                         <!-- Section pour ajouter un commentaire -->
-            <div class="mt-8 mb-4">
-                <h3 class="text-xl font-semibold mb-4">Ajouter un commentaire</h3>
-                <!-- Vérification de la connexion utilisateur -->
-                <?php if (isset($_SESSION['id_utilisateur'])): ?>
-                    <form id="comment-form" class="space-y-4">
-                        <!-- Champs cachés -->
-                        <input type="hidden" name="id_produit" value="<?php echo htmlspecialchars($id_produit); ?>">
-                        <input type="hidden" name="id_utilisateur" value="<?php echo htmlspecialchars($_SESSION['id_utilisateur']); ?>">
-                        
-                        <!-- Suppression du token CSRF car non nécessaire ici -->
-                        
-                        <!-- Zone de commentaire -->
-                        <div>
-                            <label for="commentaire" class="block text-sm font-medium text-gray-700 mb-1">Votre commentaire</label>
-                            <textarea 
-                                id="commentaire" 
-                                name="commentaire" 
-                                rows="4" 
-                                required
-                                minlength="10"
-                                class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500" 
-                                placeholder="Écrivez votre commentaire ici (minimum 10 caractères)..."
-                            ></textarea>
+                        <div class="mt-8 mb-4">
+                            <h3 class="text-xl font-semibold mb-4">Ajouter un commentaire</h3>
+                            <!-- Vérification de la connexion utilisateur -->
+                            <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                                <form id="comment-form" class="space-y-4">
+                                    <!-- Champs cachés -->
+                                    <input type="hidden" name="id_produit" value="<?php echo htmlspecialchars($id_produit); ?>">
+                                    <input type="hidden" name="id_utilisateur" value="<?php echo htmlspecialchars($_SESSION['id_utilisateur']); ?>">
+
+                                    <!-- Suppression du token CSRF car non nécessaire ici -->
+
+                                    <!-- Zone de commentaire -->
+                                    <div>
+                                        <label for="commentaire" class="block text-sm font-medium text-gray-700 mb-1">Votre commentaire</label>
+                                        <textarea
+                                            id="commentaire"
+                                            name="commentaire"
+                                            rows="4"
+                                            required
+                                            minlength="10"
+                                            class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500"
+                                            placeholder="Écrivez votre commentaire ici (minimum 10 caractères)..."></textarea>
+                                    </div>
+
+                                    <!-- Note (étoiles) -->
+                                    <div class="flex items-center">
+                                        <span class="mr-2">Note* :</span>
+                                        <div class="flex space-x-1">
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <input
+                                                    type="radio"
+                                                    id="star<?php echo $i; ?>"
+                                                    name="note"
+                                                    value="<?php echo $i; ?>"
+                                                    required
+                                                    class="hidden" />
+                                                <label for="star<?php echo $i; ?>" class="cursor-pointer">
+                                                    <svg class="w-6 h-6 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                    </svg>
+                                                </label>
+                                            <?php endfor; ?>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-sm text-gray-500">* Champs obligatoires</p>
+
+                                    <button
+                                        type="submit"
+                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                                        Soumettre l'avis
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+                                    <strong class="font-bold">Information :</strong>
+                                    <span class="block sm:inline"> Vous devez être connecté pour laisser un avis.</span>
+                                    <a href="/shopping-website/pages/connexion.php" class="underline">Se connecter</a>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                        
-                        <!-- Note (étoiles) -->
-                        <div class="flex items-center">
-                            <span class="mr-2">Note* :</span>
-                            <div class="flex space-x-1">
-                                <?php for ($i = 1; $i <= 5; $i++): ?>
-                                    <input 
-                                        type="radio" 
-                                        id="star<?php echo $i; ?>" 
-                                        name="note" 
-                                        value="<?php echo $i; ?>" 
-                                        required
-                                        class="hidden" 
-                                    />
-                                    <label for="star<?php echo $i; ?>" class="cursor-pointer">
-                                        <svg class="w-6 h-6 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                        </svg>
-                                    </label>
-                                <?php endfor; ?>
-                            </div>
-                        </div>
-                        
-                        <p class="text-sm text-gray-500">* Champs obligatoires</p>
-                        
-                        <button 
-                            type="submit" 
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200"
-                        >
-                            Soumettre l'avis
-                        </button>
-                    </form>
-                <?php else: ?>
-                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
-                        <strong class="font-bold">Information :</strong>
-                        <span class="block sm:inline"> Vous devez être connecté pour laisser un avis.</span>
-                        <a href="/shopping-website/pages/connexion.php" class="underline">Se connecter</a>
+
+
+
                     </div>
-                <?php endif; ?>
-            </div>
+                </div>
 
-            
+                <!-- Section Produits associés (en dehors des onglets) -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
+                    <!-- Ajoutez ici le contenu des produits associés -->
+                </div>
+                <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
+                </div>
 
-        </div>
-    </div>
+                <!-- Toast notification -->
+                <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
+                    Article ajouté au panier
+                </div>
+</main>
 
-    <!-- Section Produits associés (en dehors des onglets) -->
-    <div class="mt-8">
-                <h3 class="text-xl font-semibold mb-4">Produits associés</h3>
-                <!-- Ajoutez ici le contenu des produits associés -->
-            </div>
-            <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
-</div>
+<?php include '../includes/_footer.php'; ?>
 
-            <!-- Toast notification -->
-<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
-    Article ajouté au panier
-</div>
 
-    <?php include '../includes/_footer.php'; ?>
-
-    
 </body>
 
 </html>
