@@ -46,6 +46,7 @@
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
   <script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
+  <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
   <script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
   <script src="<?php echo url('assets/js/produit.js'); ?>" defer></script>
 <?php endif; ?>
