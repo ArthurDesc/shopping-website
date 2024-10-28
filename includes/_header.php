@@ -57,6 +57,11 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
   <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+  <style>
+      [x-cloak] { 
+          display: none !important; 
+      }
+  </style>
 </head>
 
 
@@ -80,13 +85,13 @@ $headerCategories = $categoryManager->getHeaderCategories();
                     <?php echo ucfirst($category); ?>
                   </a>
                   <div x-show="open"
-                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter="transition ease-out duration-100"
                     x-transition:enter-start="opacity-0 transform scale-95"
                     x-transition:enter-end="opacity-100 transform scale-100"
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 transform scale-100"
                     x-transition:leave-end="opacity-0 transform scale-95"
-                    class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                    class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100] hidden">
                     <?php foreach ($subcategories as $subcategory) : ?>
                       <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category) . "&category=" . urlencode($subcategory)); ?>"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -137,6 +142,7 @@ $headerCategories = $categoryManager->getHeaderCategories();
 
                 <!-- Menu déroulant pour utilisateurs connectés -->
                 <div x-show="open"
+                  x-cloak
                   x-transition:enter="transition ease-out duration-200"
                   x-transition:enter-start="opacity-0 transform scale-95"
                   x-transition:enter-end="opacity-100 transform scale-100"
