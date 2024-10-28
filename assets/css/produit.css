@@ -805,3 +805,113 @@ input[type="radio"] + span {
 
 
 
+.page__btn svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.page__btn a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+/* Styles de pagination */
+:root {
+    --primary: #3B82F6;  /* Bleu */
+    --greyLight: #93c5fd;  /* Version plus claire du bleu */
+    --greyLight-2: #eff6ff;  /* Fond très clair */
+    --greyDark: #1e3a8a;  /* Bleu foncé */
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0; /* Réduit de 3rem à 2rem */
+}
+
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem; /* Réduit de 5rem à 3rem */
+    margin: 2rem; /* Réduit de 3rem à 2rem */
+    border-radius: 0.4rem; /* Réduit de 0.6rem à 0.4rem */
+    background: #ffffff;
+    box-shadow: 0 0.4rem 1rem rgba(59, 130, 246, 0.05); /* Réduit l'ombre */
+    list-style-type: none;
+    padding: 0;
+}
+
+.page__numbers,
+.page__btn,
+.page__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.4rem; /* Réduit de 0.8rem à 0.4rem */
+    font-size: 1rem; /* Réduit de 1.4rem à 1rem */
+    cursor: pointer;
+}
+
+.page__dots {
+    width: 2rem; /* Réduit de 2.6rem à 2rem */
+    height: 2rem; /* Réduit de 2.6rem à 2rem */
+}
+
+.page__numbers {
+    width: 2rem; /* Réduit de 2.6rem à 2rem */
+    height: 2rem; /* Réduit de 2.6rem à 2rem */
+    border-radius: 0.3rem; /* Réduit de 0.4rem à 0.3rem */
+}
+
+.page__numbers:hover {
+    color: var(--primary);
+    background-color: var(--greyLight-2);
+}
+
+.page__numbers.active {
+    color: #ffffff;
+    background: var(--primary);
+    font-weight: 600;
+    border: 1px solid var(--primary);
+}
+
+.page__btn {
+    color: var(--greyLight);
+    pointer-events: none;
+}
+
+.page__btn.active {
+    color: var(--greyDark);
+    pointer-events: auto;
+}
+
+.page__btn.active:hover {
+    color: var(--primary);
+}
+
+.page__btn a,
+.page__numbers a {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ajuster la taille des icônes SVG */
+.page__btn svg {
+    width: 1.2rem; /* Réduit de 1.5rem à 1.2rem */
+    height: 1.2rem; /* Réduit de 1.5rem à 1.2rem */
+}
+
+.page__btn a {
+    width: 2rem; /* Réduit de 2.6rem à 2rem */
+    height: 2rem; /* Réduit de 2.6rem à 2rem */
+}
