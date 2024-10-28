@@ -221,41 +221,48 @@ $collection = $categoryManager->getCollection($id_produit);
                             </div>
                         </div>
 
-                        <!-- Description et Prix -->
-                        <div class="flex justify-between items-start mt-2">
-                            <div class="flex-grow">
-                                <p class="text-gray-600 text-sm" x-show="!editingDescription" x-text="description"></p>
-                                <textarea x-show="editingDescription"
-                                    x-model="description"
-                                    @keydown.enter="editingDescription = false; updateDescription(description)"
-                                    @keydown.escape="editingDescription = false"
-                                    class="text-sm text-gray-600 w-full border-b-2 border-blue-500 focus:outline-none"
-                                    rows="3"></textarea>
-                                <?php if ($isEditMode): ?>
-                                    <button @click="editingDescription = !editingDescription" class="text-gray-600 hover:text-blue-500">
-                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </button>
-                                <?php endif; ?>
-                            </div>
-                            <div class="ml-4 flex-shrink-0">
-                                <p class="text-2xl font-bold " x-show="!editingPrice" x-text="price + ' €'"></p>
-                                <input x-show="editingPrice"
-                                    x-model="price"
-                                    @keydown.enter="editingPrice = false; updatePrice(price)"
-                                    @keydown.escape="editingPrice = false"
-                                    class="text-3xl font-bold text-blue-600 border-b-2 border-blue-500 focus:outline-none"
-                                    type="text">
-                                <?php if ($isEditMode): ?>
-                                    <button @click="editingPrice = !editingPrice" class="text-gray-600 hover:text-blue-500">
-                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </button>
-                                <?php endif; ?>
-                            </div>
+                    <!-- Description -->
+                    <div x-data="{ editingDescription: false, description: '<?php echo addslashes(htmlspecialchars($produit['description'])); ?>' }">
+                        <div class="flex items-start">
+                            <?php if ($isEditMode): ?>
+                            <button @click="editingDescription = !editingDescription" class="mr-2 text-gray-600 hover:text-blue-500 flex-shrink-0">
+                                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <?php endif; ?>
+                            <p class="text-gray-600 text-sm flex-grow" x-show="!editingDescription" x-text="description"></p>
+                            <textarea x-show="editingDescription"
+                                      x-model="description"
+                                      @keydown.enter="editingDescription = false; updateDescription(description)"
+                                      @keydown.escape="editingDescription = false"
+                                      class="w-full text-sm border-b-2 border-blue-500 focus:outline-none"
+                                      rows="3"></textarea>
                         </div>
+                    </div>
+
+                    <!-- Prix -->
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <span class="font-bold text-lg" x-show="!editingPrice" x-text="price + ' €'"></span>
+                            <input x-show="editingPrice"
+                                   x-model="price"
+                                   @keydown.enter="editingPrice = false; updatePrice(price)"
+                                   @keydown.escape="editingPrice = false"
+                                   class="font-bold text-lg border-b-2 border-blue-500 focus:outline-none"
+                                   type="number"
+                                   step="0.01">
+                            <?php if ($isEditMode): ?>
+                            <button @click="editingPrice = !editingPrice" class="ml-2 text-gray-600 hover:text-blue-500">
+                                <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    
 
                         <!-- Marque -->
                         <div class="flex items-center mt-2">
@@ -285,87 +292,45 @@ $collection = $categoryManager->getCollection($id_produit);
                         ? explode(',', $produit['tailles_disponibles']) 
                         : [];
                     ?>
-                    <?php if ($isEditMode): ?>
-                        <!-- Section de gestion du stock en mode édition -->
-                        <div class="mt-4 p-4 border rounded-lg bg-gray-50">
-                            <div class="flex items-center justify-between" x-data="{ 
-                                editingStock: false,
-                                stock: '<?php echo $produit['stock']; ?>'
-                            }">
-                                <div class="flex items-center space-x-2">
-                                    <h3 class="font-semibold text-gray-700">Stock disponible :</h3>
-                                    <div x-show="!editingStock" class="text-lg">
-                                        <span x-text="stock"></span> unités
-                                    </div>
-                                    <input
-                                        x-show="editingStock"
-                                        type="number"
-                                        x-model="stock"
-                                        @keydown.enter="editingStock = false; updateStock(stock)"
-                                        @keydown.escape="editingStock = false"
-                                        class="w-24 px-2 py-1 border rounded focus:outline-none focus:border-blue-500"
-                                        min="0"
-                                    >
+                    <div class="mt-4 space-y-2">
+                        <!-- Check if product ID is set -->
+                        <?php if (!isset($produit['id_produit'])): ?>
+                            <p>Erreur : Aucun ID de produit fourni.</p>
+                        <?php else: ?>
+                            <form id="add-to-cart-form" class="mt-4 space-y-2">
+                                <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
+                                <select id="productSize" class="product-select w-full mb-2 p-2 border rounded-md" required>
+                                    <option value="">Choisissez une taille</option>
+                                    <?php foreach ($tailles_disponibles as $taille): ?>
+                                        <option value="<?php echo htmlspecialchars($taille); ?>"><?php echo htmlspecialchars($taille); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <select id="productQuantity" class="product-select w-full mb-2 p-2 border rounded-md" required>
+                                    <option value="">Choisissez une quantité</option>
+                                    <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
+                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <div class="flex space-x-2">
+                                    <button type="submit" id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                        Ajouter au panier
+                                    </button>
                                 </div>
-                                <button 
-                                    @click="editingStock = !editingStock"
-                                    class="text-blue-500 hover:text-blue-700"
-                                >
-                                    <svg x-show="!editingStock" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    <?php else: ?>
-                        <!-- Section existante pour l'ajout au panier -->
-                        <div class="mt-4 space-y-2">
-                            <?php if (!isset($produit['id_produit'])): ?>
-                                <p>Erreur : Aucun ID de produit fourni.</p>
-                            <?php else: ?>
-                                <form id="add-to-cart-form" class="mt-4">
-                                    <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
-                                    <div class="flex flex-col md:flex-row md:items-end md:space-x-4">
-                                        <div class="mb-2 md:mb-0 flex-grow">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
-                                            <div class="flex flex-wrap gap-2">
-                                                <?php if (!empty($tailles_disponibles)): 
-                                                    foreach ($tailles_disponibles as $taille): ?>
-                                                        <label class="inline-flex items-center">
-                                                            <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
-                                                            <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span>
-                                                        </label>
-                                                    <?php endforeach; 
-                                                else: ?>
-                                                    <p>Aucune taille disponible</p>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                        <div class="quantity-container mb-2 md:mb-0 w-auto flex items-center">
-                                            <label for="quantite" class="quantity-label mr-3">Quantité</label>
-                                            <select id="quantite" name="quantite" class="quantity-select" required>
-                                                <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
-                                                    <option value="<?php echo $i; ?>" <?php echo $i === 1 ? 'selected' : ''; ?>><?php echo $i; ?></option>
-                                                <?php endfor; ?>
-                                            </select>
-                                        </div>
-                                        <div class="add-to-cart-button mt-4 md:mt-0">
-                                            <button type="submit" id="add-to-cart-btn" class="add-to-cart-button-wrapper">
-                                                <div class="add-to-cart-text">Ajouter au panier</div>
-                                                <span class="add-to-cart-icon">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
-                                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+
+                     <script>
+                    function acheterMaintenant() {
+                        var form = document.getElementById('product-form');
+                        form.action = 'process_paiement.php'; // Redirige vers la page de paiement
+                        form.submit();
+                    }
+                    </script>
                 </div>
             </div>
+        </div>
+    </div>
 
             <!-- Ajoutez cette section pour les onglets -->
             <div class="mt-8">
@@ -622,14 +587,164 @@ $collection = $categoryManager->getCollection($id_produit);
             <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
 </div>
 
-            <!-- Toast notification -->
-<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
-    Article ajouté au panier
-</div>
+    <?php if ($isEditMode): ?>
+        <script src="../assets/js/editMode.js">
+            function updateField(field, newValue) {
+                fetch('/shopping-website/admin/update_article.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_produit: <?php echo $produit['id_produit']; ?>,
+                        field: field,
+                        new_value: newValue
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(field + ' mis à jour avec succès');
+                    } else {
+                        console.error('Erreur lors de la mise à jour de ' + field + ':', data.message);
+                        alert('Erreur lors de la mise à jour de ' + field + ': ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de la mise à jour de ' + field);
+                });
+            }
 
-    <?php include '../includes/_footer.php'; ?>
+            // Utilisez cette fonction pour chaque champ
+            function updateTitle(newTitle) {
+                updateField('nom', newTitle);
+            }
 
-    
+            function updateDescription(newDescription) {
+                updateField('description', newDescription);
+            }
+
+            function updatePrice(newPrice) {
+                updateField('prix', newPrice);
+            }
+
+            function updateBrand(newBrand) {
+                updateField('marque', newBrand);
+            }
+
+            function updateCollection(newCollection) {
+                if (['Homme', 'Femme', 'Enfant'].includes(newCollection)) {
+                    updateField('collection', newCollection);
+                } else {
+                    console.error('Collection invalide');
+                    alert('Veuillez choisir une collection valide : Homme, Femme ou Enfant');
+                }
+            }
+        </script>
+    <?php endif; ?>
+
+    <script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/detail.js" defer></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('add-to-cart-form');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = 'Ajout en cours...';
+
+            const formData = new FormData(form);
+
+            fetch('<?php echo BASE_URL; ?>ajax/add_to_cart.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartCount(data.cartCount);
+                } else {
+                    alert('Erreur : ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+            })
+            .finally(() => {
+                addToCartBtn.disabled = false;
+                addToCartBtn.textContent = 'Ajouter au panier';
+            });
+        });
+
+        function updateCartCount(count) {
+            const cartCountElement = document.getElementById('cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        }
+    });
+    </script>
+
+    <script>
+    $(document).ready(function() {
+        let currentProductId = null;
+
+        // Ouvrir le modal lorsque le bouton "Ajouter au panier" est cliqué
+        $('.open-modal-btn').click(function() {
+            currentProductId = $(this).data('product-id');
+            $('#modal-container').removeClass('hidden'); // Afficher le modal
+        });
+
+        // Ajouter au panier
+        $('#addToCartBtn').click(function() {
+            const selectedSize = $('#productSize').val();
+            const selectedQuantity = $('#productQuantity').val();
+
+            if (!selectedSize) {
+                alert('Veuillez choisir une taille');
+                return;
+            }
+
+            if (!selectedQuantity) {
+                alert('Veuillez choisir une quantité');
+                return;
+            }
+
+            // Envoyer la requête AJAX pour ajouter au panier
+            $.ajax({
+                url: '<?php echo BASE_URL; ?>ajax/add_to_cart.php',
+                method: 'POST',
+                data: {
+                    id_produit: currentProductId,
+                    taille: selectedSize,
+                    quantite: selectedQuantity
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.success) {
+                        closeModal();
+                        // Mettre à jour le compteur du panier si nécessaire
+                        updateCartCount(data.cartCount);
+                    } else {
+                        alert('Erreur : ' + data.message);
+                    }
+                },
+                error: function() {
+                    alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>
