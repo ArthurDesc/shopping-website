@@ -88,8 +88,21 @@ if (isset($_POST['update'])) {
 
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
-        $panier->mettreAJourQuantite($id_update, intval($quantity));
-        echo "Quantité mise à jour avec succès."; // Message de succès
+        // Récupérer le produit pour vérifier le stock
+        $stmt = $conn->prepare("SELECT stock FROM produits WHERE id_produit = ?");
+        $stmt->bind_param("i", $id_update);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $produit = $result->fetch_assoc();
+
+        // Vérifier si la quantité demandée ne dépasse pas le stock
+        if ($quantity <= $produit['stock']) {
+            $panier->mettreAJourQuantite($id_update, intval($quantity));
+            echo "Quantité mise à jour avec succès."; // Message de succès
+        } else {
+            echo "La quantité demandée dépasse le stock disponible."; // Message d'erreur
+            $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
+        }
     } else {
         $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
         echo "Produit retiré du panier en raison d'une quantité invalide."; // Message d'erreur
@@ -338,6 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
 
 
 

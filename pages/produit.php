@@ -380,6 +380,10 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                 <div class="p-3 flex-shrink-0">
                     <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
                     <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
+                    <!-- Affichage de la disponibilité du produit -->
+                    <p class="text-xs <?php echo $produit->getStock() > 0 ? 'text-green-600' : 'text-red-600'; ?>">
+                        <?php echo $produit->getStock() > 0 ? 'En stock' : 'Rupture de stock'; ?>
+                    </p>
                 </div>
             </a>
             <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
@@ -615,6 +619,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
 
 
 
