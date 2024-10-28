@@ -146,6 +146,12 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
     #filterDropdowns.show {
         display: block !important;
     }
+
+    /* Ajoutez ces styles pour le toast */
+    #toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
 </style>
 <?php require_once '../includes/_header.php'; ?>
 
@@ -367,6 +373,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 
         </div>
     </div>
+    
 </main>
 
 <?php include '../includes/_footer.php'; ?>
@@ -384,6 +391,8 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 <script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
+
 
 <!-- Modal pour choisir la taille -->
 <div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0">
@@ -496,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 closeModal();
                 updateCartCount(data.cartCount);
-                showToast('Article ajouté au panier'); // Ajout de cette ligne
+                showToast('Article ajouté au panier'); // Cette ligne devrait maintenant fonctionner
             } else {
                 alert('Erreur : ' + data.message);
             }
@@ -545,17 +554,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ajoutez cette nouvelle fonction pour afficher le toast
     function showToast(message) {
         const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('opacity-100');
-        setTimeout(() => {
-            toast.classList.remove('opacity-100');
-        }, 3000);
+        if (toast) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            // Retirer la classe après 3 secondes
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
     }
 });
 </script>
 
 <!-- Toast notification -->
-<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-1100">
+<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-all duration-300 transform translate-y-[-100%] opacity-0 z-[9999]">
     Article ajouté au panier
 </div>
 </body>
