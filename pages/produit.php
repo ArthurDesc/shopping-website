@@ -132,6 +132,18 @@ $categories_actives = array();
 while ($row = mysqli_fetch_assoc($result_categories_actives)) {
     $categories_actives[] = $row;
 }
+
+// Au début de votre fichier produit.php, après avoir récupéré tous les produits
+$articles_par_page = 12;
+$page_courante = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Calculer le nombre total de pages
+$nombre_total_produits = count($produits);
+$nombre_pages = ceil($nombre_total_produits / $articles_par_page);
+
+// Découper le tableau des produits pour la page courante
+$index_debut = ($page_courante - 1) * $articles_par_page;
+$produits_page = array_slice($produits, $index_debut, $articles_par_page);
 ?>
 <style>
     .filter-dropdown {
@@ -399,7 +411,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
     <?php 
     if (!empty($produits)) {
         echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
-        foreach ($produits as $produit) {
+        foreach ($produits_page as $produit) {
             $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
             
             if (!file_exists($image_url) || empty($produit->getImageUrl())) {
@@ -668,19 +680,47 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php include '../includes/_footer.php'; ?>
 
 <!-- Toast notification -->
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
 
+<?php if ($nombre_pages > 1): ?>
+    <div class="pagination-container flex justify-center items-center space-x-2 mt-8 mb-8">
+        <?php if ($page_courante > 1): ?>
+            <a href="?page=<?php echo ($page_courante - 1); ?>" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                Précédent
+            </a>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $nombre_pages; $i++): ?>
+            <?php if (
+                $i == 1 || 
+                $i == $nombre_pages || 
+                ($i >= $page_courante - 2 && $i <= $page_courante + 2)
+            ): ?>
+                <a href="?page=<?php echo $i; ?>" 
+                   class="px-4 py-2 <?php echo $i === $page_courante ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'; ?> rounded-lg hover:bg-blue-600 hover:text-white">
+                    <?php echo $i; ?>
+                </a>
+            <?php elseif (
+                ($i == $page_courante - 3 && $page_courante > 4) || 
+                ($i == $page_courante + 3 && $page_courante < $nombre_pages - 3)
+            ): ?>
+                <span class="px-2">...</span>
+            <?php endif; ?>
+        <?php endfor; ?>
+
+        <?php if ($page_courante < $nombre_pages): ?>
+            <a href="?page=<?php echo ($page_courante + 1); ?>" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                Suivant
+            </a>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
+<?php include '../includes/_footer.php'; ?>
 
 
-
-
-
-
-
-
-
+</body>
+</html>
