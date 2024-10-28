@@ -49,6 +49,12 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <script src="https://cdn.tailwindcss.com"></script>
   <?php include __DIR__ . '/../includes/_fonts.php';  ?>
   <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  
+  <!-- Ajout conditionnel du CSS de la page profil -->
+  <?php if (basename($_SERVER['PHP_SELF']) == 'profil.php'): ?>
+    <link rel="stylesheet" href="<?php echo url('assets/css/profil.css?v=' . filemtime(__DIR__ . '/../assets/css/profil.css')); ?>">
+  <?php endif; ?>
+
   <?php if (basename($_SERVER['PHP_SELF']) == 'produit.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <?php endif; ?>
@@ -354,3 +360,4 @@ $headerCategories = $categoryManager->getHeaderCategories();
 </body>
 
 </class=>
+
