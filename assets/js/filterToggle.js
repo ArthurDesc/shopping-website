@@ -24,9 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fermeture du menu au clic en dehors
     document.addEventListener('click', function(event) {
-        if (filterForm && !filterForm.contains(event.target) && !toggleFiltersButton.contains(event.target)) {
-            filterForm.style.transform = 'translateY(100%)';
-            toggleFiltersButton.setAttribute('aria-expanded', 'false');
+        // Vérifier si on est en mode mobile (largeur d'écran < 768px)
+        if (window.innerWidth < 768) {
+            if (filterForm && !filterForm.contains(event.target) && !toggleFiltersButton.contains(event.target)) {
+                filterForm.style.transform = 'translateY(100%)';
+                toggleFiltersButton.setAttribute('aria-expanded', 'false');
+            }
         }
     });
 });
