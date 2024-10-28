@@ -91,7 +91,8 @@ $headerCategories = $categoryManager->getHeaderCategories();
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 transform scale-100"
                     x-transition:leave-end="opacity-0 transform scale-95"
-                    class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100] hidden">
+                    style="display: none;" 
+                    class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                     <?php foreach ($subcategories as $subcategory) : ?>
                       <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category) . "&category=" . urlencode($subcategory)); ?>"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
