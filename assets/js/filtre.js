@@ -19,44 +19,39 @@ document.addEventListener('DOMContentLoaded', function() {
             collections: getSelectedValues('collections')
         };
 
-        console.log("Filtres sélectionnés:", selectedFilters);
-
         products.forEach(product => {
-            const categories = product.dataset.categories ? product.dataset.categories.split(',') : [];
+            const categories = product.dataset.categories?.split(',') || [];
             const marque = product.dataset.brand || '';
             const collection = product.dataset.collection || '';
 
-            const categoryMatch = selectedFilters.categories.length === 0 || 
-                selectedFilters.categories.some(cat => categories.includes(cat));
-            const marqueMatch = selectedFilters.marques.length === 0 || 
-                selectedFilters.marques.includes(marque);
-            const collectionMatch = selectedFilters.collections.length === 0 || 
-                selectedFilters.collections.includes(collection);
+            const shouldDisplay = 
+                (selectedFilters.categories.length === 0 || categories.some(cat => selectedFilters.categories.includes(cat))) &&
+                (selectedFilters.marques.length === 0 || selectedFilters.marques.includes(marque)) &&
+                (selectedFilters.collections.length === 0 || selectedFilters.collections.includes(collection));
 
-            if (categoryMatch && marqueMatch && collectionMatch) {
-                product.style.display = '';
-            } else {
-                product.style.display = 'none';
-            }
+            product.style.display = shouldDisplay ? '' : 'none';
         });
 
-        // Mettre à jour l'URL
+        updateActiveFilters(selectedFilters);
         updateUrlWithFilters(selectedFilters);
     }
 
     function updateUrlWithFilters(filters) {
         const url = new URL(window.location.href);
         
-        // Nettoyer les paramètres existants
-        url.searchParams.delete('collection');
-        url.searchParams.delete('category');
-        
-        // Ajouter les nouveaux paramètres
+        // Ne pas effacer les paramètres existants s'ils ne sont pas modifiés
         if (filters.collections.length > 0) {
             url.searchParams.set('collection', filters.collections[0]);
+        } else if (!document.querySelector('input[name="collections[]"]:checked')) {
+            // Ne supprimer que si aucune case n'est cochée
+            url.searchParams.delete('collection');
         }
+        
         if (filters.categories.length > 0) {
             url.searchParams.set('category', filters.categories[0]);
+        } else if (!document.querySelector('input[name="categories[]"]:checked')) {
+            // Ne supprimer que si aucune case n'est cochée
+            url.searchParams.delete('category');
         }
         
         // Mettre à jour l'URL sans recharger la page
@@ -94,18 +89,52 @@ document.addEventListener('DOMContentLoaded', function() {
         const collection = urlParams.get('collection');
         const category = urlParams.get('category');
 
+        // Vérifier si les checkboxes existent avant de les cocher
         if (collection) {
-            const collectionCheckbox = document.querySelector(`input[name="collections[]"][value="${collection}"]`);
-            if (collectionCheckbox) collectionCheckbox.checked = true;
+            const collectionCheckbox = document.querySelector(`input[name="collections[]"][value="${collection.toLowerCase()}"]`);
+            if (collectionCheckbox) {
+                collectionCheckbox.checked = true;
+                // Appliquer les filtres sans mettre à jour l'URL
+                applyFiltersWithoutUrlUpdate();
+            }
         }
 
         if (category) {
             const categoryCheckbox = document.querySelector(`input[name="categories[]"][value="${category}"]`);
-            if (categoryCheckbox) categoryCheckbox.checked = true;
+            if (categoryCheckbox) {
+                categoryCheckbox.checked = true;
+                // Appliquer les filtres sans mettre à jour l'URL
+                applyFiltersWithoutUrlUpdate();
+            }
         }
+    }
 
-        applyFilters();
-        updateActiveFilters();
+    // Nouvelle fonction pour appliquer les filtres sans mettre à jour l'URL
+    function applyFiltersWithoutUrlUpdate() {
+        const selectedFilters = {
+            categories: getSelectedValues('categories'),
+            marques: getSelectedValues('marques'),
+            collections: getSelectedValues('collections')
+        };
+
+        products.forEach(product => {
+            const categories = product.dataset.categories ? product.dataset.categories.split(',') : [];
+            const marque = product.dataset.brand || '';
+            const collection = product.dataset.collection || '';
+
+            const categoryMatch = selectedFilters.categories.length === 0 || 
+                selectedFilters.categories.some(cat => categories.includes(cat));
+            const marqueMatch = selectedFilters.marques.length === 0 || 
+                selectedFilters.marques.includes(marque);
+            const collectionMatch = selectedFilters.collections.length === 0 || 
+                selectedFilters.collections.includes(collection);
+
+            if (categoryMatch && marqueMatch && collectionMatch) {
+                product.style.display = '';
+            } else {
+                product.style.display = 'none';
+            }
+        });
     }
 
     // Ajouter les écouteurs d'événements
