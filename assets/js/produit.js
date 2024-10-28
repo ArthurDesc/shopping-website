@@ -72,4 +72,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Ajouter après la gestion du dropdown des catégories existant
+    const sportsFilter = document.getElementById('sports-filter');
+    const sportsToggle = document.getElementById('sports-toggle');
+    const sportsContent = document.getElementById('sports-content');
+
+    sportsToggle.addEventListener('click', function() {
+        if (sportsContent.style.display === 'none' || sportsContent.style.display === '') {
+            sportsContent.style.display = 'block';
+            sportsToggle.querySelector('svg').classList.add('rotate-180');
+        } else {
+            sportsContent.style.display = 'none';
+            sportsToggle.querySelector('svg').classList.remove('rotate-180');
+        }
+    });
 });

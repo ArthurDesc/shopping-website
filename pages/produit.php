@@ -186,32 +186,34 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                             </div>
                             <div id="categories-list">
                                 <?php foreach ($categories as $id => $category): ?>
-                                    <div class="mb-2">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" 
-                                                   id="cat_<?= htmlspecialchars($id) ?>" 
-                                                   name="categories[]" 
-                                                   value="<?= htmlspecialchars($id) ?>" 
-                                                   class="mr-2"
-                                                   <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
-                                            <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
-                                        </div>
-                                        <?php if (!empty($category['sous_categories'])): ?>
-                                            <div class="ml-4 mt-1">
-                                                <?php foreach ($category['sous_categories'] as $sous_cat): ?>
-                                                    <div class="flex items-center mb-1">
-                                                        <input type="checkbox" 
-                                                               id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                               name="categories[]" 
-                                                               value="<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                               class="mr-2"
-                                                               <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
-                                                        <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
-                                                    </div>
-                                                <?php endforeach; ?>
+                                    <?php if ($category['nom'] !== 'Sports'): ?>  <!-- Ajoutez cette condition ici -->
+                                        <div class="mb-2">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" 
+                                                       id="cat_<?= htmlspecialchars($id) ?>" 
+                                                       name="categories[]" 
+                                                       value="<?= htmlspecialchars($id) ?>" 
+                                                       class="mr-2"
+                                                       <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
                                             </div>
-                                        <?php endif; ?>
-                                    </div>
+                                            <?php if (!empty($category['sous_categories'])): ?>
+                                                <div class="ml-4 mt-1">
+                                                    <?php foreach ($category['sous_categories'] as $sous_cat): ?>
+                                                        <div class="flex items-center mb-1">
+                                                            <input type="checkbox" 
+                                                                   id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                                   name="categories[]" 
+                                                                   value="<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                                   class="mr-2"
+                                                                   <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                            <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>  <!-- Fermeture de la condition -->
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -271,6 +273,33 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                     </div>
                                 <?php endforeach; ?>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown Sports -->
+                    <div id="sports-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="sports-toggle">
+                            <span class="font-semibold text-gray-600">Sports</span>
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div id="sports-content" class="py-1 pl-4" style="display: none;">
+                            <?php
+                            foreach ($categories as $id => $category) {
+                                if ($category['nom'] === 'Sports') {  // Vérifie si c'est la catégorie Sports
+                                    foreach ($category['sous_categories'] as $sous_categorie) {
+                                        echo '<div class="flex items-center mb-2">';
+                                        echo '<input type="checkbox" id="sport_' . $sous_categorie['id'] . '" 
+                                              name="categories[]" value="' . $sous_categorie['nom'] . '" 
+                                              class="mr-2">';
+                                        echo '<label for="sport_' . $sous_categorie['id'] . '">' . $sous_categorie['nom'] . '</label>';
+                                        echo '</div>';
+                                    }
+                                    break;  // Sort de la boucle une fois la catégorie Sports trouvée
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -537,6 +566,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+
 
 
 
