@@ -40,7 +40,7 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
   <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
-<script src="<?php echo url('assets/js/toast.js'); ?>"></script>
+  <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
@@ -72,31 +72,31 @@ $headerCategories = $categoryManager->getHeaderCategories();
               </svg>
             </button>
 
-<nav class="hidden md:flex space-x-8 ml-4">
-  <?php foreach ($headerCategories as $category => $subcategories) : ?>
-    <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-      <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category)); ?>" 
-         class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-        <?php echo ucfirst($category); ?>
-      </a>
-      <div x-show="open" 
-           x-transition:enter="transition ease-out duration-200" 
-           x-transition:enter-start="opacity-0 transform scale-95" 
-           x-transition:enter-end="opacity-100 transform scale-100" 
-           x-transition:leave="transition ease-in duration-150" 
-           x-transition:leave-start="opacity-100 transform scale-100" 
-           x-transition:leave-end="opacity-0 transform scale-95" 
-           class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-        <?php foreach ($subcategories as $subcategory) : ?>
-          <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category) . "&category=" . urlencode($subcategory)); ?>" 
-             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-            <?php echo $subcategory; ?>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  <?php endforeach; ?>
-</nav>
+            <nav class="hidden md:flex space-x-8 ml-4">
+              <?php foreach ($headerCategories as $category => $subcategories) : ?>
+                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                  <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category)); ?>"
+                    class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                    <?php echo ucfirst($category); ?>
+                  </a>
+                  <div x-show="open"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95"
+                    class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                    <?php foreach ($subcategories as $subcategory) : ?>
+                      <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category) . "&category=" . urlencode($subcategory)); ?>"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <?php echo $subcategory; ?>
+                      </a>
+                    <?php endforeach; ?>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </nav>
 
           </div>
 
@@ -118,49 +118,73 @@ $headerCategories = $categoryManager->getHeaderCategories();
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
               </svg>
               <span id="cart-count" class="absolute -top-2 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none text-red-100 <?php echo $total > 0 ? 'bg-green-600' : 'bg-red-600'; ?> rounded-full">
-    <?php echo $total; ?>
-</span>
+                <?php echo $total; ?>
+              </span>
             </a>
             <div class="relative" x-data="{ open: false }">
               <?php if (isset($_SESSION['id_utilisateur'])): ?>
-                  <!-- Si connecté : bouton avec menu déroulant -->
-                  <button @click="open = !open" class="relative inline-block focus:outline-none" @click.away="open = false">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                      </svg>
-                      <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-                          <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
-                      <?php else: ?>
-                          <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
-                      <?php endif; ?>
-                  </button>
+                <!-- Si connecté : bouton avec menu déroulant -->
+                <button @click="open = !open" class="relative inline-block focus:outline-none" @click.away="open = false">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                  </svg>
+                  <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                    <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
+                  <?php else: ?>
+                    <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
+                  <?php endif; ?>
+                </button>
 
-                  <!-- Menu déroulant pour utilisateurs connectés -->
-                  <div x-show="open" 
-                       x-transition:enter="transition ease-out duration-200"
-                       x-transition:enter-start="opacity-0 transform scale-95"
-                       x-transition:enter-end="opacity-100 transform scale-100"
-                       x-transition:leave="transition ease-in duration-150"
-                       x-transition:leave-start="opacity-100 transform scale-100"
-                       x-transition:leave-end="opacity-0 transform scale-95"
-                       class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-[1200]">
-                      <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-                          <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Backoffice</a>
-                          <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                      <?php else: ?>
-                          <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                          <a href="<?php echo url('pages/commandes.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes commandes</a>
-                      <?php endif; ?>
-                      <a href="<?php echo url('pages/deconnexion.php'); ?>" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Déconnexion</a>
-                  </div>
-              <?php else: ?>
-                  <!-- Si non connecté : lien simple vers auth.php -->
-                  <a href="<?php echo url('pages/auth.php'); ?>" class="relative inline-block">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                <!-- Menu déroulant pour utilisateurs connectés -->
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-200"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  class="absolute right-0 transform translate-x-1/3 mt-2 w-48 bg-white rounded-md shadow-lg z-[1200]">
+                  <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
                       </svg>
-                      <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                      <span>Backoffice</span>
+                    </a>
+                    <a href="<?php echo url('pages/profil.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                      <span>Mon compte</span>
+                    </a>
+                  <?php else: ?>
+                    <a href="<?php echo url('pages/profil.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                      <span>Mon compte</span>
+                    </a>
+                    <a href="<?php echo url('pages/commandes.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <span>Mes commandes</span>
+                    </a>
+                  <?php endif; ?>
+                  <a href="<?php echo url('pages/deconnexion.php'); ?>" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+                    </svg>
+                    <span>Déconnexion</span>
                   </a>
+                </div>
+              <?php else: ?>
+                <!-- Si non connecté : lien simple vers auth.php -->
+                <a href="<?php echo url('pages/auth.php'); ?>" class="relative inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                  </svg>
+                  <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                </a>
               <?php endif; ?>
             </div>
           </div>
@@ -269,22 +293,4 @@ $headerCategories = $categoryManager->getHeaderCategories();
       </div>
     </div>
   </div>
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
