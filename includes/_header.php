@@ -147,6 +147,7 @@ $headerCategories = $categoryManager->getHeaderCategories();
                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                 <?php if (isset($_SESSION['id_utilisateur'])): ?>
                   <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                  <a href="<?php echo url('pages/commandes.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes commandes</a>
                   <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
                     <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Backoffice</a>
                   <?php endif; ?>
@@ -265,6 +266,8 @@ $headerCategories = $categoryManager->getHeaderCategories();
   </div>
 
   
+
+
 
 
 
