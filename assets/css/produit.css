@@ -582,3 +582,95 @@ input[type="radio"]:checked + span {
 input[type="radio"] + span {
   transition: background-color 0.3s, color 0.3s;
 }
+
+#filterForm {
+  background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 0; /* Ajout */
+  padding-left: 1rem; /* Ajout */
+}
+
+#filterForm h3,
+#filterForm span,
+#filterForm label {
+  color: white;
+}
+
+#filterForm input[type="checkbox"] {
+  accent-color: #60A5FA;
+}
+
+#filterForm .filter-section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#filterForm #closeFilters svg {
+  stroke: white;
+}
+
+#toggleFilters {
+  background-color: #3B82F6;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#toggleFilters:hover {
+  background-color: #2563EB;
+}
+
+/* Pour la version desktop */
+@media (min-width: 768px) {
+  #filterForm {
+    position: sticky;
+    top: 1rem;
+    left: 0;
+    max-width: 280px; /* Ajustez selon vos besoins */
+    margin-right: 2rem; /* Espace entre les filtres et les produits */
+  }
+  
+  .products-container {
+    margin-left: 0; /* Réinitialise la marge pour le conteneur des produits */
+    padding-left: 0; /* Réinitialise le padding pour le conteneur des produits */
+  }
+}
+
+/* Pour la version mobile */
+@media (max-width: 767px) {
+  #filterForm {
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+#filterForm input[type="text"],
+#filterForm input[type="search"] {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #1E40AF; /* Texte en bleu foncé pour le contraste */
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+#filterForm input[type="text"]::placeholder,
+#filterForm input[type="search"]::placeholder {
+  color: #60A5FA; /* Couleur du placeholder en bleu clair */
+  opacity: 0.7;
+}
+
+#filterForm input[type="text"]:focus,
+#filterForm input[type="search"]:focus {
+  outline: none;
+  background-color: white;
+  border-color: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Style pour l'icône de recherche si elle existe */
+#filterForm .search-icon {
+  color: #60A5FA;
+}
