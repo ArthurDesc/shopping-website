@@ -146,15 +146,19 @@ $headerCategories = $categoryManager->getHeaderCategories();
                    x-transition:leave-end="opacity-0 transform scale-95"
                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-[1200]">
                 <?php if (isset($_SESSION['id_utilisateur'])): ?>
-                  <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                  <a href="<?php echo url('pages/commandes.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes commandes</a>
-                  <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Backoffice</a>
-                  <?php endif; ?>
-                  <a href="<?php echo url('pages/deconnexion.php'); ?>" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Déconnexion</a>
+                    <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                        <!-- Menu Admin -->
+                        <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Backoffice</a>
+                        <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                    <?php else: ?>
+                        <!-- Menu Utilisateur standard -->
+                        <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                        <a href="<?php echo url('pages/commandes.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes commandes</a>
+                    <?php endif; ?>
+                    <a href="<?php echo url('pages/deconnexion.php'); ?>" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Déconnexion</a>
                 <?php else: ?>
-                  <a href="<?php echo url('pages/connexion.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Connexion</a>
-                  <a href="<?php echo url('pages/inscription.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Inscription</a>
+                    <a href="<?php echo url('pages/connexion.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Connexion</a>
+                    <a href="<?php echo url('pages/inscription.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Inscription</a>
                 <?php endif; ?>
               </div>
             </div>
@@ -266,6 +270,7 @@ $headerCategories = $categoryManager->getHeaderCategories();
   </div>
 
   
+
 
 
 
