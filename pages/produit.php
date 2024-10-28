@@ -24,19 +24,25 @@ $marques = mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
 $collections_query = mysqli_query($conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
 $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 
-// Récupération des produits
+// Récupération des filtres depuis l'URL
 $filtre = new Filtre();
 
-// Récupérer le paramètre de collection (Homme, Femme ou Enfant)
-if (isset($_GET['collection'])) {
-    $collection = $_GET['collection'];
-    $filtre->setCollections([$collection]);
+// Récupérer le paramètre de catégorie
+if (isset($_GET['category'])) {
+    $categories = explode(',', $_GET['category']);
+    $filtre->setCategories($categories);
 }
 
-// Récupérer le paramètre de catégorie si présent
-if (isset($_GET['category'])) {
-    $category = $_GET['category'];
-    $filtre->setCategories([$category]);
+// Récupérer le paramètre de collection
+if (isset($_GET['collection'])) {
+    $collections = explode(',', $_GET['collection']);
+    $filtre->setCollections($collections);
+}
+
+// Récupérer le paramètre de marque
+if (isset($_GET['marques'])) {
+    $marques = explode(',', $_GET['marques']);
+    $filtre->setMarques($marques);
 }
 
 // Obtenir la requête SQL et les paramètres
@@ -107,10 +113,10 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 
 // Au dbut du fichier produit.php, après avoir démarré la session
 
-// Récupérer les paramètres de l'URL
+/* Récupérer les paramètres de l'URL
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
-$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cette ligne
+$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; */ 
 
 $query_categories_actives = "
     SELECT DISTINCT c.id_categorie, c.nom
@@ -186,32 +192,34 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                             </div>
                             <div id="categories-list">
                                 <?php foreach ($categories as $id => $category): ?>
-                                    <div class="mb-2">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" 
-                                                   id="cat_<?= htmlspecialchars($id) ?>" 
-                                                   name="categories[]" 
-                                                   value="<?= htmlspecialchars($id) ?>" 
-                                                   class="mr-2"
-                                                   <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
-                                            <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
-                                        </div>
-                                        <?php if (!empty($category['sous_categories'])): ?>
-                                            <div class="ml-4 mt-1">
-                                                <?php foreach ($category['sous_categories'] as $sous_cat): ?>
-                                                    <div class="flex items-center mb-1">
-                                                        <input type="checkbox" 
-                                                               id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                               name="categories[]" 
-                                                               value="<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                               class="mr-2"
-                                                               <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
-                                                        <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
-                                                    </div>
-                                                <?php endforeach; ?>
+                                    <?php if ($category['nom'] !== 'Sports'): ?>  <!-- Ajoutez cette condition ici -->
+                                        <div class="mb-2">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" 
+                                                       id="cat_<?= htmlspecialchars($id) ?>" 
+                                                       name="categories[]" 
+                                                       value="<?= htmlspecialchars($id) ?>" 
+                                                       class="mr-2"
+                                                       <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
                                             </div>
-                                        <?php endif; ?>
-                                    </div>
+                                            <?php if (!empty($category['sous_categories'])): ?>
+                                                <div class="ml-4 mt-1">
+                                                    <?php foreach ($category['sous_categories'] as $sous_cat): ?>
+                                                        <div class="flex items-center mb-1">
+                                                            <input type="checkbox" 
+                                                                   id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                                   name="categories[]" 
+                                                                   value="<?= htmlspecialchars($sous_cat['id']) ?>" 
+                                                                   class="mr-2"
+                                                                   <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                            <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>  <!-- Fermeture de la condition -->
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -247,14 +255,14 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                     </div>
 
                     <!-- Collections -->
-                    <div class="border-b">
-                        <div @click="openTab = openTab === 'collections' ? null : 'collections'" class="flex items-center justify-between cursor-pointer py-4">
+                    <div id="collections-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="collections-toggle">
                             <span class="font-semibold text-gray-600">Collections</span>
-                            <svg :class="{'rotate-180': openTab === 'collections'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'collections'" x-collapse>
+                        <div id="collections-content" class="py-1 pl-4" style="display: none;">
                             <div class="py-4 pl-4">
                                 <?php
                                 $staticCollections = ['Homme', 'Femme', 'Enfant'];
@@ -271,6 +279,33 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                     </div>
                                 <?php endforeach; ?>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown Sports -->
+                    <div id="sports-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="sports-toggle">
+                            <span class="font-semibold text-gray-600">Sports</span>
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div id="sports-content" class="py-1 pl-4" style="display: none;">
+                            <?php
+                            foreach ($categories as $id => $category) {
+                                if ($category['nom'] === 'Sports') {  // Vérifie si c'est la catégorie Sports
+                                    foreach ($category['sous_categories'] as $sous_categorie) {
+                                        echo '<div class="flex items-center mb-2">';
+                                        echo '<input type="checkbox" id="sport_' . $sous_categorie['id'] . '" 
+                                              name="categories[]" value="' . $sous_categorie['nom'] . '" 
+                                              class="mr-2">';
+                                        echo '<label for="sport_' . $sous_categorie['id'] . '">' . $sous_categorie['nom'] . '</label>';
+                                        echo '</div>';
+                                    }
+                                    break;  // Sort de la boucle une fois la catégorie Sports trouvée
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -335,9 +370,9 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
             }
     ?>
         <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full" 
-             data-categories="<?php echo htmlspecialchars(implode(',', $produit->getCategories())); ?>"
-             data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>"
-             data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
+             data-categories="<?php echo implode(',', array_map(function($cat) { return $cat['id_categorie']; }, $categoryManager->getProductCategories($produit->getId()))); ?>"
+             data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>"
+             data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>">
             <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
                 <div class="relative pb-[125%] flex-grow">
                     <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
@@ -527,7 +562,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
- 
+    // Sélectionner toutes les checkboxes des filtres
+    const filterCheckboxes = document.querySelectorAll('input[type="checkbox"][name="categories[]"], input[type="checkbox"][name="marques[]"], input[type="checkbox"][name="collections[]"]');
+    
+    // Ajouter un écouteur d'événement pour chaque checkbox
+    filterCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Récupérer tous les filtres sélectionnés
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(el => el.value);
+            const selectedBrands = Array.from(document.querySelectorAll('input[name="marques[]"]:checked')).map(el => el.value);
+            const selectedCollections = Array.from(document.querySelectorAll('input[name="collections[]"]:checked')).map(el => el.value);
+
+            // Filtrer les produits
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const categories = product.dataset.categories.split(',');
+                const brand = product.dataset.brand;
+                const collection = product.dataset.collection;
+
+                const categoryMatch = selectedCategories.length === 0 || categories.some(cat => selectedCategories.includes(cat));
+                const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(brand);
+                const collectionMatch = selectedCollections.length === 0 || selectedCollections.includes(collection);
+
+                if (categoryMatch && brandMatch && collectionMatch) {
+                    product.style.display = '';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+
+            // Mettre à jour l'URL avec les filtres sélectionnés
+            const url = new URL(window.location.href);
+            url.searchParams.delete('category');
+            url.searchParams.delete('collection');
+            
+            if (selectedCategories.length > 0) {
+                url.searchParams.set('category', selectedCategories[0]);
+            }
+            if (selectedCollections.length > 0) {
+                url.searchParams.set('collection', selectedCollections[0]);
+            }
+            
+            window.history.pushState({}, '', url);
+        });
+    });
 });
 </script>
 
@@ -537,3 +615,5 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+

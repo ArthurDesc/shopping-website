@@ -124,35 +124,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paiement</title>
-    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Ajout de Tailwind CSS -->
+    <script src="https://js.stripe.com/v3/"></script> <!-- Ajout de Stripe.js -->
 </head>
-<body>
-    <form id="payment-form" class="mt-6">
-        <div id="card-element" class="border p-4 rounded"></div>
-        <button id="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Payer</button>
-        <div id="payment-result" class="mt-4"></div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <form id="payment-form" class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Paiement Sécurisé</h2>
+        
+        <div class="mb-4">
+            <label for="card-holder-name" class="block text-sm font-medium text-gray-700">Nom du titulaire de la carte</label>
+            <input type="text" id="card-holder-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="John Doe" required>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Informations de carte</label>
+            <div id="card-element" class="border p-4 rounded bg-gray-200"></div> <!-- Champ de carte -->
+            <div id="card-errors" class="text-red-500 mt-2"></div> <!-- Zone d'erreur pour les informations de carte -->
+        </div>
+
+        <button id="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200">Payer</button> <!-- Bouton de paiement -->
+        <div id="payment-result" class="mt-4 text-center font-bold text-green-600"></div>
     </form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const stripe = Stripe('pk_test_51Q7Hl1P5XJmDt2UGKTXg2A7p3bt8nsP1POLDv881WalxO2rQzdN7CxuflpPdoft3pCcEMnlLxLfTOxeh58sHpLbN00ITmhtq3O');
             const elements = stripe.elements();
-            const cardElement = elements.create('card');
+            const cardElement = elements.create('card', {
+                style: {
+                    base: {
+                        color: '#32325d',
+                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                        fontSmoothing: 'antialiased',
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                        padding: '20px',
+                        '::placeholder': {
+                            color: '#aab7c4'
+                        }
+                    },
+                    invalid: {
+                        color: '#fa755a',
+                        iconColor: '#fa755a'
+                    }
+                }
+            });
             cardElement.mount('#card-element');
 
             const form = document.getElementById('payment-form');
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
+                const cardHolderName = document.getElementById('card-holder-name').value;
+
                 const { paymentMethod, error } = await stripe.createPaymentMethod({
                     type: 'card',
                     card: cardElement,
+                    billing_details: {
+                        name: cardHolderName,
+                    },
                 });
 
                 if (error) {
-                    console.error('Error creating payment method:', error);
-                    document.getElementById('payment-result').innerText = error.message;
+                    document.getElementById('card-errors').innerText = error.message; // Afficher l'erreur
                 } else {
+                    document.getElementById('card-errors').innerText = ''; // Réinitialiser les erreurs
                     const formData = new FormData();
                     formData.append('paymentMethodId', paymentMethod.id);
 
@@ -162,7 +198,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     });
 
                     const result = await response.json();
-                    console.log('Server response:', result);
                     if (result.clientSecret) {
                         const { error: confirmError } = await stripe.confirmCardPayment(
                             result.clientSecret,
@@ -181,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             window.location.href = 'confirmation_paiement.php';
                         }
                     } else {
-                        throw new Error(result.message || 'Erreur inconnue');
+                        document.getElementById('payment-result').innerText = result.message || 'Erreur inconnue';
                     }
                 }
             });

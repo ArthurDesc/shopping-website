@@ -2,31 +2,86 @@
 ob_start(); // Démarre la mise en mémoire tampon de sortie
 include_once "../includes/_db.php";
 require_once "../includes/session.php";
-require_once "../classe/Panier.php";
+require_once "../classe/Panier.php"; // Gardez cette ligne
 
 $panier = new Panier();
 
-// Traitement de la mise à jour de la quantité
+// Traitement de la mise à jour de la quantité (à supprimer ou commenter)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
-    $id_update = $_POST['id_produit'];
+    // Code à supprimer ou commenter
+    // ...
+}
 
-    // Vérifier l'action (augmentation ou diminution)
-    if ($_POST['action'] === 'increase') {
-        $panier->augmenterQuantite($id_update);
-    } elseif ($_POST['action'] === 'decrease') {
-        $panier->diminuerQuantite($id_update);
+// Ajout d'un script AJAX pour gérer les mises à jour du panier
+?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('form[action="panier.php"]'); // Sélectionner tous les formulaires de mise à jour
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêcher le rafraîchissement de la page
+
+            const formData = new FormData(form); // Récupérer les données du formulaire
+
+            fetch('panier.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Pour le débogage
+                location.reload(); // Optionnel : recharger la page pour mettre à jour l'affichage
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    });
+
+    // Gestion de la quantité en JavaScript
+    const quantityForms = document.querySelectorAll('form[action="panier.php"]');
+    quantityForms.forEach(form => {
+        const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
+        const increaseButton = form.querySelector('button[name="action"][value="increase"]');
+        const quantityDisplay = form.querySelector('span');
+
+        decreaseButton.addEventListener('click', function() {
+            let quantity = parseInt(quantityDisplay.textContent);
+            if (quantity > 1) {
+                quantityDisplay.textContent = quantity - 1;
+                updateQuantity(form, quantity - 1);
+            }
+        });
+
+        increaseButton.addEventListener('click', function() {
+            let quantity = parseInt(quantityDisplay.textContent);
+            quantityDisplay.textContent = quantity + 1;
+            updateQuantity(form, quantity + 1);
+        });
+    });
+
+    function updateQuantity(form, quantity) {
+        const idProduitInput = form.querySelector('input[name="id_produit"]');
+        const formData = new FormData();
+        formData.append('id_produit', idProduitInput.value);
+        formData.append('quantite', quantity);
+        formData.append('update', true); // Indiquer que c'est une mise à jour
+
+        fetch('panier.php', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Response from server:', data); // Pour le débogage
+            location.reload(); // Optionnel : recharger la page pour mettre à jour l'affichage
+        })
+        .catch(error => console.error('Erreur:', error));
     }
-    header("Location: panier.php"); // Rediriger pour éviter le rafraîchissement
-    exit(); // Terminer le script après la redirection
-}
+});
+</script>
+<?php
 
-// Supprimer les produits
-if (isset($_GET['del'])) {
-    $id_del = $_GET['del'];
-    $panier->retirerProduit($id_del);
-}
-
-// Mettre à jour la quantité du produit
+// Traitement de la mise à jour de la quantité
 if (isset($_POST['update'])) {
     $id_update = $_POST['id_produit'];
     $quantity = $_POST['quantite'];
@@ -34,9 +89,17 @@ if (isset($_POST['update'])) {
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
         $panier->mettreAJourQuantite($id_update, intval($quantity));
+        echo "Quantité mise à jour avec succès."; // Message de succès
     } else {
         $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
+        echo "Produit retiré du panier en raison d'une quantité invalide."; // Message d'erreur
     }
+}
+
+// Supprimer les produits
+if (isset($_GET['del'])) {
+    $id_del = $_GET['del'];
+    $panier->retirerProduit($id_del);
 }
 
 // Inclusion du header
@@ -100,7 +163,7 @@ include '../includes/_header.php';
                                 <div class="flex-grow">
                                     <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
                                     <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
-                                    <form method="post" action="" class="flex items-center mt-2">
+                                    <form method="post" action="panier.php" class="flex items-center mt-2">
                                         <input type="hidden" name="id_produit" value="<?= $key ?>">
                                         <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
                                         <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
@@ -275,6 +338,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+
+
+
+
+
+
 
 
 
