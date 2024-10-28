@@ -1,75 +1,48 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const categoriesFilter = document.getElementById('categories-filter');
-    const toggleButton = document.getElementById('categories-toggle');
-    const filterContent = document.getElementById('categories-content');
-    const searchInput = document.getElementById('categories-search');
-    const categoriesList = document.getElementById('categories-list');
+    // Sélectionner tous les dropdowns
+    const dropdownContainers = document.querySelectorAll('.filter-section');
+    let activeDropdown = null;
 
-    // Toggle du dropdown
-    toggleButton.addEventListener('click', function() {
-        if (filterContent.style.display === 'none' || filterContent.style.display === '') {
-            filterContent.style.display = 'block';
-            toggleButton.querySelector('svg').classList.add('rotate-180');
-        } else {
-            filterContent.style.display = 'none';
-            toggleButton.querySelector('svg').classList.remove('rotate-180');
-        }
-    });
+    dropdownContainers.forEach(container => {
+        const toggle = container.querySelector('[id$="-toggle"]');
+        const content = container.querySelector('[id$="-content"]');
+        
+        if (!toggle || !content) return;
 
-    // Fonction de recherche
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const categories = categoriesList.querySelectorAll('.mb-2');
-
-        categories.forEach(category => {
-            const categoryName = category.querySelector('label').textContent.toLowerCase();
-            const subCategories = category.querySelectorAll('.ml-4 .flex');
-            let shouldShow = categoryName.includes(searchTerm);
-
-            subCategories.forEach(subCategory => {
-                const subCategoryName = subCategory.querySelector('label').textContent.toLowerCase();
-                if (subCategoryName.includes(searchTerm)) {
-                    shouldShow = true;
-                    subCategory.style.display = 'flex';
-                } else {
-                    subCategory.style.display = 'none';
-                }
-            });
-
-            category.style.display = shouldShow ? 'block' : 'none';
-        });
-    });
-
-    // Nouvelle partie pour les marques
-    const marquesFilter = document.getElementById('marques-filter');
-    const marquesToggle = document.getElementById('marques-toggle');
-    const marquesContent = document.getElementById('marques-content');
-    const marquesSearch = document.getElementById('marques-search');
-    const marquesList = document.getElementById('marques-list');
-
-    // Toggle du dropdown des marques
-    marquesToggle.addEventListener('click', function() {
-        if (marquesContent.style.display === 'none' || marquesContent.style.display === '') {
-            marquesContent.style.display = 'block';
-            marquesToggle.querySelector('svg').classList.add('rotate-180');
-        } else {
-            marquesContent.style.display = 'none';
-            marquesToggle.querySelector('svg').classList.remove('rotate-180');
-        }
-    });
-
-    // Fonction de recherche pour les marques
-    marquesSearch.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const marques = marquesList.querySelectorAll('.flex');
-
-        marques.forEach(marque => {
-            const marqueName = marque.querySelector('label').textContent.toLowerCase();
-            if (marqueName.includes(searchTerm)) {
-                marque.style.display = 'flex';
-            } else {
-                marque.style.display = 'none';
+        // Initialiser tous les dropdowns comme fermés
+        content.style.display = 'none';
+        
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Si ce dropdown est déjà actif, le fermer
+            if (activeDropdown === content) {
+                content.style.display = 'none';
+                toggle.querySelector('svg').classList.remove('rotate-180');
+                activeDropdown = null;
+                return;
             }
+            
+            // Fermer le dropdown actif précédent
+            if (activeDropdown) {
+                activeDropdown.style.display = 'none';
+                activeDropdown.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+            }
+            
+            // Ouvrir le nouveau dropdown
+            content.style.display = 'block';
+            toggle.querySelector('svg').classList.add('rotate-180');
+            activeDropdown = content;
         });
+    });
+
+    // Fermer le dropdown actif si on clique en dehors
+    document.addEventListener('click', function(e) {
+        if (activeDropdown && !e.target.closest('.filter-section')) {
+            const toggle = activeDropdown.previousElementSibling;
+            activeDropdown.style.display = 'none';
+            toggle.querySelector('svg').classList.remove('rotate-180');
+            activeDropdown = null;
+        }
     });
 });
