@@ -192,34 +192,48 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                             </div>
                             <div id="categories-list">
                                 <?php foreach ($categories as $id => $category): ?>
-                                    <?php if ($category['nom'] !== 'Sports'): ?>  <!-- Ajoutez cette condition ici -->
+                                    <?php if ($category['nom'] !== 'Sports'): ?>
                                         <div class="mb-2">
                                             <div class="flex items-center">
-                                                <input type="checkbox" 
-                                                       id="cat_<?= htmlspecialchars($id) ?>" 
-                                                       name="categories[]" 
-                                                       value="<?= htmlspecialchars($id) ?>" 
-                                                       class="mr-2"
-                                                       <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
-                                                <label for="cat_<?= htmlspecialchars($id) ?>" class="font-semibold"><?= htmlspecialchars($category['nom']) ?></label>
+                                                <label class="checkbox-container flex items-center">
+                                                    <input type="checkbox" 
+                                                           name="categories[]" 
+                                                           value="<?= htmlspecialchars($id) ?>"
+                                                           <?= in_array($id, $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                    <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                        <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" 
+                                                              pathLength="575.0541381835938" 
+                                                              class="checkbox-path">
+                                                        </path>
+                                                    </svg>
+                                                    <span class="ml-3 text-white"><?= htmlspecialchars($category['nom']) ?></span>
+                                                </label>
                                             </div>
+                                            
+                                            <!-- Pour les sous-catégories -->
                                             <?php if (!empty($category['sous_categories'])): ?>
-                                                <div class="ml-4 mt-1">
+                                                <div class="ml-8 mt-2">
                                                     <?php foreach ($category['sous_categories'] as $sous_cat): ?>
-                                                        <div class="flex items-center mb-1">
-                                                            <input type="checkbox" 
-                                                                   id="cat_<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                                   name="categories[]" 
-                                                                   value="<?= htmlspecialchars($sous_cat['id']) ?>" 
-                                                                   class="mr-2"
-                                                                   <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
-                                                            <label for="cat_<?= htmlspecialchars($sous_cat['id']) ?>"><?= htmlspecialchars($sous_cat['nom']) ?></label>
+                                                        <div class="flex items-center mb-2">
+                                                            <label class="checkbox-container flex items-center">
+                                                                <input type="checkbox" 
+                                                                       name="categories[]" 
+                                                                       value="<?= htmlspecialchars($sous_cat['id']) ?>"
+                                                                       <?= in_array($sous_cat['id'], $filtre->getCategories()) ? 'checked' : '' ?>>
+                                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" 
+                                                                  pathLength="575.0541381835938" 
+                                                                  class="checkbox-path">
+                                                                    </path>
+                                                                </svg>
+                                                                <span class="ml-3 text-white"><?= htmlspecialchars($sous_cat['nom']) ?></span>
+                                                            </label>
                                                         </div>
                                                     <?php endforeach; ?>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
-                                    <?php endif; ?>  <!-- Fermeture de la condition -->
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -615,6 +629,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+
 
 
 
