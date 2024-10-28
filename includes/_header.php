@@ -121,20 +121,43 @@ $headerCategories = $categoryManager->getHeaderCategories();
     <?php echo $total; ?>
 </span>
             </a>
-            <a href="<?php echo url('pages/profil.php'); ?>" class="relative inline-block">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
-              <?php if (isset($_SESSION['id_utilisateur'])): ?>
-                <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-                  <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
+            <div class="relative" x-data="{ open: false }">
+              <button @click="open = !open" class="relative inline-block focus:outline-none" @click.away="open = false">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 hover:text-blue-600">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+                <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                  <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                    <span class="absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 text-[10px] font-bold text-blue-600 px-1 rounded">Admin</span>
+                  <?php else: ?>
+                    <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
+                  <?php endif; ?>
                 <?php else: ?>
-                  <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></span>
+                  <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
                 <?php endif; ?>
-              <?php else: ?>
-                <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-              <?php endif; ?>
-            </a>
+              </button>
+
+              <div x-show="open" 
+                   x-transition:enter="transition ease-out duration-200"
+                   x-transition:enter-start="opacity-0 transform scale-95"
+                   x-transition:enter-end="opacity-100 transform scale-100"
+                   x-transition:leave="transition ease-in duration-150"
+                   x-transition:leave-start="opacity-100 transform scale-100"
+                   x-transition:leave-end="opacity-0 transform scale-95"
+                   class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                  <a href="<?php echo url('pages/profil.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                  <a href="<?php echo url('pages/commandes.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes commandes</a>
+                  <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
+                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Backoffice</a>
+                  <?php endif; ?>
+                  <a href="<?php echo url('pages/deconnexion.php'); ?>" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Déconnexion</a>
+                <?php else: ?>
+                  <a href="<?php echo url('pages/connexion.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Connexion</a>
+                  <a href="<?php echo url('pages/inscription.php'); ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Inscription</a>
+                <?php endif; ?>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -243,6 +266,11 @@ $headerCategories = $categoryManager->getHeaderCategories();
   </div>
 
   
+
+
+
+
+
 
 
 
