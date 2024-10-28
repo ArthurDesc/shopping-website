@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("Le DOM est chargé, le script s'exécute.");
 
     // Définir toutes les variables globalement dans la portée de DOMContentLoaded
+    const filterForm = document.getElementById('filterForm');
     const filterInputs = document.querySelectorAll('input[type="checkbox"][name^="categories"], input[type="checkbox"][name^="marques"], input[type="checkbox"][name^="collections"]');
     const products = document.querySelectorAll('.product-card'); // Changé pour .product-card
     const activeFiltersContainer = document.getElementById('activeFilters');
@@ -32,30 +33,41 @@ document.addEventListener('DOMContentLoaded', function() {
             product.style.display = shouldDisplay ? '' : 'none';
         });
 
-        updateActiveFilters(selectedFilters);
-        updateUrlWithFilters(selectedFilters);
+        updateURL(selectedFilters);
     }
 
-    function updateUrlWithFilters(filters) {
+    function updateURL() {
         const url = new URL(window.location.href);
+        const params = new URLSearchParams();
         
-        // Ne pas effacer les paramètres existants s'ils ne sont pas modifiés
-        if (filters.collections.length > 0) {
-            url.searchParams.set('collection', filters.collections[0]);
-        } else if (!document.querySelector('input[name="collections[]"]:checked')) {
-            // Ne supprimer que si aucune case n'est cochée
-            url.searchParams.delete('collection');
-        }
-        
-        if (filters.categories.length > 0) {
-            url.searchParams.set('category', filters.categories[0]);
-        } else if (!document.querySelector('input[name="categories[]"]:checked')) {
-            // Ne supprimer que si aucune case n'est cochée
-            url.searchParams.delete('category');
-        }
-        
+        // Récupérer tous les filtres sélectionnés
+        const selectedFilters = {
+            categories: Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(el => el.value),
+            marques: Array.from(document.querySelectorAll('input[name="marques[]"]:checked')).map(el => el.value),
+            collections: Array.from(document.querySelectorAll('input[name="collections[]"]:checked')).map(el => el.value)
+        };
+
+        // Nettoyer les paramètres existants
+        // Conserver uniquement les paramètres non liés aux filtres
+        const preservedParams = ['page', 'sort']; // Ajoutez d'autres paramètres à préserver si nécessaire
+        preservedParams.forEach(param => {
+            if (url.searchParams.has(param)) {
+                params.set(param, url.searchParams.get(param));
+            }
+        });
+
+        // Ajouter les nouveaux paramètres de filtre
+        Object.entries(selectedFilters).forEach(([key, values]) => {
+            if (values.length > 0) {
+                // Utiliser "category" au lieu de "categories" pour la cohérence
+                const paramKey = key === 'categories' ? 'category' : key;
+                params.set(paramKey, values.join(','));
+            }
+        });
+
         // Mettre à jour l'URL sans recharger la page
-        window.history.pushState({}, '', url);
+        const newUrl = `${url.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+        window.history.pushState({}, '', newUrl);
     }
 
     function updateActiveFilters() {
@@ -84,29 +96,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialisation des filtres depuis l'URL
-    function initializeFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const collection = urlParams.get('collection');
-        const category = urlParams.get('category');
-
-        // Vérifier si les checkboxes existent avant de les cocher
-        if (collection) {
-            const collectionCheckbox = document.querySelector(`input[name="collections[]"][value="${collection.toLowerCase()}"]`);
-            if (collectionCheckbox) {
-                collectionCheckbox.checked = true;
-                // Appliquer les filtres sans mettre à jour l'URL
-                applyFiltersWithoutUrlUpdate();
-            }
+    function initializeFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        
+        // Gérer la conversion de "category" vers "categories[]"
+        const categoryValue = params.get('category');
+        if (categoryValue) {
+            const values = categoryValue.split(',');
+            values.forEach(value => {
+                const checkbox = document.querySelector(`input[name="categories[]"][value="${value}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
         }
 
-        if (category) {
-            const categoryCheckbox = document.querySelector(`input[name="categories[]"][value="${category}"]`);
-            if (categoryCheckbox) {
-                categoryCheckbox.checked = true;
-                // Appliquer les filtres sans mettre à jour l'URL
-                applyFiltersWithoutUrlUpdate();
-            }
-        }
+        // Gérer les autres filtres
+        ['marques', 'collections'].forEach(filterType => {
+            const values = params.get(filterType)?.split(',') || [];
+            values.forEach(value => {
+                const checkbox = document.querySelector(`input[name="${filterType}[]"][value="${value}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        });
+
+        applyFilters();
     }
 
     // Nouvelle fonction pour appliquer les filtres sans mettre à jour l'URL
@@ -168,5 +180,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialiser les filtres au chargement
-    initializeFromUrl();
+    initializeFromURL();
 });

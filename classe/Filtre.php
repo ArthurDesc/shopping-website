@@ -13,29 +13,9 @@ class Filtre {
 
     public function setCategories($categories) {
         if (!is_array($categories)) {
-            $categories = [$categories];
+            $categories = explode(',', $categories);
         }
-        
-        // Convertir les noms de catégories en IDs si nécessaire
-        $this->categories = array_map(function($category) {
-            // Si c'est déjà un ID, le retourner tel quel
-            if (is_numeric($category)) {
-                return $category;
-            }
-            
-            // Sinon, chercher l'ID correspondant au nom
-            global $conn;
-            $stmt = $conn->prepare("SELECT id_categorie FROM categories WHERE nom = ?");
-            $stmt->bind_param("s", $category);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($row = $result->fetch_assoc()) {
-                return $row['id_categorie'];
-            }
-            
-            return $category;
-        }, $categories);
+        $this->categories = array_filter($categories);
     }
 
     public function setMarques(array $marques) {
@@ -129,11 +109,12 @@ class Filtre {
         }
 
         if (!empty($this->collections)) {
-            $conditions[] = "p.collection = ?";
-            $params[] = $this->collections[0];
+            $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
+            $conditions[] = "p.collection IN ($placeholders)";
+            $params = array_merge($params, $this->collections);
         }
 
-        $sql = "SELECT DISTINCT p.*, GROUP_CONCAT(c.nom) as categories 
+        $sql = "SELECT DISTINCT p.*, GROUP_CONCAT(c.id_categorie) as category_ids, GROUP_CONCAT(c.nom) as categories 
                 FROM produits p 
                 LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
                 LEFT JOIN categories c ON pc.id_categorie = c.id_categorie";

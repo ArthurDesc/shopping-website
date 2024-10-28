@@ -24,19 +24,25 @@ $marques = mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
 $collections_query = mysqli_query($conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
 $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 
-// Récupération des produits
+// Récupération des filtres depuis l'URL
 $filtre = new Filtre();
 
-// Récupérer le paramètre de collection (Homme, Femme ou Enfant)
-if (isset($_GET['collection'])) {
-    $collection = $_GET['collection'];
-    $filtre->setCollections([$collection]);
+// Récupérer le paramètre de catégorie
+if (isset($_GET['category'])) {
+    $categories = explode(',', $_GET['category']);
+    $filtre->setCategories($categories);
 }
 
-// Récupérer le paramètre de catégorie si présent
-if (isset($_GET['category'])) {
-    $category = $_GET['category'];
-    $filtre->setCategories([$category]);
+// Récupérer le paramètre de collection
+if (isset($_GET['collection'])) {
+    $collections = explode(',', $_GET['collection']);
+    $filtre->setCollections($collections);
+}
+
+// Récupérer le paramètre de marque
+if (isset($_GET['marques'])) {
+    $marques = explode(',', $_GET['marques']);
+    $filtre->setMarques($marques);
 }
 
 // Obtenir la requête SQL et les paramètres
@@ -364,9 +370,9 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
             }
     ?>
         <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full" 
-             data-categories="<?php echo htmlspecialchars(implode(',', $produit->getCategories())); ?>"
-             data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>"
-             data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>">
+             data-categories="<?php echo implode(',', array_map(function($cat) { return $cat['id_categorie']; }, $categoryManager->getProductCategories($produit->getId()))); ?>"
+             data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>"
+             data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>">
             <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
                 <div class="relative pb-[125%] flex-grow">
                     <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
@@ -609,3 +615,5 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+
