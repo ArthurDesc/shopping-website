@@ -66,6 +66,14 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('quantite', quantity);
         formData.append('update', true); // Indiquer que c'est une mise à jour
 
+        // Ajout d'une vérification pour s'assurer que la quantité ne dépasse pas le stock
+        const stock = parseInt(form.dataset.stock); // Assurez-vous que le stock est défini dans le formulaire
+
+        if (quantity > stock) {
+            alert(`La quantité demandée dépasse le stock disponible (${stock}).`);
+            return; // Sortir de la fonction si la quantité est trop élevée
+        }
+
         fetch('panier.php', {
             method: 'POST',
             body: formData,
@@ -338,6 +346,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
 
 
 

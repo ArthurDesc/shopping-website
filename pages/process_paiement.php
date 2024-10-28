@@ -137,6 +137,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
+            <input type="email" id="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="exemple@domaine.com" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="address" class="block text-sm font-medium text-gray-700">Adresse postale</label>
+            <input type="text" id="address" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="123 Rue Exemple" required>
+        </div>
+
+        <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Informations de carte</label>
             <div id="card-element" class="border p-4 rounded bg-gray-200"></div> <!-- Champ de carte -->
             <div id="card-errors" class="text-red-500 mt-2"></div> <!-- Zone d'erreur pour les informations de carte -->
@@ -158,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         fontSmoothing: 'antialiased',
                         fontSize: '16px',
                         lineHeight: '24px',
-                        padding: '20px',
+                        padding: '2px',
                         '::placeholder': {
                             color: '#aab7c4'
                         }
@@ -176,12 +186,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 event.preventDefault();
 
                 const cardHolderName = document.getElementById('card-holder-name').value;
+                const email = document.getElementById('email').value; // Récupérer l'email
+                const address = document.getElementById('address').value; // Récupérer l'adresse
 
                 const { paymentMethod, error } = await stripe.createPaymentMethod({
                     type: 'card',
                     card: cardElement,
                     billing_details: {
                         name: cardHolderName,
+                        email: email, // Ajouter l'email
+                        address: {
+                            line1: address, // Ajouter l'adresse
+                        },
                     },
                 });
 
