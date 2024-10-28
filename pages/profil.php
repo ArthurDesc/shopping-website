@@ -1,15 +1,16 @@
 <?php
+// Déplacer session_start() et la vérification tout en haut, avant toute sortie
 session_start();
-require_once dirname(__FILE__) . '/../includes/_header.php';
 
-require_once dirname(__FILE__) . '/../includes/_db.php';
-
-// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['id_utilisateur'])) {
-    header('Location: connexion.php');
+    header("Location: connexion.php");
     exit();
 }
 
+require_once dirname(__FILE__) . '/../includes/_header.php';
+require_once dirname(__FILE__) . '/../includes/_db.php';
+
+// Ajouter après session_start()
 $erreurs = [];
 $success = false;
 
@@ -31,7 +32,12 @@ $stmt = $conn->prepare("SELECT role FROM utilisateurs WHERE id_utilisateur = ?")
 $stmt->bind_param("i", $_SESSION['id_utilisateur']);
 $stmt->execute();
 $result = $stmt->get_result();
-$user_role = $result->fetch_assoc()['role'];
+
+// Avant la ligne 31, ajoutons une vérification
+$user_role = null;
+if ($result && $result->num_rows > 0) {
+    $user_role = $result->fetch_assoc()['role'];
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérifier le mot de passe actuel
@@ -116,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold">Mon Profil</h2>
             <div class="flex space-x-4">
-                <?php if ($user_role === 'admin'): ?>
+                <?php if (isset($user_role) && $user_role === 'admin'): ?>
                     <a href="../admin/backofficeV2.php" 
                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -234,3 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+
+
