@@ -178,21 +178,21 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                    
 
                     <!-- Catégories -->
-                    <div id="categories-filter" class="filter-section">
-                        <div class="flex items-center justify-between cursor-pointer py-4" id="categories-toggle">
+                    <div id="categories-filter" class="filter-section mb-4">
+                        <div class="flex items-center justify-between cursor-pointer py-2 border-b" @click="openTab = openTab === 'categories' ? null : 'categories'">
                             <span class="font-semibold text-gray-600">Catégories</span>
-                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'rotate-180': openTab === 'categories'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div id="categories-content" class="py-1 pl-4" style="display: none;">
-                            <!-- Pour la recherche de catégories -->
-                            <div class="search__container">
-                                <input class="search__input" type="text" id="categories-search" placeholder="Rechercher">
-                            </div>
-                            <div id="categories-list">
-                                <?php foreach ($categories as $id => $category): ?>
-                                    <?php if ($category['nom'] !== 'Sports'): ?>  <!-- Ajoutez cette condition ici -->
+                        <div x-show="openTab === 'categories'" x-collapse>
+                            <div class="py-2 pl-4">
+                                <!-- Pour la recherche de catégories -->
+                                <div class="search__container mb-2">
+                                    <input class="search__input" type="text" id="categories-search" placeholder="Rechercher">
+                                </div>
+                                <div id="categories-list">
+                                    <?php foreach ($categories as $id => $category): ?>
                                         <div class="mb-2">
                                             <div class="flex items-center">
                                                 <input type="checkbox" 
@@ -219,37 +219,39 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                                 </div>
                                             <?php endif; ?>
                                         </div>
-                                    <?php endif; ?>  <!-- Fermeture de la condition -->
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Marques -->
-                    <div id="marques-filter" class="filter-section">
-                        <div class="flex items-center justify-between cursor-pointer py-4" id="marques-toggle">
+                    <div id="marques-filter" class="filter-section mb-4">
+                        <div class="flex items-center justify-between cursor-pointer py-2 border-b" @click="openTab = openTab === 'marques' ? null : 'marques'">
                             <span class="font-semibold text-gray-600">Marques</span>
-                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'rotate-180': openTab === 'marques'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div id="marques-content" class="py-1 pl-4" style="display: none;">
-                            <!-- Pour la recherche de marques -->
-                            <div class="search__container">
-                                <input class="search__input" type="text" id="marques-search" placeholder="Rechercher">
-                            </div>
-                            <div id="marques-list">
-                                <?php foreach ($marques as $marque): ?>
-                                    <div class="flex items-center mb-2">
-                                        <input type="checkbox" 
-                                               id="marque_<?= htmlspecialchars($marque['marque']) ?>" 
-                                               name="marques[]" 
-                                               value="<?= htmlspecialchars($marque['marque']) ?>" 
-                                               class="mr-2"
-                                               <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
-                                        <label for="marque_<?= htmlspecialchars($marque['marque']) ?>"><?= htmlspecialchars($marque['marque']) ?></label>
-                                    </div>
-                                <?php endforeach; ?>
+                        <div x-show="openTab === 'marques'" x-collapse>
+                            <div class="py-2 pl-4">
+                                <!-- Pour la recherche de marques -->
+                                <div class="search__container mb-2">
+                                    <input class="search__input" type="text" id="marques-search" placeholder="Rechercher">
+                                </div>
+                                <div id="marques-list">
+                                    <?php foreach ($marques as $marque): ?>
+                                        <div class="flex items-center mb-2">
+                                            <input type="checkbox" 
+                                                   id="marque_<?= htmlspecialchars($marque['marque']) ?>" 
+                                                   name="marques[]" 
+                                                   value="<?= htmlspecialchars($marque['marque']) ?>" 
+                                                   class="mr-2"
+                                                   <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
+                                            <label for="marque_<?= htmlspecialchars($marque['marque']) ?>"><?= htmlspecialchars($marque['marque']) ?></label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -406,7 +408,26 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 
         </div>
     </div>
+    
 </main>
+
+<?php include '../includes/_footer.php'; ?>
+
+<!-- Scripts -->
+
+<!-- Ajout d'Alpine.js -->
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+<!-- Ajoutez ce script juste avant la fermeture de la balise body -->
+
+
+<script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
+
 
 <!-- Modal pour choisir la taille -->
 <div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0">
@@ -620,6 +641,10 @@ document.addEventListener('DOMContentLoaded', function() {
     Article ajouté au panier
 </div>
 
+<<<<<<< HEAD
+=======
 
+<<<<<<< HEAD
+=======
 
-
+>>>>>>> 66a171982fede77b5dba078eae50061038f22942

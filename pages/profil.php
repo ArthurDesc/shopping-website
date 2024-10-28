@@ -1,4 +1,5 @@
 <?php
+// Déplacer session_start() et la vérification tout en haut, avant toute sortie
 session_start();
 require_once dirname(__FILE__) . '/../includes/_header.php';
 

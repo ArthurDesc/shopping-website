@@ -204,7 +204,7 @@ $collection = $categoryManager->getCollection($id_produit);
                         <div class="flex items-center justify-between">
                             <!-- Titre -->
                             <div class="flex items-center">
-                                <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
+                                <h2 class="text-3xl md:text-2xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
                                 <input x-show="editingTitle"
                                     x-model="title"
                                     @keydown.enter="editingTitle = false; updateTitle(title)"
@@ -287,7 +287,7 @@ $collection = $categoryManager->getCollection($id_produit);
                     ?>
                     <?php if ($isEditMode): ?>
                         <!-- Section de gestion du stock en mode édition -->
-                        <div class="mt-4 p-4 border rounded-lg bg-gray-50">
+                        <div class="mt-2 p-2 border rounded-lg bg-gray-50">
                             <div class="flex items-center justify-between" x-data="{ 
                                 editingStock: false,
                                 stock: '<?php echo $produit['stock']; ?>'
