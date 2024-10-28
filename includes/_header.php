@@ -145,41 +145,40 @@ $headerCategories = $categoryManager->getHeaderCategories();
                   x-transition:leave-end="opacity-0 transform scale-95"
                   class="absolute right-0 transform translate-x-1/3 mt-2 w-48 bg-white rounded-md shadow-lg z-[1200]">
                   <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2 group-hover:text-blue-600">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
                       </svg>
-                      <span>Backoffice</span>
+                      <span>Administration</span>
                     </a>
-                    <a href="<?php echo url('pages/profil.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <a href="<?php echo url('pages/profil.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2 group-hover:text-blue-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                       </svg>
                       <span>Mon compte</span>
                     </a>
-                    <a href="<?php echo url('pages/commandes.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                    <a href="<?php echo url('pages/commandes.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2 group-hover:text-blue-600">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                       </svg>
                       <span>Mes commandes</span>
                     </a>
                   <?php else: ?>
-                    <a href="<?php echo url('pages/profil.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <!-- Même modification pour les liens non-admin -->
+                    <a href="<?php echo url('pages/profil.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2 group-hover:text-blue-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                       </svg>
                       <span>Mon compte</span>
                     </a>
-                    <a href="<?php echo url('pages/commandes.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
+                    <a href="<?php echo url('pages/commandes.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2 group-hover:text-blue-600">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                       </svg>
                       <span>Mes commandes</span>
                     </a>
                   <?php endif; ?>
-                  <a href="<?php echo url('pages/deconnexion.php'); ?>" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                  <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100" id="btn-deconnexion">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                     </svg>
@@ -303,4 +302,54 @@ $headerCategories = $categoryManager->getHeaderCategories();
     </div>
   </div>
 
+  <!-- Ajouter avant la fermeture du body -->
+  <!-- Modal de confirmation de déconnexion -->
+  <div id="modal-deconnexion" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0 hidden">
+    <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
+        <div class="p-6">
+            <h2 class="text-xl font-semibold mb-4">Confirmation de déconnexion</h2>
+            <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+            <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
+                <button id="cancel-deconnexion" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
+                    Annuler
+                </button>
+                <a href="<?php echo url('pages/deconnexion.php'); ?>" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 text-center">
+                    Se déconnecter
+                </a>
+            </div>
+        </div>
+    </div>
+  </div>
 
+  <!-- Ajouter le script JavaScript -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const modalDeconnexion = document.getElementById('modal-deconnexion');
+    const btnDeconnexion = document.getElementById('btn-deconnexion');
+    const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
+
+    // Ouvrir le modal
+    btnDeconnexion.addEventListener('click', function(e) {
+        e.preventDefault();
+        modalDeconnexion.classList.remove('hidden');
+    });
+
+    // Fermer le modal
+    function closeModal() {
+        modalDeconnexion.classList.add('hidden');
+    }
+
+    // Fermer avec le bouton Annuler
+    btnCancelDeconnexion.addEventListener('click', closeModal);
+
+    // Fermer en cliquant en dehors du modal
+    modalDeconnexion.addEventListener('click', function(e) {
+        if (e.target === modalDeconnexion) {
+            closeModal();
+        }
+    });
+  });
+  </script>
+</body>
+
+</html>
