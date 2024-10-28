@@ -179,8 +179,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 
                     <!-- Catégories -->
                     <div id="categories-filter" class="filter-section mb-4">
-                        <div class="flex items-center justify-between cursor-pointer py-2 border-b" @click="openTab = openTab === 'categories' ? null : 'categories'">
-                            <span class="font-semibold text-gray-600">Catégories</span>
+                    <div class="flex items-center justify-between cursor-pointer py-2" @click="openTab = openTab === 'categories' ? null : 'categories'">                            <span class="font-semibold text-gray-600">Catégories</span>
                             <svg :class="{'rotate-180': openTab === 'categories'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
@@ -241,8 +240,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 
                     <!-- Marques -->
                     <div id="marques-filter" class="filter-section mb-4">
-                        <div class="flex items-center justify-between cursor-pointer py-2 border-b" @click="openTab = openTab === 'marques' ? null : 'marques'">
-                            <span class="font-semibold text-gray-600">Marques</span>
+                    <div class="flex items-center justify-between cursor-pointer py-2" @click="openTab = openTab === 'categories' ? null : 'categories'">                            <span class="font-semibold text-gray-600">Marques</span>
                             <svg :class="{'rotate-180': openTab === 'marques'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
