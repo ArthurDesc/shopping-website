@@ -44,9 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bind_param("ssss", $nom, $prenom, $email, $motdepasse_hache);
 
                 if ($stmt->execute()) {
-                    $inscription_reussie = true;
-                    $_SESSION['message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
-                    header("Location: profil.php");
+                    $_SESSION['id_utilisateur'] = $stmt->insert_id;
+                    $_SESSION['success_message'] = "Inscription réussie ! Bienvenue sur notre site.";
+                    echo "<script>
+                            window.location.href = 'connexion.php';
+                          </script>";
                     exit();
                 } else {
                     $erreurs[] = "Erreur lors de l'inscription : " . $stmt->error;
