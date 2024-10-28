@@ -556,7 +556,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
- 
+    // Sélectionner toutes les checkboxes des filtres
+    const filterCheckboxes = document.querySelectorAll('input[type="checkbox"][name="categories[]"], input[type="checkbox"][name="marques[]"], input[type="checkbox"][name="collections[]"]');
+    
+    // Ajouter un écouteur d'événement pour chaque checkbox
+    filterCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Récupérer tous les filtres sélectionnés
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(el => el.value);
+            const selectedBrands = Array.from(document.querySelectorAll('input[name="marques[]"]:checked')).map(el => el.value);
+            const selectedCollections = Array.from(document.querySelectorAll('input[name="collections[]"]:checked')).map(el => el.value);
+
+            // Filtrer les produits
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const categories = product.dataset.categories.split(',');
+                const brand = product.dataset.brand;
+                const collection = product.dataset.collection;
+
+                const categoryMatch = selectedCategories.length === 0 || categories.some(cat => selectedCategories.includes(cat));
+                const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(brand);
+                const collectionMatch = selectedCollections.length === 0 || selectedCollections.includes(collection);
+
+                if (categoryMatch && brandMatch && collectionMatch) {
+                    product.style.display = '';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+
+            // Mettre à jour l'URL avec les filtres sélectionnés
+            const url = new URL(window.location.href);
+            url.searchParams.delete('category');
+            url.searchParams.delete('collection');
+            
+            if (selectedCategories.length > 0) {
+                url.searchParams.set('category', selectedCategories[0]);
+            }
+            if (selectedCollections.length > 0) {
+                url.searchParams.set('collection', selectedCollections[0]);
+            }
+            
+            window.history.pushState({}, '', url);
+        });
+    });
 });
 </script>
 
@@ -566,11 +609,3 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
-
-
-
-
-
-
-
-
