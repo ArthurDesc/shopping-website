@@ -249,14 +249,14 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                     </div>
 
                     <!-- Collections -->
-                    <div class="border-b">
-                        <div @click="openTab = openTab === 'collections' ? null : 'collections'" class="flex items-center justify-between cursor-pointer py-4">
+                    <div id="collections-filter" class="filter-section">
+                        <div class="flex items-center justify-between cursor-pointer py-4" id="collections-toggle">
                             <span class="font-semibold text-gray-600">Collections</span>
-                            <svg :class="{'rotate-180': openTab === 'collections'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'collections'" x-collapse>
+                        <div id="collections-content" class="py-1 pl-4" style="display: none;">
                             <div class="py-4 pl-4">
                                 <?php
                                 $staticCollections = ['Homme', 'Femme', 'Enfant'];
@@ -566,6 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
 
 
 
