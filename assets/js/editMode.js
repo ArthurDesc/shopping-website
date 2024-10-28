@@ -136,6 +136,7 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
+
 // Initialisation des événements au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     // Vérifier si nous sommes en mode édition
