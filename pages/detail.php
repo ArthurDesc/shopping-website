@@ -493,8 +493,7 @@ $collection = $categoryManager->getCollection($id_produit);
                         <div id="comments-list">
                             <?php if (!empty($avis_produit)): ?>
                                 <?php foreach (array_slice($avis_produit, 0, 5) as $avis): ?> <!-- Limiter l'affichage à 5 avis -->
-                                    <div class="mb-6 p-6 border rounded-xl shadow-lg bg-white">
-                                        <div class="flex justify-between items-center mb-2">
+                                    <div class="mb-6 p-6 border rounded-xl shadow-lg bg-white" data-avis-id="<?php echo $avis->getIdAvis(); ?>">                                        <div class="flex justify-between items-center mb-2">
                                             <div class="flex items-center">
                                                 <span class="font-semibold mr-2"><?php echo htmlspecialchars($avis->getNomUtilisateur()); ?></span>
                                                 <div class="flex items-center">
