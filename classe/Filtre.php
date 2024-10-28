@@ -96,7 +96,7 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $conditions = [];
+        $conditions = ["p.stock > 0"];  // Ajout de la condition de stock > 0
         $params = [];
 
         $sql = "SELECT p.*, GROUP_CONCAT(pc.id_categorie) as categories 
@@ -131,10 +131,7 @@ class Filtre {
             $params[] = $this->prixMax;
         }
 
-        if (!empty($conditions)) {
-            $sql .= " WHERE " . implode(' AND ', $conditions);
-        }
-
+        $sql .= " WHERE " . implode(' AND ', $conditions);
         $sql .= " GROUP BY p.id_produit";
 
         return ['sql' => $sql, 'params' => $params];
