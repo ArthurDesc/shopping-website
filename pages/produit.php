@@ -328,7 +328,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                     </h2>
                    
                     <!-- Bouton pour afficher les filtres en version mobile -->
-                    <button id="toggleFilters" class="md:hidden bg-blue-500 text-white px-3 py-1 text-sm rounded">
+                    <button id="toggleFilters" class="md:hidden bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-300 ease-in-out">
                         Filtres
                     </button>
                 </div>
@@ -615,5 +615,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
 
 
