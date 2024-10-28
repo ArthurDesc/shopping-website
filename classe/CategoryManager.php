@@ -140,4 +140,28 @@ class CategoryManager {
         // Cette méthode devrait retourner l'ID de la catégorie basé sur son nom
         // Implémentez la logique pour faire correspondre les noms aux IDs de votre base de données
     }
+
+    public function getCollection($product_id) {
+        $sql = "SELECT collection FROM produits WHERE id_produit = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            $this->lastError = "Erreur de préparation de la requête: " . $this->conn->error;
+            error_log($this->lastError);
+            return null;
+        }
+
+        $stmt->bind_param("i", $product_id);
+        $result = $stmt->execute();
+        
+        if (!$result) {
+            $this->lastError = "Erreur d'exécution: " . $stmt->error;
+            error_log($this->lastError);
+            return null;
+        }
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row ? $row['collection'] : null;
+    }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 17, 2024 at 02:29 PM
+-- Generation Time: Oct 28, 2024 at 08:29 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-
+--
 -- Database: `boutique`
 --
 
@@ -32,21 +32,9 @@ CREATE TABLE `avis` (
   `id_produit` int NOT NULL,
   `id_utilisateur` int NOT NULL,
   `note` int NOT NULL,
-  `commentaire` text NOT NULL,
+  `commentaire` text COLLATE utf8mb4_general_ci NOT NULL,
   `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `avis`
---
-
-INSERT INTO `avis` (`id_avis`, `id_produit`, `id_utilisateur`, `note`, `commentaire`, `date_creation`) VALUES
-(1, 31, 11, 3, 'dd', '2024-10-17 09:07:35'),
-(2, 32, 11, 4, 'confortable', '2024-10-17 11:46:24'),
-(3, 33, 11, 4, 'vsvdjdjl', '2024-10-17 11:48:00'),
-(4, 33, 11, 2, 'ljefoubgf,lzjd', '2024-10-17 11:48:23'),
-(5, 33, 11, 1, 'khegfyibejkmuoef', '2024-10-17 11:48:54'),
-(6, 33, 11, 5, 'bon', '2024-10-17 11:49:59');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -79,7 +67,8 @@ INSERT INTO `categories` (`id_categorie`, `nom`, `parent_id`, `description`) VAL
 (11, 'Chaussettes', 3, 'Catégorie pour toutes les chaussettes de sport'),
 (14, 'Combinaisons', NULL, 'Catégorie pour toutes les combinaisons de sport'),
 (15, 'Vêtements de running', 1, 'Catégorie pour tous les vêtements de running'),
-(16, 'Leggings', 1, 'Catégorie pour tous les leggings de sport');
+(16, 'Leggings', 1, 'Catégorie pour tous les leggings de sport'),
+(17, 'jb', 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -95,6 +84,13 @@ CREATE TABLE `commandes` (
   `statut` enum('panier','validé','expédié','annulé') DEFAULT 'panier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `commandes`
+--
+
+INSERT INTO `commandes` (`id_commande`, `date_commande`, `montant_total`, `id_utilisateur`, `statut`) VALUES
+(1, '2024-10-28 09:28:01', '40.00', 10, 'validé');
+
 -- --------------------------------------------------------
 
 --
@@ -107,6 +103,13 @@ CREATE TABLE `commande_produit` (
   `quantite` int DEFAULT NULL,
   `prix_unitaire` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `commande_produit`
+--
+
+INSERT INTO `commande_produit` (`id_commande`, `id_produit`, `quantite`, `prix_unitaire`) VALUES
+(1, 32, 1, '40.00');
 
 -- --------------------------------------------------------
 
@@ -124,6 +127,13 @@ CREATE TABLE `paiements` (
   `id_commande` int DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `paiements`
+--
+
+INSERT INTO `paiements` (`id_paiement`, `montant`, `date_paiement`, `methode_paiement`, `statut_paiement`, `transaction_id`, `id_commande`, `id_utilisateur`) VALUES
+(1, '40.00', '2024-10-28 09:28:01', 'carte', 'réussi', 'pi_3QEoIwP5XJmDt2UG1shjWVPD', 1, 10);
 
 -- --------------------------------------------------------
 
@@ -151,7 +161,7 @@ CREATE TABLE `produits` (
 
 INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`, `stock`, `taille`, `tailles_disponibles`, `marque`, `date_ajout`, `collection`) VALUES
 (31, ' T-shirt Performance', 'perfNike.jpg', 'T-shirt respirant et confortable, idéal pour les entraînements intensifs.', '30.00', 50, '0', 'XS,S,M,L,XL', 'Nike', NULL, 'Homme'),
-(32, 'Pantalon de Yoga', 'yogaAdidas.jfif', 'Pantalon extensible et confortable, parfait pour le yoga et la méditation.', '40.00', 40, '0', 'XS,S,M,L,XL', 'Adidas', NULL, 'Femme'),
+(32, 'Pantalon de Yoga', 'yogaAdidas.jfif', 'Pantalon extensible et confortable, parfait pour le yoga et la méditation.', '40.00', 39, '0', 'XS,S,M,L,XL', 'Adidas', NULL, 'Femme'),
 (33, 'Short de Course', 'shortPuma.jpg', 'Short léger et respirant, idéal pour la course à pied.', '25.00', 60, '0', 'S,M,L,XL', 'Puma', NULL, 'Homme'),
 (34, 'Legging de Sport', 'leggingUnderArmour.webp', 'Legging ajusté et confortable, parfait pour toutes les activités sportives.', '35.00', 35, '0', 'XS,S,M,L', 'UnderArmour', NULL, 'Femme'),
 (35, 'Hoodie de Sport', 'hoodieReebok.webp', 'Sweat à capuche chaud et confortable, idéal pour les jours plus frais.', '50.00', 45, '0', 'S,M,L,XL,XXL', 'Reebok', NULL, 'Homme'),
@@ -214,7 +224,7 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
 (8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
 (9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user'),
-(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin'),
+(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'user'),
 (11, 'Diomande', 'Adama', 'adama.diomande@laplateforme.io', NULL, '$2y$10$g7YKOoGuXuEIzqoX/n/9seNhgIih5y0vREtRCtyg/7YxPlePdheb2', 'user');
 
 --
@@ -227,6 +237,29 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 ALTER TABLE `avis`
   ADD PRIMARY KEY (`id_avis`),
   ADD KEY `id_produit` (`id_produit`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`),
+  ADD KEY `idx_date_creation` (`date_creation`);
+
+--
+-- Indexes for table `commandes`
+--
+ALTER TABLE `commandes`
+  ADD PRIMARY KEY (`id_commande`),
+  ADD KEY `id_utilisateur` (`id_utilisateur`);
+
+--
+-- Indexes for table `commande_produit`
+--
+ALTER TABLE `commande_produit`
+  ADD PRIMARY KEY (`id_commande`,`id_produit`),
+  ADD KEY `id_produit` (`id_produit`);
+
+--
+-- Indexes for table `paiements`
+--
+ALTER TABLE `paiements`
+  ADD PRIMARY KEY (`id_paiement`),
+  ADD KEY `id_commande` (`id_commande`),
   ADD KEY `id_utilisateur` (`id_utilisateur`);
 
 --
@@ -249,7 +282,19 @@ ALTER TABLE `utilisateurs`
 -- AUTO_INCREMENT for table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `commandes`
+--
+ALTER TABLE `commandes`
+  MODIFY `id_commande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `paiements`
+--
+ALTER TABLE `paiements`
+  MODIFY `id_paiement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `produits`
@@ -261,7 +306,38 @@ ALTER TABLE `produits`
 -- AUTO_INCREMENT for table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_utilisateur` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `avis`
+--
+ALTER TABLE `avis`
+  ADD CONSTRAINT `avis_ibfk_1` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`) ON DELETE CASCADE,
+  ADD CONSTRAINT `avis_ibfk_2` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `commandes`
+--
+ALTER TABLE `commandes`
+  ADD CONSTRAINT `commandes_ibfk_1` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`);
+
+--
+-- Constraints for table `commande_produit`
+--
+ALTER TABLE `commande_produit`
+  ADD CONSTRAINT `commande_produit_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commandes` (`id_commande`) ON DELETE CASCADE,
+  ADD CONSTRAINT `commande_produit_ibfk_2` FOREIGN KEY (`id_produit`) REFERENCES `produits` (`id_produit`);
+
+--
+-- Constraints for table `paiements`
+--
+ALTER TABLE `paiements`
+  ADD CONSTRAINT `paiements_ibfk_1` FOREIGN KEY (`id_commande`) REFERENCES `commandes` (`id_commande`),
+  ADD CONSTRAINT `paiements_ibfk_2` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateurs` (`id_utilisateur`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,23 +1,711 @@
-/* Styles communs pour les sélecteurs */
-.product-select {
-    background-color: #eaf4ff; /* Couleur de fond claire */
-    border: 2px solid #007bff; /* Bordure bleue plus épaisse */
-    border-radius: 0.375rem; /* Coins arrondis */
-    padding: 0.5rem; /* Espacement interne */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transition pour les effets */
-    color: #007bff; /* Couleur du texte */
-    font-size: 1rem; /* Taille de la police */
+input[type="radio"]:checked + span {
+  border-color: #3B82F6;
+  background-color: #EFF6FF;
+  color: #2563EB;
 }
 
-/* Effet au focus */
-.product-select:focus {
-    border-color: #0056b3; /* Bordure plus foncée au focus */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Ombre bleue au focus */
-    outline: none; /* Supprimer le contour par défaut */
+input[type="radio"] + span {
+  transition: all 0.2s;
 }
 
-/* Style pour le texte du sélecteur */
-.product-select option {
-    color: #007bff; /* Couleur du texte des options */
+.quantity-container {
+    display: flex;
+    flex-direction: row; /* Changé de column à row */
+    align-items: center; /* Centré verticalement */
+    justify-content: flex-start; /* Aligné à gauche */
 }
 
+.quantity-label {
+    font-size: 1rem; /* Augmenté pour correspondre à la nouvelle taille du select */
+    font-weight: 500;
+    color: #4B5563;
+    margin-right: 0.75rem; /* Légèrement augmenté */
+    line-height: 1.75rem; /* Ajusté pour correspondre à la nouvelle hauteur */
+}
+
+.quantity-select {
+    width: 6rem;  /* Augmenté de 5rem à 6rem */
+    height: 3rem; /* Augmenté de 2.5rem à 3rem */
+    padding: 0 0.75rem; /* Augmenté le padding horizontal */
+    border: 1px solid #3B82F6;
+    border-radius: 0.5rem; /* Légèrement augmenté pour correspondre à la nouvelle taille */
+    background-color: white;
+    color: #2563EB;
+    font-size: 1rem; /* Augmenté de 0.875rem à 1rem */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233B82F6' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center; /* Ajusté pour la nouvelle taille */
+    background-repeat: no-repeat;
+    background-size: 1.75em 1.75em; /* Légèrement augmenté */
+}
+
+.quantity-select:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+.quantity-select option {
+    background-color: white;
+    color: #2563EB;
+}
+
+.image-container {
+    perspective: 1000px;
+    position: relative;
+    overflow: visible; /* Permet à l'image de dépasser */
+}
+
+.card {
+    transition: transform 0.3s ease;
+    transform-origin: center;
+    will-change: transform; /* Améliore les performances */
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Ajoute une ombre pour l'effet 3D */
+}
+
+.montserrat-bold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700; /* Gras */
+  font-style: normal;
+}
+
+.add-to-cart-button {
+  --width: 200px; /* Augmenté de 150px à 200px */
+  --height: 50px; /* Augmenté de 40px à 50px */
+  --tooltip-height: 35px;
+  --tooltip-width: 90px;
+  --gap-between-tooltip-to-button: 18px;
+  --button-color: #2f7bf5;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: var(--button-color);
+  position: relative;
+  text-align: center;
+  border-radius: 0.5em;
+  font-family: "Arial", sans-serif;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.add-to-cart-button::after,
+.add-to-cart-button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.add-to-cart-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem; /* Augmenté la taille de la police */
+  font-weight: bold; /* Ajouté du gras pour plus de visibilité */
+}
+
+.add-to-cart-button-wrapper,
+.add-to-cart-text,
+.add-to-cart-icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.add-to-cart-text {
+  top: 0;
+}
+
+.add-to-cart-text,
+.add-to-cart-icon {
+  transition: top 0.5s;
+}
+
+.add-to-cart-icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-cart-icon svg {
+  width: 28px; /* Augmenté de 24px à 28px */
+  height: 28px; /* Augmenté de 24px à 28px */
+}
+
+.add-to-cart-button:hover {
+  background: #2563EB;
+  cursor: pointer; /* Assurez-vous que le curseur reste en mode pointer au survol */
+}
+
+.add-to-cart-button:hover .add-to-cart-text {
+  top: -100%;
+}
+
+.add-to-cart-button:hover .add-to-cart-icon {
+  top: 0;
+}
+
+.add-to-cart-button:hover:before,
+.add-to-cart-button:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-to-cart-button:hover:after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.add-to-cart-button:hover:before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}
+
+.tab-container {
+    display: flex;
+    position: relative;
+    background-color: #f3f4f6;
+    box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+    padding: 0.5rem;
+    border-radius: 99px;
+    z-index: 1;
+}
+
+.tab {
+    display: none;
+}
+
+.tab_label {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 99px;
+    color: #4b5563;
+    position: relative;
+    z-index: 3;
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+.tab:checked + .tab_label {
+    color: #2563EB;
+    font-weight: bold;
+}
+
+.indicator {
+    position: absolute;
+    height: calc(100% - 1rem);
+    border-radius: 99px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    z-index: 2;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.back-arrow-icon {
+    transition: stroke 0.3s ease;
+}
+
+a:hover .back-arrow-icon {
+    stroke: #3B82F6; /* Couleur bleue de Tailwind (blue-500) */
+}
+
+/* Styles pour le bouton de commentaire */
+.comment-submit-btn {
+  --primary: #60A5FA; /* Bleu clair principal */
+  --neutral-1: #3B82F6; /* Bleu moyen pour le fond */
+  --neutral-2: #2563EB; /* Bleu légèrement plus foncé pour le gradient */
+  --radius: 14px;
+
+  cursor: pointer;
+  border-radius: var(--radius);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: 0 0.5px 0.5px 1px rgba(59, 130, 246, 0.3),
+    0 10px 20px rgba(59, 130, 246, 0.2), 0 4px 5px 0px rgba(59, 130, 246, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  padding: 20px;
+  height: 68px;
+  font-family: "Galano Grotesque", Poppins, Montserrat, sans-serif;
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--neutral-1);
+}
+
+.comment-submit-btn::before {
+  content: "";
+  inset: 7px 6px 6px 6px;
+  position: absolute;
+  background: linear-gradient(to top, var(--neutral-1), var(--neutral-2));
+  border-radius: 30px;
+  filter: blur(0.5px);
+  z-index: 2;
+}
+
+.comment-submit-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 1px 2px rgba(96, 165, 250, 0.4),
+    0 15px 30px rgba(59, 130, 246, 0.3), 0 10px 3px -3px rgba(59, 130, 246, 0.1);
+}
+
+.comment-submit-btn:active {
+  transform: scale(1);
+  box-shadow: 0 0 1px 2px rgba(96, 165, 250, 0.4),
+    0 10px 3px -3px rgba(59, 130, 246, 0.2);
+}
+
+.comment-submit-btn:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  border: 2.5px solid transparent;
+  background: linear-gradient(var(--neutral-1), var(--neutral-2)) padding-box,
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(59, 130, 246, 0.5))
+      border-box;
+  z-index: 0;
+  transition: all 0.4s ease;
+}
+
+.comment-btn-outline::before {
+  background: conic-gradient(
+    from 180deg,
+    transparent 60%,
+    var(--primary) 80%,
+    transparent 100%
+  );
+}
+
+.comment-submit-btn:hover p span {
+  color: #ffffff;
+}
+
+.comment-btn-state p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap; /* Empêche le retour à la ligne */
+}
+
+.comment-btn-state .comment-btn-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: scale(1.25);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment-btn-state .comment-btn-icon svg {
+  overflow: visible;
+}
+
+.comment-btn-outline {
+  position: absolute;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  inset: -2px -3.5px;
+}
+
+.comment-btn-outline::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  background: conic-gradient(
+    from 180deg,
+    transparent 60%,
+    var(--primary) 80%,
+    transparent 100%
+  );
+  animation: spin 2s linear infinite;
+  animation-play-state: paused;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.comment-submit-btn:hover .comment-btn-outline {
+  opacity: 1;
+}
+
+.comment-submit-btn:hover .comment-btn-outline::before {
+  animation-play-state: running;
+}
+
+.comment-btn-state p span {
+  display: inline-block; /* Change block to inline-block */
+  opacity: 0;
+  animation: slideDown 0.8s ease forwards calc(var(--i) * 0.03s);
+}
+
+.comment-submit-btn:hover p span {
+  opacity: 1;
+  animation: wave 0.5s ease forwards calc(var(--i) * 0.02s);
+}
+
+.comment-submit-btn:focus p span {
+  opacity: 1;
+  animation: disapear 0.6s ease forwards calc(var(--i) * 0.03s);
+}
+
+@keyframes wave {
+  30% {
+    opacity: 1;
+    transform: translateY(4px) translateX(0) rotate(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) translateX(0) rotate(0);
+    color: var(--primary);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) translateX(5px) rotate(-90deg);
+    color: var(--primary);
+    filter: blur(5px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(4px) translateX(0) rotate(0);
+    filter: blur(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px) translateX(0) rotate(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0);
+  }
+}
+
+@keyframes disapear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(5px) translateY(20px);
+    color: var(--primary);
+    filter: blur(5px);
+  }
+}
+
+.comment-btn-state--default .comment-btn-icon svg {
+  animation: land 0.6s ease forwards;
+}
+
+.comment-submit-btn:hover .comment-btn-state--default .comment-btn-icon {
+  transform: rotate(45deg) scale(1.25);
+}
+
+.comment-submit-btn:focus .comment-btn-state--default svg {
+  animation: takeOff 0.8s linear forwards;
+}
+
+.comment-submit-btn:focus .comment-btn-state--default .comment-btn-icon {
+  transform: rotate(0) scale(1.25);
+}
+
+@keyframes takeOff {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(70px) rotate(45deg) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(160px) rotate(45deg) scale(0);
+  }
+}
+
+@keyframes land {
+  0% {
+    transform: translateX(-60px) translateY(30px) rotate(-50deg) scale(2);
+    opacity: 0;
+    filter: blur(3px);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.comment-btn-state--default .comment-btn-icon:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  width: 0;
+  left: -5px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5));
+}
+
+.comment-submit-btn:focus .comment-btn-state--default .comment-btn-icon:before {
+  animation: contrail 0.8s linear forwards;
+}
+
+@keyframes contrail {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  8% {
+    width: 15px;
+  }
+  60% {
+    opacity: 0.7;
+    width: 80px;
+  }
+  100% {
+    opacity: 0;
+    width: 160px;
+  }
+}
+
+.comment-btn-state {
+  padding-left: 29px;
+  z-index: 2;
+  display: flex;
+  position: relative;
+}
+
+.comment-btn-state--default span:nth-child(4) {
+  margin-right: 0; /* Supprimez la marge entre les lettres si elle existe */
+}
+
+.comment-btn-state--sent {
+  display: none;
+}
+
+.comment-btn-state--sent svg {
+  transform: scale(1.25);
+  margin-right: 8px;
+}
+
+.comment-submit-btn:focus .comment-btn-state--default {
+  position: absolute;
+}
+
+.comment-submit-btn:focus .comment-btn-state--sent {
+  display: flex;
+}
+
+.comment-submit-btn:focus .comment-btn-state--sent span {
+  opacity: 0;
+  animation: slideDown 0.8s ease forwards calc(var(--i) * 0.2s);
+}
+
+.comment-submit-btn:focus .comment-btn-state--sent .comment-btn-icon svg {
+  opacity: 0;
+  animation: appear 1.2s ease forwards 0.8s;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(4) rotate(-40deg);
+    color: var(--primary);
+    filter: blur(4px);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(0.6);
+    filter: blur(1px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#commentaire {
+    flex-grow: 1;
+    margin-right: 1rem;
+    resize: none; /* Empêche le redimensionnement */
+    border: 2px solid #3B82F6; /* Bordure bleue */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #2D3748; /* Couleur de texte foncée */
+    background-color: #EBF8FF; /* Fond bleu très clair */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#commentaire:focus {
+    outline: none;
+    border-color: #2563EB; /* Bleu plus foncé lors du focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Ombre bleue lors du focus */
+}
+
+#commentaire::placeholder {
+    color: #718096; /* Couleur du placeholder */
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.bg-gray-200 {
+    background-color: #E5E7EB;
+}
+
+.shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.w-12 {
+    width: 3rem;
+}
+
+.h-12 {
+    height: 3rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.text-gray-500 {
+    color: #6B7280;
+}
+
+.h-10 {
+    height: 2.5rem;
+}
+
+.w-10 {
+    width: 2.5rem;
+}
+
+/* Styles spécifiques pour le toast en bas */
+.bottom-toast {
+    position: fixed;
+    bottom: 1.25rem; /* 20px */
+    right: 1.25rem; /* 20px */
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.bottom-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animation d'entrée */
+@keyframes slideInUp {
+    from {
+        transform: translateY(1rem);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Animation de sortie */
+@keyframes slideOutDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(1rem);
+        opacity: 0;
+    }
+}
+
+/* Styles pour le mode édition */
+.image-container {
+    position: relative;
+    transition: opacity 0.3s ease;
+}
+
+#toast {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.edit-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+.edit-button {
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    transform: scale(1.1);
+}

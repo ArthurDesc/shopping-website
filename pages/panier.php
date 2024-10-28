@@ -257,6 +257,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 </style>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-button'); // Assurez-vous que vos boutons ont cette classe
+    const cartLogo = document.querySelector('.cart-logo'); // Assurez-vous que c'est la bonne classe ou ID
+
+    // Vérifiez si le logo du panier existe
+    if (cartLogo) {
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Change la couleur du logo du panier
+                cartLogo.style.color = 'green'; // Changez la couleur ici
+                cartLogo.style.backgroundColor = 'lightgreen'; // Optionnel : changez le fond
+                cartLogo.textContent = parseInt(cartLogo.textContent) + 1; // Incrémente le nombre d'articles
+            });
+        });
+    }
+});
+</script>
 
 
 

@@ -21,23 +21,31 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Mettre à jour l'interface utilisateur (par exemple, le nombre d'articles dans le panier)
                 updateCartUI(data.cartCount);
+                showToast('Article ajouté au panier', 'success');
             } else {
-                alert('Erreur lors de l\'ajout au panier : ' + data.message);
+                showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+            showToast('Une erreur s\'est produite lors de l\'ajout au panier', 'error');
         });
     }
 
     function updateCartUI(cartCount) {
-        // Mettre à jour le nombre d'articles dans le panier dans l'interface utilisateur
         const cartCountElement = document.getElementById('cart-count');
         if (cartCountElement) {
             cartCountElement.textContent = cartCount;
+            
+            // Mise à jour de la couleur du badge du panier
+            if (cartCount > 0) {
+                cartCountElement.classList.remove('bg-red-600');
+                cartCountElement.classList.add('bg-green-600');
+            } else {
+                cartCountElement.classList.remove('bg-green-600');
+                cartCountElement.classList.add('bg-red-600');
+            }
         }
     }
 });

@@ -92,7 +92,7 @@ break;
                     <div class="mb-4 sm:mb-5">
                         <label for="categories" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Catégories</label>
                         <div id="categories-container" class="bg-white rounded-lg p-2 max-h-40 overflow-y-auto">
-                          <!-- Les catégories seront ajoutées ici dynamiquement -->
+                            <!-- Le sélecteur de catégories sera injecté ici -->
                         </div>
                     </div>
                     <div class="flex justify-center mt-6">
@@ -737,3 +737,7 @@ window.switchTab = switchTab;
 if (typeof CategoryManager === 'undefined') {
     console.error("CategoryManager n'est pas défini. Assurez-vous que categoryManager.js est chargé avant tabManager.js");
 }
+
+// Après l'injection du HTML, initialisez le sélecteur :
+const categorySelector = new CategorySelector('categories-container');
+categorySelector.init();
