@@ -256,13 +256,19 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                 <div id="marques-list">
                                     <?php foreach ($marques as $marque): ?>
                                         <div class="flex items-center mb-2">
-                                            <input type="checkbox" 
-                                                   id="marque_<?= htmlspecialchars($marque['marque']) ?>" 
-                                                   name="marques[]" 
-                                                   value="<?= htmlspecialchars($marque['marque']) ?>" 
-                                                   class="mr-2"
-                                                   <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
-                                            <label for="marque_<?= htmlspecialchars($marque['marque']) ?>"><?= htmlspecialchars($marque['marque']) ?></label>
+                                            <label class="checkbox-container flex items-center">
+                                                <input type="checkbox" 
+                                                       name="marques[]" 
+                                                       value="<?= htmlspecialchars($marque['marque']) ?>"
+                                                       <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
+                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" 
+                                                          pathLength="575.0541381835938" 
+                                                          class="checkbox-path">
+                                                    </path>
+                                                </svg>
+                                                <span class="ml-3"><?= htmlspecialchars($marque['marque']) ?></span>
+                                            </label>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
@@ -285,13 +291,19 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                                 foreach ($staticCollections as $collection): 
                                 ?>
                                     <div class="flex items-center mb-2">
-                                        <input type="checkbox" 
-                                               id="filter-<?php echo htmlspecialchars($collection); ?>" 
-                                               name="collections[]" 
-                                               value="<?php echo htmlspecialchars($collection); ?>" 
-                                               class="mr-2"
-                                               <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
-                                        <label for="filter-<?php echo htmlspecialchars($collection); ?>"><?php echo htmlspecialchars($collection); ?></label>
+                                        <label class="checkbox-container flex items-center">
+                                            <input type="checkbox" 
+                                                   name="collections[]" 
+                                                   value="<?php echo htmlspecialchars($collection); ?>"
+                                                   <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
+                                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" 
+                                                      pathLength="575.0541381835938" 
+                                                      class="checkbox-path">
+                                                </path>
+                                            </svg>
+                                            <span class="ml-3 text-white"><?php echo htmlspecialchars($collection); ?></span>
+                                        </label>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -311,12 +323,23 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
                             foreach ($categories as $id => $category) {
                                 if ($category['nom'] === 'Sports') {  // Vérifie si c'est la catégorie Sports
                                     foreach ($category['sous_categories'] as $sous_categorie) {
-                                        echo '<div class="flex items-center mb-2">';
-                                        echo '<input type="checkbox" id="sport_' . $sous_categorie['id'] . '" 
-                                              name="categories[]" value="' . $sous_categorie['nom'] . '" 
-                                              class="mr-2">';
-                                        echo '<label for="sport_' . $sous_categorie['id'] . '">' . $sous_categorie['nom'] . '</label>';
-                                        echo '</div>';
+                                        ?>
+                                        <div class="flex items-center mb-2">
+                                            <label class="checkbox-container flex items-center">
+                                                <input type="checkbox" 
+                                                       name="categories[]" 
+                                                       value="<?php echo htmlspecialchars($sous_categorie['nom']); ?>"
+                                                       <?php echo ($filtre->hasCategory($sous_categorie['id'])) ? 'checked' : ''; ?>>
+                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" 
+                                                          pathLength="575.0541381835938" 
+                                                          class="checkbox-path">
+                                                    </path>
+                                                </svg>
+                                                <span class="ml-3 text-white"><?php echo htmlspecialchars($sous_categorie['nom']); ?></span>
+                                            </label>
+                                        </div>
+                                        <?php
                                     }
                                     break;  // Sort de la boucle une fois la catégorie Sports trouvée
                                 }
@@ -653,5 +676,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+
+
 
 

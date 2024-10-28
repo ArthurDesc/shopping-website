@@ -602,7 +602,14 @@ input[type="radio"] + span {
   accent-color: #60A5FA;
 }
 
-#filterForm .filter-section {
+/* Supprimer ou modifier les styles existants pour les bordures */
+.filter-section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 0;
+}
+
+/* Uniformiser le style pour tous les dropdowns */
+.filter-section:not(:last-child) {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -745,4 +752,46 @@ input[type="radio"] + span {
 
 #activeFilters .filter-tag button:hover {
     opacity: 1;
+}
+
+/* Style uniforme pour toutes les checkboxes dans les filtres */
+.filter-section .checkbox-container {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.filter-section .checkbox-container input {
+  display: none;
+}
+
+.filter-section .checkbox-container svg {
+  overflow: visible;
+  height: 1em !important;  /* Réduit de 1.2em à 1em */
+  width: 1em !important;   /* Réduit de 1.2em à 1em */
+  margin-right: 0.5rem;
+}
+
+.filter-section .checkbox-container .checkbox-path {
+  fill: none;
+  stroke: white;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+  stroke-dasharray: 241 9999999;
+  stroke-dashoffset: 0;
+}
+
+.filter-section .checkbox-container input:checked ~ svg .checkbox-path {
+  stroke-dasharray: 70.5096664428711 9999999;
+  stroke-dashoffset: -262.2723388671875;
+}
+
+/* Ajustement du texte à côté des checkboxes */
+.filter-section .checkbox-container span {
+  margin-left: 0.25rem;
+  color: white;
+  font-size: 0.875rem; /* Réduit légèrement la taille du texte */
 }
