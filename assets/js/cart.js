@@ -21,15 +21,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Mettre à jour l'interface utilisateur (par exemple, le nombre d'articles dans le panier)
                 updateCartUI(data.cartCount);
+                showToast('Article ajouté au panier', 'success');
             } else {
-                alert('Erreur lors de l\'ajout au panier : ' + data.message);
+                showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            alert('Une erreur s\'est produite lors de l\'ajout au panier.');
+            showToast('Une erreur s\'est produite lors de l\'ajout au panier', 'error');
         });
     }
 
