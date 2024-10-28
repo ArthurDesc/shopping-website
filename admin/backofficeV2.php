@@ -3,10 +3,30 @@
 <?php require_once '../classe/produit.php'; ?>
 <?php require_once '../classe/ArticleManager.php'; ?>
 <?php require_once '../classe/ArticleManager.php'; ?>
-
+<?php require_once '../classe/AdminManager.php'; ?>
 
 <?php
+$adminManager = new AdminManager($conn);
 
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['id_utilisateur'])) {
+    // Redirection vers la page de connexion si non connecté
+    echo "<script>
+            alert('Vous devez être connecté pour accéder à cette page.');
+            window.location.href = '../pages/connexion.php';
+          </script>";
+    exit();
+}
+
+// Vérifier si l'utilisateur est un admin
+if (!$adminManager->isAdmin($_SESSION['id_utilisateur'])) {
+    // Redirection vers la page d'accueil si non admin
+    echo "<script>
+            alert('Accès refusé. Vous devez être administrateur pour accéder à cette page.');
+            window.location.href = '../index.php';
+          </script>";
+    exit();
+}
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
 } ?>
