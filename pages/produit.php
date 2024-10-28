@@ -48,34 +48,50 @@ if (isset($_GET['marques'])) {
 // Obtenir la requête SQL et les paramètres
 $requete = $filtre->getRequeteSQL();
 
-// Préparer et exécuter la requête
+// Préparer la requête
 $stmt = mysqli_prepare($conn, $requete['sql']);
 
+// Vérifier si la requête a des paramètres avant de les lier
 if (!empty($requete['params'])) {
+    // Créer le string de types
     $types = str_repeat('s', count($requete['params']));
-    mysqli_stmt_bind_param($stmt, $types, ...$requete['params']);
+    
+    // Créer un tableau de références
+    $bindParams = array();
+    $bindParams[] = &$types; // Le type doit aussi être passé par référence
+    
+    // Ajouter chaque paramètre par référence
+    foreach ($requete['params'] as &$param) {
+        $bindParams[] = &$param;
+    }
+    
+    // Lier les paramètres
+    call_user_func_array(array($stmt, 'bind_param'), $bindParams);
 }
 
+// Exécuter la requête
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
 // Traiter les résultats
 $produits = [];
 while ($row = mysqli_fetch_assoc($result)) {
-    // Créer des objets Produit et les ajouter au tableau $produits
-    $produit = new Produit(
-        $row['id_produit'],
-        $row['nom'],
-        $row['prix'],
-        $row['image_url'],
-        $row['marque'],
-        $row['description'],
-        $row['stock'],
-        $row['tailles_disponibles'],
-        explode(',', $row['categories'] ?? ''), // Utiliser une chaîne vide si $row['categories'] est null
-        $row['collection']
-    );
-    $produits[] = $produit;
+    // Créer des objets Produit uniquement si le stock est supérieur à 0
+    if ($row['stock'] > 0) {
+        $produit = new Produit(
+            $row['id_produit'],
+            $row['nom'],
+            $row['prix'],
+            $row['image_url'],
+            $row['marque'],
+            $row['description'],
+            $row['stock'],
+            $row['tailles_disponibles'],
+            explode(',', $row['categories'] ?? ''),
+            $row['collection']
+        );
+        $produits[] = $produit;
+    }
 }
 
 // Récupération des catégories et sous-catégories
@@ -363,11 +379,13 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
     if (!empty($produits)) {
         echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
         foreach ($produits as $produit) {
-            $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
-            
-            if (!file_exists($image_url) || empty($produit->getImageUrl())) {
-                $image_url = $image_base_path . 'default_product.jpg';
-            }
+            // Vérifier si le stock est supérieur à 0
+            if ($produit->getStock() > 0) {
+                $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
+                
+                if (!file_exists($image_url) || empty($produit->getImageUrl())) {
+                    $image_url = $image_base_path . 'default_product.jpg';
+                }
     ?>
         <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full" 
              data-categories="<?php echo implode(',', array_map(function($cat) { return $cat['id_categorie']; }, $categoryManager->getProductCategories($produit->getId()))); ?>"
@@ -392,6 +410,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
             </div>
         </div>
     <?php 
+            }
         }
         echo '</div>';
     } else {
@@ -615,5 +634,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+
+
 
 
