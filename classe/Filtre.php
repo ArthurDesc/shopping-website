@@ -11,8 +11,31 @@ class Filtre {
         // Initialisation si nécessaire
     }
 
-    public function setCategories(array $categories) {
-        $this->categories = array_map('intval', $categories);
+    public function setCategories($categories) {
+        if (!is_array($categories)) {
+            $categories = [$categories];
+        }
+        
+        // Convertir les noms de catégories en IDs si nécessaire
+        $this->categories = array_map(function($category) {
+            // Si c'est déjà un ID, le retourner tel quel
+            if (is_numeric($category)) {
+                return $category;
+            }
+            
+            // Sinon, chercher l'ID correspondant au nom
+            global $conn;
+            $stmt = $conn->prepare("SELECT id_categorie FROM categories WHERE nom = ?");
+            $stmt->bind_param("s", $category);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($row = $result->fetch_assoc()) {
+                return $row['id_categorie'];
+            }
+            
+            return $category;
+        }, $categories);
     }
 
     public function setMarques(array $marques) {
@@ -96,45 +119,35 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $conditions = ["p.stock > 0"];  // Ajout de la condition de stock > 0
+        $conditions = [];
         $params = [];
-
-        $sql = "SELECT p.*, GROUP_CONCAT(pc.id_categorie) as categories 
-                FROM produits p
-                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit";
-
+        
         if (!empty($this->categories)) {
-            $placeholders = implode(',', array_fill(0, count($this->categories), '?'));
+            $placeholders = str_repeat('?,', count($this->categories) - 1) . '?';
             $conditions[] = "pc.id_categorie IN ($placeholders)";
             $params = array_merge($params, $this->categories);
         }
 
-        if (!empty($this->marques)) {
-            $placeholders = implode(',', array_fill(0, count($this->marques), '?'));
-            $conditions[] = "p.marque IN ($placeholders)";
-            $params = array_merge($params, $this->marques);
-        }
-
         if (!empty($this->collections)) {
-            $placeholders = implode(',', array_fill(0, count($this->collections), '?'));
-            $conditions[] = "p.collection IN ($placeholders)";
-            $params = array_merge($params, $this->collections);
+            $conditions[] = "p.collection = ?";
+            $params[] = $this->collections[0];
         }
 
-        if (isset($this->prixMin)) {
-            $conditions[] = "p.prix >= ?";
-            $params[] = $this->prixMin;
+        $sql = "SELECT DISTINCT p.*, GROUP_CONCAT(c.nom) as categories 
+                FROM produits p 
+                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
+                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie";
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
         }
 
-        if (isset($this->prixMax)) {
-            $conditions[] = "p.prix <= ?";
-            $params[] = $this->prixMax;
-        }
-
-        $sql .= " WHERE " . implode(' AND ', $conditions);
         $sql .= " GROUP BY p.id_produit";
 
-        return ['sql' => $sql, 'params' => $params];
+        return [
+            'sql' => $sql,
+            'params' => $params
+        ];
     }
 
     public function resetFiltres() {

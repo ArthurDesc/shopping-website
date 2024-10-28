@@ -107,10 +107,10 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
 
 // Au dbut du fichier produit.php, après avoir démarré la session
 
-// Récupérer les paramètres de l'URL
+/* Récupérer les paramètres de l'URL
 $categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
 $collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
-$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; // Ajoutez cette ligne
+$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; */ 
 
 $query_categories_actives = "
     SELECT DISTINCT c.id_categorie, c.nom
@@ -537,3 +537,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
     Article ajouté au panier
 </div>
+
+
+
+
+

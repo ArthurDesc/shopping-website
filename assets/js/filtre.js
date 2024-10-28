@@ -59,31 +59,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function applyFilters() {
-        console.log("Fonction applyFilters appelée");
-
         const selectedFilters = {
-            categories: getSelectedValues('categories'),
-            marques: getSelectedValues('marques'),
-            collections: getSelectedValues('collections')
+            collection: getSelectedValues('collections')[0], // Prend la première valeur
+            category: getSelectedValues('categories')[0]     // Prend la première valeur
         };
-
-        console.log("Filtres sélectionnés:", selectedFilters);
-
+        
+        // Mettre à jour l'URL
+        updateUrlWithFilters(selectedFilters);
+        
+        // Filtrer les produits
         products.forEach(product => {
-            const categories = product.dataset.categories ? product.dataset.categories.split(',') : [];
-            const marque = product.dataset.brand || '';
-            const collection = product.dataset.collection || '';
+            const productCollection = product.dataset.collection;
+            const productCategories = product.dataset.categories.split(',');
+            
+            const collectionMatch = !selectedFilters.collection || productCollection === selectedFilters.collection;
+            const categoryMatch = !selectedFilters.category || productCategories.includes(selectedFilters.category);
 
-            const categoryMatch = selectedFilters.categories.length === 0 || 
-                selectedFilters.categories.some(cat => categories.includes(cat));
-            const marqueMatch = selectedFilters.marques.length === 0 || selectedFilters.marques.includes(marque);
-            const collectionMatch = selectedFilters.collections.length === 0 || selectedFilters.collections.includes(collection);
-
-            if (categoryMatch && marqueMatch && collectionMatch) {
-                product.style.display = '';
-            } else {
-                product.style.display = 'none';
-            }
+            product.style.display = (collectionMatch && categoryMatch) ? '' : 'none';
         });
     }
 
@@ -159,3 +151,23 @@ $(document).ready(function() {
         });
     });
 });
+
+// Fonction pour mettre à jour l'URL avec les filtres sélectionnés
+function updateUrlWithFilters(filters) {
+    const url = new URL(window.location.href);
+    
+    // Nettoyer les paramètres existants
+    url.searchParams.delete('collection');
+    url.searchParams.delete('category');
+    
+    // Ajouter les nouveaux paramètres
+    if (filters.collections.length > 0) {
+        url.searchParams.set('collection', filters.collections[0]);
+    }
+    if (filters.categories.length > 0) {
+        url.searchParams.set('category', filters.categories[0]);
+    }
+    
+    // Mettre à jour l'URL sans recharger la page
+    window.history.pushState({}, '', url);
+}
