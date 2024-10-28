@@ -425,7 +425,6 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
     
 </main>
 
-<?php include '../includes/_footer.php'; ?>
 
 <!-- Scripts -->
 
@@ -655,10 +654,4 @@ document.addEventListener('DOMContentLoaded', function() {
     Article ajouté au panier
 </div>
 
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 66a171982fede77b5dba078eae50061038f22942
