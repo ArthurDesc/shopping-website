@@ -492,7 +492,7 @@ $collection = $categoryManager->getCollection($id_produit);
                         <!-- Contenu de l'onglet Avis -->
                         <div id="comments-list">
                             <?php if (!empty($avis_produit)): ?>
-                                <?php foreach ($avis_produit as $avis): ?>
+                                <?php foreach (array_slice($avis_produit, 0, 5) as $avis): ?> <!-- Limiter l'affichage à 5 avis -->
                                     <div class="mb-6 p-6 border rounded-xl shadow-lg bg-white">
                                         <div class="flex justify-between items-center mb-2">
                                             <div class="flex items-center">
@@ -532,6 +532,14 @@ $collection = $categoryManager->getCollection($id_produit);
                                         <p class="text-gray-700 mt-2"><?php echo htmlspecialchars($avis->getCommentaire()); ?></p>
                                     </div>
                                 <?php endforeach; ?>
+                                <?php if (count($avis_produit) > 5): ?> <!-- Vérifier s'il y a plus de 5 avis -->
+                                    <div class="text-center mt-4">
+    <a href="./avis.php?id_produit=<?php echo $id_produit; ?>" 
+       class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg inline-block">
+        Voir tous les avis (<?php echo count($avis_produit); ?>)
+    </a>
+</div>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <p>Aucun avis pour ce produit pour le moment.</p>
                             <?php endif; ?>

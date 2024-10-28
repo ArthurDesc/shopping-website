@@ -126,11 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const activeContent = document.getElementById(`${tabId}-content`);
             if (activeContent) {
                 activeContent.classList.add('active');
-                // Ajout du défilement automatique
-                activeContent.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
             }
         }
 
@@ -143,6 +138,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Position initiale de l'indicateur
         positionIndicator();
+
+        // Vérifier si on revient d'une autre page avec un onglet spécifique
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('tab');
+        if (activeTab) {
+            const tab = document.getElementById(activeTab);
+            if (tab) {
+                tab.checked = true;
+                positionIndicator();
+                showTabContent(activeTab);
+            }
+        }
 
         // Repositionner l'indicateur lors du redimensionnement de la fenêtre
         window.addEventListener('resize', positionIndicator);
