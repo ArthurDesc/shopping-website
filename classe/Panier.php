@@ -10,7 +10,7 @@ class Panier {
     }
 
     public function ajouter($id_produit, $quantite = 1, $taille = null) {
-        $key = $id_produit . ($taille ? '_' . $taille : '');
+        $key = $this->genererCleProduit($id_produit, $taille);
         if (isset($this->items[$key])) {
             $this->items[$key] += $quantite;
         } else {
@@ -20,8 +20,9 @@ class Panier {
         return true;
     }
 
-    public function retirer($id_produit) {
-        unset($this->items[$id_produit]);
+    public function retirer($id_produit, $taille = null) {
+        $key = $this->genererCleProduit($id_produit, $taille);
+        unset($this->items[$key]);
         $this->sauvegarder();
     }
 
@@ -33,40 +34,65 @@ class Panier {
         return array_sum($this->items);
     }
 
+    public function getTotal() {
+        global $conn;
+        $total = 0;
+        foreach ($this->items as $key => $quantite) {
+            list($id_produit, $taille) = explode('_', $key . '_');
+            $sql = "SELECT prix FROM produits WHERE id_produit = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('i', $id_produit);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($produit = $result->fetch_assoc()) {
+                $total += $produit['prix'] * $quantite;
+            }
+        }
+        return $total;
+    }
+
     private function sauvegarder() {
         $_SESSION['panier'] = $this->items;
     }
 
-    // Nouvelles méthodes
+    private function genererCleProduit($id_produit, $taille) {
+        return $id_produit . ($taille ? '_' . $taille : '');
+    }
 
-    public function augmenterQuantite($id_produit) {
-        if (isset($this->items[$id_produit])) {
-            $this->items[$id_produit]++;
+    public function augmenterQuantite($id_produit, $taille = null) {
+        $key = $this->genererCleProduit($id_produit, $taille);
+        if (isset($this->items[$key])) {
+            $this->items[$key]++;
             $this->sauvegarder();
         }
     }
 
-    public function diminuerQuantite($id_produit) {
-        if (isset($this->items[$id_produit])) {
-            if ($this->items[$id_produit] > 1) {
-                $this->items[$id_produit]--;
-            } else {
-                unset($this->items[$id_produit]);
-            }
-            $this->sauvegarder();
-        }
-    }
-
-    public function mettreAJourQuantite($id_produit, $quantite) {
-        if ($quantite > 0) {
-            $this->items[$id_produit] = $quantite;
-        } else {
-            unset($this->items[$id_produit]);
+    public function diminuerQuantite($id_produit, $taille = null) {
+        $key = $this->genererCleProduit($id_produit, $taille);
+        if (isset($this->items[$key]) && $this->items[$key] > 1) {
+            $this->items[$key]--;
+        } elseif (isset($this->items[$key])) {
+            unset($this->items[$key]);
         }
         $this->sauvegarder();
     }
 
-    public function retirerProduit($id_produit) {
-        $this->retirer($id_produit); // Utilise la méthode existante
+    public function mettreAJourQuantite($id_produit, $quantite, $taille = null) {
+        $key = $this->genererCleProduit($id_produit, $taille);
+        if ($quantite > 0) {
+            $this->items[$key] = $quantite;
+        } else {
+            unset($this->items[$key]);
+        }
+        $this->sauvegarder();
+    }
+
+    public function retirerProduit($id_produit, $taille = null) {
+        $this->retirer($id_produit, $taille);
+    }
+
+    public function produitExiste($id_produit, $taille = null) {
+        $key = $this->genererCleProduit($id_produit, $taille);
+        return isset($this->items[$key]);
     }
 }
