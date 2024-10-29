@@ -183,6 +183,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 checkbox.dispatchEvent(new Event('change'));
             }
         });
+
+        // Fonction de recherche pour filtrer les éléments
+        function filterItems(searchInput, containerId) {
+            const searchTerm = searchInput.value.toLowerCase();
+            const container = document.querySelector(containerId);
+            const items = container.querySelectorAll('.checkbox-container');
+            
+            items.forEach(item => {
+                const text = item.querySelector('span').textContent.toLowerCase();
+                const parentDiv = item.closest('div');
+                
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                    // Si l'élément est dans une sous-catégorie, afficher aussi le parent
+                    if (parentDiv.classList.contains('ml-6')) {
+                        parentDiv.style.display = 'block';
+                    }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Pour les marques
+        const marqueSearch = document.getElementById('marques-search');
+        if (marqueSearch) {
+            marqueSearch.addEventListener('input', () => {
+                filterItems(marqueSearch, '#marques-filter');
+            });
+        }
+
+        // Pour les catégories
+        const categorySearch = document.getElementById('categories-search');
+        if (categorySearch) {
+            categorySearch.addEventListener('input', () => {
+                filterItems(categorySearch, '#categories-filter');
+            });
+        }
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de List.js:', error);
     }
