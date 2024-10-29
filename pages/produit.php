@@ -17,12 +17,24 @@ $image_base_path = '../assets/images/produits/';
 $categories = $categoryManager->getAllCategories();
 
 // Récupérer toutes les marques uniques
-$marques_query = mysqli_query($conn, "SELECT DISTINCT marque FROM produits WHERE marque IS NOT NULL AND marque != ''");
-$marques = mysqli_fetch_all($marques_query, MYSQLI_ASSOC);
+$query = "SELECT DISTINCT marque FROM produits WHERE marque IS NOT NULL AND marque != '' ORDER BY marque";
+$result = mysqli_query($conn, $query);
+$marques = [];
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $marques[] = $row['marque'];
+    }
+}
 
 // Récupérer toutes les collections uniques
-$collections_query = mysqli_query($conn, "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != ''");
-$collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
+$collections_query = "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != '' ORDER BY collection";
+$collections_result = mysqli_query($conn, $collections_query);
+$collections = [];
+if ($collections_result) {
+    while ($row = mysqli_fetch_assoc($collections_result)) {
+        $collections[] = $row['collection'];
+    }
+}
 
 // Récupération des filtres depuis l'URL
 $filtre = new Filtre();
@@ -35,14 +47,14 @@ if (isset($_GET['categories'])) {
 
 // Récupérer le paramètre de collection
 if (isset($_GET['collection'])) {
-    $collections = explode(',', $_GET['collection']);
-    $filtre->setCollections($collections);
+    $collection = strtolower($_GET['collection']);
+    $filtre->setCollections([$collection]);
 }
 
 // Récupérer le paramètre de marque
 if (isset($_GET['marques'])) {
-    $marques = explode(',', $_GET['marques']);
-    $filtre->setMarques($marques);
+    $marques_filter = is_array($_GET['marques']) ? $_GET['marques'] : [$_GET['marques']];
+    $filtre->setMarques($marques_filter);
 }
 
 // Obtenir la requête SQL et les paramètres
@@ -127,13 +139,6 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     exit();
 }
 
-// Au dbut du fichier produit.php, après avoir démarré la session
-// Au dbut du fichier produit.php, après avoir démarré la session
-
-/* Récupérer les paramètres de l'URL
-$categorie_filter = isset($_GET['categorie']) ? $_GET['categorie'] : null;
-$collection_filter = isset($_GET['collection']) ? $_GET['collection'] : null;
-$marque_filter = isset($_GET['marque']) ? $_GET['marque'] : null; */
 
 $query_categories_actives = "
     SELECT DISTINCT c.id_categorie, c.nom
@@ -269,7 +274,8 @@ $produits_page = $produits;
 
                     <!-- Marques -->
                     <div id="marques-filter" class="filter-section mb-4">
-                        <div class="flex items-center justify-between cursor-pointer py-2" @click="openTab = openTab === 'marques' ? null : 'marques'"> <span class="font-semibold text-gray-600">Marques</span>
+                        <div class="flex items-center justify-between cursor-pointer py-2" @click="openTab = openTab === 'marques' ? null : 'marques'"> 
+                            <span class="font-semibold text-gray-600">Marques</span>
                             <svg :class="{'rotate-180': openTab === 'marques'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
@@ -284,17 +290,14 @@ $produits_page = $produits;
                                     <?php foreach ($marques as $marque): ?>
                                         <div class="flex items-center mb-2">
                                             <label class="checkbox-container flex items-center">
-                                                <input type="checkbox"
-                                                    name="marques[]"
-                                                    value="<?= htmlspecialchars($marque['marque']) ?>"
-                                                    <?= in_array($marque['marque'], $filtre->getMarques()) ? 'checked' : '' ?>>
+                                                <input type="checkbox" name="marques[]" value="<?php echo htmlspecialchars($marque); ?>">
                                                 <svg viewBox="0 0 64 64" height="2em" width="2em">
                                                     <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
                                                         pathLength="575.0541381835938"
                                                         class="checkbox-path">
                                                     </path>
                                                 </svg>
-                                                <span class="ml-2 text-white select-none"><?= htmlspecialchars($marque['marque']) ?></span>
+                                                <span class="ml-2 text-white"><?php echo htmlspecialchars($marque); ?></span>
                                             </label>
                                         </div>
                                     <?php endforeach; ?>
@@ -304,32 +307,34 @@ $produits_page = $produits;
                     </div>
 
                     <!-- Collections -->
-                    <div id="collections-filter" class="filter-section">
-                        <div class="flex items-center justify-between cursor-pointer py-4" id="collections-toggle">
+                    <div id="collections-filter" class="filter-section mb-4">
+                        <div class="flex items-center justify-between cursor-pointer py-2" @click="openTab = openTab === 'collections' ? null : 'collections'">
                             <span class="font-semibold text-gray-600">Collections</span>
-                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg :class="{'rotate-180': openTab === 'collections'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div id="collections-content" class="py-1 pl-4" style="display: none;">
-                            <div class="py-4 pl-4">
+                        <div x-show="openTab === 'collections'" x-collapse>
+                            <div class="py-2 pl-4">
                                 <?php
                                 $staticCollections = ['Homme', 'Femme', 'Enfant'];
                                 foreach ($staticCollections as $collection):
+                                    $isChecked = isset($_GET['collection']) && 
+                                                 strtolower($_GET['collection']) === strtolower($collection);
                                 ?>
                                     <div class="flex items-center mb-2">
                                         <label class="checkbox-container flex items-center">
-                                            <input type="checkbox"
-                                                name="collections[]"
-                                                value="<?php echo htmlspecialchars($collection); ?>"
-                                                <?php echo ($filtre->hasCollection($collection)) ? 'checked' : ''; ?>>
+                                            <input type="checkbox" 
+                                                   name="collections[]" 
+                                                   value="<?php echo htmlspecialchars($collection); ?>"
+                                                   <?php echo $isChecked ? 'checked' : ''; ?>>
                                             <svg viewBox="0 0 64 64" height="2em" width="2em">
                                                 <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
                                                     pathLength="575.0541381835938"
                                                     class="checkbox-path">
                                                 </path>
                                             </svg>
-                                            <span class="ml-2 text-white select-none"><?php echo htmlspecialchars($collection); ?></span>
+                                            <span class="ml-2 text-white"><?php echo htmlspecialchars($collection); ?></span>
                                         </label>
                                     </div>
                                 <?php endforeach; ?>
@@ -337,43 +342,7 @@ $produits_page = $produits;
                         </div>
                     </div>
 
-                    <!-- Dropdown Sports -->
-                    <div id="sports-filter" class="filter-section">
-                        <div class="flex items-center justify-between cursor-pointer py-4" id="sports-toggle">
-                            <span class="font-semibold text-gray-600">Sports</span>
-                            <svg class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div id="sports-content" class="py-1 pl-4" style="display: none;">
-                            <?php
-                            foreach ($categories as $id => $category) {
-                                if ($category['nom'] === 'Sports') {  // Vérifie si c'est la catégorie Sports
-                                    foreach ($category['sous_categories'] as $sous_categorie) {
-                            ?>
-                                        <div class="flex items-center mb-2">
-                                            <label class="checkbox-container flex items-center">
-                                                <input type="checkbox"
-                                                    name="categories[]"
-                                                    value="<?php echo htmlspecialchars($sous_categorie['nom']); ?>"
-                                                    <?php echo ($filtre->hasCategory($sous_categorie['id'])) ? 'checked' : ''; ?>>
-                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
-                                                        pathLength="575.0541381835938"
-                                                        class="checkbox-path">
-                                                    </path>
-                                                </svg>
-                                                <span class="ml-2 text-white"><?php echo htmlspecialchars($sous_categorie['nom']); ?></span>
-                                            </label>
-                                        </div>
-                            <?php
-                                    }
-                                    break;  // Sort de la boucle une fois la catégorie Sports trouvée
-                                }
-                            }
-                            ?>
-                        </div>
-                    </div>
+                 
                 </div>
 
                 <!-- Bouton Valider pour mobile uniquement -->
@@ -506,174 +475,6 @@ $produits_page = $produits;
         </div>
     </div>
 </div>
-
-<!-- Script spécifique à la page produit -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let currentProductId = null;
-        let currentProductPrice = null;
-
-        // Ouvrir le modal
-        document.querySelectorAll('.open-modal-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                currentProductId = this.dataset.productId;
-                currentProductPrice = this.dataset.productPrice;
-
-                // Charger les tailles disponibles pour ce produit
-                document.getElementById('productSize').innerHTML = `
-                <option value="">Choisissez une taille</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-            `;
-
-                // Mettre à jour le prix dans le tooltip
-                document.getElementById('addToCartBtn').setAttribute('data-tooltip', `${currentProductPrice} €`);
-
-                document.getElementById('modal-container').classList.add('active');
-            });
-        });
-
-        // Fermer le modal
-        document.getElementById('modal-container').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // Ajouter cette fonction pour le bouton Annuler
-        document.getElementById('cancelBtn').addEventListener('click', function() {
-            closeModal();
-        });
-
-        function closeModal() {
-            document.getElementById('modal-container').classList.remove('active');
-            // Réinitialiser la sélection de taille et le message d'erreur
-            document.getElementById('productSize').value = '';
-            document.getElementById('sizeError').classList.add('hidden');
-        }
-
-        // Ajouter au panier
-        document.getElementById('addToCartBtn').addEventListener('click', function() {
-            const selectedSize = document.getElementById('productSize').value;
-            if (!selectedSize) {
-                document.getElementById('sizeError').textContent = 'Veuillez choisir une taille';
-                document.getElementById('sizeError').classList.remove('hidden');
-                return;
-            }
-
-            document.getElementById('sizeError').classList.add('hidden');
-
-            fetch('<?php echo url("ajax/add_to_cart.php"); ?>', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        id_produit: currentProductId,
-                        taille: selectedSize,
-                        quantite: 1
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        closeModal();
-                        updateCartCount(data.cartCount);
-                        showToast('Article ajouté au panier', 'success'); // Utilisation de la fonction du toast.js
-                    } else {
-                        showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    showToast('Une erreur s\'est produite lors de l\'ajout au panier', 'error');
-                });
-        });
-
-        // Réinitialiser le message d'erreur lorsqu'une taille est sélectionnée
-        document.getElementById('productSize').addEventListener('change', function() {
-            document.getElementById('sizeError').classList.add('hidden');
-        });
-
-        function updateCartCount(count) {
-            const cartCountElement = document.getElementById('cart-count');
-            if (cartCountElement) {
-                cartCountElement.textContent = count;
-
-                // Mise à jour de la couleur du badge
-                if (count > 0) {
-                    cartCountElement.classList.remove('bg-red-600');
-                    cartCountElement.classList.add('bg-green-600');
-                } else {
-                    cartCountElement.classList.remove('bg-green-600');
-                    cartCountElement.classList.add('bg-red-600');
-                }
-            }
-        }
-
-        // Fonction de recherche pour les produits
-        $('#products-search').on('input', function() {
-            const searchTerm = $(this).val().toLowerCase();
-            $('.product-card').each(function() {
-                const productName = $(this).find('h3').text().toLowerCase();
-                // Vérifiez si le nom du produit commence par le terme de recherche
-                if (productName.startsWith(searchTerm)) {
-                    $(this).show(); // Afficher le produit si le nom commence par le terme de recherche
-                } else {
-                    $(this).hide(); // Masquer le produit s'il ne commence pas par le terme de recherche
-                }
-            });
-        });
-
-        // Sélectionner toutes les checkboxes des filtres
-        const filterCheckboxes = document.querySelectorAll('input[type="checkbox"][name="categories[]"], input[type="checkbox"][name="marques[]"], input[type="checkbox"][name="collections[]"]');
-
-        // Ajouter un écouteur d'événement pour chaque checkbox
-        filterCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                // Récupérer tous les filtres sélectionnés
-                const selectedCategories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(el => el.value);
-                const selectedBrands = Array.from(document.querySelectorAll('input[name="marques[]"]:checked')).map(el => el.value);
-                const selectedCollections = Array.from(document.querySelectorAll('input[name="collections[]"]:checked')).map(el => el.value);
-
-                // Filtrer les produits
-                const products = document.querySelectorAll('.product-card');
-                products.forEach(product => {
-                    const categories = product.dataset.categories.split(',');
-                    const brand = product.dataset.brand;
-                    const collection = product.dataset.collection;
-
-                    const categoryMatch = selectedCategories.length === 0 || categories.some(cat => selectedCategories.includes(cat));
-                    const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(brand);
-                    const collectionMatch = selectedCollections.length === 0 || selectedCollections.includes(collection);
-
-                    if (categoryMatch && brandMatch && collectionMatch) {
-                        product.style.display = '';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-
-                // Mettre à jour l'URL avec les filtres sélectionnés
-                const url = new URL(window.location.href);
-                url.searchParams.delete('category');
-                url.searchParams.delete('collection');
-
-                if (selectedCategories.length > 0) {
-                    url.searchParams.set('category', selectedCategories[0]);
-                }
-                if (selectedCollections.length > 0) {
-                    url.searchParams.set('collection', selectedCollections[0]);
-                }
-
-                window.history.pushState({}, '', url);
-            });
-        });
-    });
-</script>
-
 
 <!-- Toast notification -->
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
