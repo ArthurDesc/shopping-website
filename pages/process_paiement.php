@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         fontSmoothing: 'antialiased',
                         fontSize: '16px',
                         lineHeight: '24px',
-                        padding: '20px',
+                        padding: '2px',
                         '::placeholder': {
                             color: '#aab7c4'
                         }
