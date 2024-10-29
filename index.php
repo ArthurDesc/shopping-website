@@ -85,46 +85,50 @@ include './includes/_header.php';
   <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Touts pour votre sports</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Football</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Basketball</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Running</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Handball</button>
-          </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Rugby</button>
-          </div>
-        </a>
-      </div>
+        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+            <a href="<?php echo url('pages/produit.php?categorie=19'); ?>" class="block relative">
+                <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                <div class="absolute bottom-2 right-2 z-10">
+                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Football</button>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+            <a href="<?php echo url('pages/produit.php?categorie=20'); ?>" class="block relative">
+                <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                <div class="absolute bottom-2 right-2 z-10">
+                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Rugby</button>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+            <a href="<?php echo url('pages/produit.php?categorie=21'); ?>" class="block relative">
+                <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                <div class="absolute bottom-2 right-2 z-10">
+                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Running</button>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+            <a href="<?php echo url('pages/produit.php?categorie=22'); ?>" class="block relative">
+                <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                <div class="absolute bottom-2 right-2 z-10">
+                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Handball</button>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+            <a href="<?php echo url('pages/produit.php?categorie=23'); ?>" class="block relative">
+                <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                <div class="absolute bottom-2 right-2 z-10">
+                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Basketball</button>
+                </div>
+            </a>
+        </div>
     </div>
   </div>
 

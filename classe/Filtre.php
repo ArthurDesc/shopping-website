@@ -102,13 +102,32 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $sql = "SELECT p.* FROM produits p WHERE 1=1";
+        $sql = "SELECT DISTINCT p.* FROM produits p 
+                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
+                WHERE 1=1";
         $params = [];
+
+        if (!empty($this->categories)) {
+            $placeholders = str_repeat('?,', count($this->categories) - 1) . '?';
+            $sql .= " AND pc.id_categorie IN ($placeholders)";
+            $params = array_merge($params, $this->categories);
+        }
 
         if (!empty($this->marques)) {
             $placeholders = str_repeat('?,', count($this->marques) - 1) . '?';
             $sql .= " AND p.marque IN ($placeholders)";
             $params = array_merge($params, $this->marques);
+        }
+
+        if (!empty($this->collections)) {
+            $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
+            $sql .= " AND p.collection IN ($placeholders)";
+            $params = array_merge($params, $this->collections);
+        }
+
+        if (isset($this->prixMin) && isset($this->prixMax)) {
+            $sql .= " AND p.prix BETWEEN ? AND ?";
+            $params = array_merge($params, [$this->prixMin, $this->prixMax]);
         }
 
         return ['sql' => $sql, 'params' => $params];
