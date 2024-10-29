@@ -47,8 +47,8 @@ if (isset($_GET['categorie'])) {
 
 // Récupérer le paramètre de collection
 if (isset($_GET['collection'])) {
-    $collections = explode(',', $_GET['collection']);
-    $filtre->setCollections($collections);
+    $collection = strtolower($_GET['collection']);
+    $filtre->setCollections([$collection]);
 }
 
 // Récupérer le paramètre de marque
@@ -309,10 +309,15 @@ $produits_page = $produits;
                                 <?php
                                 $staticCollections = ['Homme', 'Femme', 'Enfant'];
                                 foreach ($staticCollections as $collection):
+                                    $isChecked = isset($_GET['collection']) && 
+                                                 strtolower($_GET['collection']) === strtolower($collection);
                                 ?>
                                     <div class="flex items-center mb-2">
                                         <label class="checkbox-container flex items-center">
-                                            <input type="checkbox" name="collections[]" value="<?php echo htmlspecialchars($collection); ?>">
+                                            <input type="checkbox" 
+                                                   name="collections[]" 
+                                                   value="<?php echo htmlspecialchars($collection); ?>"
+                                                   <?php echo $isChecked ? 'checked' : ''; ?>>
                                             <svg viewBox="0 0 64 64" height="2em" width="2em">
                                                 <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
                                                     pathLength="575.0541381835938"

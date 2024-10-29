@@ -25,8 +25,11 @@ class Filtre {
         $this->marques = array_map('trim', $marques);
     }
 
-    public function setCollections(array $collections) {
-        $this->collections = $collections;
+    public function setCollections($collections) {
+        if (!is_array($collections)) {
+            $collections = [$collections];
+        }
+        $this->collections = array_map('strtolower', $collections);
     }
 
     public function setPrixRange($min, $max) {
@@ -102,35 +105,24 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $sql = "SELECT DISTINCT p.* FROM produits p 
-                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                WHERE 1=1";
+        $sql = "SELECT DISTINCT p.* FROM produits p";
         $params = [];
-
-        if (!empty($this->categories)) {
-            $placeholders = str_repeat('?,', count($this->categories) - 1) . '?';
-            $sql .= " AND pc.id_categorie IN ($placeholders)";
-            $params = array_merge($params, $this->categories);
-        }
-
-        if (!empty($this->marques)) {
-            $placeholders = str_repeat('?,', count($this->marques) - 1) . '?';
-            $sql .= " AND p.marque IN ($placeholders)";
-            $params = array_merge($params, $this->marques);
-        }
+        $conditions = [];
 
         if (!empty($this->collections)) {
             $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
-            $sql .= " AND p.collection IN ($placeholders)";
+            $conditions[] = "LOWER(p.collection) IN ($placeholders)";
             $params = array_merge($params, $this->collections);
         }
 
-        if (isset($this->prixMin) && isset($this->prixMax)) {
-            $sql .= " AND p.prix BETWEEN ? AND ?";
-            $params = array_merge($params, [$this->prixMin, $this->prixMax]);
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
         }
 
-        return ['sql' => $sql, 'params' => $params];
+        return [
+            'sql' => $sql,
+            'params' => $params
+        ];
     }
 
     public function resetFiltres() {

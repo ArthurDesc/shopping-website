@@ -55,8 +55,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ajouter les paramètres de filtre
         Object.entries(selectedFilters).forEach(([key, values]) => {
             if (values.length > 0) {
-                const paramKey = key === 'categories' ? 'category' : key;
-                params.set(paramKey, values.join(','));
+                if (key === 'collections') {
+                    params.set('collection', values[0]); // On prend la première collection
+                } else {
+                    params.set(key, values.join(','));
+                }
             }
         });
 
@@ -102,6 +105,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeFromURL() {
         const params = new URLSearchParams(window.location.search);
         
+        // Initialiser les collections
+        const collection = params.get('collection');
+        if (collection) {
+            const checkbox = document.querySelector(`input[name="collections[]"][value="${collection}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        }
+
         // Initialiser les marques
         const marques = params.get('marques')?.split(',') || [];
         marques.forEach(marque => {
@@ -122,6 +134,16 @@ document.addEventListener('DOMContentLoaded', function() {
             filterMenu.classList.toggle('hidden');
         });
     }
+
+    // Écouteur d'événements pour les liens de collection
+    document.querySelectorAll('[data-collection]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const collection = link.dataset.collection;
+            updateURL({ collection: collection });
+            applyFilters();
+        });
+    });
 
     // Initialisation
     initializeFromURL();
