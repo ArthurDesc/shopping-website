@@ -129,12 +129,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <!-- Wrapper principal avec centrage -->
-<div class="min-h-screen flex items-center justify-center p-4 relative z-10">
-    <!-- Conteneur du formulaire -->
-    <div class="w-full max-w-md bg-white/90 backdrop-blur-md shadow-xl rounded-lg p-6 space-y-6 transform transition-all duration-300 hover:-translate-y-1">
-        <!-- En-tête avec boutons -->
+<div class="min-h-screen p-4 relative z-10">
+    <!-- En-tête avec boutons -->
+    <div class="max-w-7xl mx-auto mb-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Mon Profil</h2>
+            <h2 class="text-2xl font-bold text-white flex items-center">
+                
+                Mon Compte
+            </h2>
             <div class="flex flex-wrap gap-3">
                 <?php if ($user_role === 'admin'): ?>
                     <a href="../admin/backofficeV2.php" 
@@ -145,10 +147,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Administration
                     </a>
                 <?php endif; ?>
-                
-                <a href="deconnexion.php" 
-                   class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 text-sm">
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                <a href="deconnexion.php" class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                     </svg>
                     Déconnexion
@@ -170,12 +170,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+    </div>
 
-        <!-- Formulaire -->
-        <form method="post" class="space-y-6">
-            <!-- Champs du formulaire avec style amélioré -->
-            <div class="space-y-4">
-                <div>
+    <!-- Conteneur des 3 colonnes -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Colonne 1: Informations personnelles -->
+        <div class="bg-white/90 backdrop-blur-md shadow-xl rounded-lg p-6">
+            <h3 class="text-lg font-medium  mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                Informations personnelles
+            </h3>
+            <form id="personal-form" class="space-y-6" data-form-type="personal">
+                <div class="space-y-2">
                     <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
                     <input type="text" id="nom" name="nom" 
                            value="<?php echo htmlspecialchars($user['nom']); ?>" 
@@ -183,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                            class="form-input mt-1 block w-full">
                 </div>
 
-                <div>
+                <div class="space-y-2">
                     <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
                     <input type="text" id="prenom" name="prenom" 
                            value="<?php echo htmlspecialchars($user['prenom']); ?>" 
@@ -191,92 +199,142 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                            class="form-input mt-1 block w-full">
                 </div>
 
-                <div>
+                <div class="space-y-2">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input type="email" id="email" name="email" 
                            value="<?php echo htmlspecialchars($user['email']); ?>" 
                            required 
                            class="form-input mt-1 block w-full">
                 </div>
+            </form>
+        </div>
 
-                <div>
-                    <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse</label>
+        <!-- Colonne 2: Coordonnées -->
+        <div class="bg-white/90 backdrop-blur-md shadow-xl rounded-lg p-6">
+            <h3 class="text-lg font-medium  mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                </svg>
+                Coordonnées
+            </h3>
+            <form id="contact-form" class="space-y-6" data-form-type="contact">
+                <div class="space-y-2">
+                    <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse postale</label>
                     <textarea id="adresse" name="adresse" 
                               rows="3" 
                               class="form-input mt-1 block w-full"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
                 </div>
 
-                <div>
-                    <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
+                <div class="space-y-2">
+                    <label for="telephone" class="block text-sm font-medium text-gray-700">Numéro de téléphone</label>
                     <input type="tel" id="telephone" name="telephone" 
                            value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" 
                            class="form-input mt-1 block w-full">
                 </div>
+            </form>
+        </div>
 
-                <!-- Section mot de passe -->
-                <div class="border-t pt-6 mt-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Changer le mot de passe</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">
-                                Mot de passe actuel
-                            </label>
-                            <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
-                                   class="form-input mt-1 block w-full">
-                        </div>
-
-                        <div>
-                            <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-                            <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse" 
-                                   class="form-input mt-1 block w-full">
-                        </div>
-
-                        <div>
-                            <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
-                            <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse" 
-                                   class="form-input mt-1 block w-full">
-                        </div>
-                    </div>
+        <!-- Colonne 3: Sécurité -->
+        <div class="bg-white/90 backdrop-blur-md shadow-xl rounded-lg p-6">
+            <h3 class="text-lg font-medium  mb-6 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                Sécurité
+            </h3>
+            <form id="security-form" class="space-y-6" data-form-type="security">
+                <div class="space-y-2">
+                    <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">
+                        Mot de passe actuel
+                    </label>
+                    <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
+                           class="form-input mt-1 block w-full">
                 </div>
 
-                <!-- Bouton de soumission -->
-                <div class="flex justify-end pt-6">
-                    <button type="submit" 
-                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Mettre à jour le profil
-                    </button>
+                <div class="space-y-2">
+                    <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">
+                        Nouveau mot de passe
+                    </label>
+                    <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse" 
+                           class="form-input mt-1 block w-full">
                 </div>
-            </div>
-        </form>
+
+                <div class="space-y-2">
+                    <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">
+                        Confirmer le mot de passe
+                    </label>
+                    <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse" 
+                           class="form-input mt-1 block w-full">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bouton de validation (initialement caché) -->
+    <div id="submit-button" class="max-w-7xl mx-auto mt-6 flex justify-end hidden">
+        <button type="button" 
+                onclick="submitForms()"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
+            Valider les modifications
+        </button>
     </div>
 </div>
 
 <script>
-// Ajouter une animation pour le message de succès
 document.addEventListener('DOMContentLoaded', function() {
-    const successMessage = document.getElementById('success-message');
-    if (successMessage) {
-        successMessage.style.transition = 'opacity 0.5s ease-in-out';
-        setTimeout(() => {
-            successMessage.style.opacity = '0';
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 500);
-        }, 2500);
-    }
-});
+    const forms = document.querySelectorAll('form');
+    const submitButton = document.getElementById('submit-button');
+    let hasChanges = false;
 
-document.addEventListener('DOMContentLoaded', function() {
-    const nouveauMotdepasse = document.getElementById('nouveau_motdepasse');
-    const confirmerMotdepasse = document.getElementById('confirmer_nouveau_motdepasse');
-    const motdepasseActuel = document.getElementById('motdepasse_actuel');
-
-    function updateMotdepasseActuelRequired() {
-        const isChangingPassword = nouveauMotdepasse.value !== '' || confirmerMotdepasse.value !== '';
-        motdepasseActuel.required = isChangingPassword;
+    // Fonction pour vérifier les changements
+    function checkForChanges(e) {
+        hasChanges = true;
+        submitButton.classList.remove('hidden');
     }
 
-    nouveauMotdepasse.addEventListener('input', updateMotdepasseActuelRequired);
-    confirmerMotdepasse.addEventListener('input', updateMotdepasseActuelRequired);
+    // Ajouter les écouteurs d'événements pour tous les champs
+    forms.forEach(form => {
+        const inputs = form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', checkForChanges);
+        });
+    });
+
+    // Fonction pour soumettre tous les formulaires
+    window.submitForms = async function() {
+        const formData = new FormData();
+        
+        // Ajouter les données de chaque formulaire
+        forms.forEach(form => {
+            const formType = form.dataset.formType;
+            const inputs = form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.value) {
+                    formData.append(`${formType}_${input.name}`, input.value);
+                }
+            });
+        });
+
+        try {
+            const response = await fetch('../ajax/update_profile.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            
+            if (result.success) {
+                // Afficher le message de succès
+                location.reload(); // Ou mettre à jour l'UI sans recharger
+            } else {
+                // Gérer les erreurs
+                alert(result.message || 'Une erreur est survenue');
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Une erreur est survenue');
+        }
+    };
 });
 </script>
