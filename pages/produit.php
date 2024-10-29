@@ -40,8 +40,8 @@ if ($collections_result) {
 $filtre = new Filtre();
 
 // Récupérer le paramètre de catégorie
-if (isset($_GET['categorie'])) {
-    $categories = explode(',', $_GET['categorie']);
+if (isset($_GET['categories'])) {
+    $categories = explode(',', $_GET['categories']);
     $filtre->setCategories($categories);
 }
 

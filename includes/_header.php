@@ -107,8 +107,12 @@ $headerCategories = $categoryManager->getHeaderCategories();
                     x-transition:leave-end="opacity-0 transform scale-95"
                     style="display: none;" 
                     class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                    <a href="<?php echo url("pages/produit.php?categories=1&collection=" . urlencode($category)); ?>"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Vêtements
+                    </a>
                     <?php foreach ($subcategories as $subcategory) : ?>
-                      <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category) . "&category=" . urlencode($subcategory)); ?>"
+                      <a href="<?php echo url("pages/produit.php?collection=" . strtolower(urlencode($category)) . "&categories=" . strtolower(urlencode($subcategory))); ?>"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         <?php echo $subcategory; ?>
                       </a>
@@ -248,11 +252,16 @@ $headerCategories = $categoryManager->getHeaderCategories();
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-homme">
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=shorts'); ?>" class="block py-2">Shorts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=joggings'); ?>" class="block py-2">Joggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=chaussures'); ?>" class="block py-2">Chaussures</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&category=accessoires'); ?>" class="block py-2">Accessoires</a></li>
+              <li>
+                <a href="<?php echo url('pages/produit.php?categories=1&collection=Homme'); ?>" class="block py-2">
+                  Vêtements
+                </a>
+              </li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=accessoires'); ?>" class="block py-2">Accessoires</a></li>
             </ul>
           </li>
           <li>
@@ -263,10 +272,10 @@ $headerCategories = $categoryManager->getHeaderCategories();
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-femme">
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=joggings'); ?>" class="block py-2">Joggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=leggings'); ?>" class="block py-2">Leggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&category=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=leggings'); ?>" class="block py-2">Leggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
             </ul>
           </li>
           <li>
@@ -277,9 +286,9 @@ $headerCategories = $categoryManager->getHeaderCategories();
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-enfants">
-              <li><a href="<?php echo url('pages/produit.php?collection=enfants&category=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=enfants&category=shorts'); ?>" class="block py-2">Shorts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=enfants&category=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=enfants&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=enfants&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=enfants&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
             </ul>
           </li>
           <li>
@@ -290,11 +299,11 @@ $headerCategories = $categoryManager->getHeaderCategories();
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-sports">
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=football'); ?>" class="block py-2">Football</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=basketball'); ?>" class="block py-2">Basketball</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=running'); ?>" class="block py-2">Running</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=rugby'); ?>" class="block py-2">Rugby</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&category=handball'); ?>" class="block py-2">Handball</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=football'); ?>" class="block py-2">Football</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=basketball'); ?>" class="block py-2">Basketball</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=running'); ?>" class="block py-2">Running</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=rugby'); ?>" class="block py-2">Rugby</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=handball'); ?>" class="block py-2">Handball</a></li>
             </ul>
           </li>
         </ul>
