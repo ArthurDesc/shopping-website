@@ -1,40 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Fonction générique pour la recherche dans les listes
+    function setupSearch(searchInputId, listId) {
+        const searchInput = document.getElementById(searchInputId);
+        const list = document.getElementById(listId);
+
+        if (searchInput && list) {
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const items = list.querySelectorAll('.checkbox-container');
+                
+                items.forEach(item => {
+                    const text = item.querySelector('span').textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+    }
+
+    // Configuration des différentes recherches
+    setupSearch('categories-search', 'categories-list');
+    setupSearch('marques-search', 'marques-list');
+    
     // Recherche générale des produits
     const productsSearch = document.getElementById('products-search');
-    const productCards = document.querySelectorAll('.product-card');
-
     if (productsSearch) {
         productsSearch.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
+            const productCards = document.querySelectorAll('.product-card');
             
             productCards.forEach(card => {
-                const productName = card.querySelector('.product-name').textContent.toLowerCase();
-                const productDescription = card.querySelector('.product-description')?.textContent.toLowerCase() || '';
+                const productName = card.querySelector('.product-name')?.textContent.toLowerCase() || '';
+                const productBrand = card.querySelector('.product-brand')?.textContent.toLowerCase() || '';
                 
-                if (productName.includes(searchTerm) || productDescription.includes(searchTerm)) {
+                if (productName.includes(searchTerm) || productBrand.includes(searchTerm)) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';
-                }
-            });
-        });
-    }
-
-    // Recherche dans les catégories
-    const categoriesSearch = document.getElementById('categories-search');
-    const categoriesList = document.getElementById('categories-list');
-
-    if (categoriesSearch && categoriesList) {
-        categoriesSearch.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const categoryItems = categoriesList.querySelectorAll('.checkbox-container');
-            
-            categoryItems.forEach(item => {
-                const categoryName = item.querySelector('span').textContent.toLowerCase();
-                if (categoryName.includes(searchTerm)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
                 }
             });
         });
