@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 28, 2024 at 03:13 PM
+-- Generation Time: Oct 29, 2024 at 10:14 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -32,7 +32,7 @@ CREATE TABLE `avis` (
   `id_produit` int NOT NULL,
   `id_utilisateur` int NOT NULL,
   `note` int NOT NULL,
-  `commentaire` text COLLATE utf8mb4_general_ci NOT NULL,
+  `commentaire` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -94,7 +94,9 @@ CREATE TABLE `commandes` (
 --
 
 INSERT INTO `commandes` (`id_commande`, `date_commande`, `montant_total`, `id_utilisateur`, `statut`) VALUES
-(1, '2024-10-28 09:28:01', '40.00', 10, 'validé');
+(1, '2024-10-28 09:28:01', '40.00', 10, 'validé'),
+(2, '2024-10-29 09:33:12', '210.00', 1, 'validé'),
+(3, '2024-10-29 10:34:34', '100.00', 1, 'validé');
 
 -- --------------------------------------------------------
 
@@ -114,7 +116,9 @@ CREATE TABLE `commande_produit` (
 --
 
 INSERT INTO `commande_produit` (`id_commande`, `id_produit`, `quantite`, `prix_unitaire`) VALUES
-(1, 32, 1, '40.00');
+(1, 32, 1, '40.00'),
+(2, 31, 7, '30.00'),
+(3, 33, 4, '25.00');
 
 -- --------------------------------------------------------
 
@@ -138,7 +142,9 @@ CREATE TABLE `paiements` (
 --
 
 INSERT INTO `paiements` (`id_paiement`, `montant`, `date_paiement`, `methode_paiement`, `statut_paiement`, `transaction_id`, `id_commande`, `id_utilisateur`) VALUES
-(1, '40.00', '2024-10-28 09:28:01', 'carte', 'réussi', 'pi_3QEoIwP5XJmDt2UG1shjWVPD', 1, 10);
+(1, '40.00', '2024-10-28 09:28:01', 'carte', 'réussi', 'pi_3QEoIwP5XJmDt2UG1shjWVPD', 1, 10),
+(2, '210.00', '2024-10-29 09:33:12', 'carte', 'réussi', 'pi_3QFArTP5XJmDt2UG0Su8I6w4', 2, 1),
+(3, '100.00', '2024-10-29 10:34:34', 'carte', 'réussi', 'pi_3QFBosP5XJmDt2UG1Bp3reun', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -165,9 +171,9 @@ CREATE TABLE `produits` (
 --
 
 INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`, `stock`, `taille`, `tailles_disponibles`, `marque`, `date_ajout`, `collection`) VALUES
-(31, ' T-shirt Performance', 'perfNike.jpg', 'T-shirt respirant et confortable, idéal pour les entraînements intensifs.', '30.00', 50, '0', 'XS,S,M,L,XL', 'Nike', NULL, 'Homme'),
+(31, ' T-shirt Performance', 'perfNike.jpg', 'T-shirt respirant et confortable, idéal pour les entraînements intensifs.', '30.00', 43, '0', 'XS,S,M,L,XL', 'Nike', NULL, 'Homme'),
 (32, 'Pantalon de Yoga', 'yogaAdidas.jfif', 'Pantalon extensible et confortable, parfait pour le yoga et la méditation.', '40.00', 39, '0', 'XS,S,M,L,XL', 'Adidas', NULL, 'Femme'),
-(33, 'Short de Course', 'shortPuma.jpg', 'Short léger et respirant, idéal pour la course à pied.', '25.00', 60, '0', 'S,M,L,XL', 'Puma', NULL, 'Homme'),
+(33, 'Short de Course', 'shortPuma.jpg', 'Short léger et respirant, idéal pour la course à pied.', '25.00', 56, '0', 'S,M,L,XL', 'Puma', NULL, 'Homme'),
 (34, 'Legging de Sport', 'leggingUnderArmour.webp', 'Legging ajusté et confortable, parfait pour toutes les activités sportives.', '35.00', 35, '0', 'XS,S,M,L', 'UnderArmour', NULL, 'Femme'),
 (35, 'Hoodie de Sport', 'hoodieReebok.webp', 'Sweat à capuche chaud et confortable, idéal pour les jours plus frais.', '50.00', 45, '0', 'S,M,L,XL,XXL', 'Reebok', NULL, 'Homme'),
 (36, 'Veste de Running', 'vesteNorthface.jpg', 'Veste légère et imperméable, parfaite pour les sorties de running.', '60.00', 30, '0', 'XS,S,M,L,XL', 'NorthFace', NULL, 'Femme'),
@@ -216,24 +222,25 @@ CREATE TABLE `utilisateurs` (
   `email` varchar(100) DEFAULT NULL,
   `adresse` varchar(255) DEFAULT NULL,
   `motdepasse` varchar(255) NOT NULL,
-  `role` varchar(20) NOT NULL DEFAULT 'user'
+  `role` varchar(20) NOT NULL DEFAULT 'user',
+  `telephone` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`) VALUES
-(1, 'Baileche', 'Hamza', 'hamza1301@outlook.fr', NULL, '$2y$10$pPfTCUGDooaXAzpmVAZFc.v1HxQTxoxQNsRbm7t0tQO0BrwYCc.mu', 'user'),
-(3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'admin'),
-(4, 'as', 'as', 'jhzdjhed@gmail.fr', NULL, '$2y$10$hiUtprh65P3qAj29c.JmU.jgRmmZpU7.e0uikjf4rHbxd15jynzTW', 'user'),
-(5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user'),
-(6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user'),
-(7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
-(8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
-(9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user'),
-(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin'),
-(11, 'Diomande', 'Adama', 'adama.diomande@laplateforme.io', NULL, '$2y$10$g7YKOoGuXuEIzqoX/n/9seNhgIih5y0vREtRCtyg/7YxPlePdheb2', 'user');
+INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse`, `motdepasse`, `role`, `telephone`) VALUES
+(1, 'Baileche', 'Hamza', 'hamza1301@outlook.fr', '22 rue jouv13003', '$2y$10$pPfTCUGDooaXAzpmVAZFc.v1HxQTxoxQNsRbm7t0tQO0BrwYCc.mu', 'user', '0739265281'),
+(3, 'Baileche', 'Hamza', 'hamza.baileche@laplateforme.io', NULL, '$2y$10$soDDvpKka.ECa.ZY7oxwAOzTKr8Q0FYuf0HY5yPzITOQl3..kMMMa', 'admin', NULL),
+(4, 'as', 'as', 'jhzdjhed@gmail.fr', NULL, '$2y$10$hiUtprh65P3qAj29c.JmU.jgRmmZpU7.e0uikjf4rHbxd15jynzTW', 'user', NULL),
+(5, 'as', 'as', 'jhkkkdjhed@gmail.fr', NULL, '$2y$10$u/H8LNpU7lUih.sVPvD37uyjIf1jsxqb5OCi9OVzQBcpcUOXtHJKC', 'user', NULL),
+(6, 'zegy', 'jhéevdgjh', 'yefgedtfet@gmail.fr', NULL, '$2y$10$/BruA2Z6a0g62VAellMIZ.xR9KE/tY5FU43hqS57GSXALlWmsZiXC', 'user', NULL),
+(7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user', NULL),
+(8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user', NULL),
+(9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user', NULL),
+(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin', NULL),
+(11, 'Diomande', 'Adama', 'adama.diomande@laplateforme.io', NULL, '$2y$10$g7YKOoGuXuEIzqoX/n/9seNhgIih5y0vREtRCtyg/7YxPlePdheb2', 'user', NULL);
 
 --
 -- Indexes for dumped tables
@@ -290,19 +297,19 @@ ALTER TABLE `utilisateurs`
 -- AUTO_INCREMENT for table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `commandes`
 --
 ALTER TABLE `commandes`
-  MODIFY `id_commande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_commande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `paiements`
 --
 ALTER TABLE `paiements`
-  MODIFY `id_paiement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_paiement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `produits`
