@@ -20,7 +20,8 @@ $erreurs = [];
 $success = false;
 
 // Fonction pour récupérer les informations de l'utilisateur
-function getUserInfo($conn, $id_utilisateur) {
+function getUserInfo($conn, $id_utilisateur)
+{
     $stmt = $conn->prepare("SELECT nom, prenom, email, adresse, telephone FROM utilisateurs WHERE id_utilisateur = ?");
     $stmt->bind_param("i", $id_utilisateur);
     $stmt->execute();
@@ -72,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Vérification du nouveau mot de passe
         if (!empty($nouveau_motdepasse)) {
             $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
-            
+
             if (!preg_match($regex_mdp, $nouveau_motdepasse)) {
                 $erreurs[] = "Le nouveau mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.";
             } elseif ($nouveau_motdepasse !== $confirmer_nouveau_motdepasse) {
@@ -116,10 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['nom'] = $nom;
             $_SESSION['prenom'] = $prenom;
             $_SESSION['email'] = $email;
-            
+
             // Récupérer les informations mises à jour
             $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
-            
+
             // Message de succès qui disparaîtra après 3 secondes
             $success_message = "Profil mis à jour avec succès !";
         } else {
@@ -139,14 +140,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="max-w-7xl mx-auto mb-8">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 class="text-2xl font-bold text-white flex items-center">
-                
+
                 Mon Compte
             </h2>
             <div class="flex flex-wrap gap-3">
                 <?php if ($user_role === 'admin'): ?>
-                    <a href="../admin/backofficeV2.php" 
-                       class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm">
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <a href="../admin/backofficeV2.php"
+                        class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
                         </svg>
                         Administration
@@ -154,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
                 <a href="deconnexion.php" class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 text-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                     </svg>
                     Déconnexion
                 </a>
@@ -190,26 +191,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="personal-form" class="space-y-6" data-form-type="personal">
                 <div class="space-y-2">
                     <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                    <input type="text" id="nom" name="nom" 
-                           value="<?php echo htmlspecialchars($user['nom']); ?>" 
-                           required 
-                           class="form-input mt-1 block w-full">
+                    <input type="text" id="nom" name="nom"
+                        value="<?php echo htmlspecialchars($user['nom']); ?>"
+                        required
+                        class="form-input mt-1 block w-full">
                 </div>
 
                 <div class="space-y-2">
                     <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                    <input type="text" id="prenom" name="prenom" 
-                           value="<?php echo htmlspecialchars($user['prenom']); ?>" 
-                           required 
-                           class="form-input mt-1 block w-full">
+                    <input type="text" id="prenom" name="prenom"
+                        value="<?php echo htmlspecialchars($user['prenom']); ?>"
+                        required
+                        class="form-input mt-1 block w-full">
                 </div>
 
                 <div class="space-y-2">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" 
-                           value="<?php echo htmlspecialchars($user['email']); ?>" 
-                           required 
-                           class="form-input mt-1 block w-full">
+                    <input type="email" id="email" name="email"
+                        value="<?php echo htmlspecialchars($user['email']); ?>"
+                        required
+                        class="form-input mt-1 block w-full">
                 </div>
             </form>
         </div>
@@ -226,25 +227,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="contact-form" class="space-y-6" data-form-type="contact">
                 <div class="space-y-2">
                     <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse postale</label>
-                    <textarea id="adresse" name="adresse" 
-                              rows="3" 
-                              class="form-input mt-1 block w-full"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
+                    <textarea id="adresse" name="adresse"
+                        rows="3"
+                        class="form-input mt-1 block w-full"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
                 </div>
 
                 <div class="space-y-2">
                     <label for="telephone" class="block text-sm font-medium text-gray-700">Numéro de téléphone</label>
-                    <input type="tel" id="telephone" name="telephone" 
-                           value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" 
-                           class="form-input mt-1 block w-full">
+                    <input type="tel" id="telephone" name="telephone"
+                        value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>"
+                        class="form-input mt-1 block w-full">
+                    <input type="hidden" id="telephone_complet" name="telephone_complet">
                 </div>
             </form>
         </div>
 
         <!-- Colonne 3: Sécurité -->
         <div class="bg-white/90 backdrop-blur-md shadow-xl rounded-lg p-6">
-            <h3 class="text-lg font-medium  mb-6 flex items-center">
+            <h3 class="text-lg font-medium mb-6 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
                 Sécurité
             </h3>
@@ -253,24 +255,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">
                         Mot de passe actuel
                     </label>
-                    <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
-                           class="form-input mt-1 block w-full">
+                    <input type="password" id="motdepasse_actuel" name="motdepasse_actuel"
+                        class="form-input mt-1 block w-full">
                 </div>
 
                 <div class="space-y-2">
                     <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">
                         Nouveau mot de passe
                     </label>
-                    <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse" 
-                           class="form-input mt-1 block w-full">
+                    <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse"
+                        class="form-input mt-1 block w-full">
                 </div>
 
                 <div class="space-y-2">
                     <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">
                         Confirmer le mot de passe
                     </label>
-                    <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse" 
-                           class="form-input mt-1 block w-full">
+                    <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse"
+                        class="form-input mt-1 block w-full">
                 </div>
             </form>
         </div>
@@ -278,9 +280,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Bouton de validation (initialement caché) -->
     <div id="submit-button" class="max-w-7xl mx-auto mt-12 flex justify-end hidden">
-        <button type="button" 
-                onclick="submitForms()"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 flex items-center gap-2">
+        <button type="button"
+            onclick="submitForms()"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
@@ -289,60 +291,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const forms = document.querySelectorAll('form');
-    const submitButton = document.getElementById('submit-button');
-    let hasChanges = false;
-
-    // Fonction pour vérifier les changements
-    function checkForChanges(e) {
-        hasChanges = true;
-        submitButton.classList.remove('hidden');
-    }
-
-    // Ajouter les écouteurs d'événements pour tous les champs
-    forms.forEach(form => {
-        const inputs = form.querySelectorAll('input, textarea');
-        inputs.forEach(input => {
-            input.addEventListener('input', checkForChanges);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialisation du téléphone international
+        const input = document.querySelector("#telephone");
+        const iti = window.intlTelInput(input, {
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
+            initialCountry: "fr",
+            preferredCountries: ["fr", "gb", "us"],
+            separateDialCode: true,
+            formatOnDisplay: true,
+            autoPlaceholder: "polite"
         });
-    });
 
-    // Fonction pour soumettre tous les formulaires
-    window.submitForms = async function() {
-        const formData = new FormData();
-        
-        // Ajouter les données de chaque formulaire
+        // Gestion du bouton de validation
+        const forms = document.querySelectorAll('form');
+        const submitButton = document.getElementById('submit-button');
+        let hasChanges = false;
+
+        // Fonction pour vérifier les changements
+        function checkForChanges(e) {
+            hasChanges = true;
+            submitButton.classList.remove('hidden');
+        }
+
+        // Ajouter les écouteurs d'événements pour tous les champs
         forms.forEach(form => {
-            const formType = form.dataset.formType;
             const inputs = form.querySelectorAll('input, textarea');
             inputs.forEach(input => {
-                if (input.value) {
-                    formData.append(`${formType}_${input.name}`, input.value);
-                }
+                input.addEventListener('input', checkForChanges);
             });
         });
 
-        try {
-            const response = await fetch('../ajax/update_profile.php', {
-                method: 'POST',
-                body: formData
+        // Validation du numéro de téléphone
+        input.addEventListener('blur', function() {
+            if (input.value.trim()) {
+                if (!iti.isValidNumber()) {
+                    input.classList.add('border-red-500');
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            }
+        });
+
+        // Fonction pour soumettre tous les formulaires
+        window.submitForms = async function() {
+            const formData = new FormData();
+            
+            forms.forEach(form => {
+                const formType = form.dataset.formType;
+                const inputs = form.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    if (input.value) {
+                        if (input.id === 'telephone') {
+                            formData.append(`${formType}_${input.name}`, iti.getNumber());
+                        } else {
+                            formData.append(`${formType}_${input.name}`, input.value);
+                        }
+                    }
+                });
             });
 
-            const result = await response.json();
-            
-            if (result.success) {
-                // Afficher le message de succès
-                location.reload(); // Ou mettre à jour l'UI sans recharger
-            } else {
-                // Gérer les erreurs
-                alert(result.message || 'Une erreur est survenue');
+            try {
+                const response = await fetch('../ajax/update_profile.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert(result.message || 'Une erreur est survenue');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue');
             }
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Une erreur est survenue');
-        }
-    };
-});
+        };
+    });
 </script>

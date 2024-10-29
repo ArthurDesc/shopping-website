@@ -39,6 +39,14 @@ $headerCategories = $categoryManager->getHeaderCategories();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+<style>
+    .iti { width: 100%; }
+    .iti__flag { background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags.png"); }
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .iti__flag { background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags@2x.png"); }
+    }
+</style>
   <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
   <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
