@@ -86,7 +86,7 @@ include './includes/_header.php';
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
         <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categorie=19'); ?>" class="block relative">
+            <a href="<?php echo url('pages/produit.php?categories=19'); ?>" class="block relative">
                 <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
                 <div class="absolute bottom-2 right-2 z-10">
                     <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Football</button>
@@ -95,7 +95,7 @@ include './includes/_header.php';
         </div>
 
         <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categorie=20'); ?>" class="block relative">
+            <a href="<?php echo url('pages/produit.php?categories=20'); ?>" class="block relative">
                 <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
                 <div class="absolute bottom-2 right-2 z-10">
                     <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Rugby</button>
@@ -104,7 +104,7 @@ include './includes/_header.php';
         </div>
 
         <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categorie=21'); ?>" class="block relative">
+            <a href="<?php echo url('pages/produit.php?categories=21'); ?>" class="block relative">
                 <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
                 <div class="absolute bottom-2 right-2 z-10">
                     <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Running</button>
@@ -113,7 +113,7 @@ include './includes/_header.php';
         </div>
 
         <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categorie=22'); ?>" class="block relative">
+            <a href="<?php echo url('pages/produit.php?categories=22'); ?>" class="block relative">
                 <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
                 <div class="absolute bottom-2 right-2 z-10">
                     <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Handball</button>
@@ -122,7 +122,7 @@ include './includes/_header.php';
         </div>
 
         <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categorie=23'); ?>" class="block relative">
+            <a href="<?php echo url('pages/produit.php?categories=23'); ?>" class="block relative">
                 <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
                 <div class="absolute bottom-2 right-2 z-10">
                     <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Basketball</button>
@@ -136,7 +136,7 @@ include './includes/_header.php';
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collection=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collections=homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/homme.jpg'); ?>" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Homme</button>
@@ -144,7 +144,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collection=femme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collections=femme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/femme.jpg'); ?>" alt="Femme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Femme</button>
@@ -152,7 +152,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collection=enfant'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collections=enfant'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/enfant.jpg'); ?>" alt="Enfant" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Enfant</button>

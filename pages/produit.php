@@ -121,6 +121,24 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
 }
 
 $produits_page = $produits;
+
+// Gestion du pré-filtrage depuis l'URL
+if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
+    $type_filtre = $_GET['filtre'];
+    $valeur_filtre = $_GET['valeur'];
+    
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trouver la checkbox correspondante
+            let checkbox = document.querySelector(`input[data-${type_filtre}=\"${valeur_filtre}\"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+                // Déclencher l'événement change pour activer le filtre
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>";
+}
 ?>
 <style>
     .filter-dropdown {

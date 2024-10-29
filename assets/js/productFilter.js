@@ -51,6 +51,29 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        function updateURL(activeFilters) {
+            const params = new URLSearchParams();
+            
+            // Ajouter les catégories actives
+            if (activeFilters.categories.size > 0) {
+                params.set('categories', Array.from(activeFilters.categories).join(','));
+            }
+            
+            // Ajouter les marques actives
+            if (activeFilters.brands.size > 0) {
+                params.set('marques', Array.from(activeFilters.brands).join(','));
+            }
+            
+            // Ajouter les collections actives
+            if (activeFilters.collections.size > 0) {
+                params.set('collections', Array.from(activeFilters.collections).join(','));
+            }
+            
+            // Mettre à jour l'URL sans recharger la page
+            const newURL = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+            window.history.pushState({}, '', newURL);
+        }
+
         // Ajouter des écouteurs d'événements pour chaque checkbox
         filterCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
@@ -64,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 applyFilters();
                 updateActiveFiltersDisplay();
+                updateURL(activeFilters);
             });
         });
 
@@ -127,6 +151,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
         }
+
+        // Au chargement de la page, appliquer les filtres depuis l'URL
+        const params = new URLSearchParams(window.location.search);
+        
+        // Appliquer les filtres depuis l'URL
+        if (params.has('categories')) {
+            params.get('categories').split(',').forEach(cat => {
+                const checkbox = document.querySelector(`input[data-category="${cat}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
+        
+        if (params.has('marques')) {
+            params.get('marques').split(',').forEach(brand => {
+                const checkbox = document.querySelector(`input[data-brand="${brand}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
+        
+        if (params.has('collections')) {
+            params.get('collections').split(',').forEach(collection => {
+                const checkbox = document.querySelector(`input[data-collection="${collection}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
+        
+        // Déclencher les filtres initiaux
+        filterCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        });
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de List.js:', error);
     }
