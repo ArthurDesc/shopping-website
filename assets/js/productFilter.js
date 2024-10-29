@@ -9,11 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialiser List.js
     const options = {
         valueNames: [
+            'product-name',
             { data: ['category'] },
             { data: ['brand'] },
-            { data: ['collection'] },
-            'product-name',
-            'product-price'
+            { data: ['collection'] }
         ],
         searchClass: 'search',
         listClass: 'list'

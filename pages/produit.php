@@ -323,31 +323,25 @@ $produits_page = $produits;
             </div>
 
 
-            <div class="wave-group mb-8">
-                <input type="text" class="input search" id="search-products">
-                <span class="bar"></span>
-                <label class="label">
-                    <span class="label-char" style="--index: 0">R</span>
-                    <span class="label-char" style="--index: 1">e</span>
-                    <span class="label-char" style="--index: 2">c</span>
-                    <span class="label-char" style="--index: 3">h</span>
-                    <span class="label-char" style="--index: 4">e</span>
-                    <span class="label-char" style="--index: 5">r</span>
-                    <span class="label-char" style="--index: 6">c</span>
-                    <span class="label-char" style="--index: 7">h</span>
-                    <span class="label-char" style="--index: 8">e</span>
-                    <span class="label-char" style="--index: 9">r</span>
-                </label>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="search-icon">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-            </div>
-
             <section id="products">
-                <!-- Barre de recherche -->
                 <div class="wave-group mb-8">
-                    <input required="" type="text" class="search input" id="products-search">
-                    <!-- ... reste du code de la barre de recherche ... -->
+                    <input type="text" class="input search" id="search-products">
+                    <span class="bar"></span>
+                    <label class="label">
+                        <span class="label-char" style="--index: 0">R</span>
+                        <span class="label-char" style="--index: 1">e</span>
+                        <span class="label-char" style="--index: 2">c</span>
+                        <span class="label-char" style="--index: 3">h</span>
+                        <span class="label-char" style="--index: 4">e</span>
+                        <span class="label-char" style="--index: 5">r</span>
+                        <span class="label-char" style="--index: 6">c</span>
+                        <span class="label-char" style="--index: 7">h</span>
+                        <span class="label-char" style="--index: 8">e</span>
+                        <span class="label-char" style="--index: 9">r</span>
+                    </label>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="search-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
                 </div>
 
                 <!-- Container pour les produits -->
