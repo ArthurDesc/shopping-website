@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
         const increaseButton = form.querySelector('button[name="action"][value="increase"]');
         const quantityDisplay = form.querySelector('span');
+        const idProduitInput = form.querySelector('input[name="id_produit"]');
 
         decreaseButton.addEventListener('click', function() {
             let quantity = parseInt(quantityDisplay.textContent);
@@ -54,8 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         increaseButton.addEventListener('click', function() {
             let quantity = parseInt(quantityDisplay.textContent);
-            quantityDisplay.textContent = quantity + 1;
-            updateQuantity(form, quantity + 1);
+            const stock = parseInt(form.dataset.stock); // Récupérer le stock depuis un attribut data
+
+            if (quantity < stock) { // Vérifier si la quantité actuelle est inférieure au stock
+                quantityDisplay.textContent = quantity + 1;
+                updateQuantity(form, quantity + 1);
+            } else {
+                console.log("La quantité maximale a été atteinte."); // Message de débogage
+            }
         });
     });
 
@@ -100,8 +107,9 @@ if (isset($_POST['update'])) {
             $panier->mettreAJourQuantite($id_update, intval($quantity));
             echo "Quantité mise à jour avec succès."; // Message de succès
         } else {
-            echo "La quantité demandée dépasse le stock disponible."; // Message d'erreur
-            $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
+            // Ajuster la quantité au stock disponible
+            $panier->mettreAJourQuantite($id_update, intval($produit['stock'])); // Mettre à jour la quantité au stock disponible
+            echo "Quantité ajustée au stock disponible de " . $produit['stock'] . "."; // Message d'information
         }
     } else {
         $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
@@ -176,7 +184,7 @@ include '../includes/_header.php';
                                 <div class="flex-grow">
                                     <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
                                     <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
-                                    <form method="post" action="panier.php" class="flex items-center mt-2">
+                                    <form method="post" action="panier.php" class="flex items-center mt-2" data-stock="<?= $product['stock'] ?>">
                                         <input type="hidden" name="id_produit" value="<?= $key ?>">
                                         <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
                                         <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
