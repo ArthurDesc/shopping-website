@@ -136,7 +136,7 @@ include './includes/_header.php';
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collections=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collections=Homme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/homme.jpg'); ?>" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Homme</button>
@@ -144,7 +144,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collections=femme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collections=Femme'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/femme.jpg'); ?>" alt="Femme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Femme</button>
@@ -152,7 +152,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collections=enfant'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collections=Enfant'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/enfant.jpg'); ?>" alt="Enfant" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Enfant</button>
