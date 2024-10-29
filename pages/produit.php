@@ -26,15 +26,8 @@ if ($result) {
     }
 }
 
-// Récupérer toutes les collections uniques
-$collections_query = "SELECT DISTINCT collection FROM produits WHERE collection IS NOT NULL AND collection != '' ORDER BY collection";
-$collections_result = mysqli_query($conn, $collections_query);
-$collections = [];
-if ($collections_result) {
-    while ($row = mysqli_fetch_assoc($collections_result)) {
-        $collections[] = $row['collection'];
-    }
-}
+// Remplacer la requête des collections par un tableau statique (vers la ligne 30)
+$collections = ['Homme', 'Femme', 'Enfant'];
 
 // Remplacer l'ancien code de récupération des produits par :
 $query = "SELECT p.*, GROUP_CONCAT(pc.id_categorie) as categories 
@@ -300,12 +293,12 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
                             </svg>
                         </div>
                         <div x-show="openTab === 'collections'" x-collapse>
-                            <div class="py-2 pl-4">
+                            <div class="pl-4">
                                 <div class="space-y-2">
                                     <?php foreach ($collections as $collection): ?>
-                                        <div class="flex items-center mb-2">
+                                        <div class="flex items-center">
                                             <label class="checkbox-container flex items-center">
-                                                <input type="checkbox"
+                                                <input type="checkbox" 
                                                        class="hidden"
                                                        data-collection="<?= htmlspecialchars($collection) ?>"
                                                        name="collections[]"
