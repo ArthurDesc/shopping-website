@@ -54,8 +54,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         increaseButton.addEventListener('click', function() {
             let quantity = parseInt(quantityDisplay.textContent);
-            quantityDisplay.textContent = quantity + 1;
-            updateQuantity(form, quantity + 1);
+            // Vérification du stock avant d'augmenter la quantité
+            const idProduitInput = form.querySelector('input[name="id_produit"]');
+            const stock = <?= json_encode(array_column($contenuPanier, 'stock')) ?>; // Récupérer le stock du produit
+
+            if (quantity + 1 <= stock) {
+                quantityDisplay.textContent = quantity + 1;
+                updateQuantity(form, quantity + 1);
+            } else {
+                alert('La quantité demandée dépasse le stock disponible.');
+            }
         });
     });
 
@@ -65,14 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('id_produit', idProduitInput.value);
         formData.append('quantite', quantity);
         formData.append('update', true); // Indiquer que c'est une mise à jour
-
-        // Ajout d'une vérification pour s'assurer que la quantité ne dépasse pas le stock
-        const stock = parseInt(form.dataset.stock); // Assurez-vous que le stock est défini dans le formulaire
-
-        if (quantity > stock) {
-            alert(`La quantité demandée dépasse le stock disponible (${stock}).`);
-            return; // Sortir de la fonction si la quantité est trop élevée
-        }
 
         fetch('panier.php', {
             method: 'POST',
@@ -96,8 +96,21 @@ if (isset($_POST['update'])) {
 
     // Vérifier si la quantité est valide
     if (is_numeric($quantity) && $quantity > 0) {
-        $panier->mettreAJourQuantite($id_update, intval($quantity));
-        echo "Quantité mise à jour avec succès."; // Message de succès
+        // Récupérer le produit pour vérifier le stock
+        $stmt = $conn->prepare("SELECT stock FROM produits WHERE id_produit = ?");
+        $stmt->bind_param("i", $id_update);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $produit = $result->fetch_assoc();
+
+        // Vérifier si la quantité demandée ne dépasse pas le stock
+        if ($quantity <= $produit['stock']) {
+            $panier->mettreAJourQuantite($id_update, intval($quantity));
+            echo "Quantité mise à jour avec succès."; // Message de succès
+        } else {
+            echo "La quantité demandée dépasse le stock disponible."; // Message d'erreur
+            $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
+        }
     } else {
         $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
         echo "Produit retiré du panier en raison d'une quantité invalide."; // Message d'erreur
@@ -346,6 +359,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+
 
 
 

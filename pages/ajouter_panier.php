@@ -45,26 +45,34 @@ if (isset($_GET['id_produit'])) {
         exit;
     }
 
-    // Create a unique key for the product based on ID and size
+    // Vérification de la quantité demandée
+    $quantite_demandee = isset($_POST['quantite']) ? (int)$_POST['quantite'] : 1; // Par défaut, 1 si non spécifié
+    if ($quantite_demandee > $produit['stock']) {
+        echo "<script>alert('La quantité demandée dépasse le stock disponible ({$produit['stock']}).'); window.location.href='produit.php';</script>";
+        exit;
+    }
+
+    // Créer une clé unique pour le produit basée sur l'ID et la taille
     $key = $id . ($taille ? '_' . $taille : '');
 
-    // Check if the product is already in the cart
+    // Vérifier si le produit est déjà dans le panier
     if (isset($_SESSION['panier'][$key])) {
-        // Ensure the product entry is an array before incrementing
-        if (is_array($_SESSION['panier'][$key])) {
-            $_SESSION['panier'][$key]['quantite']++;
-        } else {
-            // Reinitialize if it was incorrectly set as a scalar
-            $_SESSION['panier'][$key] = [
-                'id_produit' => $id,
-                'quantite' => 1,
-                'taille' => $taille
-            ];
+        // Vérifier la quantité totale dans le panier
+        $quantite_totale = $_SESSION['panier'][$key]['quantite'] + $quantite_demandee;
+
+        // Vérifier si la quantité totale dépasse le stock
+        if ($quantite_totale > $produit['stock']) {
+            echo "<script>alert('La quantité totale dans le panier dépasse le stock disponible.'); window.location.href='produit.php';</script>";
+            exit;
         }
+
+        // Si la quantité totale est valide, mettre à jour la quantité dans le panier
+        $_SESSION['panier'][$key]['quantite'] += $quantite_demandee;
     } else {
+        // Si le produit n'est pas dans le panier, l'ajouter
         $_SESSION['panier'][$key] = [
             'id_produit' => $id,
-            'quantite' => 1,
+            'quantite' => $quantite_demandee,
             'taille' => $taille
         ];
     }
