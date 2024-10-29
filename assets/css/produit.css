@@ -7,38 +7,40 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.95);
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
 #modal-container.active {
   opacity: 1;
   visibility: visible;
-  transform: scale(1);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-background {
   background: white;
   width: 90%;
-  max-width: 500px;
-  padding: 30px;
+  max-width: 400px;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   transform: scale(0.8);
   opacity: 0;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 #modal-container.active .modal-background {
   transform: scale(1);
   opacity: 1;
+}
+
+.modal-content {
+  padding: 1.5rem;
 }
 
 /* Styles pour l'effet de survol des articles */
@@ -919,4 +921,50 @@ input[type="radio"] + span {
 .page__btn a {
     width: 2rem; /* Réduit de 2.6rem à 2rem */
     height: 2rem; /* Réduit de 2.6rem à 2rem */
+}
+
+/* Style personnalisé pour le select */
+#productSize {
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1e3a8a;
+    width: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231e3a8a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5em 1.5em;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#productSize:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+#productSize:hover {
+    border-color: #3b82f6;
+}
+
+/* Style pour les options du select */
+#productSize option {
+    color: #1e3a8a;
+    background-color: white;
+    padding: 0.75rem;
+}
+
+#productSize option:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Style pour le placeholder du select */
+#productSize option[value=""] {
+    color: #6b7280;
 }
