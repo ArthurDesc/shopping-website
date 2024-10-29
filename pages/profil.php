@@ -16,7 +16,7 @@ $success = false;
 
 // Fonction pour récupérer les informations de l'utilisateur
 function getUserInfo($conn, $id_utilisateur) {
-    $stmt = $conn->prepare("SELECT nom, prenom, email FROM utilisateurs WHERE id_utilisateur = ?");
+    $stmt = $conn->prepare("SELECT nom, prenom, email, adresse, telephone FROM utilisateurs WHERE id_utilisateur = ?");
     $stmt->bind_param("i", $id_utilisateur);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -35,33 +35,36 @@ $result = $stmt->get_result();
 $user_role = $result->fetch_assoc()['role'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Vérifier le mot de passe actuel
-    $stmt = $conn->prepare("SELECT motdepasse FROM utilisateurs WHERE id_utilisateur = ?");
-    $stmt->bind_param("i", $_SESSION['id_utilisateur']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $current_user = $result->fetch_assoc();
+    $erreurs = [];
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $email = $_POST['email'];
+    $adresse = $_POST['adresse'];
+    $telephone = $_POST['telephone'];
+    $nouveau_motdepasse = $_POST['nouveau_motdepasse'] ?? '';
+    $confirmer_nouveau_motdepasse = $_POST['confirmer_nouveau_motdepasse'] ?? '';
+    $motdepasse_actuel = $_POST['motdepasse_actuel'] ?? '';
 
-    if (!password_verify($_POST['motdepasse_actuel'], $current_user['motdepasse'])) {
-        $erreurs[] = "Le mot de passe actuel est incorrect.";
-    } else {
-        $nom = $_POST['nom'];
-        $prenom = $_POST['prenom'];
-        $email = $_POST['email'];
-        $nouveau_motdepasse = $_POST['nouveau_motdepasse'] ?? '';
-        $confirmer_nouveau_motdepasse = $_POST['confirmer_nouveau_motdepasse'] ?? '';
+    // Vérifier si l'utilisateur tente de changer le mot de passe
+    $changement_motdepasse = !empty($nouveau_motdepasse) || !empty($confirmer_nouveau_motdepasse);
 
-        // Vérifier si l'email est déjà utilisé par un autre utilisateur
-        $stmt = $conn->prepare("SELECT id_utilisateur FROM utilisateurs WHERE email = ? AND id_utilisateur != ?");
-        $stmt->bind_param("si", $email, $_SESSION['id_utilisateur']);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    // Vérifier le mot de passe actuel uniquement si changement de mot de passe
+    if ($changement_motdepasse) {
+        if (empty($motdepasse_actuel)) {
+            $erreurs[] = "Le mot de passe actuel est requis pour changer le mot de passe.";
+        } else {
+            $stmt = $conn->prepare("SELECT motdepasse FROM utilisateurs WHERE id_utilisateur = ?");
+            $stmt->bind_param("i", $_SESSION['id_utilisateur']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $current_user = $result->fetch_assoc();
 
-        if ($result->num_rows > 0) {
-            $erreurs[] = "Cet email est déjà utilisé par un autre utilisateur.";
+            if (!password_verify($motdepasse_actuel, $current_user['motdepasse'])) {
+                $erreurs[] = "Le mot de passe actuel est incorrect.";
+            }
         }
 
-        // Vérification du nouveau mot de passe si fourni
+        // Vérification du nouveau mot de passe
         if (!empty($nouveau_motdepasse)) {
             $regex_mdp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
             
@@ -71,41 +74,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $erreurs[] = "Les nouveaux mots de passe ne correspondent pas.";
             }
         }
+    }
 
-        if (empty($erreurs)) {
-            // Construire la requête de mise à jour
-            $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ?";
-            $params = [$nom, $prenom, $email];
-            $types = "sss";
+    // Vérifier si l'email est déjà utilisé par un autre utilisateur
+    $stmt = $conn->prepare("SELECT id_utilisateur FROM utilisateurs WHERE email = ? AND id_utilisateur != ?");
+    $stmt->bind_param("si", $email, $_SESSION['id_utilisateur']);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-            if (!empty($nouveau_motdepasse)) {
-                $sql .= ", motdepasse = ?";
-                $params[] = password_hash($nouveau_motdepasse, PASSWORD_DEFAULT);
-                $types .= "s";
-            }
+    if ($result->num_rows > 0) {
+        $erreurs[] = "Cet email est déjà utilisé par un autre utilisateur.";
+    }
 
-            $sql .= " WHERE id_utilisateur = ?";
-            $params[] = $_SESSION['id_utilisateur'];
-            $types .= "i";
+    if (empty($erreurs)) {
+        // Construire la requête de mise à jour
+        $sql = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ?, adresse = ?, telephone = ?";
+        $params = [$nom, $prenom, $email, $adresse, $telephone];
+        $types = "sssss";
 
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param($types, ...$params);
+        if ($changement_motdepasse && !empty($nouveau_motdepasse)) {
+            $sql .= ", motdepasse = ?";
+            $params[] = password_hash($nouveau_motdepasse, PASSWORD_DEFAULT);
+            $types .= "s";
+        }
 
-            if ($stmt->execute()) {
-                $success = true;
-                // Mettre à jour les informations de session
-                $_SESSION['nom'] = $nom;
-                $_SESSION['prenom'] = $prenom;
-                $_SESSION['email'] = $email;
-                
-                // Récupérer les informations mises à jour
-                $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
-                
-                // Message de succès qui disparaîtra après 3 secondes
-                $success_message = "Profil mis à jour avec succès !";
-            } else {
-                $erreurs[] = "Erreur lors de la mise à jour du profil.";
-            }
+        $sql .= " WHERE id_utilisateur = ?";
+        $params[] = $_SESSION['id_utilisateur'];
+        $types .= "i";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param($types, ...$params);
+
+        if ($stmt->execute()) {
+            $success = true;
+            // Mettre à jour les informations de session
+            $_SESSION['nom'] = $nom;
+            $_SESSION['prenom'] = $prenom;
+            $_SESSION['email'] = $email;
+            
+            // Récupérer les informations mises à jour
+            $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
+            
+            // Message de succès qui disparaîtra après 3 secondes
+            $success_message = "Profil mis à jour avec succès !";
+        } else {
+            $erreurs[] = "Erreur lors de la mise à jour du profil.";
         }
     }
 }
@@ -186,14 +199,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                 </div>
 
+                <div>
+                    <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse</label>
+                    <textarea id="adresse" name="adresse" 
+                              rows="3" 
+                              class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
+                </div>
+
+                <div>
+                    <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
+                    <input type="tel" id="telephone" name="telephone" 
+                           value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" 
+                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                </div>
+
                 <!-- Section mot de passe -->
                 <div class="border-t pt-6 mt-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Changer le mot de passe</h3>
                     <div class="space-y-4">
                         <div>
-                            <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
+                            <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">
+                                Mot de passe actuel
+                                <span class="text-sm text-gray-500">(requis uniquement pour changer le mot de passe)</span>
+                            </label>
                             <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
-                                   required 
                                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                         </div>
 
@@ -239,5 +268,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         }, 2500);
     }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const nouveauMotdepasse = document.getElementById('nouveau_motdepasse');
+    const confirmerMotdepasse = document.getElementById('confirmer_nouveau_motdepasse');
+    const motdepasseActuel = document.getElementById('motdepasse_actuel');
+
+    function updateMotdepasseActuelRequired() {
+        const isChangingPassword = nouveauMotdepasse.value !== '' || confirmerMotdepasse.value !== '';
+        motdepasseActuel.required = isChangingPassword;
+    }
+
+    nouveauMotdepasse.addEventListener('input', updateMotdepasseActuelRequired);
+    confirmerMotdepasse.addEventListener('input', updateMotdepasseActuelRequired);
 });
 </script>
