@@ -67,32 +67,47 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        function createFilterTag(type, value, onRemove) {
+            const tag = document.createElement('div');
+            tag.className = 'filter-tag flex items-center bg-blue-50 text-blue-600 px-3 py-1 rounded-md text-sm';
+            
+            const text = document.createElement('span');
+            text.textContent = value;
+            
+            const removeButton = document.createElement('button');
+            removeButton.innerHTML = '&times;';
+            removeButton.className = 'ml-2 font-bold hover:text-blue-800';
+            removeButton.dataset.type = type;
+            removeButton.dataset.value = value;
+            removeButton.onclick = onRemove;
+            
+            tag.appendChild(text);
+            tag.appendChild(removeButton);
+            return tag;
+        }
+
         function updateActiveFiltersDisplay() {
             const activeFiltersContainer = document.getElementById('activeFilters');
-            if (!activeFiltersContainer) return;
-            
             activeFiltersContainer.innerHTML = '';
 
-            function createFilterTag(value, type) {
-                const tag = document.createElement('span');
-                tag.className = 'filter-tag';
-                tag.innerHTML = `
-                    ${value}
-                    <button type="button" class="ml-2" data-type="${type}" data-value="${value}">
-                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
-                        </svg>
-                    </button>
-                `;
-                return tag;
-            }
+            filterCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const filterType = checkbox.dataset.category ? 'categories' :
+                                     checkbox.dataset.brand ? 'brands' :
+                                     'collections';
+                    
+                    const filterValue = checkbox.dataset.category ? checkbox.dataset.name :
+                                       checkbox.dataset.brand ? checkbox.dataset.brand :
+                                       checkbox.dataset.collection;
 
-            for (const [type, values] of Object.entries(activeFilters)) {
-                values.forEach(value => {
-                    const tag = createFilterTag(value, type);
+                    const tag = createFilterTag(filterType, filterValue, () => {
+                        checkbox.checked = false;
+                        checkbox.dispatchEvent(new Event('change'));
+                    });
+                    
                     activeFiltersContainer.appendChild(tag);
-                });
-            }
+                }
+            });
 
             // Gérer la suppression des filtres
             activeFiltersContainer.querySelectorAll('button').forEach(button => {

@@ -195,6 +195,7 @@ $produits_page = $produits;
                                             <input type="checkbox" 
                                                    class="hidden"
                                                    data-category="<?= htmlspecialchars($categorie['id_categorie']) ?>"
+                                                   data-name="<?= htmlspecialchars($categorie['nom']) ?>"
                                                    name="categories[]"
                                                    value="<?= htmlspecialchars($categorie['id_categorie']) ?>">
                                             <svg viewBox="0 0 64 64" height="2em" width="2em">
@@ -212,6 +213,7 @@ $produits_page = $produits;
                                                         <input type="checkbox" 
                                                                class="hidden"
                                                                data-category="<?= htmlspecialchars($sous_categorie['id']) ?>"
+                                                               data-name="<?= htmlspecialchars($sous_categorie['nom']) ?>"
                                                                name="categories[]"
                                                                value="<?= htmlspecialchars($sous_categorie['id']) ?>">
                                                         <svg viewBox="0 0 64 64" height="2em" width="2em">
