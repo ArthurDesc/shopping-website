@@ -97,9 +97,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Stock insuffisant pour le produit ID: " . $id_produit);
             }
 
-            // Insérer la ligne de commande
-            $stmt = $conn->prepare("INSERT INTO commande_produit (id_commande, id_produit, quantite, prix_unitaire) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("iiid", $id_commande, $id_produit, $quantity, $product['prix']);
+            // Vérifier si le produit est déjà dans la commande
+            $stmt = $conn->prepare("SELECT quantite FROM commande_produit WHERE id_commande = ? AND id_produit = ?");
+            $stmt->bind_param("ii", $id_commande, $id_produit);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                // Mettre à jour la quantité si le produit existe déjà
+                $stmt = $conn->prepare("UPDATE commande_produit SET quantite = quantite + ? WHERE id_commande = ? AND id_produit = ?");
+                $stmt->bind_param("iii", $quantity, $id_commande, $id_produit);
+            } else {
+                // Insérer la ligne de commande
+                $stmt = $conn->prepare("INSERT INTO commande_produit (id_commande, id_produit, quantite, prix_unitaire) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("iiid", $id_commande, $id_produit, $quantity, $product['prix']);
+            }
             
             if (!$stmt->execute()) {
                 throw new Exception("Erreur lors de l'enregistrement des produits commandés");
