@@ -125,7 +125,7 @@ $collection = $categoryManager->getCollection($id_produit);
 
 <?php include '../includes/_header.php'; ?>
 
-<main class="flex-grow container mx-auto px-4 py-8 mt-16">
+<main class="flex-grow container mx-auto px-4 pt-4"> <!-- Remplacé mt-16 et py-8 par pt-4 -->
 
     <input type="hidden" id="id_produit" name="id_produit" value="<?php echo $id_produit; ?>">
     <?php if ($isEditMode): ?>
@@ -324,12 +324,15 @@ $collection = $categoryManager->getCollection($id_produit);
                                     <input type="hidden" name="id_produit" value="<?php echo $produit['id_produit']; ?>">
                                     <div class="flex flex-col md:flex-row md:items-end md:space-x-4">
                                         <div class="mb-2 md:mb-0 flex-grow">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Taille</label>
+                                            <div class="flex flex-col gap-1">
+                                                <p id="taille-error" class="text-red-500 text-sm hidden">Veuillez sélectionner une taille</p>
+                                                <label class="text-sm font-medium text-gray-700">Taille</label>
+                                            </div>
                                             <div class="flex flex-wrap gap-2">
                                                 <?php if (!empty($tailles_disponibles)):
                                                     foreach ($tailles_disponibles as $taille): ?>
                                                         <label class="inline-flex items-center">
-                                                            <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden" required>
+                                                            <input type="radio" name="taille" value="<?php echo htmlspecialchars($taille); ?>" class="hidden">
                                                             <span class="px-4 py-3 border rounded-lg cursor-pointer hover:bg-gray-100 text-base"><?php echo htmlspecialchars($taille); ?></span>
                                                         </label>
                                                     <?php endforeach;
