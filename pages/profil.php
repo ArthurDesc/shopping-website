@@ -371,5 +371,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 alert('Une erreur est survenue');
             }
         };
+
+        // Fonction pour capitaliser la première lettre
+        function capitalizeFirstLetter(input) {
+            input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+        }
+
+        // Appliquer la capitalisation aux champs nom et prénom
+        const nomInput = document.getElementById('nom');
+        const prenomInput = document.getElementById('prenom');
+
+        nomInput.addEventListener('blur', function() {
+            capitalizeFirstLetter(this);
+        });
+
+        prenomInput.addEventListener('blur', function() {
+            capitalizeFirstLetter(this);
+        });
     });
 </script>
