@@ -25,9 +25,6 @@ if (!isset($_SESSION['panier'])) {
 }
 
 $total = array_sum($_SESSION['panier'] ?? []);
-
-$categoryManager = new CategoryManager($conn);
-$headerCategories = $categoryManager->getHeaderCategories();
 ?>
 
 
@@ -92,34 +89,95 @@ $headerCategories = $categoryManager->getHeaderCategories();
             </button>
 
             <nav class="hidden md:flex space-x-8 ml-4">
-              <?php foreach ($headerCategories as $category => $subcategories) : ?>
+                <!-- Homme -->
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                  <a href="<?php echo url("pages/produit.php?collection=" . urlencode($category)); ?>"
-                    class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                    <?php echo ucfirst($category); ?>
-                  </a>
-                  <div x-show="open"
-                    x-transition:enter="transition ease-out duration-100"
-                    x-transition:enter-start="opacity-0 transform scale-95"
-                    x-transition:enter-end="opacity-100 transform scale-100"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 transform scale-100"
-                    x-transition:leave-end="opacity-0 transform scale-95"
-                    style="display: none;" 
-                    class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                    <a href="<?php echo url("pages/produit.php?categories=1&collection=" . urlencode($category)); ?>"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Vêtements
+                    <a href="<?php echo url("pages/produit.php?collection=Homme"); ?>"
+                        class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                        Homme
                     </a>
-                    <?php foreach ($subcategories as $subcategory) : ?>
-                      <a href="<?php echo url("pages/produit.php?collection=" . strtolower(urlencode($category)) . "&categories=" . strtolower(urlencode($subcategory))); ?>"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <?php echo $subcategory; ?>
-                      </a>
-                    <?php endforeach; ?>
-                  </div>
+                    <div x-show="open" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        style="display: none;"
+                        class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                        <a href="<?php echo url("pages/produit.php?categories=1&collection=Homme"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Vêtements
+                        </a>
+                        <a href="<?php echo url("pages/produit.php?categories=2&collection=Homme"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Chaussures
+                        </a>
+                        <a href="<?php echo url("pages/produit.php?categories=3&collection=Homme"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Accessoires
+                        </a>
+                    </div>
                 </div>
-              <?php endforeach; ?>
+
+                <!-- Femme -->
+                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <a href="<?php echo url("pages/produit.php?collection=Femme"); ?>"
+                        class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                        Femme
+                    </a>
+                    <div x-show="open" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        style="display: none;"
+                        class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                        <a href="<?php echo url("pages/produit.php?categories=1&collection=Femme"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Vêtements
+                        </a>
+                        <a href="<?php echo url("pages/produit.php?categories=2&collection=Femme"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Chaussures
+                        </a>
+                        <a href="<?php echo url("pages/produit.php?categories=3&collection=Femme"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Accessoires
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Enfant -->
+                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <a href="<?php echo url("pages/produit.php?collection=Enfant"); ?>"
+                        class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                        Enfant
+                    </a>
+                    <div x-show="open" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        style="display: none;"
+                        class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                        <a href="<?php echo url("pages/produit.php?categories=1&collection=Enfant"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Vêtements
+                        </a>
+                        <a href="<?php echo url("pages/produit.php?categories=2&collection=Enfant"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Chaussures
+                        </a>
+                        <a href="<?php echo url("pages/produit.php?categories=3&collection=Enfant"); ?>"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            Accessoires
+                        </a>
+                    </div>
+                </div>
             </nav>
 
           </div>
@@ -255,6 +313,16 @@ $headerCategories = $categoryManager->getHeaderCategories();
               <li>
                 <a href="<?php echo url('pages/produit.php?categories=1&collection=Homme'); ?>" class="block py-2">
                   Vêtements
+                </a>
+              </li>
+              <li>
+                <a href="<?php echo url('/pages/produit.php?categories=2&collection=Homme'); ?>" class="block py-2">
+                  Chaussures
+                </a>
+              </li>
+              <li>
+                <a href="<?php echo url('pages/produit.php?categories=3&collection=Homme'); ?>" class="block py-2">
+                  Accessoires
                 </a>
               </li>
               <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
