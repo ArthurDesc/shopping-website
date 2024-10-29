@@ -180,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="nom" name="nom" 
                            value="<?php echo htmlspecialchars($user['nom']); ?>" 
                            required 
-                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                           class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
@@ -188,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="prenom" name="prenom" 
                            value="<?php echo htmlspecialchars($user['prenom']); ?>" 
                            required 
-                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                           class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
@@ -196,21 +196,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="email" id="email" name="email" 
                            value="<?php echo htmlspecialchars($user['email']); ?>" 
                            required 
-                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                           class="form-input mt-1 block w-full">
                 </div>
 
                 <div>
                     <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse</label>
                     <textarea id="adresse" name="adresse" 
                               rows="3" 
-                              class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
+                              class="form-input mt-1 block w-full"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
                 </div>
 
                 <div>
                     <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
                     <input type="tel" id="telephone" name="telephone" 
                            value="<?php echo htmlspecialchars($user['telephone'] ?? ''); ?>" 
-                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                           class="form-input mt-1 block w-full">
                 </div>
 
                 <!-- Section mot de passe -->
@@ -220,25 +220,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div>
                             <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">
                                 Mot de passe actuel
-                                <span class="text-sm text-gray-500">(requis uniquement pour changer le mot de passe)</span>
                             </label>
                             <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
-                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                   class="form-input mt-1 block w-full">
                         </div>
 
                         <div>
                             <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
                             <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse" 
-                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
-                            <p class="mt-1 text-sm text-gray-500">
-                                8 caractères minimum, avec majuscule, chiffre et caractère spécial
-                            </p>
+                                   class="form-input mt-1 block w-full">
                         </div>
 
                         <div>
                             <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
                             <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse" 
-                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                   class="form-input mt-1 block w-full">
                         </div>
                     </div>
                 </div>
@@ -246,7 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Bouton de soumission -->
                 <div class="flex justify-end pt-6">
                     <button type="submit" 
-                            class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:-translate-y-0.5">
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Mettre à jour le profil
                     </button>
                 </div>
