@@ -100,14 +100,18 @@ function updateCartUI(cartCount) {
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     if (toast) {
+        // Définir le contenu et le style
         toast.textContent = message;
-        toast.classList.remove('opacity-0');
-        toast.classList.add('opacity-100');
+        toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg z-50 ${
+            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        } text-white`;
         
-        // Masquer le toast après 3 secondes
+        // Ajouter la classe show pour déclencher l'animation
+        toast.classList.add('show');
+        
+        // Retirer la classe show après 3 secondes
         setTimeout(() => {
-            toast.classList.remove('opacity-100');
-            toast.classList.add('opacity-0');
+            toast.classList.remove('show');
         }, 3000);
     }
 }
