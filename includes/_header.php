@@ -91,7 +91,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
             <nav class="hidden md:flex space-x-8 ml-4">
                 <!-- Homme -->
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <a href="<?php echo url("pages/produit.php?collection=Homme"); ?>"
+                    <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
                         class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                         Homme
                     </a>
@@ -104,15 +104,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                         x-transition:leave-end="opacity-0 transform scale-95"
                         style="display: none;"
                         class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                        <a href="<?php echo url("pages/produit.php?categories=1&collection=Homme"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Vêtements
                         </a>
-                        <a href="<?php echo url("pages/produit.php?categories=2&collection=Homme"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Chaussures
                         </a>
-                        <a href="<?php echo url("pages/produit.php?categories=3&collection=Homme"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Accessoires
                         </a>
@@ -121,7 +121,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
 
                 <!-- Femme -->
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <a href="<?php echo url("pages/produit.php?collection=Femme"); ?>"
+                    <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
                         class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                         Femme
                     </a>
@@ -134,15 +134,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                         x-transition:leave-end="opacity-0 transform scale-95"
                         style="display: none;"
                         class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                        <a href="<?php echo url("pages/produit.php?categories=1&collection=Femme"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Vêtements
                         </a>
-                        <a href="<?php echo url("pages/produit.php?categories=2&collection=Femme"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Chaussures
                         </a>
-                        <a href="<?php echo url("pages/produit.php?categories=3&collection=Femme"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Accessoires
                         </a>
@@ -151,7 +151,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
 
                 <!-- Enfant -->
                 <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <a href="<?php echo url("pages/produit.php?collection=Enfant"); ?>"
+                    <a href="<?php echo url("pages/produit.php?collections=Enfant"); ?>"
                         class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
                         Enfant
                     </a>
@@ -164,15 +164,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                         x-transition:leave-end="opacity-0 transform scale-95"
                         style="display: none;"
                         class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                        <a href="<?php echo url("pages/produit.php?categories=1&collection=Enfant"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=1&collections=Enfant"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Vêtements
                         </a>
-                        <a href="<?php echo url("pages/produit.php?categories=2&collection=Enfant"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=2&collections=Enfant"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Chaussures
                         </a>
-                        <a href="<?php echo url("pages/produit.php?categories=3&collection=Enfant"); ?>"
+                        <a href="<?php echo url("pages/produit.php?categories=3&collections=Enfant"); ?>"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Accessoires
                         </a>
@@ -303,7 +303,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
             </a>
           </li>
           <li>
-            <a href="<?php echo url('pages/produit.php?collection=homme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
+            <a href="<?php echo url('pages/produit.php?collections=homme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
               Homme
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -311,67 +311,67 @@ $total = array_sum($_SESSION['panier'] ?? []);
             </a>
             <ul class="hidden pl-4" id="menu-homme">
               <li>
-                <a href="<?php echo url('pages/produit.php?categories=1&collection=Homme'); ?>" class="block py-2">
+                <a href="<?php echo url('pages/produit.php?categories=1&collections=Homme'); ?>" class="block py-2">
                   Vêtements
                 </a>
               </li>
               <li>
-                <a href="<?php echo url('/pages/produit.php?categories=2&collection=Homme'); ?>" class="block py-2">
+                <a href="<?php echo url('/pages/produit.php?categories=2&collections=Homme'); ?>" class="block py-2">
                   Chaussures
                 </a>
               </li>
               <li>
-                <a href="<?php echo url('pages/produit.php?categories=3&collection=Homme'); ?>" class="block py-2">
+                <a href="<?php echo url('pages/produit.php?categories=3&collections=Homme'); ?>" class="block py-2">
                   Accessoires
                 </a>
               </li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=homme&categories=accessoires'); ?>" class="block py-2">Accessoires</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=accessoires'); ?>" class="block py-2">Accessoires</a></li>
             </ul>
           </li>
           <li>
-            <a href="<?php echo url('pages/produit.php?collection=femme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
+            <a href="<?php echo url('pages/produit.php?collections=femme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
               Femme
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-femme">
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=leggings'); ?>" class="block py-2">Leggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=femme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=leggings'); ?>" class="block py-2">Leggings</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
             </ul>
           </li>
           <li>
-            <a href="<?php echo url('pages/produit.php?collection=enfants'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
+            <a href="<?php echo url('pages/produit.php?collections=enfants'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
               Enfants
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-enfants">
-              <li><a href="<?php echo url('pages/produit.php?collection=enfants&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=enfants&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=enfants&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=enfants&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=enfants&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=enfants&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
             </ul>
           </li>
           <li>
-            <a href="<?php echo url('pages/produit.php?collection=sports'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
+            <a href="<?php echo url('pages/produit.php?collections=sports'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
               Sports
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
             <ul class="hidden pl-4" id="menu-sports">
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=football'); ?>" class="block py-2">Football</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=basketball'); ?>" class="block py-2">Basketball</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=running'); ?>" class="block py-2">Running</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=rugby'); ?>" class="block py-2">Rugby</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collection=sports&categories=handball'); ?>" class="block py-2">Handball</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=football'); ?>" class="block py-2">Football</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=basketball'); ?>" class="block py-2">Basketball</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=running'); ?>" class="block py-2">Running</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=rugby'); ?>" class="block py-2">Rugby</a></li>
+              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=handball'); ?>" class="block py-2">Handball</a></li>
             </ul>
           </li>
         </ul>
