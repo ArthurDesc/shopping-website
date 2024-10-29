@@ -28,8 +28,8 @@ $collections = mysqli_fetch_all($collections_query, MYSQLI_ASSOC);
 $filtre = new Filtre();
 
 // Récupérer le paramètre de catégorie
-if (isset($_GET['category'])) {
-    $categories = explode(',', $_GET['category']);
+if (isset($_GET['categories'])) {
+    $categories = explode(',', $_GET['categories']);
     $filtre->setCategories($categories);
 }
 
@@ -170,6 +170,16 @@ $produits_page = $produits;
 
     #filterDropdowns.show {
         display: block !important;
+    }
+
+    .modal {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .modal.scale-100 {
+        visibility: visible;
+        opacity: 1;
     }
 </style>
 <?php require_once '../includes/_header.php'; ?>
@@ -418,30 +428,29 @@ $produits_page = $produits;
                 <?php if (!empty($produits)): ?>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <?php foreach ($produits as $produit): ?>
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full"
-                                data-categories="<?php echo implode(',', array_map(function ($cat) {
-                                                        return $cat['id_categorie'];
-                                                    }, $categoryManager->getProductCategories($produit->getId()))); ?>"
-                                data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>"
-                                data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>">
-                                <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
-                                    <div class="relative pb-[125%] flex-grow">
-                                        <img src="<?php echo $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg'); ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full">
+                                <!-- Lien produit -->
+                                <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="product-link block flex-grow">
+                                    <div class="relative pb-[125%]">
+                                        <img src="<?php echo $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg'); ?>" 
+                                             alt="<?php echo htmlspecialchars($produit->getNom()); ?>" 
+                                             class="absolute inset-0 w-full h-full object-cover object-top">
                                     </div>
-                                    <div class="p-3 flex-shrink-0">
+                                    <div class="p-3">
                                         <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
                                         <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
-                                        <!-- Affichage de la disponibilité du produit -->
-                                        <p class="text-xs <?php echo $produit->getStock() > 0 ? 'text-green-600' : 'text-red-600'; ?>">
-                                            <?php echo $produit->getStock() > 0 ? 'En stock' : 'Rupture de stock'; ?>
-                                        </p>
                                     </div>
                                 </a>
+                                
+                                <!-- Conteneur séparé pour le prix et le bouton panier -->
                                 <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
                                     <p class="product-price text-sm text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
-                                    <button type="button" class="product-cart-button open-modal-btn flex items-center justify-center" data-product-id="<?php echo $produit->getId(); ?>" data-product-price="<?php echo $produit->getPrix(); ?>">
+                                    <button type="button" 
+                                            class="product-cart-button open-modal-btn flex items-center justify-center" 
+                                            data-product-id="<?php echo $produit->getId(); ?>" 
+                                            data-product-price="<?php echo $produit->getPrix(); ?>">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="product-cart-icon">
-                                            <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8ZM10.84 5.69C10.84 4.04 12.2 2.69 13.84 2.69C15.49 2.69 16.84 3.69 16.84 5.69V6.69H10.84V5.69ZM23.82 18.41L22.39 8.41C22.25 7.43 21.41 6.69 20.41 6.69H18.84V5.69C18.84 2.69 16.6 0.69 13.84 0.69C11.08 0.69 8.84 2.93 8.84 5.69V6.69H7.57C6.58 6.69 5.43 7.43 5.29 8.41L3.86 18.41C3.69 19.62 4.62 20.69 5.84 20.69H21.84C23.06 20.69 23.99 19.62 23.82 18.41Z" fill="currentColor" />
+                                            <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8ZM10.84 5.69C10.84 4.04 12.2 2.69 13.84 2.69C15.49 2.69 16.84 3.69 16.84 5.69V6.69H10.84V5.69ZM23.82 18.41L22.39 8.41C22.25 7.43 21.41 6.69 20.41 6.69H18.84V5.69C18.84 2.69 16.6 0.69 13.84 0.69C11.08 0.69 8.84 2.93 8.84 5.69V6.69H7.57C6.58 6.69 5.43 7.43 5.29 8.41L3.86 18.41C3.69 19.62 4.62 20.69 5.84 20.69H21.84C23.06 20.69 23.99 19.62 23.82 18.41Z" fill="currentColor"/>
                                         </svg>
                                     </button>
                                 </div>
@@ -459,25 +468,12 @@ $produits_page = $produits;
 </main>
 
 
-<!-- Scripts -->
-
-<!-- Ajout d'Alpine.js -->
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-
-<!-- Ajoutez ce script juste avant la fermeture de la balise body -->
 
 
-<script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
 
-
-<!-- Modal pour choisir la taille -->
-<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0">
-    <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
+<!-- Modal avec animation -->
+<div id="modal-container">
+    <div class="modal-background bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
         <div class="p-6">
             <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
             <!-- Ajoutez cette ligne pour le message d'erreur -->
@@ -690,3 +686,6 @@ $produits_page = $produits;
 </body>
 
 </html>
+
+
+

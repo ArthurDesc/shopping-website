@@ -45,18 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = new URL(window.location.href);
         const params = new URLSearchParams();
         
-        // Préserver les paramètres non liés aux filtres
-        ['page', 'sort'].forEach(param => {
-            if (url.searchParams.has(param)) {
-                params.set(param, url.searchParams.get(param));
-            }
-        });
-
         // Ajouter les paramètres de filtre
         Object.entries(selectedFilters).forEach(([key, values]) => {
             if (values.length > 0) {
                 if (key === 'collections') {
-                    params.set('collection', values[0]); // On prend la première collection
+                    params.set('collection', values[0]);
+                } else if (key === 'categories') {
+                    params.set('categories', values.join(','));
                 } else {
                     params.set(key, values.join(','));
                 }
@@ -102,26 +97,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialisation depuis l'URL
-    function initializeFromURL() {
+    function initializeFilters() {
         const params = new URLSearchParams(window.location.search);
         
         // Initialiser les collections
         const collection = params.get('collection');
         if (collection) {
-            const checkbox = document.querySelector(`input[name="collections[]"][value="${collection}"]`);
-            if (checkbox) {
-                checkbox.checked = true;
+            const collectionCheckbox = document.querySelector(`input[name="collections[]"][value="${collection}"]`);
+            if (collectionCheckbox) {
+                collectionCheckbox.checked = true;
             }
         }
 
-        // Initialiser les marques
-        const marques = params.get('marques')?.split(',') || [];
-        marques.forEach(marque => {
-            const checkbox = document.querySelector(`input[name="marques[]"][value="${marque}"]`);
-            if (checkbox) checkbox.checked = true;
+        // Initialiser les catégories
+        const categories = params.get('categories')?.split(',') || [];
+        categories.forEach(category => {
+            const categoryCheckbox = document.querySelector(`input[name="categories[]"][value="${category}"]`);
+            if (categoryCheckbox) {
+                categoryCheckbox.checked = true;
+            }
         });
 
-        applyFilters();
+        // Mettre à jour les filtres actifs
+        updateActiveFilters();
     }
 
     // Écouteurs d'événements
@@ -146,5 +144,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Initialisation
-    initializeFromURL();
+    initializeFilters();
 });
