@@ -175,7 +175,8 @@ include '../includes/_header.php';
                                 <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
                                 <div class="flex-grow">
                                     <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
-                                    <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
+                                    <p class="text-gray-600">Prix unitaire: <span class="prix-unitaire" data-prix="<?= $product['prix'] ?>"><?= number_format($product['prix'], 2); ?>€</span></p>
+                                    <p class="text-gray-600">Sous-total: <span class="sous-total" data-id="<?= $key ?>"><?= number_format($product_total, 2); ?>€</span></p>
                                     <form method="post" action="panier.php" class="flex items-center mt-2">
                                         <input type="hidden" name="id_produit" value="<?= $key ?>">
                                         <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
@@ -183,7 +184,7 @@ include '../includes/_header.php';
                                         <button type="submit" name="action" value="increase" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-r">+</button>
                                     </form>
                                 </div>
-                                <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
+                                <a href="panier.php?del=<?= urlencode($key); ?>" class="delete-item text-red-500 hover:text-red-700 ml-4" data-product-id="<?= urlencode($key); ?>">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
@@ -351,6 +352,125 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de la suppression des articles
+    document.querySelectorAll('.delete-item').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            const productElement = this.closest('.flex.items-center');
+            const sousTotal = productElement.querySelector('.sous-total');
+            const montantARetirer = parseFloat(sousTotal.textContent.replace('€', ''));
+
+            fetch(`panier.php?del=${productId}`, {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(() => {
+                // Supprimer visuellement l'élément
+                productElement.remove();
+                
+                // Mettre à jour le total
+                updateTotal(-montantARetirer);
+                
+                // Si le panier est vide, afficher le message de panier vide
+                const remainingItems = document.querySelectorAll('.flex.items-center').length;
+                if (remainingItems === 0) {
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    });
+
+    // Fonction pour mettre à jour le total
+    function updateTotal(montantChangement = 0) {
+        const totalElement = document.querySelector('.text-2xl.font-bold.text-green-600');
+        if (totalElement) {
+            const currentTotal = parseFloat(totalElement.textContent.replace('€', ''));
+            const newTotal = Math.max(0, currentTotal + montantChangement);
+            totalElement.textContent = `${newTotal.toFixed(2)}€`;
+        }
+    }
+
+    // Fonction pour mettre à jour le sous-total d'un produit
+    function updateSousTotal(productId, quantity) {
+        const sousTotal = document.querySelector(`.sous-total[data-id="${productId}"]`);
+        const prixUnitaire = parseFloat(sousTotal.closest('.flex-grow').querySelector('.prix-unitaire').dataset.prix);
+        const nouveauSousTotal = prixUnitaire * quantity;
+        sousTotal.textContent = `${nouveauSousTotal.toFixed(2)}€`;
+        return nouveauSousTotal;
+    }
+
+    // Mise à jour des gestionnaires d'événements pour les boutons +/-
+    const quantityForms = document.querySelectorAll('form[action="panier.php"]');
+    quantityForms.forEach(form => {
+        const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
+        const increaseButton = form.querySelector('button[name="action"][value="increase"]');
+        const quantityDisplay = form.querySelector('span');
+        const productId = form.querySelector('input[name="id_produit"]').value;
+
+        decreaseButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            let quantity = parseInt(quantityDisplay.textContent);
+            if (quantity > 1) {
+                quantity--;
+                quantityDisplay.textContent = quantity;
+                const ancienSousTotal = parseFloat(form.closest('.flex-grow').querySelector('.sous-total').textContent.replace('€', ''));
+                const nouveauSousTotal = updateSousTotal(productId, quantity);
+                updateTotal(nouveauSousTotal - ancienSousTotal);
+                updateQuantity(form, quantity);
+            }
+        });
+
+        increaseButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            let quantity = parseInt(quantityDisplay.textContent);
+            quantity++;
+            quantityDisplay.textContent = quantity;
+            const ancienSousTotal = parseFloat(form.closest('.flex-grow').querySelector('.sous-total').textContent.replace('€', ''));
+            const nouveauSousTotal = updateSousTotal(productId, quantity);
+            updateTotal(nouveauSousTotal - ancienSousTotal);
+            updateQuantity(form, quantity);
+        });
+    });
+});
+</script>
+
+<!-- Ajouter au début du fichier, après les includes -->
+if (isset($_GET['get_total'])) {
+    $total = 0;
+    $contenuPanier = $panier->getContenu();
+    
+    if (!empty($contenuPanier)) {
+        $ids = array_map(function ($key) {
+            return explode('_', $key)[0];
+        }, array_keys($contenuPanier));
+        $ids = array_unique($ids);
+
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        while ($product = $result->fetch_assoc()) {
+            foreach ($contenuPanier as $key => $quantity) {
+                list($id, $taille) = explode('_', $key . '_');
+                if ($id == $product['id_produit']) {
+                    $total += $product['prix'] * intval($quantity);
+                }
+            }
+        }
+    }
+    
+    header('Content-Type: application/json');
+    echo json_encode(['total' => $total]);
+    exit;
+}
 
 
 

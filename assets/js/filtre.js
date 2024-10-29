@@ -20,10 +20,20 @@ document.addEventListener('DOMContentLoaded', function() {
             collections: getSelectedValues('collections')
         };
 
+        console.log('Filtres sélectionnés:', selectedFilters);
+        console.log('Nombre de produits trouvés:', products.length);
+
         products.forEach(product => {
             const categories = product.dataset.categories?.split(',') || [];
             const marque = product.dataset.brand || '';
             const collection = product.dataset.collection || '';
+
+            console.log('Données du produit:', {
+                categories,
+                marque,
+                collection,
+                element: product
+            });
 
             const shouldDisplay = 
                 (selectedFilters.categories.length === 0 || categories.some(cat => selectedFilters.categories.includes(cat))) &&

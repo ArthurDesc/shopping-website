@@ -73,8 +73,11 @@ include './includes/_header.php';
   <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Touts pour votre sports</h2>
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
-      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+      <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group product-card" 
+           data-categories="football" 
+           data-brand="" 
+           data-collection="">
+        <a href="<?php echo url('pages/produit.php?category=%2CFootball'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Football</button>
@@ -82,7 +85,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?category=23'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Basketball</button>
@@ -90,7 +93,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?category=21'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Running</button>
@@ -98,7 +101,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?category=22'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Handball</button>
@@ -106,7 +109,7 @@ include './includes/_header.php';
         </a>
       </div>
       <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?categorie=homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?category=20'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
             <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Rugby</button>
@@ -120,10 +123,10 @@ include './includes/_header.php';
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collection=Homme'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?collection=homme&filtre=genre'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/homme.jpg'); ?>" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Homme</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Homme</button>
           </div>
         </a>
       </div>
@@ -150,10 +153,10 @@ include './includes/_header.php';
   <div class="custom-scroll">
     <div class="flex space-x-8 p-4 w-max">
       <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?promotion=camp'); ?>" class="block relative">
+        <a href="<?php echo url('pages/produit.php?promotion=camp&filtre=promo'); ?>" class="block relative">
           <img src="<?php echo url('assets/images/camp.jpeg'); ?>" alt="Homme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
           <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
+            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Promotion</button>
           </div>
         </a>
       </div>
@@ -250,3 +253,28 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     display: none;
   }
 </style>
+
+<form id="filterForm">
+  <div class="filter-section">
+    <h3>Catégories</h3>
+    <label>
+      <input type="checkbox" name="categories[]" value="football">
+      <span>Football</span>
+    </label>
+    <!-- Autres catégories... -->
+  </div>
+  
+  <div class="filter-section">
+    <h3>Marques</h3>
+    <!-- Checkboxes pour les marques... -->
+  </div>
+  
+  <div class="filter-section">
+    <h3>Collections</h3>
+    <!-- Checkboxes pour les collections... -->
+  </div>
+</form>
+
+<div id="activeFilters"></div>
+
+
