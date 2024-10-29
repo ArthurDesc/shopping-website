@@ -10,7 +10,7 @@ include './includes/_header.php';
         <img src="<?php echo url('assets/images/pikaso_edit.png'); ?>" alt="Image 3" class="w-full h-full object-cover object-center">
         <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-50"></div>
         <div class="absolute bottom-8 sm:bottom-12 left-6 sm:left-10 text-white z-10 max-w-[80%]">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Determination</h2>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Détermination</h2>
         </div>
       </div>
       <div class="swiper-slide relative">
