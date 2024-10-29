@@ -191,26 +191,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="personal-form" class="space-y-6" data-form-type="personal">
                 <div class="space-y-2">
                     <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                    <input type="text" id="nom" name="nom"
-                        value="<?php echo htmlspecialchars($user['nom']); ?>"
-                        required
-                        class="form-input mt-1 block w-full">
+                    <div class="relative">
+                        <input type="text" id="nom" name="nom"
+                            value="<?php echo htmlspecialchars($user['nom']); ?>"
+                            required
+                            disabled
+                            class="form-input mt-1 block w-full pr-10">
+                        <button type="button" onclick="toggleEdit('nom')" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="space-y-2">
                     <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                    <input type="text" id="prenom" name="prenom"
-                        value="<?php echo htmlspecialchars($user['prenom']); ?>"
-                        required
-                        class="form-input mt-1 block w-full">
+                    <div class="relative">
+                        <input type="text" id="prenom" name="prenom"
+                            value="<?php echo htmlspecialchars($user['prenom']); ?>"
+                            required
+                            disabled
+                            class="form-input mt-1 block w-full pr-10">
+                        <button type="button" onclick="toggleEdit('prenom')" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="space-y-2">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email"
-                        value="<?php echo htmlspecialchars($user['email']); ?>"
-                        required
-                        class="form-input mt-1 block w-full">
+                    <div class="relative">
+                        <input type="email" id="email" name="email"
+                            value="<?php echo htmlspecialchars($user['email']); ?>"
+                            required
+                            disabled
+                            class="form-input mt-1 block w-full pr-10">
+                        <button type="button" onclick="toggleEdit('email')" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -227,9 +251,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form id="contact-form" class="space-y-6" data-form-type="contact">
                 <div class="space-y-2">
                     <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse postale</label>
-                    <textarea id="adresse" name="adresse"
-                        rows="3"
-                        class="form-input mt-1 block w-full"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
+                    <div class="relative">
+                        <textarea id="adresse" name="adresse"
+                            rows="3"
+                            disabled
+                            class="form-input mt-1 block w-full pr-10"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
+                        <button type="button" onclick="toggleEdit('adresse')" class="absolute right-2 top-4 text-gray-500 hover:text-blue-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="space-y-2">
@@ -388,5 +420,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         prenomInput.addEventListener('blur', function() {
             capitalizeFirstLetter(this);
         });
+
+        // Fonction pour activer/désactiver l'édition d'un champ
+        window.toggleEdit = function(fieldId) {
+            const input = document.getElementById(fieldId);
+            const isDisabled = input.disabled;
+            
+            input.disabled = !isDisabled;
+            
+            if (!isDisabled) {
+                input.classList.add('bg-gray-50');
+            } else {
+                input.classList.remove('bg-gray-50');
+                input.focus();
+            }
+        };
     });
 </script>
