@@ -160,105 +160,153 @@ $produits_page = $produits;
 <main class="container mx-auto px-4 mt-2">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
-        <div id="filterForm" class="md:w-1/4">
-            <div class="filter-controls p-4">
-                <!-- Catégories -->
-                <div class="filter-section mb-4">
-                    <h3 class="font-semibold mb-2">Catégories</h3>
-                    <div class="space-y-2">
-                        <?php foreach ($categories as $id_categorie => $categorie): ?>
-                            <label class="checkbox-container flex items-center">
-                                <input type="checkbox" 
-                                       class="hidden" 
-                                       data-category="<?= htmlspecialchars($categorie['id_categorie']) ?>"
-                                       value="<?= htmlspecialchars($categorie['id_categorie']) ?>">
-                                <svg viewBox="0 0 64 64" height="1em" width="1em">
-                                    <path d="M 0 16 V 56 A 8 8 0 0 0 8 64 H 56 A 8 8 0 0 0 64 56 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16" 
-                                          class="checkbox-path" 
-                                          fill="none" 
-                                          stroke="white" 
-                                          stroke-width="4">
-                                    </path>
-                                </svg>
-                                <span class="ml-2 text-sm"><?= htmlspecialchars($categorie['nom']) ?></span>
-                            </label>
-                            
-                            <?php if (!empty($categorie['sous_categories'])): ?>
-                                <div class="ml-6 space-y-1">
-                                    <?php foreach ($categorie['sous_categories'] as $sous_categorie): ?>
+        <div id="filterForm" x-data="{ openTab: null }" class="fixed md:static inset-0 bg-gradient-to-b from-blue-400 to-blue-600 z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:h-fit md:z-auto overflow-y-auto">
+            <div class="h-full p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-semibold text-lg">Filtres</h3>
+                    <button id="closeFilters" class="md:hidden text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Contenu des filtres -->
+                <div class="flex-grow overflow-y-auto px-4">
+                    <!-- Catégories -->
+                    <div id="categories-filter" class="filter-section mb-4">
+                        <div class="flex items-center justify-between cursor-pointer py-2" 
+                             @click="openTab = openTab === 'categories' ? null : 'categories'">
+                            <span class="font-semibold text-gray-600">Catégories</span>
+                            <svg :class="{'rotate-180': openTab === 'categories'}" 
+                                 class="w-6 h-6 transform transition-transform duration-200" 
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div x-show="openTab === 'categories'" x-collapse>
+                            <div class="py-2 pl-4">
+                                <div class="search__container mb-2">
+                                    <input class="search__input" type="text" id="categories-search" placeholder="Rechercher">
+                                </div>
+                                <div class="space-y-2">
+                                    <?php foreach ($categories as $id_categorie => $categorie): ?>
                                         <label class="checkbox-container flex items-center">
                                             <input type="checkbox" 
-                                                   class="hidden" 
-                                                   data-category="<?= htmlspecialchars($sous_categorie['id']) ?>"
-                                                   value="<?= htmlspecialchars($sous_categorie['id']) ?>">
-                                            <svg viewBox="0 0 64 64" height="1em" width="1em">
-                                                <path d="M 0 16 V 56 A 8 8 0 0 0 8 64 H 56 A 8 8 0 0 0 64 56 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16" 
-                                                      class="checkbox-path" 
-                                                      fill="none" 
-                                                      stroke="white" 
-                                                      stroke-width="4">
-                                            </path>
-                                        </svg>
-                                        <span class="ml-2 text-sm"><?= htmlspecialchars($sous_categorie['nom']) ?></span>
+                                                   class="hidden"
+                                                   data-category="<?= htmlspecialchars($categorie['id_categorie']) ?>"
+                                                   name="categories[]"
+                                                   value="<?= htmlspecialchars($categorie['id_categorie']) ?>">
+                                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                                    class="checkbox-path">
+                                                </path>
+                                            </svg>
+                                            <span class="ml-2 text-white select-none"><?= htmlspecialchars($categorie['nom']) ?></span>
                                         </label>
+                                        
+                                        <?php if (!empty($categorie['sous_categories'])): ?>
+                                            <div class="ml-6 space-y-1">
+                                                <?php foreach ($categorie['sous_categories'] as $sous_categorie): ?>
+                                                    <label class="checkbox-container flex items-center">
+                                                        <input type="checkbox" 
+                                                               class="hidden"
+                                                               data-category="<?= htmlspecialchars($sous_categorie['id']) ?>"
+                                                               name="categories[]"
+                                                               value="<?= htmlspecialchars($sous_categorie['id']) ?>">
+                                                        <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                            <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                                                class="checkbox-path">
+                                                            </path>
+                                                        </svg>
+                                                        <span class="ml-2 text-white select-none"><?= htmlspecialchars($sous_categorie['nom']) ?></span>
+                                                    </label>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php endforeach; ?>
                                 </div>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Marques -->
-                <div class="filter-section mb-4">
-                    <h3 class="font-semibold mb-2">Marques</h3>
-                    <div class="space-y-2">
-                        <?php foreach ($marques as $marque): ?>
-                            <label class="checkbox-container flex items-center">
-                                <input type="checkbox" 
-                                       class="hidden" 
-                                       data-brand="<?= htmlspecialchars($marque) ?>"
-                                       value="<?= htmlspecialchars($marque) ?>">
-                                <svg viewBox="0 0 64 64" height="1em" width="1em">
-                                    <path d="M 0 16 V 56 A 8 8 0 0 0 8 64 H 56 A 8 8 0 0 0 64 56 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16" 
-                                          class="checkbox-path" 
-                                          fill="none" 
-                                          stroke="white" 
-                                          stroke-width="4">
-                                    </path>
-                                </svg>
-                                <span class="ml-2 text-sm"><?= htmlspecialchars($marque) ?></span>
-                            </label>
-                        <?php endforeach; ?>
+                    <!-- Marques -->
+                    <div id="marques-filter" class="filter-section mb-4">
+                        <div class="flex items-center justify-between cursor-pointer py-2" 
+                             @click="openTab = openTab === 'marques' ? null : 'marques'">
+                            <span class="font-semibold text-gray-600">Marques</span>
+                            <svg :class="{'rotate-180': openTab === 'marques'}" 
+                                 class="w-6 h-6 transform transition-transform duration-200" 
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div x-show="openTab === 'marques'" x-collapse>
+                            <div class="py-2 pl-4">
+                                <div class="search__container mb-2">
+                                    <input class="search__input" type="text" id="marques-search" placeholder="Rechercher">
+                                </div>
+                                <div id="marques-list">
+                                    <?php foreach ($marques as $marque): ?>
+                                        <div class="flex items-center mb-2">
+                                            <label class="checkbox-container flex items-center">
+                                                <input type="checkbox"
+                                                       class="hidden"
+                                                       data-brand="<?= htmlspecialchars($marque) ?>"
+                                                       name="marques[]"
+                                                       value="<?= htmlspecialchars($marque) ?>">
+                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                                        class="checkbox-path"></path>
+                                                </svg>
+                                                <span class="ml-2 text-white select-none"><?= htmlspecialchars($marque) ?></span>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Collections -->
-                <div class="filter-section mb-4">
-                    <h3 class="font-semibold mb-2">Collections</h3>
-                    <div class="space-y-2">
-                        <?php foreach ($collections as $collection): ?>
-                            <label class="checkbox-container flex items-center">
-                                <input type="checkbox" 
-                                       class="hidden" 
-                                       data-collection="<?= htmlspecialchars($collection) ?>"
-                                       value="<?= htmlspecialchars($collection) ?>">
-                                <svg viewBox="0 0 64 64" height="1em" width="1em">
-                                    <path d="M 0 16 V 56 A 8 8 0 0 0 8 64 H 56 A 8 8 0 0 0 64 56 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 0 0 0 56 0 H 8 A 8 8 0 0 0 0 8 V 16" 
-                                          class="checkbox-path" 
-                                          fill="none" 
-                                          stroke="white" 
-                                          stroke-width="4">
-                                    </path>
-                                </svg>
-                                <span class="ml-2 text-sm"><?= htmlspecialchars($collection) ?></span>
-                            </label>
-                        <?php endforeach; ?>
+                    <!-- Collections -->
+                    <div id="collections-filter" class="filter-section mb-4">
+                        <div class="flex items-center justify-between cursor-pointer py-2" 
+                             @click="openTab = openTab === 'collections' ? null : 'collections'">
+                            <span class="font-semibold text-gray-600">Collections</span>
+                            <svg :class="{'rotate-180': openTab === 'collections'}" 
+                                 class="w-6 h-6 transform transition-transform duration-200" 
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <div x-show="openTab === 'collections'" x-collapse>
+                            <div class="py-2 pl-4">
+                                <div class="space-y-2">
+                                    <?php foreach ($collections as $collection): ?>
+                                        <div class="flex items-center mb-2">
+                                            <label class="checkbox-container flex items-center">
+                                                <input type="checkbox"
+                                                       class="hidden"
+                                                       data-collection="<?= htmlspecialchars($collection) ?>"
+                                                       name="collections[]"
+                                                       value="<?= htmlspecialchars($collection) ?>">
+                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                                        class="checkbox-path"></path>
+                                                </svg>
+                                                <span class="ml-2 text-white select-none"><?= htmlspecialchars($collection) ?></span>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Liste des produits à droite -->
+        <!-- Liste des produits -->
         <div class="w-full md:w-3/4">
             <div class="flex flex-col mb-4 mt-4">
                 <div class="flex justify-between items-center">
@@ -295,33 +343,31 @@ $produits_page = $produits;
                 </svg>
             </div>
 
-            <section class="products_list">
-                <?php if (!empty($produits)): ?>
-                    <div id="products">
-                        <div class="list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            <?php foreach ($produits as $produit): ?>
-                                <div class="product-item" 
-                                     data-category="<?= htmlspecialchars(implode(',', $produit->getCategories())) ?>"
-                                     data-brand="<?= htmlspecialchars($produit->getMarque()) ?>"
-                                     data-collection="<?= htmlspecialchars($produit->getCollection()) ?>">
-                                    <a href="<?= url('pages/detail.php?id=' . $produit->getId()) ?>" class="block">
-                                        <div class="relative overflow-hidden rounded-lg">
-                                            <img src="<?= url($produit->getImageUrl()) ?>" 
-                                                 alt="<?= htmlspecialchars($produit->getNom()) ?>" 
-                                                 class="w-full h-64 object-cover">
-                                            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent">
-                                                <h3 class="product-name text-white font-semibold"><?= htmlspecialchars($produit->getNom()) ?></h3>
-                                                <p class="product-price text-white"><?= number_format($produit->getPrix(), 2) ?>€</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            <?php endforeach; ?>
+            <section id="products">
+                <!-- Barre de recherche -->
+                <div class="wave-group mb-8">
+                    <input required="" type="text" class="search input" id="products-search">
+                    <!-- ... reste du code de la barre de recherche ... -->
+                </div>
+
+                <!-- Container pour les produits -->
+                <div class="list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <?php foreach ($produits as $produit): ?>
+                        <div class="product-card list-item"
+                             data-category="<?= htmlspecialchars(implode(',', $produit->getCategories())) ?>"
+                             data-brand="<?= htmlspecialchars($produit->getMarque()) ?>"
+                             data-collection="<?= htmlspecialchars($produit->getCollection()) ?>">
+                            <!-- Contenu de la carte produit -->
+                            <h3 class="product-name text-sm font-semibold mb-1 truncate">
+                                <?= htmlspecialchars($produit->getNom()) ?>
+                            </h3>
+                            <p class="product-price text-sm text-blue-600 font-bold">
+                                <?= $produit->formatPrix() ?>
+                            </p>
+                            <!-- ... reste du contenu de la carte ... -->
                         </div>
-                    </div>
-                <?php else: ?>
-                    <p>Aucun produit disponible.</p>
-                <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
             </section>
 
         </div>
@@ -379,6 +425,4 @@ $produits_page = $produits;
 </body>
 
 </html>
-
-
 
