@@ -27,8 +27,20 @@ if (isset($_SESSION['panier']) && !empty($_SESSION['panier'])) {
     }
 }
 
+// Récupérer les informations de l'utilisateur
+$stmt = $conn->prepare("SELECT adresse, telephone FROM utilisateurs WHERE id_utilisateur = ?");
+$stmt->bind_param("i", $_SESSION['id_utilisateur']);
+$stmt->execute();
+$result = $stmt->get_result();
+$user_info = $result->fetch_assoc();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
+        // Mettre à jour les informations de l'utilisateur si elles ont changé
+        $stmt = $conn->prepare("UPDATE utilisateurs SET adresse = ?, telephone = ? WHERE id_utilisateur = ?");
+        $stmt->bind_param("ssi", $_POST['adresse'], $_POST['telephone'], $_SESSION['id_utilisateur']);
+        $stmt->execute();
+
         // Démarrer une transaction
         $conn->begin_transaction();
 
@@ -127,32 +139,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Ajout de Tailwind CSS -->
     <script src="https://js.stripe.com/v3/"></script> <!-- Ajout de Stripe.js -->
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <form id="payment-form" class="bg-white p-8 rounded-lg shadow-lg w-96">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-8">
+    <form id="payment-form" class="bg-white p-8 rounded-lg shadow-lg w-[32rem] mx-4">
         <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Paiement Sécurisé</h2>
         
+        <!-- Informations de livraison -->
+        <div class="mb-6 border-b pb-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-700">Informations de livraison</h3>
+            
+            <div class="mb-4">
+                <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse de livraison</label>
+                <textarea 
+                    id="adresse" 
+                    name="adresse" 
+                    rows="3" 
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                ><?php echo htmlspecialchars($user_info['adresse'] ?? ''); ?></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="telephone" class="block text-sm font-medium text-gray-700">Numéro de téléphone</label>
+                <input 
+                    type="tel" 
+                    id="telephone" 
+                    name="telephone" 
+                    value="<?php echo htmlspecialchars($user_info['telephone'] ?? ''); ?>"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                >
+            </div>
+        </div>
+
+        <!-- Informations de paiement -->
         <div class="mb-4">
             <label for="card-holder-name" class="block text-sm font-medium text-gray-700">Nom du titulaire de la carte</label>
-            <input type="text" id="card-holder-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="John Doe" required>
+            <input type="text" id="card-holder-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="John Doe" required>
         </div>
 
-        <div class="mb-4">
-            <label for="email" class="block text-sm font-medium text-gray-700">Adresse e-mail</label>
-            <input type="email" id="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="exemple@domaine.com" required>
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Informations de carte</label>
+            <div id="card-element" class="border p-4 rounded bg-gray-50"></div>
+            <div id="card-errors" class="text-red-500 mt-2 text-sm"></div>
         </div>
 
-        <div class="mb-4">
-            <label for="address" class="block text-sm font-medium text-gray-700">Adresse postale</label>
-            <input type="text" id="address" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="123 Rue Exemple" required>
+        <!-- Total de la commande -->
+        <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+            <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-700">Total à payer :</span>
+                <span class="font-bold text-lg"><?php echo number_format($total_amount, 2, ',', ' '); ?> €</span>
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700">Informations de carte</label>
-            <div id="card-element" class="border p-4 rounded bg-gray-200"></div> <!-- Champ de carte -->
-            <div id="card-errors" class="text-red-500 mt-2"></div> <!-- Zone d'erreur pour les informations de carte -->
-        </div>
-
-        <button id="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200">Payer</button> <!-- Bouton de paiement -->
+        <button id="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
+            Procéder au paiement
+        </button>
+        
         <div id="payment-result" class="mt-4 text-center font-bold text-green-600"></div>
     </form>
 
@@ -186,27 +228,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 event.preventDefault();
 
                 const cardHolderName = document.getElementById('card-holder-name').value;
-                const email = document.getElementById('email').value; // Récupérer l'email
-                const address = document.getElementById('address').value; // Récupérer l'adresse
+                const adresse = document.getElementById('adresse').value;
+                const telephone = document.getElementById('telephone').value;
+
+                // Vérifier que les champs sont remplis
+                if (!adresse || !telephone) {
+                    document.getElementById('card-errors').innerText = 'Veuillez remplir tous les champs obligatoires';
+                    return;
+                }
 
                 const { paymentMethod, error } = await stripe.createPaymentMethod({
                     type: 'card',
                     card: cardElement,
                     billing_details: {
                         name: cardHolderName,
-                        email: email, // Ajouter l'email
+                        phone: telephone,
                         address: {
-                            line1: address, // Ajouter l'adresse
-                        },
+                            line1: adresse
+                        }
                     },
                 });
 
                 if (error) {
-                    document.getElementById('card-errors').innerText = error.message; // Afficher l'erreur
+                    document.getElementById('card-errors').innerText = error.message;
                 } else {
-                    document.getElementById('card-errors').innerText = ''; // Réinitialiser les erreurs
+                    document.getElementById('card-errors').innerText = '';
                     const formData = new FormData();
                     formData.append('paymentMethodId', paymentMethod.id);
+                    formData.append('adresse', adresse);
+                    formData.append('telephone', telephone);
 
                     const response = await fetch('process_paiement.php', {
                         method: 'POST',
