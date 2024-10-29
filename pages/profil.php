@@ -1,15 +1,20 @@
 <?php
-// Déplacer session_start() et la vérification tout en haut, avant toute sortie
+// Vérifier qu'il n'y a aucune sortie avant
+ob_start(); // Démarre la mise en tampon de sortie
+
+// Démarrer la session avant tout
 session_start();
-require_once dirname(__FILE__) . '/../includes/_header.php';
 
-require_once dirname(__FILE__) . '/../includes/_db.php';
-
-// Vérifier si l'utilisateur est connecté
+// Vérifier si l'utilisateur est connecté AVANT d'inclure les autres fichiers
 if (!isset($_SESSION['id_utilisateur'])) {
-    header('Location: connexion.php');
+    header('Location: ../index.php');
+    ob_end_clean(); // Nettoie le tampon de sortie
     exit();
 }
+
+// Inclure les fichiers nécessaires APRÈS la vérification
+require_once dirname(__FILE__) . '/../includes/_header.php';
+require_once dirname(__FILE__) . '/../includes/_db.php';
 
 $erreurs = [];
 $success = false;
@@ -272,10 +277,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <!-- Bouton de validation (initialement caché) -->
-    <div id="submit-button" class="max-w-7xl mx-auto mt-6 flex justify-end hidden">
+    <div id="submit-button" class="max-w-7xl mx-auto mt-12 flex justify-end hidden">
         <button type="button" 
                 onclick="submitForms()"
-                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105">
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
             Valider les modifications
         </button>
     </div>
