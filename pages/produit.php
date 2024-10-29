@@ -353,18 +353,42 @@ $produits_page = $produits;
                 <!-- Container pour les produits -->
                 <div class="list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <?php foreach ($produits as $produit): ?>
-                        <div class="product-card list-item"
+                        <div class="product-card list-item bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full"
                              data-category="<?= htmlspecialchars(implode(',', $produit->getCategories())) ?>"
                              data-brand="<?= htmlspecialchars($produit->getMarque()) ?>"
                              data-collection="<?= htmlspecialchars($produit->getCollection()) ?>">
-                            <!-- Contenu de la carte produit -->
-                            <h3 class="product-name text-sm font-semibold mb-1 truncate">
-                                <?= htmlspecialchars($produit->getNom()) ?>
-                            </h3>
-                            <p class="product-price text-sm text-blue-600 font-bold">
-                                <?= $produit->formatPrix() ?>
-                            </p>
-                            <!-- ... reste du contenu de la carte ... -->
+                            
+                            <!-- Lien produit avec image -->
+                            <a href="<?= url('pages/detail.php?id=' . $produit->getId()) ?>" class="product-link block flex-grow">
+                                <div class="relative pb-[125%]">
+                                    <img src="<?= $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg') ?>" 
+                                         alt="<?= htmlspecialchars($produit->getNom()) ?>" 
+                                         class="absolute inset-0 w-full h-full object-cover object-top">
+                                </div>
+                                <div class="p-3">
+                                    <h3 class="product-name text-sm font-semibold mb-1 truncate">
+                                        <?= htmlspecialchars($produit->getNom()) ?>
+                                    </h3>
+                                    <p class="text-xs text-gray-600 mb-1">
+                                        <?= htmlspecialchars($produit->getMarque()) ?>
+                                    </p>
+                                </div>
+                            </a>
+                            
+                            <!-- Prix et bouton panier -->
+                            <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
+                                <p class="product-price text-sm text-blue-600 font-bold">
+                                    <?= $produit->formatPrix() ?>
+                                </p>
+                                <button type="button" 
+                                        class="product-cart-button open-modal-btn flex items-center justify-center" 
+                                        data-product-id="<?= $produit->getId() ?>" 
+                                        data-product-price="<?= $produit->getPrix() ?>">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="product-cart-icon">
+                                        <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8Z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
