@@ -55,15 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         increaseButton.addEventListener('click', function() {
             let quantity = parseInt(quantityDisplay.textContent);
-            // Vérification du stock avant d'augmenter la quantité
-            const idProduitInput = form.querySelector('input[name="id_produit"]');
-            const stock = <?= json_encode(array_column($contenuPanier, 'stock')) ?>; // Récupérer le stock du produit
+            const stock = parseInt(form.dataset.stock); // Récupérer le stock depuis un attribut data
 
-            if (quantity + 1 <= stock) {
+            if (quantity < stock) { // Vérifier si la quantité actuelle est inférieure au stock
                 quantityDisplay.textContent = quantity + 1;
                 updateQuantity(form, quantity + 1);
             } else {
-                alert('La quantité demandée dépasse le stock disponible.');
+                console.log("La quantité maximale a été atteinte."); // Message de débogage
             }
         });
     });
