@@ -709,3 +709,17 @@ a:hover .back-arrow-icon {
 .edit-button:hover {
     transform: scale(1.1);
 }
+
+.text-red-500 {
+    color: #ef4444;
+}
+
+.hidden {
+    display: none;
+}
+
+#taille-error {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
