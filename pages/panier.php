@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
         const increaseButton = form.querySelector('button[name="action"][value="increase"]');
         const quantityDisplay = form.querySelector('span');
+        const idProduitInput = form.querySelector('input[name="id_produit"]');
 
         decreaseButton.addEventListener('click', function() {
             let quantity = parseInt(quantityDisplay.textContent);
@@ -54,8 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         increaseButton.addEventListener('click', function() {
             let quantity = parseInt(quantityDisplay.textContent);
-            quantityDisplay.textContent = quantity + 1;
-            updateQuantity(form, quantity + 1);
+            const stock = parseInt(form.dataset.stock); // Récupérer le stock depuis un attribut data
+
+            if (quantity < stock) { // Vérifier si la quantité actuelle est inférieure au stock
+                quantityDisplay.textContent = quantity + 1;
+                updateQuantity(form, quantity + 1);
+            } else {
+                console.log("La quantité maximale a été atteinte."); // Message de débogage
+            }
         });
     });
 
@@ -100,8 +107,9 @@ if (isset($_POST['update'])) {
             $panier->mettreAJourQuantite($id_update, intval($quantity));
             echo "Quantité mise à jour avec succès."; // Message de succès
         } else {
-            echo "La quantité demandée dépasse le stock disponible."; // Message d'erreur
-            $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
+            // Ajuster la quantité au stock disponible
+            $panier->mettreAJourQuantite($id_update, intval($produit['stock'])); // Mettre à jour la quantité au stock disponible
+            echo "Quantité ajustée au stock disponible de " . $produit['stock'] . "."; // Message d'information
         }
     } else {
         $panier->retirerProduit($id_update); // Retirer le produit si la quantité n'est pas valide
@@ -175,9 +183,8 @@ include '../includes/_header.php';
                                 <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
                                 <div class="flex-grow">
                                     <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
-                                    <p class="text-gray-600">Prix unitaire: <span class="prix-unitaire" data-prix="<?= $product['prix'] ?>"><?= number_format($product['prix'], 2); ?>€</span></p>
-                                    <p class="text-gray-600">Sous-total: <span class="sous-total" data-id="<?= $key ?>"><?= number_format($product_total, 2); ?>€</span></p>
-                                    <form method="post" action="panier.php" class="flex items-center mt-2">
+                                    <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
+                                    <form method="post" action="panier.php" class="flex items-center mt-2" data-stock="<?= $product['stock'] ?>">
                                         <input type="hidden" name="id_produit" value="<?= $key ?>">
                                         <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
                                         <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
@@ -352,136 +359,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Gestion de la suppression des articles
-    document.querySelectorAll('.delete-item').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const productId = this.dataset.productId;
-            const productElement = this.closest('.flex.items-center');
-            const sousTotal = productElement.querySelector('.sous-total');
-            const montantARetirer = parseFloat(sousTotal.textContent.replace('€', ''));
-
-            fetch(`panier.php?del=${productId}`, {
-                method: 'GET'
-            })
-            .then(response => response.text())
-            .then(() => {
-                // Supprimer visuellement l'élément
-                productElement.remove();
-                
-                // Mettre à jour le total
-                updateTotal(-montantARetirer);
-                
-                // Si le panier est vide, afficher le message de panier vide
-                const remainingItems = document.querySelectorAll('.flex.items-center').length;
-                if (remainingItems === 0) {
-                    location.reload();
-                }
-            })
-            .catch(error => console.error('Erreur:', error));
-        });
-    });
-
-    // Fonction pour mettre à jour le total
-    function updateTotal(montantChangement = 0) {
-        const totalElement = document.querySelector('.text-2xl.font-bold.text-green-600');
-        if (totalElement) {
-            const currentTotal = parseFloat(totalElement.textContent.replace('€', ''));
-            const newTotal = Math.max(0, currentTotal + montantChangement);
-            totalElement.textContent = `${newTotal.toFixed(2)}€`;
-        }
-    }
-
-    // Fonction pour mettre à jour le sous-total d'un produit
-    function updateSousTotal(productId, quantity) {
-        const sousTotal = document.querySelector(`.sous-total[data-id="${productId}"]`);
-        const prixUnitaire = parseFloat(sousTotal.closest('.flex-grow').querySelector('.prix-unitaire').dataset.prix);
-        const nouveauSousTotal = prixUnitaire * quantity;
-        sousTotal.textContent = `${nouveauSousTotal.toFixed(2)}€`;
-        return nouveauSousTotal;
-    }
-
-    // Mise à jour des gestionnaires d'événements pour les boutons +/-
-    const quantityForms = document.querySelectorAll('form[action="panier.php"]');
-    quantityForms.forEach(form => {
-        const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
-        const increaseButton = form.querySelector('button[name="action"][value="increase"]');
-        const quantityDisplay = form.querySelector('span');
-        const productId = form.querySelector('input[name="id_produit"]').value;
-
-        decreaseButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            let quantity = parseInt(quantityDisplay.textContent);
-            if (quantity > 1) {
-                quantity--;
-                quantityDisplay.textContent = quantity;
-                const ancienSousTotal = parseFloat(form.closest('.flex-grow').querySelector('.sous-total').textContent.replace('€', ''));
-                const nouveauSousTotal = updateSousTotal(productId, quantity);
-                updateTotal(nouveauSousTotal - ancienSousTotal);
-                updateQuantity(form, quantity);
-            }
-        });
-
-        increaseButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            let quantity = parseInt(quantityDisplay.textContent);
-            quantity++;
-            quantityDisplay.textContent = quantity;
-            const ancienSousTotal = parseFloat(form.closest('.flex-grow').querySelector('.sous-total').textContent.replace('€', ''));
-            const nouveauSousTotal = updateSousTotal(productId, quantity);
-            updateTotal(nouveauSousTotal - ancienSousTotal);
-            updateQuantity(form, quantity);
-        });
-    });
-});
-</script>
-
-<!-- Ajouter au début du fichier, après les includes -->
-if (isset($_GET['get_total'])) {
-    $total = 0;
-    $contenuPanier = $panier->getContenu();
-    
-    if (!empty($contenuPanier)) {
-        $ids = array_map(function ($key) {
-            return explode('_', $key)[0];
-        }, array_keys($contenuPanier));
-        $ids = array_unique($ids);
-
-        $placeholders = implode(',', array_fill(0, count($ids), '?'));
-        $sql = "SELECT * FROM produits WHERE id_produit IN ($placeholders)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        while ($product = $result->fetch_assoc()) {
-            foreach ($contenuPanier as $key => $quantity) {
-                list($id, $taille) = explode('_', $key . '_');
-                if ($id == $product['id_produit']) {
-                    $total += $product['prix'] * intval($quantity);
-                }
-            }
-        }
-    }
-    
-    header('Content-Type: application/json');
-    echo json_encode(['total' => $total]);
-    exit;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 

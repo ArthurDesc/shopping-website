@@ -50,10 +50,13 @@
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
-  <script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
-  <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
-  <script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
-  <script src="<?php echo url('assets/js/produit.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filterSearch.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/product-modal.js'); ?>" defer></script>
 <?php endif; ?>
 
 </body>

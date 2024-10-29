@@ -18,12 +18,18 @@ class Filtre {
         $this->categories = array_filter($categories);
     }
 
-    public function setMarques(array $marques) {
-        $this->marques = $marques;
+    public function setMarques($marques) {
+        if (!is_array($marques)) {
+            $marques = [$marques];
+        }
+        $this->marques = array_map('trim', $marques);
     }
 
-    public function setCollections(array $collections) {
-        $this->collections = $collections;
+    public function setCollections($collections) {
+        if (!is_array($collections)) {
+            $collections = [$collections];
+        }
+        $this->collections = array_map('strtolower', $collections);
     }
 
     public function setPrixRange($min, $max) {
@@ -99,31 +105,19 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $conditions = [];
+        $sql = "SELECT DISTINCT p.* FROM produits p";
         $params = [];
-        
-        if (!empty($this->categories)) {
-            $placeholders = str_repeat('?,', count($this->categories) - 1) . '?';
-            $conditions[] = "pc.id_categorie IN ($placeholders)";
-            $params = array_merge($params, $this->categories);
-        }
+        $conditions = [];
 
         if (!empty($this->collections)) {
             $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
-            $conditions[] = "p.collection IN ($placeholders)";
+            $conditions[] = "LOWER(p.collection) IN ($placeholders)";
             $params = array_merge($params, $this->collections);
         }
 
-        $sql = "SELECT DISTINCT p.*, GROUP_CONCAT(c.id_categorie) as category_ids, GROUP_CONCAT(c.nom) as categories 
-                FROM produits p 
-                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie";
-
         if (!empty($conditions)) {
-            $sql .= " WHERE " . implode(" AND ", $conditions);
+            $sql .= " WHERE " . implode(' AND ', $conditions);
         }
-
-        $sql .= " GROUP BY p.id_produit";
 
         return [
             'sql' => $sql,
