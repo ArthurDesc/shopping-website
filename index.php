@@ -39,7 +39,6 @@ include './includes/_header.php';
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
     
-    <!-- Nouveau hjg bouton d'ancrage -->
     <div class="absolute bottom-16 sm:bottom-12 md:bottom-8 left-1/2 transform -translate-x-1/2 z-10">
       <a href="#nouveautes" class="bg-blue-600 bg-opacity-80 text-white px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm md:text-base rounded-full shadow-md hover:bg-blue-600 hover:text-white transition duration-300 flex items-center space-x-2">
         <span>Découvrir plus</span>
@@ -54,11 +53,24 @@ include './includes/_header.php';
   <div class="custom-scroll">
     <div class="flex space-x-12 p-4 w-max">
       <?php
-      $marques = ['Puma', 'Adidas', 'Nike', 'NorthFace', 'underarmour'];
+      // Récupérer toutes les marques de la base de données
+      $query = "SELECT DISTINCT marque FROM produits ORDER BY marque";
+      $result = mysqli_query($conn, $query);
+      $all_marques = [];
+      while ($row = mysqli_fetch_assoc($result)) {
+          $all_marques[] = $row['marque'];
+      }
+
+      // Liste des marques que vous voulez afficher dans l'index
+      $marques_to_display = ['Puma', 'Adidas', 'Nike', 'NorthFace', 'UnderArmour'];
+
+      // Ne garder que les marques qui existent dans la base de données
+      $marques = array_intersect($marques_to_display, $all_marques);
+
       foreach ($marques as $marque) :
       ?>
         <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-          <a href="<?php echo url('pages/produit.php?marque=' . $marque); ?>" class="block relative">
+          <a href="<?php echo url('pages/produit.php?marques=' . urlencode($marque)); ?>" class="block relative">
             <img src="<?php echo url('assets/images/' . strtolower($marque) . '.png'); ?>" alt="<?php echo $marque; ?>" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-105">
             <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
             <div class="absolute bottom-2 right-2 z-10">

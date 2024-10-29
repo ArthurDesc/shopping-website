@@ -18,8 +18,11 @@ class Filtre {
         $this->categories = array_filter($categories);
     }
 
-    public function setMarques(array $marques) {
-        $this->marques = $marques;
+    public function setMarques($marques) {
+        if (!is_array($marques)) {
+            $marques = [$marques];
+        }
+        $this->marques = array_map('trim', $marques);
     }
 
     public function setCollections(array $collections) {
@@ -99,47 +102,16 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $sql = "SELECT p.*, GROUP_CONCAT(c.nom) as categories 
-                FROM produits p 
-                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
-                WHERE p.stock > 0";
-        
+        $sql = "SELECT p.* FROM produits p WHERE 1=1";
         $params = [];
-        $conditions = [];
 
-        // Ajouter les conditions pour les catégories
-        if (!empty($this->categories)) {
-            $placeholders = str_repeat('?,', count($this->categories) - 1) . '?';
-            $conditions[] = "c.id_categorie IN ($placeholders)";
-            $params = array_merge($params, $this->categories);
-        }
-
-        // Ajouter les conditions pour les collections
-        if (!empty($this->collections)) {
-            $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
-            $conditions[] = "p.collection IN ($placeholders)";
-            $params = array_merge($params, $this->collections);
-        }
-
-        // Ajouter les conditions pour les marques
         if (!empty($this->marques)) {
             $placeholders = str_repeat('?,', count($this->marques) - 1) . '?';
-            $conditions[] = "p.marque IN ($placeholders)";
+            $sql .= " AND p.marque IN ($placeholders)";
             $params = array_merge($params, $this->marques);
         }
 
-        // Ajouter toutes les conditions à la requête
-        if (!empty($conditions)) {
-            $sql .= " AND " . implode(" AND ", $conditions);
-        }
-
-        $sql .= " GROUP BY p.id_produit";
-        
-        return [
-            'sql' => $sql,
-            'params' => $params
-        ];
+        return ['sql' => $sql, 'params' => $params];
     }
 
     public function resetFiltres() {
