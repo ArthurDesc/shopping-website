@@ -133,17 +133,7 @@ while ($row = mysqli_fetch_assoc($result_categories_actives)) {
     $categories_actives[] = $row;
 }
 
-// Au début de votre fichier produit.php, après avoir récupéré tous les produits
-$articles_par_page = 12;
-$page_courante = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-// Calculer le nombre total de pages
-$nombre_total_produits = count($produits);
-$nombre_pages = ceil($nombre_total_produits / $articles_par_page);
-
-// Découper le tableau des produits pour la page courante
-$index_debut = ($page_courante - 1) * $articles_par_page;
-$produits_page = array_slice($produits, $index_debut, $articles_par_page);
+$produits_page = $produits;
 ?>
 <style>
     .filter-dropdown {
@@ -168,9 +158,9 @@ $produits_page = array_slice($produits, $index_debut, $articles_par_page);
 <?php require_once '../includes/_header.php'; ?>
 
 <!-- Ajoutez cette div pour créer l'espace supplémentaire -->
-<div class="mt-16"></div> <!-- Vous pouvez ajuster la valeur (16) selon vos besoins -->
+<div class="mt-8"></div> <!-- Vous pouvez ajuster la valeur (16) selon vos besoins -->
 
-<main class="container mx-auto px-4">
+<main class="container mx-auto px-4 mt-2">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
         <div id="filterForm" x-data="{ openTab: null }" class="fixed md:static inset-0 bg-gradient-to-b from-blue-400 to-blue-600 z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:h-fit md:z-auto overflow-y-auto">
@@ -387,7 +377,7 @@ $produits_page = array_slice($produits, $index_debut, $articles_par_page);
             </div>
 
 
-            <div class="wave-group">
+            <div class="wave-group mb-8">
                 <input required="" type="text" class="input" id="products-search">
                 <span class="bar"></span>
                 <label class="label">
@@ -408,51 +398,42 @@ $produits_page = array_slice($produits, $index_debut, $articles_par_page);
             </div>
 
             <section class="products_list">
-                <?php
-                if (!empty($produits)) {
-                    echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
-                    foreach ($produits_page as $produit) {
-                        $image_url = $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg');
-
-                        if (!file_exists($image_url) || empty($produit->getImageUrl())) {
-                            $image_url = $image_base_path . 'default_product.jpg';
-                        }
-                ?>
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full"
-                            data-categories="<?php echo implode(',', array_map(function ($cat) {
-                                                    return $cat['id_categorie'];
-                                                }, $categoryManager->getProductCategories($produit->getId()))); ?>"
-                            data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>"
-                            data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>">
-                            <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
-                                <div class="relative pb-[125%] flex-grow">
-                                    <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
+                <?php if (!empty($produits)): ?>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <?php foreach ($produits as $produit): ?>
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full"
+                                data-categories="<?php echo implode(',', array_map(function ($cat) {
+                                                        return $cat['id_categorie'];
+                                                    }, $categoryManager->getProductCategories($produit->getId()))); ?>"
+                                data-brand="<?php echo htmlspecialchars($produit->getMarque()); ?>"
+                                data-collection="<?php echo htmlspecialchars($produit->getCollection()); ?>">
+                                <a href="<?php echo url('pages/detail.php?id=' . $produit->getId()); ?>" class="block flex-grow flex flex-col">
+                                    <div class="relative pb-[125%] flex-grow">
+                                        <img src="<?php echo $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg'); ?>" alt="<?php echo htmlspecialchars($produit->getNom()); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
+                                    </div>
+                                    <div class="p-3 flex-shrink-0">
+                                        <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
+                                        <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
+                                        <!-- Affichage de la disponibilité du produit -->
+                                        <p class="text-xs <?php echo $produit->getStock() > 0 ? 'text-green-600' : 'text-red-600'; ?>">
+                                            <?php echo $produit->getStock() > 0 ? 'En stock' : 'Rupture de stock'; ?>
+                                        </p>
+                                    </div>
+                                </a>
+                                <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
+                                    <p class="product-price text-sm text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
+                                    <button type="button" class="product-cart-button open-modal-btn flex items-center justify-center" data-product-id="<?php echo $produit->getId(); ?>" data-product-price="<?php echo $produit->getPrix(); ?>">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="product-cart-icon">
+                                            <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8ZM10.84 5.69C10.84 4.04 12.2 2.69 13.84 2.69C15.49 2.69 16.84 3.69 16.84 5.69V6.69H10.84V5.69ZM23.82 18.41L22.39 8.41C22.25 7.43 21.41 6.69 20.41 6.69H18.84V5.69C18.84 2.69 16.6 0.69 13.84 0.69C11.08 0.69 8.84 2.93 8.84 5.69V6.69H7.57C6.58 6.69 5.43 7.43 5.29 8.41L3.86 18.41C3.69 19.62 4.62 20.69 5.84 20.69H21.84C23.06 20.69 23.99 19.62 23.82 18.41Z" fill="currentColor" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <div class="p-3 flex-shrink-0">
-                                    <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($produit->getNom()); ?></h3>
-                                    <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($produit->getMarque()); ?></p>
-                                    <!-- Affichage de la disponibilité du produit -->
-                                    <p class="text-xs <?php echo $produit->getStock() > 0 ? 'text-green-600' : 'text-red-600'; ?>">
-                                        <?php echo $produit->getStock() > 0 ? 'En stock' : 'Rupture de stock'; ?>
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
-                                <p class="product-price text-sm text-blue-600 font-bold"><?php echo $produit->formatPrix(); ?></p>
-                                <button type="button" class="product-cart-button open-modal-btn flex items-center justify-center" data-product-id="<?php echo $produit->getId(); ?>" data-product-price="<?php echo $produit->getPrix(); ?>">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="product-cart-icon">
-                                        <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8ZM10.84 5.69C10.84 4.04 12.2 2.69 13.84 2.69C15.49 2.69 16.84 3.69 16.84 5.69V6.69H10.84V5.69ZM23.82 18.41L22.39 8.41C22.25 7.43 21.41 6.69 20.41 6.69H18.84V5.69C18.84 2.69 16.6 0.69 13.84 0.69C11.08 0.69 8.84 2.93 8.84 5.69V6.69H7.57C6.58 6.69 5.43 7.43 5.29 8.41L3.86 18.41C3.69 19.62 4.62 20.69 5.84 20.69H21.84C23.06 20.69 23.99 19.62 23.82 18.41Z" fill="currentColor" />
-                                    </svg>
-                                </button>
                             </div>
-                        </div>
-                <?php
-                    }
-                    echo '</div>';
-                } else {
-                    echo "<p>Aucun produit disponible.</p>";
-                }
-                ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p>Aucun produit disponible.</p>
+                <?php endif; ?>
             </section>
 
         </div>
@@ -686,48 +667,6 @@ $produits_page = array_slice($produits, $index_debut, $articles_par_page);
     Article ajouté au panier
 </div>
 
-<?php if ($nombre_pages > 1): ?>
-    <div class="pagination-container">
-        <ul class="page">
-            <?php if ($page_courante > 1): ?>
-                <li class="page__btn active">
-                    <a href="?page=<?php echo ($page_courante - 1); ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                        </svg>
-                    </a>
-                </li>
-            <?php endif; ?>
-
-            <?php for ($i = 1; $i <= $nombre_pages; $i++): ?>
-                <?php if (
-                    $i == 1 ||
-                    $i == $nombre_pages ||
-                    ($i >= $page_courante - 2 && $i <= $page_courante + 2)
-                ): ?>
-                    <li class="page__numbers <?php echo $i === $page_courante ? 'active' : ''; ?>">
-                        <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                    </li>
-                <?php elseif (
-                    ($i == $page_courante - 3 && $page_courante > 4) ||
-                    ($i == $page_courante + 3 && $page_courante < $nombre_pages - 3)
-                ): ?>
-                    <li class="page__dots">...</li>
-                <?php endif; ?>
-            <?php endfor; ?>
-
-            <?php if ($page_courante < $nombre_pages): ?>
-                <li class="page__btn active">
-                    <a href="?page=<?php echo ($page_courante + 1); ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </a>
-                </li>
-            <?php endif; ?>
-        </ul>
-    </div>
-<?php endif; ?>
 <?php include '../includes/_footer.php'; ?>
 
 

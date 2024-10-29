@@ -125,7 +125,7 @@ $collection = $categoryManager->getCollection($id_produit);
 
 <?php include '../includes/_header.php'; ?>
 
-<main class="flex-grow container mx-auto px-4 py-8 mt-16">
+<main class="flex-grow container mx-auto px-4 pt-4"> <!-- Remplacé mt-16 et py-8 par pt-4 -->
 
     <input type="hidden" id="id_produit" name="id_produit" value="<?php echo $id_produit; ?>">
     <?php if ($isEditMode): ?>
