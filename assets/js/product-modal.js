@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 modal.classList.remove('active');
-                updateCartCount(data.cartCount);
+                updateCartUI(data.cartCount);
                 showToast('Article ajouté au panier', 'success');
             } else {
                 showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
@@ -84,10 +84,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function updateCartCount(count) {
+function updateCartUI(cartCount) {
     const cartCountElement = document.getElementById('cart-count');
     if (cartCountElement) {
-        cartCountElement.textContent = count;
+        cartCountElement.textContent = cartCount;
+        
+        // Mise à jour de la couleur du badge
+        if (cartCount > 0) {
+            cartCountElement.classList.remove('bg-red-600');
+            cartCountElement.classList.add('bg-green-600');
+        }
     }
 }
 
@@ -98,6 +104,7 @@ function showToast(message, type = 'success') {
         toast.classList.remove('opacity-0');
         toast.classList.add('opacity-100');
         
+        // Masquer le toast après 3 secondes
         setTimeout(() => {
             toast.classList.remove('opacity-100');
             toast.classList.add('opacity-0');
