@@ -25,8 +25,11 @@ class Filtre {
         $this->marques = array_map('trim', $marques);
     }
 
-    public function setCollections(array $collections) {
-        $this->collections = $collections;
+    public function setCollections($collections) {
+        if (!is_array($collections)) {
+            $collections = [$collections];
+        }
+        $this->collections = array_map('strtolower', $collections);
     }
 
     public function setPrixRange($min, $max) {
@@ -102,16 +105,24 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $sql = "SELECT p.* FROM produits p WHERE 1=1";
+        $sql = "SELECT DISTINCT p.* FROM produits p";
         $params = [];
+        $conditions = [];
 
-        if (!empty($this->marques)) {
-            $placeholders = str_repeat('?,', count($this->marques) - 1) . '?';
-            $sql .= " AND p.marque IN ($placeholders)";
-            $params = array_merge($params, $this->marques);
+        if (!empty($this->collections)) {
+            $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
+            $conditions[] = "LOWER(p.collection) IN ($placeholders)";
+            $params = array_merge($params, $this->collections);
         }
 
-        return ['sql' => $sql, 'params' => $params];
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        return [
+            'sql' => $sql,
+            'params' => $params
+        ];
     }
 
     public function resetFiltres() {
