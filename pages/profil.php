@@ -254,13 +254,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="relative">
                         <textarea id="adresse" name="adresse"
                             rows="3"
-                            disabled
+                            <?php echo !empty($user['adresse']) ? 'disabled' : ''; ?>
                             class="form-input mt-1 block w-full pr-10"><?php echo htmlspecialchars($user['adresse'] ?? ''); ?></textarea>
-                        <button type="button" onclick="toggleEdit('adresse')" class="absolute right-2 top-4 text-gray-500 hover:text-blue-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                            </svg>
-                        </button>
+                        <?php if (!empty($user['adresse'])): ?>
+                            <button type="button" onclick="toggleEdit('adresse')" class="absolute right-2 top-4 text-gray-500 hover:text-blue-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                                </svg>
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -305,19 +307,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="space-y-2">
-                    <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">
+                    <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700 hidden password-field">
                         Nouveau mot de passe
                     </label>
                     <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse"
-                        class="form-input mt-1 block w-full">
+                        class="form-input mt-1 block w-full hidden password-field">
                 </div>
 
                 <div class="space-y-2">
-                    <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">
+                    <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700 hidden password-field">
                         Confirmer le mot de passe
                     </label>
                     <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse"
-                        class="form-input mt-1 block w-full">
+                        class="form-input mt-1 block w-full hidden password-field">
                 </div>
             </form>
         </div>
@@ -382,6 +384,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Fonction pour soumettre tous les formulaires
         window.submitForms = async function() {
+            const motdepasseActuel = document.getElementById('motdepasse_actuel');
+            
+            if (motdepasseActuel && !motdepasseActuel.disabled && motdepasseActuel.value) {
+                try {
+                    const formData = new FormData();
+                    formData.append('motdepasse_actuel', motdepasseActuel.value);
+                    
+                    const response = await fetch('../ajax/verify_password.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Afficher les champs de nouveau mot de passe
+                        document.querySelectorAll('.password-field').forEach(el => {
+                            el.classList.remove('hidden');
+                        });
+                        return; // Ne pas soumettre le formulaire complet
+                    } else {
+                        alert('Mot de passe incorrect');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue');
+                    return;
+                }
+            }
+            
             const formData = new FormData();
             
             forms.forEach(form => {
@@ -422,7 +455,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
         }
 
-        // Appliquer la capitalisation aux champs nom et prénom
+        // Appliquer la capitalisation aux champs nom et prnom
         const nomInput = document.getElementById('nom');
         const prenomInput = document.getElementById('prenom');
 
@@ -448,7 +481,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     input.placeholder = 'Entrez votre mot de passe actuel';
                     input.focus();
                 } else {
-                    // Solution plus robuste pour placer le curseur à la fin
                     requestAnimationFrame(() => {
                         input.focus();
                         const currentValue = input.value;
@@ -460,6 +492,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 input.classList.remove('bg-gray-50');
                 if (fieldId === 'motdepasse_actuel') {
                     input.value = '••••••••';
+                    // Cacher les champs de nouveau mot de passe
+                    document.querySelectorAll('.password-field').forEach(el => {
+                        el.classList.add('hidden');
+                    });
+                    // Vider les champs de mot de passe
+                    document.getElementById('nouveau_motdepasse').value = '';
+                    document.getElementById('confirmer_nouveau_motdepasse').value = '';
                 }
             }
         };
