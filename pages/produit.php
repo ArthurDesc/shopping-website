@@ -327,43 +327,7 @@ $produits_page = $produits;
                         </div>
                     </div>
 
-                    <!-- Dropdown Sports -->
-                    <div id="sports-filter" class="filter-section mb-4">
-                        <div class="flex items-center justify-between cursor-pointer py-2" @click="openTab = openTab === 'sports' ? null : 'sports'">
-                            <span class="font-semibold text-gray-600">Sports</span>
-                            <svg :class="{'rotate-180': openTab === 'sports'}" class="w-6 h-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div x-show="openTab === 'sports'" x-collapse>
-                            <?php
-                            foreach ($categories as $id => $category) {
-                                if ($category['nom'] === 'Sports') {  // Vérifie si c'est la catégorie Sports
-                                    foreach ($category['sous_categories'] as $sous_categorie) {
-                            ?>
-                                        <div class="flex items-center mb-2">
-                                            <label class="checkbox-container flex items-center">
-                                                <input type="checkbox"
-                                                    name="categories[]"
-                                                    value="<?php echo htmlspecialchars($sous_categorie['nom']); ?>"
-                                                    <?php echo ($filtre->hasCategory($sous_categorie['id'])) ? 'checked' : ''; ?>>
-                                                <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                                    <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
-                                                        pathLength="575.0541381835938"
-                                                        class="checkbox-path">
-                                                    </path>
-                                                </svg>
-                                                <span class="ml-2 text-white"><?php echo htmlspecialchars($sous_categorie['nom']); ?></span>
-                                            </label>
-                                        </div>
-                            <?php
-                                    }
-                                    break;  // Sort de la boucle une fois la catégorie Sports trouvée
-                                }
-                            }
-                            ?>
-                        </div>
-                    </div>
+                 
                 </div>
 
                 <!-- Bouton Valider pour mobile uniquement -->
