@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 28, 2024 at 08:29 AM
+-- Generation Time: Oct 28, 2024 at 03:13 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -68,7 +68,12 @@ INSERT INTO `categories` (`id_categorie`, `nom`, `parent_id`, `description`) VAL
 (14, 'Combinaisons', NULL, 'Catégorie pour toutes les combinaisons de sport'),
 (15, 'Vêtements de running', 1, 'Catégorie pour tous les vêtements de running'),
 (16, 'Leggings', 1, 'Catégorie pour tous les leggings de sport'),
-(17, 'jb', 3, NULL);
+(18, 'Sports', NULL, NULL),
+(19, 'Football', 18, NULL),
+(20, 'Rugby', 18, NULL),
+(21, 'Running', 18, NULL),
+(22, 'Handball', 18, NULL),
+(23, 'Basketball', 18, NULL);
 
 -- --------------------------------------------------------
 
@@ -186,14 +191,17 @@ CREATE TABLE `produit_categorie` (
 --
 
 INSERT INTO `produit_categorie` (`id_produit`, `id_categorie`) VALUES
-(34, 1),
 (35, 1),
 (36, 1),
 (37, 1),
 (38, 1),
-(39, 1),
 (37, 5),
-(35, 8);
+(35, 8),
+(34, 1),
+(34, 16),
+(39, 2),
+(39, 1),
+(31, 5);
 
 -- --------------------------------------------------------
 
@@ -224,7 +232,7 @@ INSERT INTO `utilisateurs` (`id_utilisateur`, `nom`, `prenom`, `email`, `adresse
 (7, 'zegy', 'jhéevdgjh', 'yefgeedtfet@gmail.fr', NULL, '$2y$10$69p7aiPk5a1RhztOnVR5nuyZfEBV3bhwOw5fLPb397ghhi9cGUEHe', 'user'),
 (8, 'Soilihi', 'Hamza', 'hamza@hamza.fr', NULL, '$2y$10$znnAnemAhpreCwiMYVIdB.XULNMbLhXBmdlyWbFXzRMyz2c9xSIaS', 'user'),
 (9, 'fsfds', 'fsd', 'derroce@gmail.com', NULL, '$2y$10$s5XZBqP3bRAI2buklEAWauABgwK7.PNA57guszhWBgLS/kuCMVP/a', 'user'),
-(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'user'),
+(10, 'arthur', 'arthur', 'arthur@gmail.com', NULL, '$2y$10$G5Zy3GoNC1Cog8YAB1UxyefStxQ9nr/npRduorRQ15r40hRWvgwEC', 'admin'),
 (11, 'Diomande', 'Adama', 'adama.diomande@laplateforme.io', NULL, '$2y$10$g7YKOoGuXuEIzqoX/n/9seNhgIih5y0vREtRCtyg/7YxPlePdheb2', 'user');
 
 --
@@ -282,7 +290,7 @@ ALTER TABLE `utilisateurs`
 -- AUTO_INCREMENT for table `avis`
 --
 ALTER TABLE `avis`
-  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_avis` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `commandes`
