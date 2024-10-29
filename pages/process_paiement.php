@@ -138,60 +138,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Paiement</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Ajout de Tailwind CSS -->
     <script src="https://js.stripe.com/v3/"></script> <!-- Ajout de Stripe.js -->
+   <link rel="stylesheet" href="../assets/css/process_paiement.css">
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-8">
-    <form id="payment-form" class="bg-white p-8 rounded-lg shadow-lg w-[32rem] mx-4">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Paiement Sécurisé</h2>
+<body class="flex items-center justify-center min-h-screen py-8">
+    <form id="payment-form" class="form-container">
+        <h2 class="form-title">Paiement Sécurisé</h2>
         
         <!-- Informations de livraison -->
         <div class="mb-6 border-b pb-6">
             <h3 class="text-lg font-semibold mb-4 text-gray-700">Informations de livraison</h3>
             
             <div class="mb-4">
-                <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse de livraison</label>
+                <label for="adresse" class="input-label">Adresse de livraison</label>
                 <textarea 
                     id="adresse" 
                     name="adresse" 
                     rows="3" 
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="input-field h-24"
                     required
                 ><?php echo htmlspecialchars($user_info['adresse'] ?? ''); ?></textarea>
             </div>
 
             <div class="mb-4">
-                <label for="telephone" class="block text-sm font-medium text-gray-700">Numéro de téléphone</label>
+                <label for="telephone" class="input-label">Numéro de téléphone</label>
                 <input 
                     type="tel" 
                     id="telephone" 
                     name="telephone" 
                     value="<?php echo htmlspecialchars($user_info['telephone'] ?? ''); ?>"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="input-field"
                     required
                 >
             </div>
         </div>
 
         <!-- Informations de paiement -->
-        <div class="mb-4">
-            <label for="card-holder-name" class="block text-sm font-medium text-gray-700">Nom du titulaire de la carte</label>
-            <input type="text" id="card-holder-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="John Doe" required>
+        <div class="mb-6">
+            <label for="card-holder-name" class="input-label">Nom du titulaire de la carte</label>
+            <input type="text" id="card-holder-name" class="input-field" placeholder="John Doe" required>
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Informations de carte</label>
+            <label class="input-label mb-2">Informations de carte</label>
             <div id="card-element" class="border p-4 rounded bg-gray-50"></div>
-            <div id="card-errors" class="text-red-500 mt-2 text-sm"></div>
+            <div id="card-errors" class="error-message"></div>
         </div>
 
         <!-- Total de la commande -->
-        <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+        <div class="total-amount">
             <div class="flex justify-between items-center">
                 <span class="font-medium text-gray-700">Total à payer :</span>
                 <span class="font-bold text-lg"><?php echo number_format($total_amount, 2, ',', ' '); ?> €</span>
             </div>
         </div>
 
-        <button id="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-medium">
+        <button id="submit" class="submit-button">
             Procéder au paiement
         </button>
         
