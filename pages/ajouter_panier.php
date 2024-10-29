@@ -99,14 +99,3 @@ if (isset($_GET['id_produit'])) {
     echo "<script>alert('Aucun ID de produit fourni.'); window.location.href='produit.php';</script>";
     exit();
 }
-
-// Example of using the connection
-$stmt = $conn->prepare("INSERT INTO your_table (column1, column2) VALUES (?, ?)");
-if ($stmt) {
-    // Bind parameters and execute the statement
-    $stmt->bind_param("ss", $value1, $value2);
-    $stmt->execute();
-    $stmt->close();
-} else {
-    die("Prepare failed: " . $conn->error);
-}

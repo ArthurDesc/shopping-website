@@ -582,3 +582,336 @@ input[type="radio"]:checked + span {
 input[type="radio"] + span {
   transition: background-color 0.3s, color 0.3s;
 }
+
+#filterForm {
+  background: linear-gradient(to bottom, #3B82F6 0%, #3465ec 100%); /* Dégradé plus foncé */
+  /* Remplace la ligne existante qui était :
+  background: linear-gradient(to bottom, #60A5FA 0%, #3B82F6 100%); */
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 0;
+  padding-left: 1rem;
+  height: fit-content;
+  min-height: min-content;
+  position: sticky;
+  top: 1rem;
+}
+
+#filterForm h3,
+#filterForm span,
+#filterForm label {
+  color: white;
+}
+
+#filterForm input[type="checkbox"] {
+  accent-color: #60A5FA;
+}
+
+/* Supprimer ou modifier les styles existants pour les bordures */
+.filter-section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 0;
+}
+
+/* Uniformiser le style pour tous les dropdowns */
+.filter-section:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#filterForm #closeFilters svg {
+  stroke: white;
+}
+
+#toggleFilters {
+  background-color: #3B82F6;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+#toggleFilters:hover {
+  background-color: #2563EB;
+}
+
+/* Pour la version desktop */
+@media (min-width: 768px) {
+  #filterForm {
+    position: sticky;
+    top: 1rem;
+    left: 0;
+    max-width: 280px; /* Ajustez selon vos besoins */
+    margin-right: 2rem; /* Espace entre les filtres et les produits */
+  }
+  
+  .products-container {
+    margin-left: 0; /* Réinitialise la marge pour le conteneur des produits */
+    padding-left: 0; /* Réinitialise le padding pour le conteneur des produits */
+  }
+}
+
+/* Pour la version mobile */
+@media (max-width: 767px) {
+  #filterForm {
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+#filterForm input[type="text"],
+#filterForm input[type="search"] {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #1E40AF; /* Texte en bleu foncé pour le contraste */
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+#filterForm input[type="text"]::placeholder,
+#filterForm input[type="search"]::placeholder {
+  color: #60A5FA; /* Couleur du placeholder en bleu clair */
+  opacity: 0.7;
+}
+
+#filterForm input[type="text"]:focus,
+#filterForm input[type="search"]:focus {
+  outline: none;
+  background-color: white;
+  border-color: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Style pour l'icône de recherche si elle existe */
+#filterForm .search-icon {
+  color: #60A5FA;
+}
+
+.checkbox-container {
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  display: none;
+}
+
+.checkbox-container svg {
+  overflow: visible;
+  /* Réduire la taille par défaut */
+  height: 1.2em !important;  /* Remplace le 2em précédent */
+  width: 1.2em !important;   /* Remplace le 2em précédent */
+}
+
+.checkbox-path {
+  fill: none;
+  stroke: white;
+  stroke-width: 6;  /* Vous pouvez aussi ajuster l'épaisseur du trait si besoin */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+  stroke-dasharray: 241 9999999;
+  stroke-dashoffset: 0;
+}
+
+.checkbox-container input:checked ~ svg .checkbox-path {
+  stroke-dasharray: 70.5096664428711 9999999;
+  stroke-dashoffset: -262.2723388671875;
+}
+
+/* Ajustement de l'espacement */
+.checkbox-container span {
+  margin-left: 0.5rem; /* Réduit l'espace entre la checkbox et le texte */
+}
+
+/* Styles spécifiques pour les checkboxes de filtres */
+.filter-checkbox input[type="radio"]:checked + span {
+    border-color: #3B82F6;
+    background-color: #EFF6FF;
+    color: #2563EB;
+}
+
+.filter-checkbox input[type="radio"] + span {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Styles pour les étiquettes de filtres actifs */
+#activeFilters .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background-color: #EFF6FF;
+    border: 1px solid #3B82F6;
+    border-radius: 0.375rem;
+    color: #2563EB;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#activeFilters .filter-tag button {
+    margin-left: 0.5rem;
+    color: #2563EB;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+#activeFilters .filter-tag button:hover {
+    opacity: 1;
+}
+
+/* Style uniforme pour toutes les checkboxes dans les filtres */
+.filter-section .checkbox-container {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.filter-section .checkbox-container input {
+  display: none;
+}
+
+.filter-section .checkbox-container svg {
+  overflow: visible;
+  height: 1em !important;  /* Réduit de 1.2em à 1em */
+  width: 1em !important;   /* Réduit de 1.2em à 1em */
+  margin-right: 0.5rem;
+}
+
+.filter-section .checkbox-container .checkbox-path {
+  fill: none;
+  stroke: white;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+  stroke-dasharray: 241 9999999;
+  stroke-dashoffset: 0;
+}
+
+.filter-section .checkbox-container input:checked ~ svg .checkbox-path {
+  stroke-dasharray: 70.5096664428711 9999999;
+  stroke-dashoffset: -262.2723388671875;
+}
+
+/* Ajustement du texte à côté des checkboxes */
+.filter-section .checkbox-container span {
+  margin-left: 0.25rem;
+  color: white;
+  font-size: 0.875rem; /* Réduit légèrement la taille du texte */
+}
+
+
+
+
+.page__btn svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.page__btn a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+/* Styles de pagination */
+:root {
+    --primary: #3B82F6;  /* Bleu */
+    --greyLight: #93c5fd;  /* Version plus claire du bleu */
+    --greyLight-2: #eff6ff;  /* Fond très clair */
+    --greyDark: #1e3a8a;  /* Bleu foncé */
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0; /* Réduit de 3rem à 2rem */
+}
+
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem; /* Réduit de 5rem à 3rem */
+    margin: 2rem; /* Réduit de 3rem à 2rem */
+    border-radius: 0.4rem; /* Réduit de 0.6rem à 0.4rem */
+    background: #ffffff;
+    box-shadow: 0 0.4rem 1rem rgba(59, 130, 246, 0.05); /* Réduit l'ombre */
+    list-style-type: none;
+    padding: 0;
+}
+
+.page__numbers,
+.page__btn,
+.page__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.4rem; /* Réduit de 0.8rem à 0.4rem */
+    font-size: 1rem; /* Réduit de 1.4rem à 1rem */
+    cursor: pointer;
+}
+
+.page__dots {
+    width: 2rem; /* Réduit de 2.6rem à 2rem */
+    height: 2rem; /* Réduit de 2.6rem à 2rem */
+}
+
+.page__numbers {
+    width: 2rem; /* Réduit de 2.6rem à 2rem */
+    height: 2rem; /* Réduit de 2.6rem à 2rem */
+    border-radius: 0.3rem; /* Réduit de 0.4rem à 0.3rem */
+}
+
+.page__numbers:hover {
+    color: var(--primary);
+    background-color: var(--greyLight-2);
+}
+
+.page__numbers.active {
+    color: #ffffff;
+    background: var(--primary);
+    font-weight: 600;
+    border: 1px solid var(--primary);
+}
+
+.page__btn {
+    color: var(--greyLight);
+    pointer-events: none;
+}
+
+.page__btn.active {
+    color: var(--greyDark);
+    pointer-events: auto;
+}
+
+.page__btn.active:hover {
+    color: var(--primary);
+}
+
+.page__btn a,
+.page__numbers a {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ajuster la taille des icônes SVG */
+.page__btn svg {
+    width: 1.2rem; /* Réduit de 1.5rem à 1.2rem */
+    height: 1.2rem; /* Réduit de 1.5rem à 1.2rem */
+}
+
+.page__btn a {
+    width: 2rem; /* Réduit de 2.6rem à 2rem */
+    height: 2rem; /* Réduit de 2.6rem à 2rem */
+}

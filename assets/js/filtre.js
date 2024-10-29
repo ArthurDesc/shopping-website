@@ -76,21 +76,26 @@ document.addEventListener('DOMContentLoaded', function() {
         activeFiltersContainer.innerHTML = '';
         filterInputs.forEach(checkbox => {
             if (checkbox.checked) {
-                const label = checkbox.nextElementSibling.textContent.trim();
-                const tag = document.createElement('span');
-                tag.className = 'filter-tag bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full';
-                tag.innerHTML = `
-                    ${label}
-                    <svg class="inline-block ml-1 w-4 h-4 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                `;
-                tag.querySelector('svg').addEventListener('click', () => {
-                    checkbox.checked = false;
-                    applyFilters();
-                    updateActiveFilters();
-                });
-                activeFiltersContainer.appendChild(tag);
+                // Rechercher spécifiquement le span contenant le texte
+                const labelSpan = checkbox.closest('label').querySelector('span:not(.checkbox-path)');
+                const label = labelSpan ? labelSpan.textContent.trim() : '';
+                
+                if (label) {
+                    const tag = document.createElement('span');
+                    tag.className = 'filter-tag bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full';
+                    tag.innerHTML = `
+                        ${label}
+                        <svg class="inline-block ml-1 w-4 h-4 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    `;
+                    tag.querySelector('svg').addEventListener('click', () => {
+                        checkbox.checked = false;
+                        applyFilters();
+                        updateActiveFilters();
+                    });
+                    activeFiltersContainer.appendChild(tag);
+                }
             }
         });
     }

@@ -99,32 +99,43 @@ class Filtre {
     }
 
     public function getRequeteSQL() {
-        $conditions = [];
-        $params = [];
+        $sql = "SELECT p.*, GROUP_CONCAT(c.nom) as categories 
+                FROM produits p 
+                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
+                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie 
+                WHERE p.stock > 0";
         
+        $params = [];
+        $conditions = [];
+
+        // Ajouter les conditions pour les catégories
         if (!empty($this->categories)) {
             $placeholders = str_repeat('?,', count($this->categories) - 1) . '?';
-            $conditions[] = "pc.id_categorie IN ($placeholders)";
+            $conditions[] = "c.id_categorie IN ($placeholders)";
             $params = array_merge($params, $this->categories);
         }
 
+        // Ajouter les conditions pour les collections
         if (!empty($this->collections)) {
             $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
             $conditions[] = "p.collection IN ($placeholders)";
             $params = array_merge($params, $this->collections);
         }
 
-        $sql = "SELECT DISTINCT p.*, GROUP_CONCAT(c.id_categorie) as category_ids, GROUP_CONCAT(c.nom) as categories 
-                FROM produits p 
-                LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-                LEFT JOIN categories c ON pc.id_categorie = c.id_categorie";
+        // Ajouter les conditions pour les marques
+        if (!empty($this->marques)) {
+            $placeholders = str_repeat('?,', count($this->marques) - 1) . '?';
+            $conditions[] = "p.marque IN ($placeholders)";
+            $params = array_merge($params, $this->marques);
+        }
 
+        // Ajouter toutes les conditions à la requête
         if (!empty($conditions)) {
-            $sql .= " WHERE " . implode(" AND ", $conditions);
+            $sql .= " AND " . implode(" AND ", $conditions);
         }
 
         $sql .= " GROUP BY p.id_produit";
-
+        
         return [
             'sql' => $sql,
             'params' => $params
