@@ -73,8 +73,8 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
         ?>
             <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full">
                 <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block flex-grow flex flex-col">
-                    <div class="relative pb-[125%] flex-grow">
-                        <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="absolute inset-0 w-full h-full object-cover object-top">
+                    <div class="relative pb-[90%] flex-grow">
+                        <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="absolute inset-0 w-full h-full object-cover object-center">
                     </div>
                     <div class="p-3 flex-shrink-0">
                         <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($row['nom']); ?></h3>

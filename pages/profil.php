@@ -1,4 +1,5 @@
 <?php
+// Déplacer session_start() et la vérification tout en haut, avant toute sortie
 session_start();
 require_once dirname(__FILE__) . '/../includes/_header.php';
 
@@ -110,110 +111,116 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!-- HTML du formulaire -->
-<div class="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10">
-    <div class="p-4">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Mon Profil</h2>
-            <div class="flex space-x-4">
+<div class="gradient-container fixed inset-0 -z-10">
+    <div class="gradient"></div>
+</div>
+
+<!-- Wrapper principal avec centrage -->
+<div class="min-h-screen flex items-center justify-center p-4 relative z-10">
+    <!-- Conteneur du formulaire -->
+    <div class="w-full max-w-md bg-white/90 backdrop-blur-md shadow-xl rounded-lg p-6 space-y-6 transform transition-all duration-300 hover:-translate-y-1">
+        <!-- En-tête avec boutons -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Mon Profil</h2>
+            <div class="flex flex-wrap gap-3">
                 <?php if ($user_role === 'admin'): ?>
                     <a href="../admin/backofficeV2.php" 
-                       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 inline-flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                       class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 text-sm">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
                         </svg>
                         Administration
                     </a>
                 <?php endif; ?>
                 
                 <a href="deconnexion.php" 
-                   class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 inline-flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3 3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3zm11.707 4.707a1 1 0 0 0-1.414-1.414L10 9.586 6.707 6.293a1 1 0 0 0-1.414 1.414L8.586 11l-3.293 3.293a1 1 0 1 0 1.414 1.414L10 12.414l3.293 3.293a1 1 0 0 0 1.414-1.414L11.414 11l3.293-3.293z" clip-rule="evenodd"/>
+                   class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200 text-sm">
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                     </svg>
                     Déconnexion
                 </a>
             </div>
         </div>
 
+        <!-- Messages de succès et d'erreur -->
         <?php if ($success): ?>
-            <div id="success-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+            <div id="success-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
                 <p><?php echo $success_message; ?></p>
             </div>
-            <script>
-                // Faire disparaître le message après 3 secondes
-                setTimeout(function() {
-                    document.getElementById('success-message').style.display = 'none';
-                }, 3000);
-            </script>
         <?php endif; ?>
 
         <?php if (!empty($erreurs)): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
                 <?php foreach ($erreurs as $erreur): ?>
                     <p><?php echo htmlspecialchars($erreur); ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
 
+        <!-- Formulaire -->
         <form method="post" class="space-y-6">
-            <div>
-                <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
-                <input type="text" id="nom" name="nom" 
-                       value="<?php echo htmlspecialchars($user['nom']); ?>" 
-                       required 
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-            </div>
+            <!-- Champs du formulaire avec style amélioré -->
+            <div class="space-y-4">
+                <div>
+                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+                    <input type="text" id="nom" name="nom" 
+                           value="<?php echo htmlspecialchars($user['nom']); ?>" 
+                           required 
+                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                </div>
 
-            <div>
-                <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
-                <input type="text" id="prenom" name="prenom" 
-                       value="<?php echo htmlspecialchars($user['prenom']); ?>" 
-                       required 
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-            </div>
+                <div>
+                    <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" 
+                           value="<?php echo htmlspecialchars($user['prenom']); ?>" 
+                           required 
+                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                </div>
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" name="email" 
-                       value="<?php echo htmlspecialchars($user['email']); ?>" 
-                       required 
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-            </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" 
+                           value="<?php echo htmlspecialchars($user['email']); ?>" 
+                           required 
+                           class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                </div>
 
-            <div class="border-t pt-4">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Changer le mot de passe</h3>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
-                        <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
-                               required 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-                    </div>
+                <!-- Section mot de passe -->
+                <div class="border-t pt-6 mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Changer le mot de passe</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="motdepasse_actuel" class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
+                            <input type="password" id="motdepasse_actuel" name="motdepasse_actuel" 
+                                   required 
+                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                        </div>
 
-                    <div>
-                        <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-                        <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
-                        <p class="mt-1 text-sm text-gray-500">
-                            8 caractères minimum, avec majuscule, chiffre et caractère spécial
-                        </p>
-                    </div>
+                        <div>
+                            <label for="nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
+                            <input type="password" id="nouveau_motdepasse" name="nouveau_motdepasse" 
+                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                            <p class="mt-1 text-sm text-gray-500">
+                                8 caractères minimum, avec majuscule, chiffre et caractère spécial
+                            </p>
+                        </div>
 
-                    <div>
-                        <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
-                        <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                        <div>
+                            <label for="confirmer_nouveau_motdepasse" class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
+                            <input type="password" id="confirmer_nouveau_motdepasse" name="confirmer_nouveau_motdepasse" 
+                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex justify-end space-x-4">
-                <button type="submit" 
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Mettre à jour le profil
-                </button>
+                <!-- Bouton de soumission -->
+                <div class="flex justify-end pt-6">
+                    <button type="submit" 
+                            class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:-translate-y-0.5">
+                        Mettre à jour le profil
+                    </button>
+                </div>
             </div>
         </form>
     </div>

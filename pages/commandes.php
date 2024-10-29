@@ -28,11 +28,14 @@ require_once '../includes/_header.php';
     <h1 class="text-2xl font-bold mb-6">Mes commandes</h1>
 
     <?php if (empty($commandes)): ?>
-        <div class="bg-gray-100 rounded-lg p-6 text-center">
-            <p class="text-gray-600">Vous n'avez pas encore passé de commande.</p>
-            <a href="produit.php" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                Découvrir nos produits
-            </a>
+        <div class="text-center p-6">
+            <h2 class="text-2xl font-bold mb-4 text-blue-400">Aucune commande</h2>
+            <p class="text-gray-700 mb-6">Vous n'avez pas encore passé de commande.</p>
+            <div class="flex flex-col items-center space-y-4">
+                <a href="produit.php" class="btn btn-small">
+                    Découvrir nos produits
+                </a>
+            </div>
         </div>
     <?php else: ?>
         <div class="space-y-6">
