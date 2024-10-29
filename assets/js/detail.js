@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleAddToCart() {
         const form = document.getElementById('add-to-cart-form');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const tailleError = document.getElementById('taille-error');
         
         if (!form || !addToCartBtn) {
             console.warn("Le formulaire ou le bouton d'ajout au panier n'a pas été trouvé.");
@@ -68,6 +69,16 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             if (isSubmitting) return;
 
+            // Vérifier si une taille est sélectionnée
+            const tailleSelectionnee = form.querySelector('input[name="taille"]:checked');
+            if (!tailleSelectionnee) {
+                tailleError.classList.remove('hidden');
+                return;
+            }
+
+            // Cacher le message d'erreur si une taille est sélectionnée
+            tailleError.classList.add('hidden');
+            
             isSubmitting = true;
             addToCartBtn.disabled = true;
             const originalText = addToCartBtn.querySelector('.add-to-cart-text').textContent;
@@ -83,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     updateCartCount(data.cartCount);
-                    showToast('Article ajouté au panier', 'success'); // Utilisation du nouveau toast
+                    showToast('Article ajouté au panier', 'success');
                 } else {
                     showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
                 }
@@ -96,6 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 isSubmitting = false;
                 addToCartBtn.disabled = false;
                 addToCartBtn.querySelector('.add-to-cart-text').textContent = originalText;
+            });
+        });
+
+        // Ajouter un écouteur pour cacher le message d'erreur quand une taille est sélectionnée
+        const tailleInputs = form.querySelectorAll('input[name="taille"]');
+        tailleInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                tailleError.classList.add('hidden');
             });
         });
     }
