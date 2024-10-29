@@ -49,6 +49,8 @@
 
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/js/productFilter.js"></script>
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/filterSearch.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
