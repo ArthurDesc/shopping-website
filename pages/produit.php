@@ -176,6 +176,16 @@ $produits_page = $produits;
     #filterDropdowns.show {
         display: block !important;
     }
+
+    .modal {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .modal.scale-100 {
+        visibility: visible;
+        opacity: 1;
+    }
 </style>
 <?php require_once '../includes/_header.php'; ?>
 
@@ -430,9 +440,9 @@ $produits_page = $produits;
 
 
 
-<!-- Modal pour choisir la taille -->
-<div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0">
-    <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
+<!-- Modal avec animation -->
+<div id="modal-container">
+    <div class="modal-background bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
         <div class="p-6">
             <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
             <!-- Ajoutez cette ligne pour le message d'erreur -->
@@ -478,76 +488,5 @@ $produits_page = $produits;
 
 </html>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('modal-container');
-    const productSize = document.getElementById('productSize');
-    const sizeError = document.getElementById('sizeError');
-    let currentProductId = null;
-    let currentProductPrice = null;
 
-    // Gestionnaire pour les boutons d'ajout au panier
-    document.querySelectorAll('.open-modal-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            currentProductId = this.dataset.productId;
-            currentProductPrice = this.dataset.productPrice;
-            
-            // Réinitialiser et ouvrir le modal
-            productSize.value = '';
-            sizeError.classList.add('hidden');
-            modal.classList.remove('hidden');
-        });
-    });
 
-    // Gestionnaire pour le bouton Annuler
-    document.getElementById('cancelBtn').addEventListener('click', function() {
-        modal.classList.add('hidden');
-    });
-
-    // Gestionnaire pour le bouton Ajouter au panier dans le modal
-    document.getElementById('addToCartBtn').addEventListener('click', function() {
-        const selectedSize = productSize.value;
-        
-        if (!selectedSize) {
-            sizeError.textContent = 'Veuillez choisir une taille';
-            sizeError.classList.remove('hidden');
-            return;
-        }
-
-        // Appel AJAX pour ajouter au panier
-        fetch('<?php echo url("ajax/add_to_cart.php"); ?>', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                id_produit: currentProductId,
-                taille: selectedSize,
-                quantite: 1
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                modal.classList.add('hidden');
-                updateCartCount(data.cartCount);
-                showToast('Article ajouté au panier', 'success');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            showToast('Erreur lors de l\'ajout au panier', 'error');
-        });
-    });
-
-    // Fermeture du modal en cliquant à l'extérieur
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-        }
-    });
-});
-</script>

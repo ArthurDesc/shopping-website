@@ -1,60 +1,81 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let currentProductId = null;
-    let currentProductPrice = null;
+    const modal = document.getElementById('modal-container');
     const productSize = document.getElementById('productSize');
     const sizeError = document.getElementById('sizeError');
-    const productsSearch = document.getElementById('products-search');
+    let currentProductId = null;
+    let currentProductPrice = null;
 
-    // Modifier la gestion des clics sur les boutons
+    // Gestionnaire pour les boutons d'ajout au panier
     document.querySelectorAll('.open-modal-btn').forEach(button => {
         button.addEventListener('click', function(e) {
-            // Important : empêcher la propagation pour ne pas interférer avec le lien parent
-            e.stopPropagation();
             e.preventDefault();
+            e.stopPropagation();
             
             currentProductId = this.dataset.productId;
             currentProductPrice = this.dataset.productPrice;
-
-            if (productSize) {
-                productSize.innerHTML = `
-                    <option value="">Choisissez une taille</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                `;
-            }
-
-            document.getElementById('modal-container').classList.add('active');
+            
+            // Réinitialiser et charger les tailles
+            productSize.innerHTML = `
+                <option value="">Choisissez une taille</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+            `;
+            
+            modal.classList.add('active');
         });
     });
 
-    // S'assurer que les clics sur les liens produits fonctionnent
-    document.querySelectorAll('.product-card a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Ne pas empêcher la navigation si le clic n'est pas sur le bouton panier
-            if (!e.target.closest('.open-modal-btn')) {
-                // Laisser la navigation se faire normalement
-                return true;
+    // Gestionnaire pour le bouton Ajouter au panier
+    document.getElementById('addToCartBtn').addEventListener('click', function() {
+        const selectedSize = productSize.value;
+        
+        if (!selectedSize) {
+            sizeError.textContent = 'Veuillez choisir une taille';
+            sizeError.classList.remove('hidden');
+            return;
+        }
+
+        fetch('ajax/add_to_cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                id_produit: currentProductId,
+                taille: selectedSize,
+                quantite: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                modal.classList.remove('active');
+                updateCartCount(data.cartCount);
+                showToast('Article ajouté au panier', 'success');
             }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            showToast('Erreur lors de l\'ajout au panier', 'error');
         });
     });
 
-    // Gestion de la recherche
-    if (productsSearch) {
-        productsSearch.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('.product-card').forEach(product => {
-                const productName = product.querySelector('h3').textContent.toLowerCase();
-                product.style.display = productName.startsWith(searchTerm) ? '' : 'none';
-            });
-        });
-    }
+    // Gestionnaire pour le bouton Annuler
+    document.getElementById('cancelBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.classList.remove('active');
+        productSize.value = '';
+        sizeError.classList.add('hidden');
+    });
 
-    // Gestion des événements du modal
-    if (productSize) {
-        productSize.addEventListener('change', function() {
+    // Fermeture du modal en cliquant à l'extérieur
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            productSize.value = '';
             sizeError.classList.add('hidden');
-        });
-    }
+        }
+    });
 });
