@@ -37,16 +37,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('ajax/add_to_cart.php', {
+        // Cacher le message d'erreur
+        sizeError.classList.add('hidden');
+
+        // Utiliser FormData pour la cohérence
+        const formData = new FormData();
+        formData.append('id_produit', currentProductId);
+        formData.append('taille', selectedSize);
+        formData.append('quantite', '1');
+
+        fetch('/shopping-website/ajax/add_to_cart.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                id_produit: currentProductId,
-                taille: selectedSize,
-                quantite: 1
-            })
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
@@ -54,11 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.classList.remove('active');
                 updateCartCount(data.cartCount);
                 showToast('Article ajouté au panier', 'success');
+            } else {
+                showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            showToast('Erreur lors de l\'ajout au panier', 'error');
+            showToast('Une erreur s\'est produite', 'error');
         });
     });
 
@@ -79,3 +83,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function updateCartCount(count) {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+    }
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = message;
+        toast.classList.remove('opacity-0');
+        toast.classList.add('opacity-100');
+        
+        setTimeout(() => {
+            toast.classList.remove('opacity-100');
+            toast.classList.add('opacity-0');
+        }, 3000);
+    }
+}
