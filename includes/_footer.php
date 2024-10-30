@@ -36,6 +36,7 @@
 <script src="<?php echo url('assets/js/header.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/autocomplete.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/toast.js'); ?>" defer></script>
+<script src="https://kit.fontawesome.com/5ea815c1d0.js" crossorigin="anonymous"></script>
 
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'detail.php') !== false): ?>
