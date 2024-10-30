@@ -242,7 +242,13 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   x-transition:leave-end="opacity-0 transform scale-95"
                   class="absolute right-0 transform translate-x-1/3 mt-2 w-48 bg-white rounded-md shadow-lg z-[1200]">
                   <?php if ($adminManager->isAdmin($_SESSION['id_utilisateur'])): ?>
-                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <a href="<?php echo url('admin/backofficeV2.php'); ?>" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group relative" id="admin-link">
+                      <div class="absolute inset-0 bg-white flex items-center justify-center hidden" id="admin-loader">
+                        <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </div>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2 group-hover:text-blue-600">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
                       </svg>
@@ -505,6 +511,39 @@ $total = array_sum($_SESSION['panier'] ?? []);
       });
     });
   </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const adminLink = document.getElementById('admin-link');
+    const fullPageLoader = document.getElementById('full-page-loader');
+
+    adminLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      fullPageLoader.classList.remove('hidden');
+      fullPageLoader.classList.add('flex');
+      
+      setTimeout(() => {
+        window.location.href = this.href;
+      }, 3000);
+    });
+  });
+  </script>
+
+  <!-- Ajoutez ceci juste après l'ouverture du <body> -->
+  <div id="full-page-loader" class="fixed inset-0 bg-white bg-opacity-90 z-[9999] justify-center items-center hidden">
+    <div class="spinnerContainer">
+      <div class="spinner"></div>
+      <div class="loader">
+        <p>loading</p>
+        <div class="words">
+          <span class="word">Ajouter</span>
+          <span class="word">Modifier</span>
+          <span class="word">Supprimer</span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </class=>
