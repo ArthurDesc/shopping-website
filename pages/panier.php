@@ -37,52 +37,102 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Gestion de la quantité en JavaScript
+    // Gestion de la suppression
+    const deleteButtons = document.querySelectorAll('a[href^="panier.php?del="]');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.href.split('=')[1];
+            
+            Swal.fire({
+                title: 'Êtes-vous sûr ?',
+                text: "Voulez-vous retirer cet article du panier ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui, supprimer',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    });
+
+    // Gestion de la quantité
     const quantityForms = document.querySelectorAll('form[action="panier.php"]');
     quantityForms.forEach(form => {
-        const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
-        const increaseButton = form.querySelector('button[name="action"][value="increase"]');
-        const quantityDisplay = form.querySelector('span');
-        const idProduitInput = form.querySelector('input[name="id_produit"]');
-
-        decreaseButton.addEventListener('click', function() {
-            let quantity = parseInt(quantityDisplay.textContent);
+        const decreaseButton = form.querySelector('button[value="decrease"]');
+        const increaseButton = form.querySelector('button[value="increase"]');
+        
+        // Diminuer la quantité
+        decreaseButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const quantitySpan = form.querySelector('span');
+            let quantity = parseInt(quantitySpan.textContent);
+            
             if (quantity > 1) {
-                quantityDisplay.textContent = quantity - 1;
-                updateQuantity(form, quantity - 1);
+                updateQuantityWithAnimation(form, quantity - 1, 'decrease');
+            } else {
+                Swal.fire({
+                    title: 'Supprimer l\'article ?',
+                    text: "La quantité minimum est de 1. Voulez-vous retirer l'article ?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui, supprimer',
+                    cancelButtonText: 'Non, garder'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const productId = form.querySelector('input[name="id_produit"]').value;
+                        window.location.href = `panier.php?del=${productId}`;
+                    }
+                });
             }
         });
 
-        increaseButton.addEventListener('click', function() {
-            let quantity = parseInt(quantityDisplay.textContent);
-            const stock = parseInt(form.dataset.stock); // Récupérer le stock depuis un attribut data
+        // Augmenter la quantité
+        increaseButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const quantitySpan = form.querySelector('span');
+            let quantity = parseInt(quantitySpan.textContent);
+            const stock = parseInt(form.dataset.stock);
 
-            if (quantity < stock) { // Vérifier si la quantité actuelle est inférieure au stock
-                quantityDisplay.textContent = quantity + 1;
-                updateQuantity(form, quantity + 1);
+            if (quantity < stock) {
+                updateQuantityWithAnimation(form, quantity + 1, 'increase');
             } else {
-                console.log("La quantité maximale a été atteinte."); // Message de débogage
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Stock insuffisant',
+                    text: 'La quantité maximale disponible est atteinte.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
             }
         });
     });
 
-    function updateQuantity(form, quantity) {
-        const idProduitInput = form.querySelector('input[name="id_produit"]');
-        const formData = new FormData();
-        formData.append('id_produit', idProduitInput.value);
-        formData.append('quantite', quantity);
-        formData.append('update', true); // Indiquer que c'est une mise à jour
+    function updateQuantityWithAnimation(form, newQuantity, action) {
+        const formData = new FormData(form);
+        formData.append('quantite', newQuantity);
+        formData.append('update', true);
 
         fetch('panier.php', {
             method: 'POST',
-            body: formData,
+            body: formData
         })
         .then(response => response.text())
         .then(data => {
-            console.log('Response from server:', data); // Pour le débogage
-            location.reload(); // Optionnel : recharger la page pour mettre à jour l'affichage
+            location.reload(); // Recharge simplement la page sans animation
         })
-        .catch(error => console.error('Erreur:', error));
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: 'Une erreur est survenue lors de la mise à jour'
+            });
+        });
     }
 });
 </script>
@@ -243,6 +293,7 @@ include '../includes/_header.php';
     <script src="../assets/js/scripts.js" defer></script>
     <script src="../assets/js/navbar.js" defer></script>
     <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </main>
 
 <form id="payment-form">
