@@ -385,17 +385,18 @@ a:hover .back-arrow-icon {
 
 
 .avis-button {
-  --primary: #ff5569;
-  --neutral-1: #2e2e2e;
-  --neutral-2: #1a1a1a;
+  --primary: #ffffff;
+  --neutral-1: #3273ff;
+  --neutral-2: #065fd4;
   --radius: 14px;
 
   cursor: pointer;
   border-radius: var(--radius);
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  text-shadow: none;
   border: none;
-  box-shadow: 0 0.5px 0.5px 1px rgba(0, 0, 0, 0.2),
-      0 10px 20px rgba(0, 0, 0, 0.2), 0 4px 5px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0.5px 0.5px 1px rgba(59, 130, 246, 0.2),
+      0 10px 20px rgba(59, 130, 246, 0.2), 
+      0 4px 5px 0px rgba(59, 130, 246, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -403,13 +404,15 @@ a:hover .back-arrow-icon {
   transition: all 0.3s ease;
   min-width: 200px;
   padding: 15px;
-  height: 50px;  /* Réduit de 68px à 50px */
+  height: 50px;
   font-family: "Galano Grotesque", Poppins, Montserrat, sans-serif;
   font-style: normal;
   font-size: 18px;
   font-weight: 600;
   color: #ffffff;
-  background: var(--neutral-1);
+  background: white;
+  margin: 0 auto;
+  width: 80%;
 }
 
 .avis-button:hover {
@@ -493,7 +496,7 @@ a:hover .back-arrow-icon {
   background: conic-gradient(
     from 180deg,
     transparent 60%,
-    rgb(22, 22, 22) 80%,
+    rgb(22, 111, 255) 80%, /* Changé en bleu pour matcher le thème */
     transparent 100%
   );
   animation: spin 2s linear infinite;
@@ -793,4 +796,31 @@ a:hover .back-arrow-icon {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* Styles pour le conteneur des étoiles */
+.flex.items-center.gap-2 {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Style pour le conteneur des étoiles individuelles */
+.flex.space-x-1 {
+    display: flex;
+    justify-content: center;
+}
+
+/* Taille des étoiles */
+.w-8.h-8 {
+    width: 2rem;
+    height: 2rem;
+}
+
+/* Style pour le bouton */
+.avis-button {
+    margin: 1rem auto;
+    width: 50%;
+    max-width: 300px;
 }
