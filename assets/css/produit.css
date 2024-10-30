@@ -1,5 +1,13 @@
     /* ... vos styles existants ... */
-
+/* AJOUTER au début du fichier */
+:root {
+  --primary: #3B82F6;
+  --primary-dark: #2563EB;
+  --primary-light: #60A5FA;
+  --greyLight: #93c5fd;
+  --greyLight-2: #eff6ff;
+  --greyDark: #1e3a8a;
+}
 /* Styles pour le modal */
 #modal-container {
   position: fixed;
@@ -34,16 +42,6 @@
 
 #filterDropdowns.show {
   display: block !important;
-}
-
-.modal {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.modal.scale-100 {
-  visibility: visible;
-  opacity: 1;
 }
 
 #modal-container.active {
@@ -188,50 +186,6 @@
   background-color: white;
 }
 
-/* Nouveau style pour le bouton Ajouter au panier */
-.button {
-  --width: 180px;
-  --height: 40px;
-  --tooltip-height: 35px;
-  --tooltip-width: 90px;
-  --gap-between-tooltip-to-button: 18px;
-  --button-color: #3B82F6;
-  --tooltip-color: #fff;
-  width: var(--width);
-  height: var(--height);
-  background: var(--button-color);
-  position: relative;
-  text-align: center;
-  border-radius: 0.5em;
-  font-family: "Arial";
-  transition: background 0.3s;
-  cursor: pointer;
-}
-
-.button::before {
-  position: absolute;
-  content: attr(data-tooltip);
-  width: var(--tooltip-width);
-  height: var(--tooltip-height);
-  background-color: #555;
-  font-size: 0.9rem;
-  color: #fff;
-  border-radius: 0.25em;
-  line-height: var(--tooltip-height);
-  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
-  left: calc(50% - var(--tooltip-width) / 2);
-}
-
-.button::after {
-  position: absolute;
-  content: "";
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-top-color: #555;
-  left: calc(50% - 10px);
-  bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
-}
 
 .button::after,
 .button::before {
@@ -240,44 +194,10 @@
   transition: all 0.5s;
 }
 
-.text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.button-wrapper,
-.text,
-.icon {
-  overflow: hidden;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  color: #fff;
-}
 
-.text {
-  top: 0;
-}
 
-.text,
-.icon {
-  transition: top 0.5s;
-}
 
-.icon {
-  color: #fff;
-  top: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon svg {
-  width: 24px;
-  height: 24px;
-}
 
 .button:hover {
   background: #2563EB;
@@ -724,31 +644,7 @@ input[type="radio"] + span {
   color: #60A5FA;
 }
 
-.checkbox-container {
-  cursor: pointer;
-}
 
-.checkbox-container input {
-  display: none;
-}
-
-.checkbox-container svg {
-  overflow: visible;
-  /* Réduire la taille par défaut */
-  height: 1.2em !important;  /* Remplace le 2em précédent */
-  width: 1.2em !important;   /* Remplace le 2em précédent */
-}
-
-.checkbox-path {
-  fill: none;
-  stroke: white;
-  stroke-width: 6;  /* Vous pouvez aussi ajuster l'épaisseur du trait si besoin */
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
-  stroke-dasharray: 241 9999999;
-  stroke-dashoffset: 0;
-}
 
 .checkbox-container input:checked ~ svg .checkbox-path {
   stroke-dasharray: 70.5096664428711 9999999;
@@ -841,116 +737,7 @@ input[type="radio"] + span {
 
 
 
-.page__btn svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
 
-.page__btn a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.6rem;
-  height: 2.6rem;
-}
-
-/* Styles de pagination */
-:root {
-    --primary: #3B82F6;  /* Bleu */
-    --greyLight: #93c5fd;  /* Version plus claire du bleu */
-    --greyLight-2: #eff6ff;  /* Fond très clair */
-    --greyDark: #1e3a8a;  /* Bleu foncé */
-}
-
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2rem 0; /* Réduit de 3rem à 2rem */
-}
-
-.page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 3rem; /* Réduit de 5rem à 3rem */
-    margin: 2rem; /* Réduit de 3rem à 2rem */
-    border-radius: 0.4rem; /* Réduit de 0.6rem à 0.4rem */
-    background: #ffffff;
-    box-shadow: 0 0.4rem 1rem rgba(59, 130, 246, 0.05); /* Réduit l'ombre */
-    list-style-type: none;
-    padding: 0;
-}
-
-.page__numbers,
-.page__btn,
-.page__dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0.4rem; /* Réduit de 0.8rem à 0.4rem */
-    font-size: 1rem; /* Réduit de 1.4rem à 1rem */
-    cursor: pointer;
-}
-
-.page__dots {
-    width: 2rem; /* Réduit de 2.6rem à 2rem */
-    height: 2rem; /* Réduit de 2.6rem à 2rem */
-}
-
-.page__numbers {
-    width: 2rem; /* Réduit de 2.6rem à 2rem */
-    height: 2rem; /* Réduit de 2.6rem à 2rem */
-    border-radius: 0.3rem; /* Réduit de 0.4rem à 0.3rem */
-}
-
-.page__numbers:hover {
-    color: var(--primary);
-    background-color: var(--greyLight-2);
-}
-
-.page__numbers.active {
-    color: #ffffff;
-    background: var(--primary);
-    font-weight: 600;
-    border: 1px solid var(--primary);
-}
-
-.page__btn {
-    color: var(--greyLight);
-    pointer-events: none;
-}
-
-.page__btn.active {
-    color: var(--greyDark);
-    pointer-events: auto;
-}
-
-.page__btn.active:hover {
-    color: var(--primary);
-}
-
-.page__btn a,
-.page__numbers a {
-    text-decoration: none;
-    color: inherit;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Ajuster la taille des icônes SVG */
-.page__btn svg {
-    width: 1.2rem; /* Réduit de 1.5rem à 1.2rem */
-    height: 1.2rem; /* Réduit de 1.5rem à 1.2rem */
-}
-
-.page__btn a {
-    width: 2rem; /* Réduit de 2.6rem à 2rem */
-    height: 2rem; /* Réduit de 2.6rem à 2rem */
-}
 
 /* Style personnalisé pour le select */
 #productSize {
