@@ -783,13 +783,14 @@ input[type="radio"] + span {
 
 /* Version Mobile */
 @media (max-width: 767px) {
-  #filterForm {
+  .filter-apply {
     position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1000;
-    border-radius: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: var(--primary-dark);
+    text-align: center;
   }
 
 
@@ -826,12 +827,21 @@ input[type="radio"] + span {
 
   .filter-apply button {
     width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
     padding: 0.75rem;
     background: white;
     color: var(--primary);
     border: none;
     border-radius: 8px;
     font-weight: 600;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .filter-apply button:hover {
+    background: #f8fafc; /* Gris très clair */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .filter-apply button {
