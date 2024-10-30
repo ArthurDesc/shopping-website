@@ -116,15 +116,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
@@ -146,15 +146,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
@@ -174,15 +174,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
@@ -204,15 +204,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
@@ -232,15 +232,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
@@ -262,15 +262,15 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
@@ -354,7 +354,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
                       <span>Mes commandes</span>
                     </a>
                   <?php endif; ?>
-                  <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100" id="btn-deconnexion">
+                  <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 " id="btn-deconnexion">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                     </svg>
@@ -379,21 +379,21 @@ $total = array_sum($_SESSION['panier'] ?? []);
     <div id="sidebar" class="fixed left-0 top-0 w-full md:w-64 h-full bg-gradient-to-b from-blue-400 to-blue-600 text-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
       <!-- En-tête de la sidebar -->
       <div class="flex justify-between items-center p-4 border-b border-white/20">
-        <button id="close-sidebar" class="text-white hover:text-white/80 focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex-grow flex items-center ml-4">
-          <input type="text" name="q" placeholder="Rechercher..."
-            class="w-full px-3 py-2 bg-white/90 border border-white/30 rounded-l-md text-blue-900 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white placeholder-blue-400/70">
-          <button type="submit" class="bg-white/20 text-white px-4 py-2 rounded-r-md hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </button>
-        </form>
-      </div>
+  <button id="close-sidebar" class="text-white hover:text-white/80 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex-grow flex items-center ml-4">
+    <input type="text" name="q" placeholder="Rechercher..."
+      class="w-full h-10 px-3 bg-white/90 border border-white/30 rounded-l-md text-blue-900 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white placeholder-blue-400/70">
+    <button type="submit" class="h-10 bg-white/20 text-white px-4 rounded-r-md hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+    </button>
+  </form>
+</div>
 
 
       <nav class="p-4">

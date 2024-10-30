@@ -341,31 +341,20 @@ footer {
   flex-shrink: 0;
 }
 
-/* Ajout des styles pour la scrollbar */
-#sidebar::-webkit-scrollbar {
-  width: 6px;
-}
 
-#sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-}
 
-#sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
-
-#sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* Style des liens et dropdowns */
 #sidebar a {
   color: white;
   transition: background-color 0.2s ease;
 }
 
-#sidebar a:hover {
+/* Effet de hover uniquement sur les liens qui ne sont pas des toggles */
+#sidebar a:not([id$="-toggle"]):hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Style spécifique pour les toggles */
+#sidebar [id$="-toggle"]:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
