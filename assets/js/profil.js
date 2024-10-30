@@ -258,5 +258,31 @@ document.addEventListener('DOMContentLoaded', () => {
             errorDiv.textContent = error.message || 'Erreur lors du changement de mot de passe';
             errorDiv.classList.remove('hidden');
         }
+        
+    });
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Retirer la classe active de tous les boutons
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active', 'text-blue-600', 'border-blue-600');
+                btn.classList.add('text-gray-500', 'border-transparent');
+            });
+
+            // Ajouter la classe active au bouton cliqué
+            button.classList.add('active', 'text-blue-600', 'border-blue-600');
+            button.classList.remove('text-gray-500', 'border-transparent');
+
+            // Cacher tous les contenus
+            tabPanes.forEach(pane => {
+                pane.classList.add('hidden');
+            });
+
+            // Afficher le contenu correspondant
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.remove('hidden');
+        });
     });
 });
