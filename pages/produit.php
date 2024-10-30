@@ -155,7 +155,7 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
 
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
-                    <!-- Catégories -->
+                    <!-- Cat��gories -->
                     <div id="categories-filter" class="filter-section mb-4">
                         <div class="flex items-center justify-between cursor-pointer py-2" 
                              @click="openTab = openTab === 'categories' ? null : 'categories'">
@@ -336,7 +336,7 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
                 </div>
 
                 <!-- Container pour les produits -->
-                <div class="list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="list grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     <?php foreach ($produits as $produit): ?>
                         <div class="product-card list-item bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full"
                              data-category="<?= htmlspecialchars(implode(',', $produit->getCategories())) ?>"
