@@ -88,11 +88,11 @@
   transform: scale(1.03);
 }
 
-.product-card .text-blue-600 {
+.product-card -blue-600 {
   transition: all 0.3s ease;
 }
 
-.product-card:hover .text-blue-600 {
+.product-card:hover -blue-600 {
   color: #2563EB;
 }
 
@@ -154,8 +154,7 @@
 }
 
 /* Styles pour l'input de tailles */
-.taille-select,
-.quantite-select {
+.taille-select {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
@@ -187,12 +186,7 @@
 }
 
 
-.button::after,
-.button::before {
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.5s;
-}
+
 
 
 
@@ -203,11 +197,11 @@
   background: #2563EB;
 }
 
-.button:hover .text {
+.button:hover {
   top: -100%;
 }
 
-.button:hover .icon {
+.button:hover  {
   top: 0;
 }
 
@@ -380,13 +374,7 @@
     color: #2563EB; /* Couleur bleue plus foncée au survol */
 }
 
-.cart-icon-adjust {
-    margin-top: 2px; /* Ajustez cette valeur selon vos besoins */
-}
 
-.cart-icon-adjust svg {
-    vertical-align: middle;
-}
 
 .product-price-cart-container {
     display: flex;
@@ -540,18 +528,12 @@ input[type="radio"] + span {
 }
 
 #filterForm {
-  background: linear-gradient(to bottom, #3B82F6 0%, #3465ec 100%); /* Dégradé plus foncé */
-  /* Remplace la ligne existante qui était :
-  background: linear-gradient(to bottom, #60A5FA 0%, #3B82F6 100%); */
+  background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+  transition: transform 0.3s ease-in-out;
   color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-left: 0;
-  padding-left: 1rem;
-  height: fit-content;
-  min-height: min-content;
-  position: sticky;
-  top: 1rem;
+  padding: 1rem;
+  transform: translateY(100%); /* Caché par défaut en mobile */
+  overflow-y: auto;
 }
 
 #filterForm h3,
@@ -589,30 +571,15 @@ input[type="radio"] + span {
   background-color: #2563EB;
 }
 
-/* Pour la version desktop */
-@media (min-width: 768px) {
-  #filterForm {
-    position: sticky;
-    top: 1rem;
-    left: 0;
-    max-width: 280px; /* Ajustez selon vos besoins */
-    margin-right: 2rem; /* Espace entre les filtres et les produits */
-  }
+
   
   .products-container {
     margin-left: 0; /* Réinitialise la marge pour le conteneur des produits */
     padding-left: 0; /* Réinitialise le padding pour le conteneur des produits */
   }
-}
 
-/* Pour la version mobile */
-@media (max-width: 767px) {
-  #filterForm {
-    left: 0;
-    width: 100%;
-    border-radius: 0;
-  }
-}
+
+
 
 #filterForm input[type="text"],
 #filterForm input[type="search"] {
@@ -651,20 +618,12 @@ input[type="radio"] + span {
   stroke-dashoffset: -262.2723388671875;
 }
 
-/* Ajustement de l'espacement */
-.checkbox-container span {
-  margin-left: 0.5rem; /* Réduit l'espace entre la checkbox et le texte */
-}
 
 /* Styles spécifiques pour les checkboxes de filtres */
 .filter-checkbox input[type="radio"]:checked + span {
     border-color: #3B82F6;
     background-color: #EFF6FF;
     color: #2563EB;
-}
-
-.filter-checkbox input[type="radio"] + span {
-    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Styles pour les étiquettes de filtres actifs */
@@ -784,3 +743,115 @@ input[type="radio"] + span {
 #productSize option[value=""] {
     color: #6b7280;
 }
+
+
+/* Version Desktop */
+@media (min-width: 768px) {
+  #filterForm {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    border-radius: 8px;
+    transform: none !important;
+    max-width: 280px;
+    margin-right: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Style de la scrollbar sur desktop */
+  #filterForm::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #filterForm::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  #filterForm::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+}
+
+
+
+/* Classe active pour l'animation */
+#filterForm.is-active {
+  transform: translateY(0);
+}
+
+/* Version Mobile */
+@media (max-width: 767px) {
+  .filter-apply {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: var(--primary-dark);
+    text-align: center;
+  }
+
+
+.filter-header {
+  position: sticky;
+  top: 0;
+  background: var(--primary);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+  /* Bouton de fermeture */
+  .filter-close {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .filter-apply {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: var(--primary-dark);
+    text-align: center;
+  }
+
+  .filter-apply button {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 0.75rem;
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .filter-apply button:hover {
+    background: #f8fafc; /* Gris très clair */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .filter-apply button {
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+}
+

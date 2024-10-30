@@ -287,6 +287,13 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
                         </div>
                     </div>
                 </div>
+
+                <!-- Bouton d'application des filtres (version mobile) -->
+                <div class="filter-apply md:hidden">
+                    <button type="button" id="applyFilters">
+                        Appliquer
+                    </button>
+                </div>
             </div>
         </div>
 
