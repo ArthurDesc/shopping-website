@@ -63,7 +63,7 @@ include '../includes/_header.php';
                                     $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
                                 }
                     ?>
-                                <div class="cart-item flex items-center border-b border-gray-200 py-4">
+                                <div class="cart-item flex items-center cart-item border-b border-gray-200 py-4">
                                     <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
                                     <div class="flex-grow">
                                         <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>

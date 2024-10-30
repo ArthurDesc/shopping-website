@@ -88,7 +88,33 @@ async function confirmRemoveItem(productId, element) {
     });
 
     if (result.isConfirmed) {
-        await handleRemoveItem(productId, element);
+        const taille = element.querySelector('input[name="taille"]')?.value;
+        const formData = new FormData();
+        formData.append('action', 'remove');
+        formData.append('id_produit', productId);
+        if (taille) formData.append('taille', taille);
+        
+        try {
+            const response = await updateCart(formData);
+            if (response.success) {
+                const cartItem = element.closest('.cart-item');
+                if (cartItem) {
+                    cartItem.style.transition = 'opacity 0.3s ease-out';
+                    cartItem.style.opacity = '0';
+                    setTimeout(() => {
+                        cartItem.remove();
+                        if (response.totalItems === 0) {
+                            location.reload(); // Recharger la page si le panier est vide
+                        }
+                    }, 300);
+                }
+                updateCartUI(response);
+                showToast('Article supprimé du panier', 'success');
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            showToast('Erreur lors de la suppression', 'error');
+        }
     }
 }
 
