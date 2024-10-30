@@ -36,30 +36,32 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
         <div class="max-w-5xl mx-auto"> <!-- Conteneur principal à 80% -->
 
             <!-- En-tête avec les tabs -->
-            <div class="mb-8">
+            <div>
+                <!-- En-tête avec titre et bouton déconnexion -->
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-3xl font-bold text-white">Mon Compte</h1>
-                    <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 " id="btn-deconnexion">
+                    <button id="btn-deconnexion" 
+                            class="flex items-center px-4 py-2 bg-white text-red-600 rounded-lg hover:bg-red-50 transition-colors shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
                         </svg>
                         <span>Déconnexion</span>
-                    </a>
+                    </button>
                 </div>
 
-                <!-- Navigation des tabs -->
-                <div class="border-b border-gray-200">
-                    <nav class="flex space-x-8" aria-label="Tabs">
-                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600"
-                            data-tab="profile">
+                <!-- Navigation des tabs et contenu dans un seul conteneur -->
+                <div class="bg-white shadow-lg">
+                    <nav class="flex space-x-8 px-6 border-b border-gray-200" aria-label="Tabs">
+                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600 hover:text-blue-700"
+                                data-tab="profile">
                             Informations personnelles
                         </button>
                         <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                            data-tab="orders">
+                                data-tab="orders">
                             Historique des commandes
                         </button>
                         <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                            data-tab="security">
+                                data-tab="security">
                             Sécurité
                         </button>
                     </nav>
@@ -67,7 +69,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
             </div>
 
             <!-- Contenu des tabs -->
-            <div class="tab-content bg-white rounded-xl shadow-lg">
+            <div class="tab-content bg-white rounded-b-xl shadow-lg">
                 <!-- Tab Profil -->
                 <div id="profile" class="tab-pane active p-8">
                     <!-- Contenu actuel du profil -->

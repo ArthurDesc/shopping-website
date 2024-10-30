@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (!isset($_SESSION)) {
+    session_start();
+}
 require_once '../includes/_db.php';
 
 // Redirection si l'utilisateur n'est pas connecté
