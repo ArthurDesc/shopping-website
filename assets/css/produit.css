@@ -88,11 +88,11 @@
   transform: scale(1.03);
 }
 
-.product-card .text-blue-600 {
+.product-card -blue-600 {
   transition: all 0.3s ease;
 }
 
-.product-card:hover .text-blue-600 {
+.product-card:hover -blue-600 {
   color: #2563EB;
 }
 
@@ -154,8 +154,7 @@
 }
 
 /* Styles pour l'input de tailles */
-.taille-select,
-.quantite-select {
+.taille-select {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
@@ -187,12 +186,7 @@
 }
 
 
-.button::after,
-.button::before {
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.5s;
-}
+
 
 
 
@@ -203,11 +197,11 @@
   background: #2563EB;
 }
 
-.button:hover .text {
+.button:hover {
   top: -100%;
 }
 
-.button:hover .icon {
+.button:hover  {
   top: 0;
 }
 
@@ -380,13 +374,7 @@
     color: #2563EB; /* Couleur bleue plus foncée au survol */
 }
 
-.cart-icon-adjust {
-    margin-top: 2px; /* Ajustez cette valeur selon vos besoins */
-}
 
-.cart-icon-adjust svg {
-    vertical-align: middle;
-}
 
 .product-price-cart-container {
     display: flex;
@@ -651,20 +639,12 @@ input[type="radio"] + span {
   stroke-dashoffset: -262.2723388671875;
 }
 
-/* Ajustement de l'espacement */
-.checkbox-container span {
-  margin-left: 0.5rem; /* Réduit l'espace entre la checkbox et le texte */
-}
 
 /* Styles spécifiques pour les checkboxes de filtres */
 .filter-checkbox input[type="radio"]:checked + span {
     border-color: #3B82F6;
     background-color: #EFF6FF;
     color: #2563EB;
-}
-
-.filter-checkbox input[type="radio"] + span {
-    transition: background-color 0.3s, color 0.3s;
 }
 
 /* Styles pour les étiquettes de filtres actifs */
