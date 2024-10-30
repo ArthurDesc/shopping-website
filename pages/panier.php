@@ -16,74 +16,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isse
 ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const forms = document.querySelectorAll('form[action="panier.php"]'); // Sélectionner tous les formulaires de mise à jour
-
-    forms.forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêcher le rafraîchissement de la page
-
-            const formData = new FormData(form); // Récupérer les données du formulaire
-
-            fetch('panier.php', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data); // Pour le débogage
-                location.reload(); // Optionnel : recharger la page pour mettre à jour l'affichage
-            })
-            .catch(error => console.error('Erreur:', error));
-        });
-    });
-
-    // Gestion de la quantité en JavaScript
     const quantityForms = document.querySelectorAll('form[action="panier.php"]');
+    
     quantityForms.forEach(form => {
         const decreaseButton = form.querySelector('button[name="action"][value="decrease"]');
         const increaseButton = form.querySelector('button[name="action"][value="increase"]');
         const quantityDisplay = form.querySelector('span');
-        const idProduitInput = form.querySelector('input[name="id_produit"]');
+        const priceElement = form.closest('.flex').querySelector('.text-gray-600');
+        const unitPrice = parseFloat(priceElement.getAttribute('data-price'));
 
-        decreaseButton.addEventListener('click', function() {
-            let quantity = parseInt(quantityDisplay.textContent);
-            if (quantity > 1) {
-                quantityDisplay.textContent = quantity - 1;
-                updateQuantity(form, quantity - 1);
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('form[action="panier.php"]').forEach(form => {
+                const qty = parseInt(form.querySelector('span').textContent);
+                const price = parseFloat(form.closest('.flex').querySelector('.text-gray-600').getAttribute('data-price'));
+                total += qty * price;
+            });
+
+            const totalElement = document.querySelector('.text-2xl.font-bold.text-green-600');
+            if (totalElement) {
+                totalElement.textContent = total.toFixed(2) + '€';
+            }
+        }
+
+        function updateQuantity(form, newQuantity) {
+            const formData = new FormData(form);
+            formData.append('quantite', newQuantity);
+            formData.append('update', true);
+
+            fetch('panier.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(() => {
+                // Mise à jour de l'affichage
+                quantityDisplay.textContent = newQuantity;
+                
+                // Mise à jour du prix du produit
+                const newPrice = (unitPrice * newQuantity).toFixed(2);
+                priceElement.textContent = newPrice + '€';
+                
+                // Mise à jour du total
+                updateTotal();
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+
+        decreaseButton?.addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentQty = parseInt(quantityDisplay.textContent);
+            if (currentQty > 1) {
+                updateQuantity(form, currentQty - 1);
             }
         });
 
-        increaseButton.addEventListener('click', function() {
-            let quantity = parseInt(quantityDisplay.textContent);
-            const stock = parseInt(form.dataset.stock); // Récupérer le stock depuis un attribut data
-
-            if (quantity < stock) { // Vérifier si la quantité actuelle est inférieure au stock
-                quantityDisplay.textContent = quantity + 1;
-                updateQuantity(form, quantity + 1);
+        increaseButton?.addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentQty = parseInt(quantityDisplay.textContent);
+            const stock = parseInt(form.dataset.stock);
+            
+            if (currentQty < stock) {
+                updateQuantity(form, currentQty + 1);
             } else {
-                console.log("La quantité maximale a été atteinte."); // Message de débogage
+                alert('Stock maximum atteint');
             }
         });
     });
-
-    function updateQuantity(form, quantity) {
-        const idProduitInput = form.querySelector('input[name="id_produit"]');
-        const formData = new FormData();
-        formData.append('id_produit', idProduitInput.value);
-        formData.append('quantite', quantity);
-        formData.append('update', true); // Indiquer que c'est une mise à jour
-
-        fetch('panier.php', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log('Response from server:', data); // Pour le débogage
-            location.reload(); // Optionnel : recharger la page pour mettre à jour l'affichage
-        })
-        .catch(error => console.error('Erreur:', error));
-    }
 });
 </script>
 <?php
@@ -183,12 +182,16 @@ include '../includes/_header.php';
                                 <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
                                 <div class="flex-grow">
                                     <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
-                                    <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
-                                    <form method="post" action="panier.php" class="flex items-center mt-2" data-stock="<?= $product['stock'] ?>">
-                                        <input type="hidden" name="id_produit" value="<?= $key ?>">
-                                        <button type="submit" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
-                                        <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
-                                        <button type="submit" name="action" value="increase" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-r">+</button>
+                                    <p class="text-gray-600" data-price="<?= $product['prix'] ?>">
+                                        <?= number_format($product['prix'], 2); ?>€
+                                    </p>
+                                    <form action="panier.php" method="POST" data-stock="<?= $product['stock'] ?>">
+                                        <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
+                                        <div class="flex items-center space-x-2">
+                                            <button type="button" name="action" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
+                                            <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
+                                            <button type="button" name="action" value="increase" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-r">+</button>
+                                        </div>
                                     </form>
                                 </div>
                                 <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
