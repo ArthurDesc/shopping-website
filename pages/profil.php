@@ -50,7 +50,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                 </div>
 
                 <!-- Navigation des tabs et contenu dans un seul conteneur -->
-                <div class="bg-white shadow-lg">
+                <div class="bg-white shadow-lg shadow-blue-100/50 rounded-t-xl">
                     <nav class="flex space-x-8 px-6 border-b border-gray-200" aria-label="Tabs">
                         <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600 hover:text-blue-700"
                                 data-tab="profile">
