@@ -5,14 +5,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentProductId = null;
     let currentProductPrice = null;
 
-    // Gestionnaire pour les boutons d'ajout au panier
-    document.querySelectorAll('.open-modal-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
+    // Utiliser la délégation d'événements au niveau du document
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.open-modal-btn')) {
             e.preventDefault();
             e.stopPropagation();
             
-            currentProductId = this.dataset.productId;
-            currentProductPrice = this.dataset.productPrice;
+            const button = e.target.closest('.open-modal-btn');
+            currentProductId = button.dataset.productId;
+            currentProductPrice = button.dataset.productPrice;
             
             // Mettre à jour le prix dans le bouton d'ajout au panier
             const addToCartBtn = document.getElementById('addToCartBtn');
@@ -30,7 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             
             modal.classList.add('active');
-        });
+        }
+    });
+
+    // Ajouter un écouteur pour le bouton de réinitialisation des filtres
+    document.getElementById('reset-filters').addEventListener('click', function() {
+        // Attendre que le DOM soit mis à jour après la réinitialisation des filtres
+        setTimeout(() => {
+            initializeProductButtons();
+        }, 100);
     });
 
     // Gestionnaire pour le bouton Ajouter au panier
@@ -110,14 +119,21 @@ function showToast(message, type = 'success') {
         toast.textContent = message;
         toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg z-50 ${
             type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white`;
+        } text-white opacity-0 transition-opacity duration-300`;
         
-        // Ajouter la classe show pour déclencher l'animation
-        toast.classList.add('show');
-        
-        // Retirer la classe show après 3 secondes
+        // Afficher le toast
         setTimeout(() => {
-            toast.classList.remove('show');
+            toast.style.opacity = '1';
+        }, 10);
+        
+        // Cacher le toast après 3 secondes
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            
+            // Supprimer complètement le toast après la fin de l'animation
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 300);
         }, 3000);
     }
 }

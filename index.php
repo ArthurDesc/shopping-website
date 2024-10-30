@@ -49,145 +49,209 @@ include './includes/_header.php';
     </div>
   </div>
 
-  <h2 id="nouveautes" class="text-2xl font-normal mb-4 mt-12 ml-4">Les nouveautés du moment</h2>
-  <div class="custom-scroll">
-    <div class="flex space-x-12 p-4 w-max">
-      <?php
-      // Récupérer toutes les marques de la base de données
-      $query = "SELECT DISTINCT marque FROM produits ORDER BY marque";
-      $result = mysqli_query($conn, $query);
-      $all_marques = [];
-      while ($row = mysqli_fetch_assoc($result)) {
-          $all_marques[] = $row['marque'];
-      }
-
-      // Liste des marques que vous voulez afficher dans l'index
-      $marques_to_display = ['Puma', 'Adidas', 'Nike', 'NorthFace', 'UnderArmour'];
-
-      // Ne garder que les marques qui existent dans la base de données
-      $marques = array_intersect($marques_to_display, $all_marques);
-
-      foreach ($marques as $marque) :
-      ?>
-        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-          <a href="<?php echo url('pages/produit.php?marques=' . urlencode($marque)); ?>" class="block relative">
-            <img src="<?php echo url('assets/images/' . strtolower($marque) . '.png'); ?>" alt="<?php echo $marque; ?>" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
-            <div class="absolute bottom-2 right-2 z-10">
-              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600"><?php echo $marque; ?></button>
-              </div>
-            </a>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Touts pour votre sports</h2>
-  <div class="custom-scroll">
-    <div class="flex space-x-12 p-4 w-max">
-        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categories=19'); ?>" class="block relative">
-                <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-                <div class="absolute bottom-2 right-2 z-10">
-                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Football</button>
-                </div>
-            </a>
-        </div>
-
-        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categories=20'); ?>" class="block relative">
-                <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-                <div class="absolute bottom-2 right-2 z-10">
-                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Rugby</button>
-                </div>
-            </a>
-        </div>
-
-        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categories=21'); ?>" class="block relative">
-                <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-                <div class="absolute bottom-2 right-2 z-10">
-                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Running</button>
-                </div>
-            </a>
-        </div>
-
-        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categories=22'); ?>" class="block relative">
-                <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-                <div class="absolute bottom-2 right-2 z-10">
-                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Handball</button>
-                </div>
-            </a>
-        </div>
-
-        <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
-            <a href="<?php echo url('pages/produit.php?categories=23'); ?>" class="block relative">
-                <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-                <div class="absolute bottom-2 right-2 z-10">
-                    <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Basketball</button>
-                </div>
-            </a>
-        </div>
-    </div>
-  </div>
-
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Collections</h2>
-  <div class="custom-scroll">
-    <div class="flex space-x-8 p-4 w-max">
-      <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collections=Homme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/homme.jpg'); ?>" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Homme</button>
-          </div>
-        </a>
+  <div id="nouveautes" class="section-container relative px-4 mt-12">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-normal">Les nouveautés du moment</h2>
+      <div class="hidden md:flex gap-2">
+        <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="scroll-right-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
-      <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collections=Femme'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/femme.jpg'); ?>" alt="Femme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Femme</button>
+    </div>
+    <div class="scroll-container overflow-x-auto scrollbar-hide">
+      <div class="flex space-x-8 p-4 w-max">
+        <?php
+        // Récupérer toutes les marques de la base de données
+        $query = "SELECT DISTINCT marque FROM produits ORDER BY marque";
+        $result = mysqli_query($conn, $query);
+        $all_marques = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $all_marques[] = $row['marque'];
+        }
+
+        // Liste des marques que vous voulez afficher dans l'index
+        $marques_to_display = ['Puma', 'Adidas', 'Nike', 'NorthFace', 'UnderArmour'];
+
+        // Ne garder que les marques qui existent dans la base de données
+        $marques = array_intersect($marques_to_display, $all_marques);
+
+        foreach ($marques as $marque) :
+        ?>
+          <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+            <a href="<?php echo url('pages/produit.php?marques=' . urlencode($marque)); ?>" class="block relative">
+              <img src="<?php echo url('assets/images/' . strtolower($marque) . '.png'); ?>" alt="<?php echo $marque; ?>" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-t from-blue-600 to-transparent opacity-0 group-hover:opacity-50 transition duration-300"></div>
+              <div class="absolute bottom-2 right-2 z-10">
+                <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600"><?php echo $marque; ?></button>
+                </div>
+              </a>
           </div>
-        </a>
-      </div>
-      <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?collections=Enfant'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/enfant.jpg'); ?>" alt="Enfant" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Enfant</button>
-          </div>
-        </a>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
 
-  <h2 class="text-2xl font-normal mb-4 mt-12 ml-4">Les promotions</h2>
-  <div class="custom-scroll">
-    <div class="flex space-x-8 p-4 w-max">
-      <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?promotion=camp'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/camp.jpeg'); ?>" alt="Homme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
-          </div>
-        </a>
+  <div class="section-container relative px-4">
+    <div class="flex items-center justify-between mb-4 mt-12">
+      <h2 class="text-2xl font-normal">Touts pour votre sports</h2>
+      <div class="hidden md:flex gap-2">
+        <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="scroll-right-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
-      <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?promotion=airmax-sunder'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/airmax-sunder.jpg'); ?>" alt="Femme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
+    </div>
+    <div class="scroll-container overflow-x-auto scrollbar-hide">
+      <div class="flex space-x-12 p-4 w-max">
+          <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+              <a href="<?php echo url('pages/produit.php?categories=19'); ?>" class="block relative">
+                  <img src="<?php echo url('assets/images/football.jpg'); ?>" alt="Football" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                  <div class="absolute bottom-2 right-2 z-10">
+                      <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Football</button>
+                  </div>
+              </a>
           </div>
-        </a>
+
+          <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+              <a href="<?php echo url('pages/produit.php?categories=20'); ?>" class="block relative">
+                  <img src="<?php echo url('assets/images/rugby.jpg'); ?>" alt="Rugby" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                  <div class="absolute bottom-2 right-2 z-10">
+                      <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Rugby</button>
+                  </div>
+              </a>
+          </div>
+
+          <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+              <a href="<?php echo url('pages/produit.php?categories=21'); ?>" class="block relative">
+                  <img src="<?php echo url('assets/images/running.jpg'); ?>" alt="Running" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                  <div class="absolute bottom-2 right-2 z-10">
+                      <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Running</button>
+                  </div>
+              </a>
+          </div>
+
+          <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+              <a href="<?php echo url('pages/produit.php?categories=22'); ?>" class="block relative">
+                  <img src="<?php echo url('assets/images/handball.jpg'); ?>" alt="Handball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                  <div class="absolute bottom-2 right-2 z-10">
+                      <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Handball</button>
+                  </div>
+              </a>
+          </div>
+
+          <div class="flex-shrink-0 w-64 relative shadow-lg rounded-lg overflow-hidden group">
+              <a href="<?php echo url('pages/produit.php?categories=23'); ?>" class="block relative">
+                  <img src="<?php echo url('assets/images/basketball.jpg'); ?>" alt="Basketball" class="w-full h-64 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+                  <div class="absolute bottom-2 right-2 z-10">
+                      <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Basketball</button>
+                  </div>
+              </a>
+          </div>
       </div>
-      <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-        <a href="<?php echo url('pages/produit.php?promotion=kids'); ?>" class="block relative">
-          <img src="<?php echo url('assets/images/kids.jpg'); ?>" alt="Enfant" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-          <div class="absolute bottom-2 right-2">
-            <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-700 group-hover:text-white">Promotion</button>
-          </div>
-        </a>
+    </div>
+  </div>
+
+  <div class="section-container relative px-4">
+    <div class="flex items-center justify-between mb-4 mt-12">
+      <h2 class="text-2xl font-normal">Collections</h2>
+      <div class="hidden md:flex gap-2">
+        <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="scroll-right-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="scroll-container overflow-x-auto scrollbar-hide">
+      <div class="flex space-x-8 p-4 w-max">
+        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?collections=Homme'); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/homme.jpg'); ?>" alt="Homme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+            <div class="absolute bottom-2 right-2">
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Homme</button>
+            </div>
+          </a>
+        </div>
+        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?collections=Femme'); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/femme.jpg'); ?>" alt="Femme" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+            <div class="absolute bottom-2 right-2">
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Femme</button>
+            </div>
+          </a>
+        </div>
+        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?collections=Enfant'); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/enfant.jpg'); ?>" alt="Enfant" class="w-full h-44 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+            <div class="absolute bottom-2 right-2">
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Enfant</button>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-container relative px-4">
+    <div class="flex items-center justify-between mb-4 mt-12">
+      <h2 class="text-2xl font-normal">Les promotions</h2>
+      <div class="hidden md:flex gap-2">
+        <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button class="scroll-right-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="scroll-container overflow-x-auto scrollbar-hide">
+      <div class="flex space-x-8 p-4 w-max">
+        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?promotion=camp&filtre=promo'); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/camp.jpeg'); ?>" alt="Homme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+            <div class="absolute bottom-2 right-2">
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Promotion</button>
+            </div>
+          </a>
+        </div>
+        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?promotion=airmax-sunder'); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/airmax-sunder.jpg'); ?>" alt="Femme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+            <div class="absolute bottom-2 right-2">
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
+            </div>
+          </a>
+        </div>
+        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
+          <a href="<?php echo url('pages/produit.php?promotion=kids'); ?>" class="block relative">
+            <img src="<?php echo url('assets/images/kids.jpg'); ?>" alt="Enfant" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
+            <div class="absolute bottom-2 right-2">
+              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-700 group-hover:text-white">Promotion</button>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -265,4 +329,45 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   .nouveautes-container .flex > div:first-child::before {
     display: none;
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollAmount = 300;
+
+  // Gestionnaire pour les boutons gauche
+  document.querySelectorAll('.scroll-left-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const container = this.closest('.section-container').querySelector('.scroll-container');
+      container.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Gestionnaire pour les boutons droite
+  document.querySelectorAll('.scroll-right-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const container = this.closest('.section-container').querySelector('.scroll-container');
+      container.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+  });
+});
+</script>
+
+
+
+
