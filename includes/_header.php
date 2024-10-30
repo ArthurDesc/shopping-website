@@ -84,6 +84,95 @@ $total = array_sum($_SESSION['panier'] ?? []);
       display: none !important;
     }
   </style>
+  <style>
+    .spinnerContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .spinner {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      border: 4px solid #0000;
+      border-radius: 50%;
+      border-right-color: #299fff;
+      animation: tri-spinner 1s infinite linear;
+    }
+
+    .spinner::before,
+    .spinner::after {
+      content: "";
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 50%;
+      animation: tri-spinner 2s infinite;
+    }
+
+    .spinner::after {
+      margin: 8px;
+      animation-duration: 3s;
+    }
+
+    @keyframes tri-spinner {
+      100% {
+        transform: rotate(1turn);
+      }
+    }
+
+    .loader {
+      color: #4a4a4a;
+      font-family: "Poppins",sans-serif;
+      font-weight: 500;
+      font-size: 25px;
+      box-sizing: content-box;
+      height: 40px;
+      padding: 10px 10px;
+      display: flex;
+      border-radius: 8px;
+    }
+
+    .words {
+      overflow: hidden;
+    }
+
+    .word {
+      display: block;
+      height: 100%;
+      padding-left: 6px;
+      color: #299fff;
+      animation: cycle-words 5s infinite;
+    }
+
+    @keyframes cycle-words {
+      10% {
+        transform: translateY(-105%);
+      }
+      25% {
+        transform: translateY(-100%);
+      }
+      35% {
+        transform: translateY(-205%);
+      }
+      50% {
+        transform: translateY(-200%);
+      }
+      60% {
+        transform: translateY(-305%);
+      }
+      75% {
+        transform: translateY(-300%);
+      }
+      85% {
+        transform: translateY(-405%);
+      }
+      100% {
+        transform: translateY(-400%);
+      }
+    }
+  </style>
 </head>
 
 
@@ -537,9 +626,10 @@ $total = array_sum($_SESSION['panier'] ?? []);
         <p>loading</p>
         <div class="words">
           <span class="word">Ajouter</span>
+          <span class="word">Ajouter</span>
           <span class="word">Modifier</span>
-          <span class="word">Supprimer</span>
-          
+          <span class="word">Suprimer</span>
+          <span class="word">Ajouter</span>
         </div>
       </div>
     </div>
