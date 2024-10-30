@@ -133,9 +133,18 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
     </script>";
 }
 
-// Après la ligne 55, ajoutez :
+// Après la ligne où $produits est rempli
 $categories_avec_produits = array();
 $sous_categories_avec_produits = array();
+$categories_forcees = array();
+
+// Récupérer les catégories depuis l'URL
+if (isset($_GET['categories'])) {
+    $requested_categories = explode(',', $_GET['categories']);
+    foreach ($requested_categories as $cat_id) {
+        $categories_forcees[$cat_id] = true;
+    }
+}
 
 // Parcourir tous les produits pour identifier les catégories utilisées
 foreach ($produits as $produit) {
@@ -199,13 +208,15 @@ foreach ($produits as $produit) {
                                     <?php foreach ($categories as $id_categorie => $categorie): 
                                         $has_active_subcategories = false;
                                         foreach ($categorie['sous_categories'] as $sous_cat) {
-                                            if (isset($sous_categories_avec_produits[$sous_cat['id']])) {
+                                            if (isset($sous_categories_avec_produits[$sous_cat['id']]) || isset($categories_forcees[$sous_cat['id']])) {
                                                 $has_active_subcategories = true;
                                                 break;
                                             }
                                         }
                                         
-                                        if (isset($categories_avec_produits[$id_categorie]) || $has_active_subcategories): 
+                                        if (isset($categories_avec_produits[$id_categorie]) || 
+                                            $has_active_subcategories || 
+                                            isset($categories_forcees[$id_categorie])): 
                                     ?>
                                         <label class="checkbox-container flex items-center">
                                             <input type="checkbox" 
@@ -225,7 +236,8 @@ foreach ($produits as $produit) {
                                         <?php if (!empty($categorie['sous_categories'])): ?>
                                             <div class="ml-6 space-y-1">
                                                 <?php foreach ($categorie['sous_categories'] as $sous_categorie): ?>
-                                                    <?php if (isset($sous_categories_avec_produits[$sous_categorie['id']])): ?>
+                                                    <?php if (isset($sous_categories_avec_produits[$sous_categorie['id']]) || 
+                                                             isset($categories_forcees[$sous_categorie['id']])): ?>
                                                         <label class="checkbox-container flex items-center">
                                                             <input type="checkbox" 
                                                                    class="hidden"
