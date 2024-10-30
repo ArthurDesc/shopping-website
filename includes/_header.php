@@ -196,25 +196,25 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   Homme
                 </a>
                 <div x-show="open"
+                  x-cloak
                   x-transition:enter="transition ease-out duration-100"
                   x-transition:enter-start="opacity-0 transform scale-95"
                   x-transition:enter-end="opacity-100 transform scale-100"
-                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave="transition ease-in duration-75"
                   x-transition:leave-start="opacity-100 transform scale-100"
                   x-transition:leave-end="opacity-0 transform scale-95"
-                  style="display: none;"
-                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-36 bg-white rounded-md shadow-lg z-[1100] py-1">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Vêtements
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Vêtements</span>
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Chaussures
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Chaussures</span>
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Accessoires
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Accessoires</span>
                   </a>
                 </div>
               </div>
@@ -226,25 +226,25 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   Femme
                 </a>
                 <div x-show="open"
-                  x-transition:enter="transition ease-out duration-100"
+                  x-cloak
+                  x-transition:enter="transition ease-out duration-200"
                   x-transition:enter-start="opacity-0 transform scale-95"
                   x-transition:enter-end="opacity-100 transform scale-100"
                   x-transition:leave="transition ease-in duration-150"
                   x-transition:leave-start="opacity-100 transform scale-100"
                   x-transition:leave-end="opacity-0 transform scale-95"
-                  style="display: none;"
-                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-36 bg-white rounded-md shadow-lg z-[1100] py-1">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Vêtements
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Vêtements</span>
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Chaussures
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Chaussures</span>
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Accessoires
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Accessoires</span>
                   </a>
                 </div>
               </div>
@@ -255,25 +255,25 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   Enfant
                 </a>
                 <div x-show="open"
-                  x-transition:enter="transition ease-out duration-100"
+                  x-cloak
+                  x-transition:enter="transition ease-out duration-200"
                   x-transition:enter-start="opacity-0 transform scale-95"
                   x-transition:enter-end="opacity-100 transform scale-100"
                   x-transition:leave="transition ease-in duration-150"
                   x-transition:leave-start="opacity-100 transform scale-100"
                   x-transition:leave-end="opacity-0 transform scale-95"
-                  style="display: none;"
-                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-36 bg-white rounded-md shadow-lg z-[1100] py-1">
                   <a href="<?php echo url("pages/produit.php?categories=1&collections=Enfant"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Vêtements
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Vêtements</span>
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=2&collections=Enfant"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Chaussures
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Chaussures</span>
                   </a>
                   <a href="<?php echo url("pages/produit.php?categories=3&collections=Enfant"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Accessoires
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-blue-600 group">
+                    <span>Accessoires</span>
                   </a>
                 </div>
               </div>
