@@ -95,4 +95,12 @@ class Panier {
         $key = $this->genererCleProduit($id_produit, $taille);
         return isset($this->items[$key]);
     }
+
+    public function getCartInfo() {
+        return [
+            'items' => $this->getContenu(),
+            'totalItems' => $this->getNombreArticles(),
+            'totalPrice' => number_format($this->getTotal(), 2, '.', '')
+        ];
+    }
 }

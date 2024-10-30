@@ -19,11 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit'])) {
 
     if ($produit && $produit['stock'] >= $quantite) {
         $panier->ajouter($id_produit, $quantite, $taille);
+        $cartInfo = $panier->getCartInfo();
         
         echo json_encode([
             'success' => true,
             'message' => 'Produit ajouté au panier',
-            'cartCount' => $panier->getNombreArticles()
+            'cartCount' => $cartInfo['totalItems']
         ]);
     } else {
         echo json_encode([
