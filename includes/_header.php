@@ -36,146 +36,52 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
+  
+  <!-- Styles pour intl-tel-input -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
   <style>
-    .iti {
-      width: 100%;
-    }
-
-    .iti__flag {
-      background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags.png");
-    }
-
-    @media (-webkit-min-device-pixel-ratio: 2),
-    (min-resolution: 192dpi) {
-      .iti__flag {
-        background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags@2x.png");
-      }
+    .iti { width: 100%; }
+    .iti__flag { background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags.png"); }
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .iti__flag { background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags@2x.png"); }
     }
   </style>
-  <!-- X-Editable -->
-<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-  <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
-  <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
+
+  <!-- Bibliothèques externes -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <?php include __DIR__ . '/../includes/_fonts.php';  ?>
-  <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
 
-  <!-- Ajout conditionnel du CSS de la page profil -->
+  <!-- Ressources locales -->
+  <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
+  <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
+  <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
+  <?php include __DIR__ . '/../includes/_fonts.php'; ?>
+  
+  <!-- CSS spécifiques aux pages -->
+  <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <?php if (basename($_SERVER['PHP_SELF']) == 'profil.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/profil.css?v=' . filemtime(__DIR__ . '/../assets/css/profil.css')); ?>">
   <?php endif; ?>
-
   <?php if (basename($_SERVER['PHP_SELF']) == 'produit.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/produit.css')); ?>">
   <?php endif; ?>
   <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/detail.css')); ?>">
   <?php endif; ?>
+  
+  <!-- CSS principaux -->
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
+
+  <!-- Scripts -->
   <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
-  <style>
-    [x-cloak] {
-      display: none !important;
-    }
-  </style>
-  <style>
-    .spinnerContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
 
-    .spinner {
-      width: 56px;
-      height: 56px;
-      display: grid;
-      border: 4px solid #0000;
-      border-radius: 50%;
-      border-right-color: #299fff;
-      animation: tri-spinner 1s infinite linear;
-    }
-
-    .spinner::before,
-    .spinner::after {
-      content: "";
-      grid-area: 1/1;
-      margin: 2px;
-      border: inherit;
-      border-radius: 50%;
-      animation: tri-spinner 2s infinite;
-    }
-
-    .spinner::after {
-      margin: 8px;
-      animation-duration: 3s;
-    }
-
-    @keyframes tri-spinner {
-      100% {
-        transform: rotate(1turn);
-      }
-    }
-
-    .loader {
-      color: #4a4a4a;
-      font-family: "Poppins",sans-serif;
-      font-weight: 500;
-      font-size: 25px;
-      box-sizing: content-box;
-      height: 40px;
-      padding: 10px 10px;
-      display: flex;
-      border-radius: 8px;
-    }
-
-    .words {
-      overflow: hidden;
-    }
-
-    .word {
-      display: block;
-      height: 100%;
-      padding-left: 6px;
-      color: #299fff;
-      animation: cycle-words 5s infinite;
-    }
-
-    @keyframes cycle-words {
-      10% {
-        transform: translateY(-105%);
-      }
-      25% {
-        transform: translateY(-100%);
-      }
-      35% {
-        transform: translateY(-205%);
-      }
-      50% {
-        transform: translateY(-200%);
-      }
-      60% {
-        transform: translateY(-305%);
-      }
-      75% {
-        transform: translateY(-300%);
-      }
-      85% {
-        transform: translateY(-405%);
-      }
-      100% {
-        transform: translateY(-400%);
-      }
-    }
-  </style>
 </head>
 
 
@@ -280,7 +186,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   </a>
                 </div>
               </div>
-             
+
 
 
 
@@ -392,21 +298,21 @@ $total = array_sum($_SESSION['panier'] ?? []);
     <div id="sidebar" class="fixed left-0 top-0 w-full md:w-64 h-full bg-gradient-to-b from-blue-400 to-blue-600 text-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
       <!-- En-tête de la sidebar -->
       <div class="flex justify-between items-center p-4 border-b border-white/20">
-  <button id="close-sidebar" class="text-white hover:text-white/80 focus:outline-none">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  </button>
-  <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex-grow flex items-center ml-4">
-    <input type="text" name="q" placeholder="Rechercher..."
-      class="w-full h-10 px-3 bg-white/90 border border-white/30 rounded-l-md text-blue-900 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white placeholder-blue-400/70">
-    <button type="submit" class="h-10 bg-white/20 text-white px-4 rounded-r-md hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-      </svg>
-    </button>
-  </form>
-</div>
+        <button id="close-sidebar" class="text-white hover:text-white/80 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex-grow flex items-center ml-4">
+          <input type="text" name="q" placeholder="Rechercher..."
+            class="w-full h-10 px-3 bg-white/90 border border-white/30 rounded-l-md text-blue-900 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white placeholder-blue-400/70">
+          <button type="submit" class="h-10 bg-white/20 text-white px-4 rounded-r-md hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </button>
+        </form>
+      </div>
 
 
       <nav class="p-4">
@@ -605,20 +511,20 @@ $total = array_sum($_SESSION['panier'] ?? []);
   </script>
 
   <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const adminLink = document.getElementById('admin-link');
-    const fullPageLoader = document.getElementById('full-page-loader');
+    document.addEventListener('DOMContentLoaded', function() {
+      const adminLink = document.getElementById('admin-link');
+      const fullPageLoader = document.getElementById('full-page-loader');
 
-    adminLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      fullPageLoader.classList.remove('hidden');
-      fullPageLoader.classList.add('flex');
-      
-      setTimeout(() => {
-        window.location.href = this.href;
-      }, 3000);
+      adminLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        fullPageLoader.classList.remove('hidden');
+        fullPageLoader.classList.add('flex');
+
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 3000);
+      });
     });
-  });
   </script>
 
   <!-- Ajoutez ceci juste après l'ouverture du <body> -->
