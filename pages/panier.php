@@ -72,9 +72,11 @@ include '../includes/_header.php';
                                         <input type="hidden" name="id_produit" value="<?= $id ?>">                                            <?php if ($taille): ?>
                                                 <input type="hidden" name="taille" value="<?= $taille ?>">
                                             <?php endif; ?>
-                                            <button type="button" value="decrease" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-l">-</button>
-                                            <span class="px-4 py-1 bg-gray-100"><?= $quantity ?></span>
-                                            <button type="button" value="increase" class="bg-gray-200 text-gray-600 px-2 py-1 rounded-r">+</button>
+                                            <div class="quantity-control">
+                                                <button type="button" value="decrease" class="quantity-btn">-</button>
+                                                <span class="quantity-display"><?= $quantity ?></span>
+                                                <button type="button" value="increase" class="quantity-btn">+</button>
+                                            </div>
                                         </form>
                                     </div>
                                     <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
