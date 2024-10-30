@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Vérifier s'il y a des produits avant d'initialiser List.js
+    // Ajouter ces variables au début
+    const noResults = document.getElementById('no-results');
+    const resetFilters = document.getElementById('reset-filters');
     const productContainer = document.querySelector('#products .list');
+
+    // Vérifier s'il y a des produits avant d'initialiser List.js
     if (!productContainer || !productContainer.children.length) {
         console.log('Aucun produit trouvé');
         return;
@@ -49,6 +53,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 return categoryMatch && brandMatch && collectionMatch;
             });
+
+            // Ajouter cette vérification après le filtrage
+            checkVisibleProducts();
+        }
+
+        function checkVisibleProducts() {
+            const visibleProducts = productList.visibleItems.length;
+            if (visibleProducts === 0) {
+                productContainer.classList.add('hidden');
+                noResults.classList.remove('hidden');
+            } else {
+                productContainer.classList.remove('hidden');
+                noResults.classList.add('hidden');
+            }
         }
 
         function updateURL(activeFilters) {
@@ -221,6 +239,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 filterItems(categorySearch, '#categories-filter');
             });
         }
+
+        // Ajouter l'écouteur d'événements pour le bouton reset
+        resetFilters?.addEventListener('click', () => {
+            // Réinitialiser les filtres actifs
+            activeFilters.categories.clear();
+            activeFilters.brands.clear();
+            activeFilters.collections.clear();
+
+            // Décocher toutes les checkboxes
+            filterCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            // Réinitialiser l'input de recherche
+            const searchInput = document.getElementById('search-products');
+            if (searchInput) {
+                searchInput.value = '';
+                // Déclencher la recherche pour mettre à jour la liste
+                productList.search();
+            }
+
+            // Réinitialiser la recherche et les filtres
+            productList.search();
+            productList.filter();
+
+            // Mettre à jour l'affichage
+            updateActiveFiltersDisplay();
+            updateURL(activeFilters);
+            checkVisibleProducts();
+
+            // Réinitialiser l'URL
+            window.history.pushState({}, '', window.location.pathname);
+        });
+
+        // Ajouter la vérification après la recherche
+        productList.on('searchComplete', checkVisibleProducts);
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de List.js:', error);
     }

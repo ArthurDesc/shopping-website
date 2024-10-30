@@ -855,3 +855,21 @@ input[type="radio"] + span {
   }
 }
 
+#no-results {
+  min-height: 200px;
+  text-align: center;
+}
+
+#reset-filters {
+  background-color: var(--primary);
+  transition: all 0.3s ease;
+}
+
+#reset-filters:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+#reset-filters:active {
+  transform: translateY(0);
+}
