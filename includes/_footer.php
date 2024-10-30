@@ -53,13 +53,9 @@
 <script src="<?php echo BASE_URL; ?>assets/js/dropdown.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/js/productFilter.js"></script>
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/filterSearch.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/filtre.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/filterToggle.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/product-modal.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/productFilterMobile.js'); ?>" defer></script>
 <?php endif; ?>
 
 </body>
