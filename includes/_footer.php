@@ -33,6 +33,7 @@
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 <script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/header.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/autocomplete.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/toast.js'); ?>" defer></script>
 
