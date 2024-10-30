@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
             currentProductId = this.dataset.productId;
             currentProductPrice = parseFloat(this.dataset.productPrice);
             
+            // Mettre à jour le prix dans le bouton d'ajout au panier
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            if (addToCartBtn) {
+                addToCartBtn.setAttribute('data-tooltip', currentProductPrice + ' €');
+            }
+            
             // Réinitialiser et charger les tailles
             productSize.innerHTML = `
                 <option value="">Choisissez une taille</option>

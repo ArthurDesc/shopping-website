@@ -69,62 +69,9 @@ class Filtre {
         return $this->prixMax;
     }
 
-    public function appliquerFiltres(array $produits) {
-        return array_filter($produits, function($produit) {
-            // Filtre par catégorie
-            if (!empty($this->categories) && !$this->estDansCategories($produit)) {
-                return false;
-            }
 
-            // Filtre par marque
-            if (!empty($this->marques) && !in_array($produit->getMarque(), $this->marques)) {
-                return false;
-            }
 
-            // Filtre par collection
-            if (!empty($this->collections) && !in_array($produit->getCollection(), $this->collections)) {
-                return false;
-            }
-
-            // Filtre par prix
-            if (isset($this->prixMin) && $produit->getPrix() < $this->prixMin) {
-                return false;
-            }
-            if (isset($this->prixMax) && $produit->getPrix() > $this->prixMax) {
-                return false;
-            }
-
-            return true;
-        });
-    }
-
-    private function estDansCategories($produit) {
-        // Supposons que $produit a une méthode getCategories() qui retourne un tableau d'IDs de catégories
-        $produitsCategories = $produit->getCategories();
-        return !empty(array_intersect($this->categories, $produitsCategories));
-    }
-
-    public function getRequeteSQL() {
-        $sql = "SELECT DISTINCT p.* FROM produits p";
-        $params = [];
-        $conditions = [];
-
-        if (!empty($this->collections)) {
-            $placeholders = str_repeat('?,', count($this->collections) - 1) . '?';
-            $conditions[] = "LOWER(p.collection) IN ($placeholders)";
-            $params = array_merge($params, $this->collections);
-        }
-
-        if (!empty($conditions)) {
-            $sql .= " WHERE " . implode(' AND ', $conditions);
-        }
-
-        return [
-            'sql' => $sql,
-            'params' => $params
-        ];
-    }
-
+  
     public function resetFiltres() {
         $this->categories = [];
         $this->marques = [];
