@@ -159,10 +159,11 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   </a>
                 </div>
               </div>
+              <!-- Enfant -->
               <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
+                <a href="<?php echo url("pages/produit.php?collections=Enfant"); ?>"
                   class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                  Homme
+                  Enfant
                 </a>
                 <div x-show="open"
                   x-transition:enter="transition ease-out duration-100"
@@ -173,108 +174,22 @@ $total = array_sum($_SESSION['panier'] ?? []);
                   x-transition:leave-end="opacity-0 transform scale-95"
                   style="display: none;"
                   class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Enfant"); ?>"
                     class="block px-4 py-2 text-sm text-gray-700 ">
                     Vêtements
                   </a>
-                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Enfant"); ?>"
                     class="block px-4 py-2 text-sm text-gray-700 ">
                     Chaussures
                   </a>
-                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Enfant"); ?>"
                     class="block px-4 py-2 text-sm text-gray-700 ">
                     Accessoires
                   </a>
                 </div>
               </div>
+             
 
-              <!-- Femme -->
-              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
-                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                  Femme
-                </a>
-                <div x-show="open"
-                  x-transition:enter="transition ease-out duration-100"
-                  x-transition:enter-start="opacity-0 transform scale-95"
-                  x-transition:enter-end="opacity-100 transform scale-100"
-                  x-transition:leave="transition ease-in duration-150"
-                  x-transition:leave-start="opacity-100 transform scale-100"
-                  x-transition:leave-end="opacity-0 transform scale-95"
-                  style="display: none;"
-                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Vêtements
-                  </a>
-                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Chaussures
-                  </a>
-                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Accessoires
-                  </a>
-                </div>
-              </div>
-              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
-                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                  Homme
-                </a>
-                <div x-show="open"
-                  x-transition:enter="transition ease-out duration-100"
-                  x-transition:enter-start="opacity-0 transform scale-95"
-                  x-transition:enter-end="opacity-100 transform scale-100"
-                  x-transition:leave="transition ease-in duration-150"
-                  x-transition:leave-start="opacity-100 transform scale-100"
-                  x-transition:leave-end="opacity-0 transform scale-95"
-                  style="display: none;"
-                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Vêtements
-                  </a>
-                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Chaussures
-                  </a>
-                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Accessoires
-                  </a>
-                </div>
-              </div>
-
-              <!-- Femme -->
-              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
-                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                  Femme
-                </a>
-                <div x-show="open"
-                  x-transition:enter="transition ease-out duration-100"
-                  x-transition:enter-start="opacity-0 transform scale-95"
-                  x-transition:enter-end="opacity-100 transform scale-100"
-                  x-transition:leave="transition ease-in duration-150"
-                  x-transition:leave-start="opacity-100 transform scale-100"
-                  x-transition:leave-end="opacity-0 transform scale-95"
-                  style="display: none;"
-                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Vêtements
-                  </a>
-                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Chaussures
-                  </a>
-                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                    class="block px-4 py-2 text-sm text-gray-700 ">
-                    Accessoires
-                  </a>
-                </div>
-              </div>
 
 
             </nav>
