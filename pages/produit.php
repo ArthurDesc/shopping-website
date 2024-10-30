@@ -132,6 +132,30 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
         });
     </script>";
 }
+
+// Après la ligne 55, ajoutez :
+$categories_avec_produits = array();
+$sous_categories_avec_produits = array();
+
+// Parcourir tous les produits pour identifier les catégories utilisées
+foreach ($produits as $produit) {
+    $cats = $produit->getCategories();
+    foreach ($cats as $cat_id) {
+        foreach ($categories as $id_categorie => $categorie) {
+            // Vérifier si c'est une sous-catégorie
+            foreach ($categorie['sous_categories'] as $sous_cat) {
+                if ($sous_cat['id'] == $cat_id) {
+                    $sous_categories_avec_produits[$cat_id] = true;
+                    $categories_avec_produits[$id_categorie] = true;
+                }
+            }
+            // Vérifier si c'est une catégorie principale
+            if ($cat_id == $id_categorie) {
+                $categories_avec_produits[$cat_id] = true;
+            }
+        }
+    }
+}
 ?>
 
 <?php require_once '../includes/_header.php'; ?>
@@ -155,7 +179,7 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
 
                 <!-- Contenu des filtres -->
                 <div class="flex-grow overflow-y-auto px-4">
-                    <!-- Cat��gories -->
+                    <!-- Catgories -->
                     <div id="categories-filter" class="filter-section mb-4">
                         <div class="flex items-center justify-between cursor-pointer py-2" 
                              @click="openTab = openTab === 'categories' ? null : 'categories'">
@@ -172,7 +196,17 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
                                     <input class="search__input" type="text" id="categories-search" placeholder="Rechercher">
                                 </div>
                                 <div class="space-y-2">
-                                    <?php foreach ($categories as $id_categorie => $categorie): ?>
+                                    <?php foreach ($categories as $id_categorie => $categorie): 
+                                        $has_active_subcategories = false;
+                                        foreach ($categorie['sous_categories'] as $sous_cat) {
+                                            if (isset($sous_categories_avec_produits[$sous_cat['id']])) {
+                                                $has_active_subcategories = true;
+                                                break;
+                                            }
+                                        }
+                                        
+                                        if (isset($categories_avec_produits[$id_categorie]) || $has_active_subcategories): 
+                                    ?>
                                         <label class="checkbox-container flex items-center">
                                             <input type="checkbox" 
                                                    class="hidden"
@@ -191,24 +225,27 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
                                         <?php if (!empty($categorie['sous_categories'])): ?>
                                             <div class="ml-6 space-y-1">
                                                 <?php foreach ($categorie['sous_categories'] as $sous_categorie): ?>
-                                                    <label class="checkbox-container flex items-center">
-                                                        <input type="checkbox" 
-                                                               class="hidden"
-                                                               data-category="<?= htmlspecialchars($sous_categorie['id']) ?>"
-                                                               data-name="<?= htmlspecialchars($sous_categorie['nom']) ?>"
-                                                               name="categories[]"
-                                                               value="<?= htmlspecialchars($sous_categorie['id']) ?>">
-                                                        <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                                            <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
-                                                                class="checkbox-path">
-                                                            </path>
-                                                        </svg>
-                                                        <span class="ml-2 text-white select-none"><?= htmlspecialchars($sous_categorie['nom']) ?></span>
-                                                    </label>
+                                                    <?php if (isset($sous_categories_avec_produits[$sous_categorie['id']])): ?>
+                                                        <label class="checkbox-container flex items-center">
+                                                            <input type="checkbox" 
+                                                                   class="hidden"
+                                                                   data-category="<?= htmlspecialchars($sous_categorie['id']) ?>"
+                                                                   data-name="<?= htmlspecialchars($sous_categorie['nom']) ?>"
+                                                                   name="categories[]"
+                                                                   value="<?= htmlspecialchars($sous_categorie['id']) ?>">
+                                                            <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                                                <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                                                    class="checkbox-path">
+                                                                </path>
+                                                            </svg>
+                                                            <span class="ml-2 text-white select-none"><?= htmlspecialchars($sous_categorie['nom']) ?></span>
+                                                        </label>
+                                                    <?php endif; ?>
                                                 <?php endforeach; ?>
                                             </div>
                                         <?php endif; ?>
-                                    <?php endforeach; ?>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
