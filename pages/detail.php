@@ -550,7 +550,6 @@ $collection = $categoryManager->getCollection($id_produit);
                                     <input type="hidden" name="id_produit" value="<?php echo htmlspecialchars($id_produit); ?>">
                                     <input type="hidden" name="id_utilisateur" value="<?php echo htmlspecialchars($_SESSION['id_utilisateur']); ?>">
 
-                                    <!-- Suppression du token CSRF car non nécessaire ici -->
 
                                     <!-- Zone de commentaire -->
                                     <div>

@@ -48,8 +48,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   </style>
 
   <!-- Bibliothèques externes -->
-  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+ 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -81,6 +80,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <!-- Scripts -->
   <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-editable@1.0.3/dist/vanilla-editable.min.js"></script>
 
 </head>
 

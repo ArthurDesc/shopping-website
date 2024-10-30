@@ -1,143 +1,262 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Récupération des éléments du formulaire
-    const profileForm = document.getElementById('profileForm');
-    const inputs = {
-        telephone: document.getElementById('telephone'),
-        email: document.getElementById('email'),
-        nom: document.getElementById('nom'),
-        prenom: document.getElementById('prenom')
-    };
-
-    // Regex de validation
-    const validationRules = {
+document.addEventListener('DOMContentLoaded', () => {
+    // Configuration des validations
+    const validations = {
         telephone: {
-            regex: /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/,
+            pattern: /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/,
             message: 'Format invalide (ex: 06 12 34 56 78)'
         },
         email: {
-            regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: 'Format email invalide'
+            pattern: /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+            message: 'Format email invalide. Exemple : utilisateur@domaine.com',
+            validate: (value) => {
+                // Vérification supplémentaire de la longueur
+                if (value.length > 254) {
+                    return "L'adresse email est trop longue";
+                }
+                // Vérification basique de la structure
+                if (!value.includes('@') || !value.includes('.')) {
+                    return "L'adresse email doit contenir @ et un domaine valide";
+                }
+                // Vérification des espaces
+                if (/\s/.test(value)) {
+                    return "L'adresse email ne doit pas contenir d'espaces";
+                }
+                return true;
+            }
         },
         nom: {
-            regex: /^[A-Za-zÀ-ÿ\s-]{2,}$/,
+            pattern: /^[A-Za-zÀ-ÿ\s-]{2,}$/,
             message: 'Le nom doit contenir au moins 2 caractères (lettres, espaces et tirets uniquement)'
         },
         prenom: {
-            regex: /^[A-Za-zÀ-ÿ\s-]{2,}$/,
+            pattern: /^[A-Za-zÀ-ÿ\s-]{2,}$/,
             message: 'Le prénom doit contenir au moins 2 caractères (lettres, espaces et tirets uniquement)'
         }
     };
 
-    // Fonction de validation en temps réel
-    function setupValidation(inputElement, validationRule) {
-        inputElement.addEventListener('input', function(e) {
-            if (this.value && !validationRule.regex.test(this.value)) {
-                this.setCustomValidity(validationRule.message);
-                this.classList.add('invalid');
-                this.classList.remove('valid');
-            } else {
-                this.setCustomValidity('');
-                this.classList.remove('invalid');
-                this.classList.add('valid');
-            }
+    // Initialisation des champs éditables
+    document.querySelectorAll('.editable').forEach(el => {
+        // Ajout de l'icône d'édition
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-pencil-alt text-gray-400 absolute right-3 opacity-0 group-hover:opacity-100 transition-opacity';
+        el.parentNode.appendChild(icon);
+
+        // Gestion du survol
+        el.addEventListener('mouseover', () => {
+            icon.style.opacity = '1';
         });
+        el.addEventListener('mouseout', () => {
+            icon.style.opacity = '0';
+        });
+
+        // Gestion du clic pour l'édition
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            const currentValue = this.textContent.trim();
+            const isTextarea = this.dataset.type === 'textarea';
+            
+            // Création du champ d'édition
+            const input = isTextarea 
+                ? document.createElement('textarea')
+                : document.createElement('input');
+            
+            input.value = currentValue;
+            input.type = this.dataset.type || 'text';
+            input.className = `w-full px-3 py-2 bg-white border border-gray-300 rounded-lg 
+                             focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
+            
+            if (isTextarea) {
+                input.rows = 3;
+            }
+
+            // Création des boutons de validation/annulation
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'flex gap-2 mt-2';
+            buttonsDiv.innerHTML = `
+                <button class="save-btn px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="cancel-btn px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            // Remplacement temporaire du contenu
+            const originalContent = this.innerHTML;
+            this.innerHTML = '';
+            this.appendChild(input);
+            this.appendChild(buttonsDiv);
+            input.focus();
+
+            // Gestion de la sauvegarde
+            buttonsDiv.querySelector('.save-btn').addEventListener('click', async () => {
+                const newValue = input.value.trim();
+                const fieldName = el.dataset.name;
+                
+                // Validation
+                const validation = validations[fieldName];
+                if (validation && !validation.pattern.test(newValue)) {
+                    showToast(validation.message, 'error');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('../ajax/update_profile.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `name=${fieldName}&value=${encodeURIComponent(newValue)}`
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        el.innerHTML = newValue || (fieldName === 'telephone' || fieldName === 'adresse' ? 'Non renseigné' : '');
+                        showToast('Modification enregistrée', 'success');
+                        
+                        if (fieldName === 'nom' || fieldName === 'prenom') {
+                            updateHeaderName();
+                        }
+                    } else {
+                        throw new Error(data.message);
+                    }
+                } catch (error) {
+                    el.innerHTML = originalContent;
+                    showToast(error.message || 'Erreur lors de la sauvegarde', 'error');
+                }
+            });
+
+            // Gestion de l'annulation
+            buttonsDiv.querySelector('.cancel-btn').addEventListener('click', () => {
+                el.innerHTML = originalContent;
+            });
+        });
+    });
+
+    // Fonction pour mettre à jour le nom dans le header
+    function updateHeaderName() {
+        const nom = document.getElementById('nom').textContent.trim();
+        const prenom = document.getElementById('prenom').textContent.trim();
+        const headerName = document.getElementById('userNameHeader');
+        if (headerName) {
+            headerName.textContent = `${prenom} ${nom}`;
+        }
     }
 
-    // Application des validations
-    Object.keys(inputs).forEach(key => {
-        if (inputs[key] && validationRules[key]) {
-            setupValidation(inputs[key], validationRules[key]);
+    // Fonction pour afficher les toasts (à adapter selon votre système de notification)
+    function showToast(message, type = 'success') {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: type,
+                text: message,
+                toast: true,
+                position: 'bottom-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+        } else {
+            alert(message);
+        }
+    }
+
+    // Gestion du modal de changement de mot de passe
+    const modal = document.getElementById('password_modal');
+    const toggleBtn = document.getElementById('toggle_password_modal');
+    const closeBtn = document.getElementById('cancel_password');
+    const changePasswordBtn = document.getElementById('change_password');
+
+    // Fonction pour réinitialiser le formulaire
+    function resetPasswordForm() {
+        document.getElementById('current_password').value = '';
+        document.getElementById('new_password').value = '';
+        document.getElementById('confirm_password').value = '';
+        modal.classList.add('hidden');
+    }
+    
+    // Ajouter ces gestionnaires d'événements
+    closeBtn.addEventListener('click', resetPasswordForm);
+    
+    // Fermer en cliquant en dehors du modal
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            resetPasswordForm();
         }
     });
 
-    // Gestion de la soumission du formulaire
-    profileForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    // Ouvrir le modal
+    toggleBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
 
-        // Vérification de la validité du formulaire
-        if (!this.checkValidity()) {
-            // Afficher les messages d'erreur natifs du navigateur
+    // Gestion du changement de mot de passe
+    changePasswordBtn.addEventListener('click', async () => {
+        // Vérification de l'existence des éléments
+        const currentPasswordInput = document.getElementById('current_password');
+        const newPasswordInput = document.getElementById('new_password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const errorDiv = document.getElementById('password-error');
+
+        if (!currentPasswordInput || !newPasswordInput || !confirmPasswordInput || !errorDiv) {
+            return;
+        }
+
+        // Récupération des valeurs
+        const currentPassword = currentPasswordInput.value.trim();
+        const newPassword = newPasswordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+
+        // Réinitialiser le message d'erreur
+        errorDiv.classList.add('hidden');
+        errorDiv.textContent = '';
+
+        // Validation des champs
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            errorDiv.textContent = 'Tous les champs sont obligatoires';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
+        // Validation de la longueur minimale
+        if (newPassword.length < 8) {
+            errorDiv.textContent = 'Le nouveau mot de passe doit contenir au moins 8 caractères';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
+        // Validation de la correspondance
+        if (newPassword !== confirmPassword) {
+            errorDiv.textContent = 'Les mots de passe ne correspondent pas';
+            errorDiv.classList.remove('hidden');
             return;
         }
 
         try {
-            // Afficher le loader
-            Swal.fire({
-                title: 'Mise à jour en cours...',
-                text: 'Veuillez patienter',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
+            const response = await fetch('../ajax/update_password.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `current_password=${encodeURIComponent(currentPassword)}&new_password=${encodeURIComponent(newPassword)}&confirm_password=${encodeURIComponent(confirmPassword)}`
             });
-
-            const formData = new FormData(this);
-            const response = await axios.post('../ajax/update_profile.php', formData);
-
-            if (response.data.success) {
-                // Mise à jour du token CSRF
-                document.querySelector('input[name="csrf_token"]').value = response.data.newCsrfToken;
-
-                // Mise à jour des informations dans le header si nécessaire
-                if (document.getElementById('userNameHeader')) {
-                    document.getElementById('userNameHeader').textContent = 
-                        `${response.data.user.prenom} ${response.data.user.nom}`;
-                }
-
-                // Message de succès
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Succès!',
-                    text: response.data.message,
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-
-                // Mise à jour visuelle des champs
-                Object.keys(response.data.user).forEach(key => {
-                    const input = document.getElementById(key);
-                    if (input) {
-                        input.value = response.data.user[key];
-                        input.classList.add('valid');
-                    }
-                });
-
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Mot de passe modifié avec succès', 'success');
+                resetPasswordForm();
             } else {
-                throw new Error(response.data.message);
+                errorDiv.textContent = data.message;
+                errorDiv.classList.remove('hidden');
             }
-
         } catch (error) {
-            // Gestion des erreurs
-            Swal.fire({
-                icon: 'error',
-                title: 'Erreur',
-                text: error.message || 'Une erreur est survenue lors de la mise à jour',
-                confirmButtonText: 'OK'
-            });
-
-            // Log de l'erreur pour le debugging
-            console.error('Erreur lors de la mise à jour du profil:', error);
+            errorDiv.textContent = error.message || 'Erreur lors du changement de mot de passe';
+            errorDiv.classList.remove('hidden');
         }
     });
-
-    // Réinitialisation des styles de validation lors du focus
-    Object.values(inputs).forEach(input => {
-        if (input) {
-            input.addEventListener('focus', function() {
-                this.classList.remove('invalid', 'valid');
-            });
-        }
-    });
-
-    // Ajout de classes CSS pour le feedback visuel
-    const style = document.createElement('style');
-    style.textContent = `
-        input.valid {
-            border-color: #22c55e !important;
-        }
-        input.invalid {
-            border-color: #ef4444 !important;
-        }
-    `;
-    document.head.appendChild(style);
 });
