@@ -6,6 +6,14 @@ require_once "../classe/Panier.php"; // Gardez cette ligne
 
 $panier = new Panier();
 
+// Ajouter ceci au début du fichier, avec les autres traitements POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    $key_to_delete = $_POST['delete'];
+    $panier->retirerProduit($key_to_delete);
+    echo "success";
+    exit;
+}
+
 // Traitement de la mise à jour de la quantité (à supprimer ou commenter)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produit']) && isset($_POST['action'])) {
     // Code à supprimer ou commenter
@@ -80,6 +88,82 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateQuantity(form, currentQty + 1);
             } else {
                 alert('Stock maximum atteint');
+            }
+        });
+    });
+
+    // Fonction pour calculer le total du panier
+    function calculateTotal() {
+        let total = 0;
+        const products = document.querySelectorAll('.flex.items-center.border-b');
+        
+        products.forEach(product => {
+            const priceElement = product.querySelector('[data-price]');
+            const quantityElement = product.querySelector('span');
+            
+            if (priceElement && quantityElement) {
+                const price = parseFloat(priceElement.getAttribute('data-price'));
+                const quantity = parseInt(quantityElement.textContent);
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    total += price * quantity;
+                }
+            }
+        });
+        
+        return total;
+    }
+
+    // Fonction pour mettre à jour l'affichage du total
+    function updateTotalDisplay() {
+        const total = calculateTotal();
+        const totalElement = document.querySelector('.text-2xl.font-bold.text-green-600');
+        if (totalElement) {
+            totalElement.textContent = total.toFixed(2) + '€';
+            console.log('Total mis à jour:', total.toFixed(2)); // Pour le débogage
+        }
+    }
+
+    // Gestion de la suppression
+    document.querySelectorAll('a[href^="panier.php?del="]').forEach(deleteLink => {
+        deleteLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productKey = this.href.split('del=')[1];
+            const productContainer = this.closest('.flex.items-center.border-b');
+
+            if (confirm('Voulez-vous vraiment supprimer cet article ?')) {
+                const formData = new FormData();
+                formData.append('delete', productKey);
+
+                fetch('panier.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(() => {
+                    // Supprimer l'élément du DOM
+                    if (productContainer) {
+                        productContainer.remove();
+                        
+                        // Mettre à jour le total
+                        updateTotalDisplay();
+
+                        // Mettre à jour le compteur du panier
+                        const cartCount = document.querySelector('.cart-count');
+                        if (cartCount) {
+                            const currentCount = parseInt(cartCount.textContent);
+                            cartCount.textContent = Math.max(0, currentCount - 1);
+                        }
+
+                        // Vérifier si le panier est vide
+                        const remainingProducts = document.querySelectorAll('.flex.items-center.border-b');
+                        if (remainingProducts.length === 0) {
+                            location.reload();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
             }
         });
     });
@@ -183,7 +267,7 @@ include '../includes/_header.php';
                                 <div class="flex-grow">
                                     <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
                                     <p class="text-gray-600" data-price="<?= $product['prix'] ?>">
-                                        <?= number_format($product['prix'], 2); ?>€
+                                        <?= number_format($product['prix'] * $quantity, 2) ?>€
                                     </p>
                                     <form action="panier.php" method="POST" data-stock="<?= $product['stock'] ?>">
                                         <input type="hidden" name="id_produit" value="<?= $product['id_produit'] ?>">
