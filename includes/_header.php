@@ -53,6 +53,9 @@ $total = array_sum($_SESSION['panier'] ?? []);
       }
     }
   </style>
+  <!-- X-Editable -->
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
   <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
   <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

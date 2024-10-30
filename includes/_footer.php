@@ -52,14 +52,19 @@
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/js/dropdown.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/js/productFilter.js"></script>
-<script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/product-modal.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/productFilterMobile.js'); ?>" defer></script>
+  <script src="<?php echo BASE_URL; ?>assets/js/dropdown.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/js/productFilter.js"></script>
+  <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
+  <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
+  <script src="<?php echo url('assets/js/product-modal.js'); ?>" defer></script>
+  <script src="<?php echo url('assets/js/productFilterMobile.js'); ?>" defer></script>
 <?php endif; ?>
 
+<?php if (strpos($_SERVER['REQUEST_URI'], 'profil.php') !== false): ?>
+  <script src="<?php echo BASE_URL; ?>assets/js/profil.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<?php endif; ?>
 </body>
 
 </html>

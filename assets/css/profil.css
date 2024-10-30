@@ -44,3 +44,17 @@ input:not(:disabled) {
     border-color: #3b82f6;
     background-color: #f8fafc;
 }
+
+/* Styles pour la sidebar */
+.sidebar {
+    background: linear-gradient(to bottom, #60A5FA, #3B82F6);
+}
+
+.sidebar a {
+    color: white;
+}
+
+.active-tab {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
