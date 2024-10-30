@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             
             currentProductId = this.dataset.productId;
-            currentProductPrice = this.dataset.productPrice;
+            currentProductPrice = parseFloat(this.dataset.productPrice);
             
             // Réinitialiser et charger les tailles
             productSize.innerHTML = `
@@ -22,6 +22,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 <option value="L">L</option>
                 <option value="XL">XL</option>
             `;
+            
+            // Mettre à jour le prix dans le bouton et le tooltip
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            const formattedPrice = new Intl.NumberFormat('fr-FR', {
+                style: 'currency',
+                currency: 'EUR'
+            }).format(currentProductPrice);
+            
+            // Mettre à jour le tooltip avec le prix
+            addToCartBtn.setAttribute('data-tooltip', `Ajouter - ${formattedPrice}`);
+            
+            // Mettre à jour le prix dans le bouton
+            const priceElement = document.querySelector('.cart-add-button-price');
+            if (priceElement) {
+                priceElement.textContent = formattedPrice;
+            }
             
             modal.classList.add('active');
         });
