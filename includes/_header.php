@@ -30,20 +30,29 @@ $total = array_sum($_SESSION['panier'] ?? []);
 
 
 <!DOCTYPE html>
-<html lang="fr"class="h-full">
+<html lang="fr" class="h-full">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fitmode</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
-<style>
-    .iti { width: 100%; }
-    .iti__flag { background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags.png"); }
-    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-        .iti__flag { background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags@2x.png"); }
+  <style>
+    .iti {
+      width: 100%;
     }
-</style>
+
+    .iti__flag {
+      background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags.png");
+    }
+
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
+      .iti__flag {
+        background-image: url("https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/img/flags@2x.png");
+      }
+    }
+  </style>
   <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
   <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -54,7 +63,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <script src="https://cdn.tailwindcss.com"></script>
   <?php include __DIR__ . '/../includes/_fonts.php';  ?>
   <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
-  
+
   <!-- Ajout conditionnel du CSS de la page profil -->
   <?php if (basename($_SERVER['PHP_SELF']) == 'profil.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/profil.css?v=' . filemtime(__DIR__ . '/../assets/css/profil.css')); ?>">
@@ -69,9 +78,9 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
   <style>
-      [x-cloak] { 
-          display: none !important; 
-      }
+    [x-cloak] {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -89,95 +98,183 @@ $total = array_sum($_SESSION['panier'] ?? []);
             </button>
 
             <nav class="hidden md:flex space-x-8 ml-4">
-                <!-- Homme -->
-                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
-                        class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                        Homme
-                    </a>
-                    <div x-show="open" 
-                        x-transition:enter="transition ease-out duration-100"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95"
-                        style="display: none;"
-                        class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                        <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Vêtements
-                        </a>
-                        <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Chaussures
-                        </a>
-                        <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Accessoires
-                        </a>
-                    </div>
+              <!-- Homme -->
+              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
+                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                  Homme
+                </a>
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-100"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  style="display: none;"
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Vêtements
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Chaussures
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Accessoires
+                  </a>
                 </div>
+              </div>
 
-                <!-- Femme -->
-                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
-                        class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                        Femme
-                    </a>
-                    <div x-show="open" 
-                        x-transition:enter="transition ease-out duration-100"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95"
-                        style="display: none;"
-                        class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                        <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Vêtements
-                        </a>
-                        <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Chaussures
-                        </a>
-                        <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Accessoires
-                        </a>
-                    </div>
+              <!-- Femme -->
+              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
+                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                  Femme
+                </a>
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-100"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  style="display: none;"
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Vêtements
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Chaussures
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Accessoires
+                  </a>
                 </div>
+              </div>
+              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
+                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                  Homme
+                </a>
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-100"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  style="display: none;"
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Vêtements
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Chaussures
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Accessoires
+                  </a>
+                </div>
+              </div>
 
-                <!-- Enfant -->
-                <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                    <a href="<?php echo url("pages/produit.php?collections=Enfant"); ?>"
-                        class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
-                        Enfant
-                    </a>
-                    <div x-show="open" 
-                        x-transition:enter="transition ease-out duration-100"
-                        x-transition:enter-start="opacity-0 transform scale-95"
-                        x-transition:enter-end="opacity-100 transform scale-100"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 transform scale-100"
-                        x-transition:leave-end="opacity-0 transform scale-95"
-                        style="display: none;"
-                        class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
-                        <a href="<?php echo url("pages/produit.php?categories=1&collections=Enfant"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Vêtements
-                        </a>
-                        <a href="<?php echo url("pages/produit.php?categories=2&collections=Enfant"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Chaussures
-                        </a>
-                        <a href="<?php echo url("pages/produit.php?categories=3&collections=Enfant"); ?>"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            Accessoires
-                        </a>
-                    </div>
+              <!-- Femme -->
+              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
+                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                  Femme
+                </a>
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-100"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  style="display: none;"
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Vêtements
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Chaussures
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Accessoires
+                  </a>
                 </div>
+              </div>
+              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="<?php echo url("pages/produit.php?collections=Homme"); ?>"
+                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                  Homme
+                </a>
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-100"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  style="display: none;"
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Vêtements
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Chaussures
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Homme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Accessoires
+                  </a>
+                </div>
+              </div>
+
+              <!-- Femme -->
+              <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                <a href="<?php echo url("pages/produit.php?collections=Femme"); ?>"
+                  class="flex items-center text-gray-600 hover:text-blue-600 font-medium transition duration-300">
+                  Femme
+                </a>
+                <div x-show="open"
+                  x-transition:enter="transition ease-out duration-100"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  style="display: none;"
+                  class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-white rounded-md shadow-lg z-[1100]">
+                  <a href="<?php echo url("pages/produit.php?categories=1&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Vêtements
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=2&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Chaussures
+                  </a>
+                  <a href="<?php echo url("pages/produit.php?categories=3&collections=Femme"); ?>"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    Accessoires
+                  </a>
+                </div>
+              </div>
+
+
             </nav>
 
           </div>
@@ -277,17 +374,18 @@ $total = array_sum($_SESSION['panier'] ?? []);
       </div>
     </header>
 
-    <!-- Barre de navigation latérale -->
-    <div id="sidebar" class="fixed left-0 top-0 w-full md:w-64 h-full bg-white text-black shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
-      <div class="flex justify-between items-center p-4 border-b">
-        <button id="close-sidebar" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+    <div id="sidebar" class="fixed left-0 top-0 w-full md:w-64 h-full bg-gradient-to-b from-blue-400 to-blue-600 text-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+      <!-- En-tête de la sidebar -->
+      <div class="flex justify-between items-center p-4 border-b border-white/20">
+        <button id="close-sidebar" class="text-white hover:text-white/80 focus:outline-none">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
         <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex-grow flex items-center ml-4">
-          <input type="text" name="q" placeholder="Rechercher..." class="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text" name="q" placeholder="Rechercher..."
+            class="w-full px-3 py-2 bg-white/90 border border-white/30 rounded-l-md text-blue-900 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white placeholder-blue-400/70">
+          <button type="submit" class="bg-white/20 text-white px-4 py-2 rounded-r-md hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
@@ -295,83 +393,131 @@ $total = array_sum($_SESSION['panier'] ?? []);
         </form>
       </div>
 
+
       <nav class="p-4">
-        <ul class="space-y-2">
+        <ul class="space-y-3">
+          <!-- Bouton Tous les articles -->
           <li>
-            <a href="<?php echo url('pages/produit.php'); ?>" class="flex items-center justify-between py-2 border-b">
+            <a href="<?php echo url('pages/produit.php'); ?>"
+              class="flex items-center py-2 px-3 text-white hover:bg-white/10 rounded-md transition-colors duration-200">
               Tous les articles
             </a>
           </li>
-          <li>
-            <a href="<?php echo url('pages/produit.php?collections=homme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-homme-toggle">
+
+          <!-- Dropdown Homme -->
+          <li class="border-b border-white/20 pb-2">
+            <a href="<?php echo url('pages/produit.php?collections=homme'); ?>"
+              class="flex items-center justify-between py-2 px-3 text-white hover:bg-white/10 rounded-md transition-colors duration-200"
+              id="menu-homme-toggle">
               Homme
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 transition-transform duration-200">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
-            <ul class="hidden pl-4" id="menu-homme">
+            <ul class="hidden pl-4 space-y-1 mt-2" id="menu-homme">
               <li>
-                <a href="<?php echo url('pages/produit.php?categories=1&collections=Homme'); ?>" class="block py-2">
+                <a href="<?php echo url('pages/produit.php?categories=1&collections=Homme'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
                   Vêtements
                 </a>
               </li>
               <li>
-                <a href="<?php echo url('/pages/produit.php?categories=2&collections=Homme'); ?>" class="block py-2">
+                <a href="<?php echo url('/pages/produit.php?categories=2&collections=Homme'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
                   Chaussures
                 </a>
               </li>
               <li>
-                <a href="<?php echo url('pages/produit.php?categories=3&collections=Homme'); ?>" class="block py-2">
+                <a href="<?php echo url('pages/produit.php?categories=3&collections=Homme'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
                   Accessoires
                 </a>
               </li>
-              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=homme&categories=accessoires'); ?>" class="block py-2">Accessoires</a></li>
             </ul>
           </li>
-          <li>
-            <a href="<?php echo url('pages/produit.php?collections=femme'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-femme-toggle">
+
+          <!-- Dropdown Femme -->
+          <li class="border-b border-white/20 pb-2">
+            <a href="<?php echo url('pages/produit.php?collections=femme'); ?>"
+              class="flex items-center justify-between py-2 px-3 text-white hover:bg-white/10 rounded-md transition-colors duration-200"
+              id="menu-femme-toggle">
               Femme
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 transition-transform duration-200">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
-            <ul class="hidden pl-4" id="menu-femme">
-              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=joggings'); ?>" class="block py-2">Joggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=leggings'); ?>" class="block py-2">Leggings</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=femme&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
+            <ul class="hidden pl-4 space-y-1 mt-2" id="menu-femme">
+              <li>
+                <a href="<?php echo url('pages/produit.php?categories=1&collections=Femme'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
+                  Vêtements
+                </a>
+              </li>
+              <li>
+                <a href="<?php echo url('/pages/produit.php?categories=2&collections=Femme'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
+                  Chaussures
+                </a>
+              </li>
+              <li>
+                <a href="<?php echo url('pages/produit.php?categories=3&collections=Femme'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
+                  Accessoires
+                </a>
+              </li>
             </ul>
           </li>
-          <li>
-            <a href="<?php echo url('pages/produit.php?collections=enfants'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-enfants-toggle">
-              Enfants
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+
+          <!-- Dropdown Enfant -->
+          <li class="border-b border-white/20 pb-2">
+            <a href="<?php echo url('pages/produit.php?collections=enfant'); ?>"
+              class="flex items-center justify-between py-2 px-3 text-white hover:bg-white/10 rounded-md transition-colors duration-200"
+              id="menu-enfant-toggle">
+              Enfant
+              <svg xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 transition-transform duration-200">
+                <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </a>
-            <ul class="hidden pl-4" id="menu-enfants">
-              <li><a href="<?php echo url('pages/produit.php?collections=enfants&categories=t-shirts'); ?>" class="block py-2">T-shirts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=enfants&categories=shorts'); ?>" class="block py-2">Shorts</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=enfants&categories=chaussures'); ?>" class="block py-2">Chaussures</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="<?php echo url('pages/produit.php?collections=sports'); ?>" class="flex items-center justify-between py-2 border-b" id="menu-sports-toggle">
-              Sports
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-              </svg>
-            </a>
-            <ul class="hidden pl-4" id="menu-sports">
-              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=football'); ?>" class="block py-2">Football</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=basketball'); ?>" class="block py-2">Basketball</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=running'); ?>" class="block py-2">Running</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=rugby'); ?>" class="block py-2">Rugby</a></li>
-              <li><a href="<?php echo url('pages/produit.php?collections=sports&categories=handball'); ?>" class="block py-2">Handball</a></li>
+            <ul class="hidden pl-4 space-y-1 mt-2" id="menu-enfant">
+              <li>
+                <a href="<?php echo url('pages/produit.php?categories=1&collections=Enfant'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
+                  Vêtements
+                </a>
+              </li>
+              <li>
+                <a href="<?php echo url('/pages/produit.php?categories=2&collections=Enfant'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
+                  Chaussures
+                </a>
+              </li>
+              <li>
+                <a href="<?php echo url('pages/produit.php?categories=3&collections=Enfant'); ?>"
+                  class="block py-2 px-3 text-white/90 hover:bg-white/10 rounded-md transition-colors duration-200">
+                  Accessoires
+                </a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -398,51 +544,50 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <!-- Modal de confirmation de déconnexion -->
   <div id="modal-deconnexion" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0 hidden">
     <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
-        <div class="p-6">
-            <h2 class="text-xl font-semibold mb-4">Confirmation de déconnexion</h2>
-            <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir vous déconnecter ?</p>
-            <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
-                <button id="cancel-deconnexion" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
-                    Annuler
-                </button>
-                <a href="<?php echo url('pages/deconnexion.php'); ?>" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 text-center">
-                    Se déconnecter
-                </a>
-            </div>
+      <div class="p-6">
+        <h2 class="text-xl font-semibold mb-4">Confirmation de déconnexion</h2>
+        <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+        <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
+          <button id="cancel-deconnexion" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
+            Annuler
+          </button>
+          <a href="<?php echo url('pages/deconnexion.php'); ?>" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 text-center">
+            Se déconnecter
+          </a>
         </div>
+      </div>
     </div>
   </div>
 
   <!-- Ajouter le script JavaScript -->
   <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const modalDeconnexion = document.getElementById('modal-deconnexion');
-    const btnDeconnexion = document.getElementById('btn-deconnexion');
-    const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
+    document.addEventListener('DOMContentLoaded', function() {
+      const modalDeconnexion = document.getElementById('modal-deconnexion');
+      const btnDeconnexion = document.getElementById('btn-deconnexion');
+      const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
 
-    // Ouvrir le modal
-    btnDeconnexion.addEventListener('click', function(e) {
+      // Ouvrir le modal
+      btnDeconnexion.addEventListener('click', function(e) {
         e.preventDefault();
         modalDeconnexion.classList.remove('hidden');
-    });
+      });
 
-    // Fermer le modal
-    function closeModal() {
+      // Fermer le modal
+      function closeModal() {
         modalDeconnexion.classList.add('hidden');
-    }
+      }
 
-    // Fermer avec le bouton Annuler
-    btnCancelDeconnexion.addEventListener('click', closeModal);
+      // Fermer avec le bouton Annuler
+      btnCancelDeconnexion.addEventListener('click', closeModal);
 
-    // Fermer en cliquant en dehors du modal
-    modalDeconnexion.addEventListener('click', function(e) {
+      // Fermer en cliquant en dehors du modal
+      modalDeconnexion.addEventListener('click', function(e) {
         if (e.target === modalDeconnexion) {
-            closeModal();
+          closeModal();
         }
+      });
     });
-  });
   </script>
 </body>
 
 </class=>
-
