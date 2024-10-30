@@ -441,6 +441,8 @@ $total = array_sum($_SESSION['panier'] ?? []);
               </li>
             </ul>
           </li>
+
+     
         </ul>
       </nav>
     </div>
