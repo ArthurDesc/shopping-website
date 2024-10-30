@@ -17,6 +17,35 @@
   transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
+.filter-dropdown {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.filter-dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#filterDropdowns {
+  overflow: hidden;
+}
+
+#filterDropdowns.show {
+  display: block !important;
+}
+
+.modal {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.modal.scale-100 {
+  visibility: visible;
+  opacity: 1;
+}
+
 #modal-container.active {
   opacity: 1;
   visibility: visible;

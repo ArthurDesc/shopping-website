@@ -133,36 +133,7 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
     </script>";
 }
 ?>
-<style>
-    .filter-dropdown {
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
 
-    .filter-dropdown.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    #filterDropdowns {
-        overflow: hidden;
-    }
-
-    #filterDropdowns.show {
-        display: block !important;
-    }
-
-    .modal {
-        visibility: hidden;
-        opacity: 0;
-    }
-
-    .modal.scale-100 {
-        visibility: visible;
-        opacity: 1;
-    }
-</style>
 <?php require_once '../includes/_header.php'; ?>
 
 <!-- Ajoutez cette div pour créer l'espace supplémentaire -->
@@ -338,7 +309,7 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
 
             <section id="products">
                 <div class="wave-group mb-8">
-                    <input type="text" class="input search" id="search-products">
+                    <input required="" type="text" class="input search" id="search-products">
                     <span class="bar"></span>
                     <label class="label">
                         <span class="label-char" style="--index: 0">R</span>
