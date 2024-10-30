@@ -76,7 +76,7 @@
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
@@ -85,7 +85,7 @@
 }
 
 .product-card:hover img {
-  transform: scale(1.03);
+  transform: scale(1.015);
 }
 
 .product-card -blue-600 {
