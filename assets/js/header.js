@@ -79,20 +79,65 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Gestion du menu latéral
   const menuToggle = document.getElementById('menu-toggle');
+  const closeButton = document.getElementById('close-sidebar');
   const sidebar = document.getElementById('sidebar');
+  const body = document.body;
 
-  menuToggle.addEventListener('click', function() {
-    sidebar.classList.toggle('-translate-x-full');
+  // Ouvrir le menu
+  menuToggle?.addEventListener('click', function() {
+    sidebar.classList.add('open');
+    body.classList.add('sidebar-open');
   });
 
-  // Gestion des sous-menus
-  const subMenuToggles = document.querySelectorAll('[id$="-toggle"]');
-  subMenuToggles.forEach(toggle => {
+  // Fermer le menu
+  closeButton?.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+    body.classList.remove('sidebar-open');
+  });
+
+  // Fermer le menu en cliquant sur l'overlay
+  document.addEventListener('click', function(e) {
+    if (body.classList.contains('sidebar-open') && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+      body.classList.remove('sidebar-open');
+    }
+  });
+
+  // Gestion des dropdowns
+  const dropdownContainers = document.querySelectorAll('#sidebar li');
+  let activeDropdown = null;
+
+  dropdownContainers.forEach(container => {
+    const toggle = container.querySelector('[id$="-toggle"]');
+    const content = container.querySelector('ul');
+    
+    if (!toggle || !content) return;
+
+    // Initialiser tous les dropdowns comme fermés
+    content.style.display = 'none';
+    
     toggle.addEventListener('click', function(e) {
       e.preventDefault();
-      const subMenuId = this.id.replace('-toggle', '');
-      const subMenu = document.getElementById(subMenuId);
-      subMenu.classList.toggle('hidden');
+      e.stopPropagation();
+      
+      // Si ce dropdown est déjà actif, le fermer
+      if (activeDropdown === content) {
+        content.style.display = 'none';
+        toggle.querySelector('svg').style.transform = '';
+        activeDropdown = null;
+        return;
+      }
+      
+      // Fermer le dropdown actif précédent
+      if (activeDropdown) {
+        activeDropdown.style.display = 'none';
+        activeDropdown.previousElementSibling.querySelector('svg').style.transform = '';
+      }
+      
+      // Ouvrir le nouveau dropdown
+      content.style.display = 'block';
+      toggle.querySelector('svg').style.transform = 'rotate(180deg)';
+      activeDropdown = content;
     });
   });
 });

@@ -72,7 +72,9 @@ $total = array_sum($_SESSION['panier'] ?? []);
   <?php if (basename($_SERVER['PHP_SELF']) == 'produit.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <?php endif; ?>
-  <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
+    <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <?php endif; ?>
   <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
   <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>

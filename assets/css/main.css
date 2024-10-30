@@ -8,9 +8,8 @@ footer, footer .font-sans {
 
 #sidebar {
   transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  background-color: white;
-  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(to bottom, #60A5FA, #3B82F6);
   position: fixed;
   top: 0;
   left: 0;
@@ -21,7 +20,6 @@ footer, footer .font-sans {
 
 #sidebar.open {
   transform: translateX(0);
-  opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -341,4 +339,40 @@ main {
 
 footer {
   flex-shrink: 0;
+}
+
+/* Ajout des styles pour la scrollbar */
+#sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Style des liens et dropdowns */
+#sidebar a {
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+#sidebar a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#sidebar ul ul {
+  transition: all 0.3s ease-in-out;
+}
+
+#sidebar svg {
+  transition: transform 0.3s ease;
 }
