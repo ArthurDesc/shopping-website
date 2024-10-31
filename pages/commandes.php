@@ -28,7 +28,7 @@ require_once '../includes/_header.php';
 
 <main class="flex">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-6">Mes commandes</h1>
+    <h2 class="text-2xl font-semibold text-gray-900 mb-6">Mes commandes</h2>
 
         <?php if (empty($commandes)): ?>
             <div class="text-center p-6">
@@ -107,4 +107,9 @@ require_once '../includes/_header.php';
         <?php endif; ?>
     </div>
 </main>
-    <?php require_once '../includes/_footer.php'; ?>
+    <?php 
+    // Inclure le footer seulement si on n'est pas dans la page profil
+    if (!isset($is_included_in_profile)) {
+        require_once '../includes/_footer.php';
+    }
+    ?>

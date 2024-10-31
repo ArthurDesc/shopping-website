@@ -150,7 +150,10 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
 
                 <!-- Tab Commandes -->
                 <div id="orders" class="tab-pane hidden p-8">
-                    <?php include 'commandes.php'; ?>
+                    <?php 
+                    $is_included_in_profile = true;
+                    include 'commandes.php';
+                    ?>
                 </div>
 
                 <!-- Tab Sécurité -->
