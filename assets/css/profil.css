@@ -41,8 +41,9 @@ input:disabled {
     background-color: white;
   }
   
-  /* plus sign */
-  .sign {
+  /* Styles communs pour sign et sign-logout */
+  .sign,
+  .sign-logout {
     width: 100%;
     transition-duration: 0.3s;
     display: flex;
@@ -50,8 +51,15 @@ input:disabled {
     justify-content: center;
   }
   
-  .sign svg {
+  .sign svg,
+  .sign-logout svg {
     width: 17px;
+  }
+  
+  /* Style spécifique pour l'icône sign-logout */
+  .sign-logout svg path {
+    fill: #3b82f6;
+    transition-duration: 0.3s;
   }
   
   
@@ -75,13 +83,14 @@ input:disabled {
     transition-duration: 0.3s;
   }
   
-  .Btn:hover .sign {
+  .Btn:hover .sign,
+  .Btn:hover .sign-logout {
     width: 30%;
     transition-duration: 0.3s;
     padding-left: 20px;
   }
-  
-  .Btn:hover  {
+
+  .Btn:hover .sign-logout svg path {
     fill: white;
   }
   
