@@ -79,11 +79,13 @@ async function handleQuantityChange(form, action) {
 
 async function confirmRemoveItem(productId, element) {
     const result = await Swal.fire({
-        title: 'Supprimer l\'article ?',
-        text: "Voulez-vous retirer cet article du panier ?",
+        title: 'Attention !',
+        text: 'Voulez-vous supprimer cet article du panier ?',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Oui, supprimer',
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6e7881',
+        confirmButtonText: 'Supprimer',
         cancelButtonText: 'Annuler'
     });
 
