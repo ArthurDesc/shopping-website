@@ -107,22 +107,38 @@ input:not(:disabled) {
     font-weight: 700;
     font-family: Helvetica,"sans-serif";
     transition: all .2s;
-    padding: 10px 20px;
+    padding: 4px 12px;
     border-radius: 100px;
     background: white;
     border: 1px solid transparent;
     display: flex;
     align-items: center;
-    font-size: 15px;
+    font-size: 13px;
+    color: #3b82f6;
+  }
+  
+  /* Logo bleu (par défaut) */
+  .button-retour .logo-img {
+    height: 18px;
+    width: auto;
+    object-fit: contain;
   }
   
   .button-retour button:hover {
-    background: white;
+    background: #3b82f6;
+    color: white;
+  }
+  
+  .button-retour button:hover .logo-img {
+    content: url('../images/LogoBlanc.png');
+    height: 18px;
+    width: auto;
+    object-fit: contain;
   }
   
   .button-retour button > svg {
-    width: 34px;
-    margin-right: 10px;
+    width: 24px;
+    margin-right: 6px;
     transition: transform .3s ease-in-out;
   }
   

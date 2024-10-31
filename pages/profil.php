@@ -30,13 +30,13 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
     <div class="fixed top-4 w-full px-4 z-50">
         <div class="flex justify-between items-center max-w-7xl mx-auto">
             <!-- Bouton retour modifié -->
-            <a href="<?php echo url('index.php'); ?>" class="button-retour flex items-center gap-2 hover:opacity-80 transition-all duration-300">
+            <a href="<?php echo url('index.php'); ?>" class="button-retour flex items-center gap-2 transition-all duration-300 -ml-2">
                 <button>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
-                        <circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
-                        <path fill="black" d="M49 35.5C49.8284 35.5 50.5 36.1716 50.5 37C50.5 37.8284 49.8284 38.5 49 38.5V35.5ZM24.9393 38.0607C24.3536 37.4749 24.3536 36.5251 24.9393 35.9393L34.4853 26.3934C35.0711 25.8076 36.0208 25.8076 36.6066 26.3934C37.1924 26.9792 37.1924 27.9289 36.6066 28.5147L28.1213 37L36.6066 45.4853C37.1924 46.0711 37.1924 47.0208 36.6066 47.6066C36.0208 48.1924 35.0711 48.1924 34.4853 47.6066L24.9393 38.0607ZM49 38.5L26 38.5V35.5L49 35.5V38.5Z"></path>
+                        <circle class="stroke-current" stroke-width="3" stroke="currentColor" r="35.5" cy="37" cx="37"></circle>
+                        <path class="fill-current" fill="currentColor" d="M49 35.5C49.8284 35.5 50.5 36.1716 50.5 37C50.5 37.8284 49.8284 38.5 49 38.5V35.5ZM24.9393 38.0607C24.3536 37.4749 24.3536 36.5251 24.9393 35.9393L34.4853 26.3934C35.0711 25.8076 36.0208 25.8076 36.6066 26.3934C37.1924 26.9792 37.1924 27.9289 36.6066 28.5147L28.1213 37L36.6066 45.4853C37.1924 46.0711 37.1924 47.0208 36.6066 47.6066C36.0208 48.1924 35.0711 48.1924 34.4853 47.6066L24.9393 38.0607ZM49 38.5L26 38.5V35.5L49 35.5V38.5Z"></path>
                     </svg>
-                    <span>Fitmode</span>
+                    <img src="<?php echo url('assets/images/logoBleu.png'); ?>" alt="Fitmode" class="logo-img" height="200">
                 </button>
             </a>
 
