@@ -45,7 +45,7 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
                     </svg>
                     <img src="<?php echo url('assets/images/logoBleu.png'); ?>" alt="Fitmode" class="logo-img" height="200">
                 </button>
-                
+
             </a>
 
             <!-- Boutons Administration/Déconnexion -->
@@ -61,7 +61,7 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
                         <div class="text">Administration</div>
                     </a>
                 <?php endif; ?>
-                
+
                 <!-- Bouton déconnexion -->
                 <button class="Btn " id="btn-deconnexion">
                     <div class="sign-logout">
@@ -103,7 +103,8 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                             </svg>
-                            Historique des commandes
+                            <span class="hidden sm:inline">Historique des commandes</span>
+                            <span class="sm:hidden">Commandes</span>
                         </button>
                         <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 flex items-center gap-2"
                             data-tab="security">
@@ -211,15 +212,16 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
                     <div class="space-y-6">
                         <!-- Changement de mot de passe -->
                         <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Mot de passe</h3>
-                            <button type="button"
-                                id="toggle_password_modal"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                                </svg>
-                                Changer le mot de passe
-                            </button>
+                            <div class="flex justify-center items-center">
+                                <button type="button"
+                                    id="toggle_password_modal"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    Changer le mot de passe
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
