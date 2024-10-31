@@ -36,8 +36,16 @@ include './includes/_header.php';
       </div>
     </div>
     <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev !hidden sm:!flex w-10 h-10 items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </div>
+    <div class="swiper-button-next !hidden sm:!flex w-10 h-10 items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+    </div>
     
     <div class="absolute bottom-8 sm:bottom-12 md:bottom-8 left-1/2 transform -translate-x-1/2 z-10">
       <a href="#nouveautes" class="bg-blue-600 bg-opacity-80 text-white px-6 py-3 sm:px-4 sm:py-2 text-base sm:text-sm md:text-base rounded-full shadow-md hover:bg-blue-600 hover:text-white transition duration-300 flex items-center space-x-3 sm:space-x-2">
