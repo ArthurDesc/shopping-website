@@ -60,7 +60,7 @@ include './includes/_header.php';
   <div id="nouveautes" class="section-container relative px-4 mt-12">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-2xl font-normal">Les nouveautés du moment</h2>
-      <div class="hidden md:flex gap-2">
+      <div class="scroll-buttons hidden sm:hidden md:flex gap-2">
         <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -109,7 +109,7 @@ include './includes/_header.php';
   <div class="section-container relative px-4">
     <div class="flex items-center justify-between mb-4 mt-12">
       <h2 class="text-2xl font-normal">Touts pour votre sports</h2>
-      <div class="hidden md:flex gap-2">
+      <div class="scroll-buttons hidden sm:hidden md:flex gap-2">
         <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -175,7 +175,7 @@ include './includes/_header.php';
   <div class="section-container relative px-4">
     <div class="flex items-center justify-between mb-4 mt-12">
       <h2 class="text-2xl font-normal">Collections</h2>
-      <div class="hidden md:flex gap-2">
+      <div class="scroll-buttons hidden sm:hidden md:flex gap-2">
         <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -218,52 +218,8 @@ include './includes/_header.php';
     </div>
   </div>
 
-  <div class="section-container relative px-4">
-    <div class="flex items-center justify-between mb-4 mt-12">
-      <h2 class="text-2xl font-normal">Les promotions</h2>
-      <div class="hidden md:flex gap-2">
-        <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button class="scroll-right-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <div class="scroll-container overflow-x-auto scrollbar-hide">
-      <div class="flex space-x-8 p-4 w-max">
-        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-          <a href="<?php echo url('pages/produit.php?promotion=camp&filtre=promo'); ?>" class="block relative">
-            <img src="<?php echo url('assets/images/camp.jpeg'); ?>" alt="Homme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-            <div class="absolute bottom-2 right-2">
-              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white group-hover:text-blue-600">Promotion</button>
-            </div>
-          </a>
-        </div>
-        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-          <a href="<?php echo url('pages/produit.php?promotion=airmax-sunder'); ?>" class="block relative">
-            <img src="<?php echo url('assets/images/airmax-sunder.jpg'); ?>" alt="Femme" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-            <div class="absolute bottom-2 right-2">
-              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-white  group-hover:text-blue-600">Promotion</button>
-            </div>
-          </a>
-        </div>
-        <div class="flex-shrink-0 w-80 relative shadow-lg rounded-lg overflow-hidden group">
-          <a href="<?php echo url('pages/produit.php?promotion=kids'); ?>" class="block relative">
-            <img src="<?php echo url('assets/images/kids.jpg'); ?>" alt="Enfant" class="w-full h-80 object-cover rounded-lg transition duration-300 group-hover:scale-110">
-            <div class="absolute bottom-2 right-2">
-              <button class="bg-blue-600 text-white text-sm px-4 py-1 rounded-full transition duration-300 shadow-md group-hover:bg-blue-700 group-hover:text-white">Promotion</button>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
+ 
+</main class="mb-8">
 
 <?php include './includes/_footer.php'; ?>
 
@@ -352,26 +308,52 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 document.addEventListener('DOMContentLoaded', function() {
   const scrollAmount = 300;
 
-  // Gestionnaire pour les boutons gauche
-  document.querySelectorAll('.scroll-left-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const container = this.closest('.section-container').querySelector('.scroll-container');
-      container.scrollBy({
-        left: -scrollAmount,
-        behavior: 'smooth'
-      });
-    });
-  });
+  // Fonction pour vérifier si le défilement est nécessaire
+  function checkScrollable(container, buttonsContainer) {
+    // Ajouter une vérification de la largeur d'écran (768px est la breakpoint md de Tailwind par défaut)
+    const isMobileView = window.innerWidth < 768;
+    const isScrollable = container.scrollWidth > container.clientWidth;
+    
+    // Cacher les boutons sur mobile ou si le contenu ne déborde pas
+    buttonsContainer.style.display = (isMobileView || !isScrollable) ? 'none' : 'flex';
+  }
 
-  // Gestionnaire pour les boutons droite
-  document.querySelectorAll('.scroll-right-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const container = this.closest('.section-container').querySelector('.scroll-container');
-      container.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth'
+  // Pour chaque section
+  document.querySelectorAll('.section-container').forEach(section => {
+    const container = section.querySelector('.scroll-container');
+    const buttonsContainer = section.querySelector('.scroll-buttons');
+    
+    if (container && buttonsContainer) {
+      // Vérification initiale
+      checkScrollable(container, buttonsContainer);
+
+      // Vérification lors du redimensionnement
+      window.addEventListener('resize', () => {
+        checkScrollable(container, buttonsContainer);
       });
-    });
+
+      // Gestionnaires de clics existants
+      const leftBtn = buttonsContainer.querySelector('.scroll-left-btn');
+      const rightBtn = buttonsContainer.querySelector('.scroll-right-btn');
+
+      if (leftBtn) {
+        leftBtn.addEventListener('click', function() {
+          container.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      if (rightBtn) {
+        rightBtn.addEventListener('click', function() {
+          container.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+          });
+        });
+      }
+    }
   });
 });
 </script>
