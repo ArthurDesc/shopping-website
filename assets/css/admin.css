@@ -67,3 +67,17 @@ details>summary::-webkit-details-marker {
     font-weight: bold;
     color: #3B82F6;
 }
+
+
+select {
+    cursor: pointer;
+  }
+
+  select:hover,
+  select option:hover {
+    cursor: pointer;
+  }
+
+  select option {
+    cursor: pointer;
+  }

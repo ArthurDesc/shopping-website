@@ -76,11 +76,11 @@ break;
                     <div class="mb-4 sm:mb-5">
                         <label for="collection" class="block text-white font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Collection</label>
                         <div class="relative">
-                          <select id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base appearance-none bg-white text-gray-700">
+                          <select id="collection" name="collection" class="w-full px-3 py-1 rounded text-sm sm:text-base appearance-none bg-white text-gray-700 border border-blue-200 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                             <option value="" disabled selected>Sélectionnez une collection</option>
-                            <option value="Homme">Homme</option>
-                            <option value="Femme">Femme</option>
-                            <option value="Enfant">Enfant</option>
+                            <option value="Homme" class="hover:bg-blue-50">Homme</option>
+                            <option value="Femme" class="hover:bg-blue-50">Femme</option>
+                            <option value="Enfant" class="hover:bg-blue-50">Enfant</option>
                           </select>
                           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

@@ -29,76 +29,78 @@ $image_base_path = '../assets/images/produits/';
 // Ajouter une variable pour le nombre de résultats
 $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
 ?>
+<main>
 
-<div class="container mx-auto px-4">
-    <div class="mt-6 flex flex-col sm:flex-row justify-between items-center">
-        <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
-        <form method="get" action="" class="flex items-center mt-4 sm:mt-0">
-            <div class="wave-group">
-                <input required type="text" name="q" class="input" value="<?php echo htmlspecialchars($search); ?>">
-                <span class="bar"></span>
-                <label class="label">
-                    <span class="label-char" style="--index: 0">R</span>
-                    <span class="label-char" style="--index: 1">e</span>
-                    <span class="label-char" style="--index: 2">c</span>
-                    <span class="label-char" style="--index: 3">h</span>
-                    <span class="label-char" style="--index: 4">e</span>
-                    <span class="label-char" style="--index: 5">r</span>
-                    <span class="label-char" style="--index: 6">c</span>
-                    <span class="label-char" style="--index: 7">h</span>
-                    <span class="label-char" style="--index: 8">e</span>
-                    <span class="label-char" style="--index: 9">r</span>
-                </label>
-                <button type="submit" class="search-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="search-icon">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                </button>
-            </div>
-        </form>
-    </div>
-    <!-- Champ de recherche avec autocomplétion -->
-    
-
-    <section class="products_list">
-        <?php 
-        if ($result->num_rows > 0) {
-            echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
-            while ($row = $result->fetch_assoc()) { 
-                $image_url = $image_base_path . ($row['image_url'] ?? 'default_product.jpg');
-                
-                if (!file_exists($image_url) || empty($row['image_url'])) {
-                    $image_url = $image_base_path . 'default_product.jpg';
-                }
-        ?>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full">
-                <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block flex-grow flex flex-col">
-                    <div class="relative pb-[90%] flex-grow">
-                        <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="absolute inset-0 w-full h-full object-cover object-center">
-                    </div>
-                    <div class="p-3 flex-shrink-0">
-                        <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($row['nom']); ?></h3>
-                        <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($row['marque']); ?></p>
-                    </div>
-                </a>
-                <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
-                    <p class="product-price text-sm text-blue-600 font-bold"><?php echo number_format($row['prix'], 2); ?> €</p>
-                    <button type="button" class="product-cart-button open-modal-btn flex items-center justify-center" data-product-id="<?php echo $row['id_produit']; ?>" data-product-price="<?php echo $row['prix']; ?>" onclick="ouvrirModalTaille(<?php echo $row['id_produit']; ?>, <?php echo $row['prix']; ?>)">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="product-cart-icon">
-                            <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8ZM10.84 5.69C10.84 4.04 12.2 2.69 13.84 2.69C15.49 2.69 16.84 3.69 16.84 5.69V6.69H10.84V5.69ZM23.82 18.41L22.39 8.41C22.25 7.43 21.41 6.69 20.41 6.69H18.84V5.69C18.84 2.69 16.6 0.69 13.84 0.69C11.08 0.69 8.84 2.93 8.84 5.69V6.69H7.57C6.58 6.69 5.43 7.43 5.29 8.41L3.86 18.41C3.69 19.62 4.62 20.69 5.84 20.69H21.84C23.06 20.69 23.99 19.62 23.82 18.41Z" fill="currentColor"/>
+    <div class="container mx-auto px-4">
+        <div class="mt-6 flex flex-col sm:flex-row justify-between items-center">
+            <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
+            <form method="get" action="" class="flex items-center mt-4 sm:mt-0">
+                <div class="wave-group">
+                    <input required type="text" name="q" class="input" value="<?php echo htmlspecialchars($search); ?>">
+                    <span class="bar"></span>
+                    <label class="label">
+                        <span class="label-char" style="--index: 0">R</span>
+                        <span class="label-char" style="--index: 1">e</span>
+                        <span class="label-char" style="--index: 2">c</span>
+                        <span class="label-char" style="--index: 3">h</span>
+                        <span class="label-char" style="--index: 4">e</span>
+                        <span class="label-char" style="--index: 5">r</span>
+                        <span class="label-char" style="--index: 6">c</span>
+                        <span class="label-char" style="--index: 7">h</span>
+                        <span class="label-char" style="--index: 8">e</span>
+                        <span class="label-char" style="--index: 9">r</span>
+                    </label>
+                    <button type="submit" class="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="search-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                     </button>
                 </div>
-            </div>
-        <?php 
+            </form>
+        </div>
+        <!-- Champ de recherche avec autocomplétion -->
+
+
+        <section class="products_list">
+            <?php
+            if ($result->num_rows > 0) {
+                echo '<div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6">';
+                while ($row = $result->fetch_assoc()) {
+                    $image_url = $image_base_path . ($row['image_url'] ?? 'default_product.jpg');
+
+                    if (!file_exists($image_url) || empty($row['image_url'])) {
+                        $image_url = $image_base_path . 'default_product.jpg';
+                    }
+            ?>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full">
+                        <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block flex-grow flex flex-col">
+                            <div class="relative pb-[90%] flex-grow">
+                                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="absolute inset-0 w-full h-full object-cover object-center">
+                            </div>
+                            <div class="p-3 flex-shrink-0">
+                                <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($row['nom']); ?></h3>
+                                <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($row['marque']); ?></p>
+                            </div>
+                        </a>
+                        <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
+                            <p class="product-price text-sm text-blue-600 font-bold"><?php echo number_format($row['prix'], 2); ?> €</p>
+                            <button type="button" class="product-cart-button open-modal-btn flex items-center justify-center" data-product-id="<?php echo $row['id_produit']; ?>" data-product-price="<?php echo $row['prix']; ?>" onclick="ouvrirModalTaille(<?php echo $row['id_produit']; ?>, <?php echo $row['prix']; ?>)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="product-cart-icon">
+                                    <path d="M7.2 9.8C7.08 9.23 7.55 8.69 8.14 8.69H8.84V10.69C8.84 11.24 9.29 11.69 9.84 11.69C10.39 11.69 10.84 11.24 10.84 10.69V8.69H16.84V10.69C16.84 11.24 17.29 11.69 17.84 11.69C18.39 11.69 18.84 11.24 18.84 10.69V8.69H19.54C20.13 8.69 20.55 9.06 20.62 9.55L21.76 17.55C21.85 18.15 21.38 18.69 20.77 18.69H7.07C6.46 18.69 5.99 18.15 6.08 17.55L7.2 9.8ZM10.84 5.69C10.84 4.04 12.2 2.69 13.84 2.69C15.49 2.69 16.84 3.69 16.84 5.69V6.69H10.84V5.69ZM23.82 18.41L22.39 8.41C22.25 7.43 21.41 6.69 20.41 6.69H18.84V5.69C18.84 2.69 16.6 0.69 13.84 0.69C11.08 0.69 8.84 2.93 8.84 5.69V6.69H7.57C6.58 6.69 5.43 7.43 5.29 8.41L3.86 18.41C3.69 19.62 4.62 20.69 5.84 20.69H21.84C23.06 20.69 23.99 19.62 23.82 18.41Z" fill="currentColor" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+            <?php
+                }
+                echo '</div>';
+            } else {
+                echo "<p class='mt-4'>Aucun produit trouvé pour cette recherche.</p>";
             }
-            echo '</div>';
-        } else {
-            echo "<p class='mt-4'>Aucun produit trouvé pour cette recherche.</p>";
-        }
-        ?>
-    </section>
-</div>
+            ?>
+        </section>
+    </div>
+</main>
 
 
 <?php require_once '../includes/_footer.php'; ?>
@@ -135,10 +137,10 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
     </div>
 </div>
 
-
 </script>
 
 
 
 </body>
+
 </html>

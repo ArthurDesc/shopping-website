@@ -442,3 +442,16 @@ footer {
     background-color: white; /* Au lieu d'une couleur semi-transparente */
     opacity: 1; /* Assurez-vous que l'opacité est à 1 */
   }
+
+  select {
+    cursor: pointer;
+  }
+
+  select:hover,
+  select option:hover {
+    cursor: pointer;
+  }
+
+  select option {
+    cursor: pointer;
+  }
