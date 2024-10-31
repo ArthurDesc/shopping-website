@@ -115,6 +115,9 @@ function updateCartUI(cartCount) {
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     if (toast) {
+        // Réinitialiser l'affichage du toast
+        toast.style.display = 'block';
+        
         // Définir le contenu et le style
         toast.textContent = message;
         toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg z-50 ${
@@ -130,7 +133,7 @@ function showToast(message, type = 'success') {
         setTimeout(() => {
             toast.style.opacity = '0';
             
-            // Supprimer complètement le toast après la fin de l'animation
+            // Attendre la fin de l'animation avant de cacher
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 300);
