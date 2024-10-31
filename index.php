@@ -6,11 +6,26 @@ include './includes/_header.php';
 <main class="flex-grow">
   <div class="swiper-container relative w-full mx-auto overflow-hidden h-[calc(100vh-55px)]">
     <div class="swiper-wrapper h-full">
-      <div class="swiper-slide relative">
-        <img src="<?php echo url('assets/images/pikaso_edit.png'); ?>" alt="Image 3" class="w-full h-full object-cover object-center">
-        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-50"></div>
-        <div class="absolute bottom-8 sm:bottom-12 left-6 sm:left-10 text-white z-10 max-w-[80%]">
+      <div class="swiper-slide relative overflow-hidden">
+        <div class="slide-bg">
+          <img src="<?php echo url('assets/images/background1.png'); ?>" alt="Background" class="w-full h-full object-cover object-center">
+        </div>
+        <div class="slide-foreground">
+          <img src="<?php echo url('assets/images/foreground1.png'); ?>" alt="Foreground" class="w-full h-full object-contain z-10 absolute inset-0">
+        </div>
+        <div class="slide-content absolute bottom-8 sm:bottom-12 left-6 sm:left-10 text-white z-20">
           <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Détermination</h2>
+        </div>
+      </div>
+      <div class="swiper-slide relative overflow-hidden">
+        <div class="slide-bg">
+          <img src="<?php echo url('assets/images/background2.png'); ?>" alt="Background" class="w-full h-full object-cover object-center">
+        </div>
+        <div class="slide-foreground">
+          <img src="<?php echo url('assets/images/foreground2.png'); ?>" alt="Foreground" class="w-full h-full object-contain z-10 absolute inset-0">
+        </div>
+        <div class="slide-content absolute bottom-8 sm:bottom-12 left-6 sm:left-10 text-white z-20">
+          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold mb-2">Compétition</h2>
         </div>
       </div>
       <div class="swiper-slide relative">
@@ -292,12 +307,60 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
 
 <style>
-  .nouveautes-container {
+
+.slide-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.slide-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-foreground {
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    -webkit-mask-image: radial-gradient(circle at center, 
+        black 20%,
+        rgba(0, 0, 0, 0.7) 40%,
+        transparent 100%
+    );
+    mask-image: radial-gradient(circle at center, 
+        black 20%,
+        rgba(0, 0, 0, 0.7) 40%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.1));
+}
+
+.slide-foreground img {
+    width: auto;
+    height: 95%;
+    object-fit: contain;
+    position: relative;
+    bottom: 0;
+    transform: none;
+    left: auto;
+}
+
+.nouveautes-container {
     position: relative;
     overflow: visible !important;
-  }
-  
-  .nouveautes-container::before {
+}
+
+.nouveautes-container::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -307,13 +370,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     background-color: #3B82F6;
     transform: translateY(-50%);
     z-index: -1;
-  }
-  
-  .nouveautes-container .flex > div {
+}
+
+.nouveautes-container .flex > div {
     position: relative;
-  }
-  
-  .nouveautes-container .flex > div::before {
+}
+
+.nouveautes-container .flex > div::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -324,20 +387,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     border-radius: 50%;
     transform: translateY(-50%);
     z-index: 1;
-  }
-  
-  .nouveautes-container .flex > div:first-child::before {
-    display: none;
-  }
+}
 
-  .scrollbar-hide::-webkit-scrollbar {
+.nouveautes-container .flex > div:first-child::before {
     display: none;
-  }
+}
 
-  .scrollbar-hide {
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
-  }
+}
+
 </style>
 
 <script>

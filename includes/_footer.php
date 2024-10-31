@@ -49,6 +49,10 @@
   <script src="<?php echo url('assets/js/backoffice/categorySelector.js'); ?>" defer></script>
 <?php endif; ?>
 
+<?php if (strpos($_SERVER['REQUEST_URI'], 'index.php') !== false): ?>
+  <script src="<?php echo url('assets/js/carousel.js'); ?>" defer></script>
+<?php endif; ?>
+
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
