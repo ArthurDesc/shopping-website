@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? document.createElement('textarea')
                 : document.createElement('input');
             
-            input.value = currentValue;
+            input.value = currentValue === "Non renseigné" ? "" : currentValue;
             input.type = this.dataset.type || 'text';
             input.className = `w-full px-3 py-2 bg-white border border-transparent rounded-lg`;
 
