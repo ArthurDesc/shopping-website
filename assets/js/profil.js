@@ -86,6 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const buttonsDiv = document.createElement('div');
             buttonsDiv.className = 'flex justify-end gap-2 mt-2';
 
+            // Ajout des boutons (uniquement le bouton de validation)
+            buttonsDiv.innerHTML = `
+                <button class="save-btn px-3 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                </button>
+            `;
+
             // Création d'un conteneur pour l'input et les boutons
             const container = document.createElement('div');
             container.className = 'flex items-center gap-2';
@@ -97,16 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remplacement du contenu
             this.innerHTML = '';
             this.appendChild(container);
-
-            // Ajout des boutons
-            buttonsDiv.innerHTML = `
-                <button class="save-btn px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                    <i class="fas fa-check"></i>
-                </button>
-                <button class="cancel-btn px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
 
             input.focus();
 
@@ -147,11 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     el.innerHTML = originalContent;
                     showToast(error.message || 'Erreur lors de la sauvegarde', 'error');
                 }
-            });
-
-            // Gestion de l'annulation
-            buttonsDiv.querySelector('.cancel-btn').addEventListener('click', () => {
-                el.innerHTML = originalContent;
             });
         });
     });
