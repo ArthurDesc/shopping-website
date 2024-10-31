@@ -491,13 +491,11 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
     <div class="spinnerContainer">
       <div class="spinner"></div>
       <div class="loader">
-        <p>loading</p>
         <div class="words">
           <span class="word">Ajouter</span>
           <span class="word">Ajouter</span>
           <span class="word">Modifier</span>
-          <span class="word">Suprimer</span>
-          <span class="word">Ajouter</span>
+          <span class="word">Supprimer</span>
         </div>
       </div>
     </div>

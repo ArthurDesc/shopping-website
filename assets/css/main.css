@@ -440,3 +440,9 @@ footer {
     85% { transform: translateY(-405%); }
     100% { transform: translateY(-400%); }
   }
+
+  /* Remplacer ou ajouter ces styles */
+  #full-page-loader {
+    background-color: white; /* Au lieu d'une couleur semi-transparente */
+    opacity: 1; /* Assurez-vous que l'opacité est à 1 */
+  }
