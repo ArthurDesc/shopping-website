@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Gestion du clic pour l'édition
         el.addEventListener('click', function(e) {
             e.preventDefault();
-            this.classList.add('active');
             const currentValue = this.textContent.trim();
             const isTextarea = this.dataset.type === 'textarea';
             
@@ -68,9 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
             input.type = this.dataset.type || 'text';
             input.className = `w-full px-3 py-2 bg-white border border-transparent rounded-lg`;
             
-            if (isTextarea) {
-                input.rows = 3;
-            }
+            // Ajout du gestionnaire de clic extérieur
+            const handleClickOutside = (event) => {
+                if (!el.contains(event.target)) {
+                    el.innerHTML = currentValue; // Restaure le contenu original
+                    el.classList.remove('active');
+                    document.removeEventListener('click', handleClickOutside);
+                }
+            };
+
+            // Ajout du listener après un court délai pour éviter le déclenchement immédiat
+            setTimeout(() => {
+                document.addEventListener('click', handleClickOutside);
+            }, 0);
 
             // Création des boutons de validation/annulation
             const buttonsDiv = document.createElement('div');

@@ -222,10 +222,13 @@ input:disabled {
     stroke-width: 1.5;
   }
 
-  .editable.active + .edit-icon {
+  /* Cache l'icône quand l'input est actif */
+  .editable.active ~ .edit-icon,
+  .editable:focus ~ .edit-icon {
     display: none;
   }
 
+  /* Change la couleur au survol */
   .editable:hover + .edit-icon,
   .editable-container:hover .edit-icon {
     color: #3B82F6;
