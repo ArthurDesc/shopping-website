@@ -67,7 +67,6 @@ async function handleQuantityChange(form, action) {
                 totalPrice: response.totalPrice
             });
             
-            showToast('Panier mis à jour', 'success');
         } else {
             showToast(response.message || 'Erreur lors de la mise à jour', 'error');
         }

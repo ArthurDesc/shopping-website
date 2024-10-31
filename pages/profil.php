@@ -29,12 +29,15 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
     <!-- En-tête avec les boutons de navigation -->
     <div class="fixed top-4 w-full px-4 z-50">
         <div class="flex justify-between items-center max-w-7xl mx-auto">
-            <!-- Bouton retour -->
-            <a href="<?php echo url('index.php'); ?>" class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                </svg>
-                <img src="<?php echo url('assets/images/logo.png'); ?>" alt="Fitmode" class="h-5">
+            <!-- Bouton retour modifié -->
+            <a href="<?php echo url('index.php'); ?>" class="button-retour flex items-center gap-2 hover:opacity-80 transition-all duration-300">
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
+                        <circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
+                        <path fill="black" d="M49 35.5C49.8284 35.5 50.5 36.1716 50.5 37C50.5 37.8284 49.8284 38.5 49 38.5V35.5ZM24.9393 38.0607C24.3536 37.4749 24.3536 36.5251 24.9393 35.9393L34.4853 26.3934C35.0711 25.8076 36.0208 25.8076 36.6066 26.3934C37.1924 26.9792 37.1924 27.9289 36.6066 28.5147L28.1213 37L36.6066 45.4853C37.1924 46.0711 37.1924 47.0208 36.6066 47.6066C36.0208 48.1924 35.0711 48.1924 34.4853 47.6066L24.9393 38.0607ZM49 38.5L26 38.5V35.5L49 35.5V38.5Z"></path>
+                    </svg>
+                    <span>Fitmode</span>
+                </button>
             </a>
 
             <!-- Bouton déconnexion -->

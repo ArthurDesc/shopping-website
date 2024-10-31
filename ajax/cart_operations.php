@@ -36,7 +36,6 @@ try {
                     $response = array_merge(
                         ['success' => true],
                         $cartInfo,
-                        ['message' => 'Panier mis à jour']
                     );
                 } else {
                     throw new Exception("Stock insuffisant");
