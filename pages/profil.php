@@ -63,7 +63,7 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
                 <?php endif; ?>
 
                 <!-- Bouton déconnexion -->
-                <button class="Btn " id="btn-deconnexion">
+                <button class="Btn " id="btn-deconnexion-profil">
                     <div class="sign-logout">
                         <svg viewBox="0 0 512 512">
                             <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
@@ -285,53 +285,6 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
             </div>
         </div>
     </div>
-
-    <!-- Modal de déconnexion -->
-    <div id="modal-deconnexion" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0 hidden">
-        <div class="bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
-            <div class="p-6">
-                <h2 class="text-xl font-semibold mb-4">Confirmation de déconnexion</h2>
-                <p class="text-gray-600 mb-6">Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
-                    <button id="cancel-deconnexion" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
-                        Annuler
-                    </button>
-                    <a href="<?php echo url('pages/deconnexion.php'); ?>" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 text-center">
-                        Se déconnecter
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script pour la gestion du modal de déconnexion -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modalDeconnexion = document.getElementById('modal-deconnexion');
-            const btnDeconnexion = document.getElementById('btn-deconnexion');
-            const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
-
-            if (btnDeconnexion && modalDeconnexion && btnCancelDeconnexion) {
-                // Ouvrir le modal
-                btnDeconnexion.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    modalDeconnexion.classList.remove('hidden');
-                });
-
-                // Fermer le modal
-                btnCancelDeconnexion.addEventListener('click', function() {
-                    modalDeconnexion.classList.add('hidden');
-                });
-
-                // Fermer en cliquant en dehors
-                modalDeconnexion.addEventListener('click', function(e) {
-                    if (e.target === modalDeconnexion) {
-                        modalDeconnexion.classList.add('hidden');
-                    }
-                });
-            }
-        });
-    </script>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
     <script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
