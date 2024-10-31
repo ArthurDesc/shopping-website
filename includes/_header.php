@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../includes/_db.php';
 require_once __DIR__ . '/../classe/CategoryManager.php';
 
-$adminManager = new AdminManager($conn); // Assurez-vous que $conn est disponible
+$adminManager = new AdminManager($conn);
 $panier = new Panier();
 $total = $panier->getNombreArticles();
 error_reporting(E_ALL);
@@ -25,6 +25,9 @@ if (!isset($_SESSION['panier'])) {
 }
 
 $total = array_sum($_SESSION['panier'] ?? []);
+
+// Déterminer si nous sommes sur la page profil
+$isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
 ?>
 
 
@@ -63,7 +66,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
   
   <!-- CSS spécifiques aux pages -->
   <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
-  <?php if (basename($_SERVER['PHP_SELF']) == 'profil.php'): ?>
+  <?php if ($isProfilPage): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/profil.css?v=' . filemtime(__DIR__ . '/../assets/css/profil.css')); ?>">
   <?php endif; ?>
   <?php if (basename($_SERVER['PHP_SELF']) == 'produit.php'): ?>
@@ -84,8 +87,9 @@ $total = array_sum($_SESSION['panier'] ?? []);
 
 </head>
 
-
-<body class="flex flex-col min-h-full pt-[55px]">
+<body class="flex flex-col min-h-full <?php echo $isProfilPage ? '' : 'pt-[55px]'; ?>">
+<?php if (!$isProfilPage): ?>
+  <!-- Le reste du header ici (tout le contenu existant) -->
   <div id="header-container" class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-3 px-2 bg-white shadow-md">
@@ -545,6 +549,7 @@ $total = array_sum($_SESSION['panier'] ?? []);
       </div>
     </div>
   </div>
+  <?php endif; ?>
 </body>
 
 </class=>

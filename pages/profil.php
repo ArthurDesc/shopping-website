@@ -9,11 +9,8 @@ if (!isset($_SESSION['id_utilisateur'])) {
     exit();
 }
 
-
-
 // Fonction pour récupérer les informations de l'utilisateur
-function getUserInfo($conn, $id_utilisateur)
-{
+function getUserInfo($conn, $id_utilisateur) {
     $stmt = $conn->prepare("SELECT nom, prenom, email, adresse, telephone FROM utilisateurs WHERE id_utilisateur = ?");
     $stmt->bind_param("i", $id_utilisateur);
     $stmt->execute();
@@ -29,6 +26,28 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
 
 
 <body class="bg-gray-50 min-h-screen">
+    <!-- En-tête avec les boutons de navigation -->
+    <div class="fixed top-4 w-full px-4 z-50">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <!-- Bouton retour -->
+            <a href="<?php echo url('index.php'); ?>" class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <img src="<?php echo url('assets/images/logo.png'); ?>" alt="Fitmode" class="h-5">
+            </a>
+
+            <!-- Bouton déconnexion -->
+            <button class="Btn" id="btn-deconnexion">
+                <div class="sign">
+                    <svg viewBox="0 0 512 512">
+                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                    </svg>
+                </div>
+                <div class="text">Déconnexion</div>
+            </button>
+        </div>
+    </div>
 
     <main class="container mx-auto px-4 py-8">
 
@@ -38,15 +57,9 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
             <!-- En-tête avec les tabs -->
             <div>
                 <!-- En-tête avec titre et bouton déconnexion -->
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex justify-between items-center mb-3">
                     <h1 class="text-3xl font-bold text-white">Mon Compte</h1>
-                    <button id="btn-deconnexion" 
-                            class="flex items-center px-4 py-2 bg-white text-red-600 rounded-lg hover:bg-red-50 transition-colors shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
-                        </svg>
-                        <span>Déconnexion</span>
-                    </button>
+                    
                 </div>
 
                 <!-- Navigation des tabs et contenu dans un seul conteneur -->
@@ -257,7 +270,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const modalDeconnexion = document.getElementById('modal-deconnexion');
-        const btnDeconnexion = document.getElementById('btn-deconnexion-profil);
+        const btnDeconnexion = document.getElementById('btn-deconnexion');
         const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
 
         if (btnDeconnexion && modalDeconnexion && btnCancelDeconnexion) {
