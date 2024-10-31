@@ -74,7 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Création des boutons de validation/annulation
             const buttonsDiv = document.createElement('div');
-            buttonsDiv.className = 'flex gap-2 mt-2';
+            buttonsDiv.className = 'flex justify-end gap-2 mt-2';
+
+            // Création d'un conteneur pour l'input et les boutons
+            const container = document.createElement('div');
+            container.className = 'flex items-center gap-2';
+
+            // Ajout de l'input et des boutons dans le conteneur
+            container.appendChild(input);
+            container.appendChild(buttonsDiv);
+
+            // Remplacement du contenu
+            this.innerHTML = '';
+            this.appendChild(container);
+
+            // Ajout des boutons
             buttonsDiv.innerHTML = `
                 <button class="save-btn px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">
                     <i class="fas fa-check"></i>
@@ -84,11 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             `;
 
-            // Remplacement temporaire du contenu
-            const originalContent = this.innerHTML;
-            this.innerHTML = '';
-            this.appendChild(input);
-            this.appendChild(buttonsDiv);
             input.focus();
 
             // Gestion de la sauvegarde
