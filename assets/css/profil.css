@@ -54,9 +54,7 @@ input:disabled {
     width: 17px;
   }
   
-  .sign svg path {
-    fill: #3b82f6;
-  }
+  
   /* text */
   .text {
     position: absolute;
@@ -83,7 +81,7 @@ input:disabled {
     padding-left: 20px;
   }
   
-  .Btn:hover .sign svg path {
+  .Btn:hover  {
     fill: white;
   }
   
