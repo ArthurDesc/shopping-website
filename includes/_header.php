@@ -451,7 +451,7 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
       </nav>
     </div>
 
-    <!-- Barre de recherche déroulante sticky avec autocomplétion -->
+    <!-- Barre de recherche droulante sticky avec autocomplétion -->
     <div id="search-bar" class="w-full bg-white transition-all duration-300 ease-in-out overflow-visible flex items-center h-0 shadow-md border-t border-gray-200">
       <div class="container mx-auto px-4">
         <form action="<?php echo url('pages/recherche.php'); ?>" method="GET" class="flex items-center relative">
@@ -521,20 +521,39 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
       const adminLink = document.getElementById('admin-link');
       const fullPageLoader = document.getElementById('full-page-loader');
 
-      adminLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        fullPageLoader.classList.remove('hidden');
-        fullPageLoader.classList.add('flex');
-
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 3000);
-      });
+    adminLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Désactiver le défilement sur body ET html
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      
+      fullPageLoader.classList.remove('hidden');
+      fullPageLoader.classList.add('flex');
+      
+      // Stocker la position actuelle du scroll
+      const scrollPosition = window.pageYOffset;
+      document.body.style.top = `-${scrollPosition}px`;
+      
+      setTimeout(() => {
+        // Réinitialiser les styles avant la redirection
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        window.scrollTo(0, scrollPosition);
+        
+        window.location.href = this.href;
+      }, 3000);
     });
+  });
   </script>
 
   <!-- Ajoutez ceci juste après l'ouverture du <body> -->
-  <div id="full-page-loader" class="fixed inset-0 bg-white bg-opacity-90 z-[9999] justify-center items-center hidden">
+  <div id="full-page-loader" class="fixed inset-0 bg-white z-[9999] justify-center items-center hidden" style="opacity: 1 !important;">
     <div class="spinnerContainer">
       <div class="spinner"></div>
       <div class="loader">
