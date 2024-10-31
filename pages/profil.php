@@ -108,7 +108,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Nom*</label>
                                 <div id="nom"
-                                    class="editable block w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                                    class="editable block w-full px-4 py-2.5 bg-white rounded-lg transition-colors"
                                     data-type="text"
                                     data-url="../ajax/update_profile.php"
                                     data-name="nom"
@@ -120,7 +120,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Prénom*</label>
                                 <div id="prenom"
-                                    class="editable block w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                                    class="editable block w-full px-4 py-2.5 bg-white rounded-lg transition-colors"
                                     data-type="text"
                                     data-url="../ajax/update_profile.php"
                                     data-name="prenom"
@@ -134,7 +134,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Email*</label>
                             <div id="email"
-                                class="editable block w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                                class="editable block w-full px-4 py-2.5 bg-white rounded-lg transition-colors"
                                 data-type="email"
                                 data-url="../ajax/update_profile.php"
                                 data-name="email"
@@ -147,7 +147,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
                             <div id="telephone"
-                                class="editable block w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                                class="editable block w-full px-4 py-2.5 bg-white rounded-lg transition-colors"
                                 data-type="tel"
                                 data-url="../ajax/update_profile.php"
                                 data-name="telephone">
@@ -159,7 +159,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
                             <div id="adresse"
-                                class="editable block w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                                class="editable block w-full px-4 py-2.5 bg-white rounded-lg transition-colors"
                                 data-type="textarea"
                                 data-url="../ajax/update_profile.php"
                                 data-name="adresse">

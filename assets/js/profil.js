@@ -62,8 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             input.value = currentValue;
             input.type = this.dataset.type || 'text';
-            input.className = `w-full px-3 py-2 bg-white border border-gray-300 rounded-lg 
-                             focus:ring-2 focus:ring-blue-500 focus:border-blue-500`;
+            input.className = `w-full px-3 py-2 bg-white border border-transparent rounded-lg`;
             
             if (isTextarea) {
                 input.rows = 3;
