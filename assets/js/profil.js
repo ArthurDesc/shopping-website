@@ -72,6 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
             input.type = this.dataset.type || 'text';
             input.className = `w-full px-3 py-2 bg-white border border-transparent rounded-lg`;
 
+            // Ajout de l'écouteur pour la touche Entrée
+            input.addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault(); // Empêcher le saut de ligne par défaut
+                    await handleSave(); // Utiliser la même fonction de sauvegarde
+                }
+            });
+
             // Gestionnaire de clic extérieur modifié
             const handleClickOutside = (event) => {
                 if (!isEditing) return; // Ne rien faire si pas en mode édition
