@@ -246,4 +246,20 @@ input:disabled {
     display: none;
   }
   
+  /* Style spécifique pour l'icône administration */
+  #admin-link .sign-logout svg path {
+    fill: none;
+    stroke: #2563eb;
+    transition-duration: 0.3s;
+  }
+
+  #admin-link:hover {
+    background-color: #2563eb;
+  }
+
+  #admin-link:hover .sign-logout svg path {
+    fill: none;
+    stroke: white;
+  }
+  
   
