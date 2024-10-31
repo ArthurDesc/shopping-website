@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Gestion du clic pour l'édition
         el.addEventListener('click', function(e) {
             e.preventDefault();
+            this.classList.add('active');
             const currentValue = this.textContent.trim();
             const isTextarea = this.dataset.type === 'textarea';
             
@@ -70,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ajout du gestionnaire de clic extérieur
             const handleClickOutside = (event) => {
                 if (!el.contains(event.target)) {
-                    el.innerHTML = currentValue; // Restaure le contenu original
+                    el.innerHTML = currentValue;
                     el.classList.remove('active');
                     document.removeEventListener('click', handleClickOutside);
                 }

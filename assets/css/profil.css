@@ -234,4 +234,9 @@ input:disabled {
     color: #3B82F6;
   }
   
+  /* Modification du sélecteur pour cibler correctement l'icône */
+  .editable-container .editable.active ~ .edit-icon {
+    display: none;
+  }
+  
   
