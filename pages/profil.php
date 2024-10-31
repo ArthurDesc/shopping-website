@@ -60,10 +60,9 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
 
             <!-- En-tête avec les tabs -->
             <div>
-                <!-- En-tête avec titre et bouton déconnexion -->
-                <div class="flex justify-between items-center mb-3">
+                <!-- En-tête avec titre -->
+                <div class="flex justify-center items-center mb-3">
                     <h1 class="text-3xl font-bold text-white">Mon Compte</h1>
-
                 </div>
 
                 <!-- Navigation des tabs et contenu dans un seul conteneur -->
