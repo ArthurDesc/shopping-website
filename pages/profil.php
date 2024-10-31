@@ -34,23 +34,24 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
 
 <body class="bg-gray-50 min-h-screen">
     <!-- En-tête avec les boutons de navigation -->
-    <div class="fixed top-4 w-full px-4 z-50">
-        <div class="flex justify-between items-center max-w-7xl mx-auto">
-            <!-- Bouton retour modifié -->
+    <div class="fixed top-0 w-full px-4 z-50 bg-white sm:bg-transparent sm:top-4">
+        <div class="flex justify-between items-center max-w-7xl mx-auto py-2 sm:py-0">
+            <!-- Bouton retour -->
             <a href="<?php echo url('index.php'); ?>" class="button-retour flex items-center gap-2 transition-all duration-300 -ml-2">
-                <button>
+                <button class="sm:flex hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
                         <circle class="stroke-current" stroke-width="3" stroke="currentColor" r="35.5" cy="37" cx="37"></circle>
                         <path class="fill-current" fill="currentColor" d="M49 35.5C49.8284 35.5 50.5 36.1716 50.5 37C50.5 37.8284 49.8284 38.5 49 38.5V35.5ZM24.9393 38.0607C24.3536 37.4749 24.3536 36.5251 24.9393 35.9393L34.4853 26.3934C35.0711 25.8076 36.0208 25.8076 36.6066 26.3934C37.1924 26.9792 37.1924 27.9289 36.6066 28.5147L28.1213 37L36.6066 45.4853C37.1924 46.0711 37.1924 47.0208 36.6066 47.6066C36.0208 48.1924 35.0711 48.1924 34.4853 47.6066L24.9393 38.0607ZM49 38.5L26 38.5V35.5L49 35.5V38.5Z"></path>
                     </svg>
                     <img src="<?php echo url('assets/images/logoBleu.png'); ?>" alt="Fitmode" class="logo-img" height="200">
                 </button>
+                
             </a>
 
-            <!-- Bouton déconnexion -->
-            <div class="flex items-center gap-4">
+            <!-- Boutons Administration/Déconnexion -->
+            <div class="flex items-center gap-2 sm:gap-4">
                 <?php if ($isAdmin): ?>
-                    <a href="../admin/backofficeV2.php" class="Btn bg-white hover:bg-blue-600 border border-blue-600 text-blue-600 hover:text-white transition-colors">
+                    <a href="../admin/backofficeV2.php" class="Btn bg-white hover:bg-blue-600 border border-blue-600 text-blue-600 hover:text-white transition-colors ">
                         <div class="sign">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281Z" />
@@ -61,7 +62,8 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
                     </a>
                 <?php endif; ?>
                 
-                <button class="Btn" id="btn-deconnexion">
+                <!-- Bouton déconnexion -->
+                <button class="Btn " id="btn-deconnexion">
                     <div class="sign-logout">
                         <svg viewBox="0 0 512 512">
                             <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
@@ -73,7 +75,7 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 mt-16 sm:mt-8">
 
         <!-- Contenu principal dans un conteneur centré -->
         <div class="max-w-5xl mx-auto"> <!-- Conteneur principal à 80% -->
@@ -82,18 +84,19 @@ $isAdmin = $adminManager->isAdmin($_SESSION['id_utilisateur']);
             <div>
                 <!-- En-tête avec titre -->
                 <div class="flex justify-center items-center mb-3">
-                    <h1 class="text-3xl font-bold text-white">Mon Compte</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-white">Mon Compte</h1>
                 </div>
 
                 <!-- Navigation des tabs et contenu dans un seul conteneur -->
                 <div class="bg-white shadow-lg shadow-blue-100/50 rounded-t-xl">
-                    <nav class="flex space-x-8 px-6 border-b border-gray-200" aria-label="Tabs">
-                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600 hover:text-blue-700 flex items-center gap-2"
+                    <nav class="flex overflow-x-auto hide-scrollbar space-x-4 sm:space-x-8 px-4 sm:px-6 border-b border-gray-200" aria-label="Tabs">
+                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600 hover:text-blue-700 flex items-center gap-2 min-w-max"
                             data-tab="profile">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                             </svg>
-                            Informations personnelles
+                            <span class="hidden sm:inline">Informations personnelles</span>
+                            <span class="sm:hidden">Infos</span>
                         </button>
                         <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 flex items-center gap-2"
                             data-tab="orders">
