@@ -10,7 +10,8 @@ if (!isset($_SESSION['id_utilisateur'])) {
 }
 
 // Fonction pour récupérer les informations de l'utilisateur
-function getUserInfo($conn, $id_utilisateur) {
+function getUserInfo($conn, $id_utilisateur)
+{
     $stmt = $conn->prepare("SELECT nom, prenom, email, adresse, telephone FROM utilisateurs WHERE id_utilisateur = ?");
     $stmt->bind_param("i", $id_utilisateur);
     $stmt->execute();
@@ -62,22 +63,32 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
                 <!-- En-tête avec titre et bouton déconnexion -->
                 <div class="flex justify-between items-center mb-3">
                     <h1 class="text-3xl font-bold text-white">Mon Compte</h1>
-                    
+
                 </div>
 
                 <!-- Navigation des tabs et contenu dans un seul conteneur -->
                 <div class="bg-white shadow-lg shadow-blue-100/50 rounded-t-xl">
                     <nav class="flex space-x-8 px-6 border-b border-gray-200" aria-label="Tabs">
-                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600 hover:text-blue-700"
-                                data-tab="profile">
+                        <button class="tab-btn active whitespace-nowrap py-4 px-1 border-b-2 font-medium text-blue-600 border-blue-600 hover:text-blue-700 flex items-center gap-2"
+                            data-tab="profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
                             Informations personnelles
                         </button>
-                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                                data-tab="orders">
+                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 flex items-center gap-2"
+                            data-tab="orders">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>
                             Historique des commandes
                         </button>
-                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-                                data-tab="security">
+                        <button class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 flex items-center gap-2"
+                            data-tab="security">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                            </svg>
+
                             Sécurité
                         </button>
                     </nav>
@@ -166,7 +177,7 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
 
                 <!-- Tab Commandes -->
                 <div id="orders" class="tab-pane hidden p-8">
-                    <?php 
+                    <?php
                     $is_included_in_profile = true;
                     include 'commandes.php';
                     ?>
@@ -271,31 +282,31 @@ $user = getUserInfo($conn, $_SESSION['id_utilisateur']);
 
     <!-- Script pour la gestion du modal de déconnexion -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const modalDeconnexion = document.getElementById('modal-deconnexion');
-        const btnDeconnexion = document.getElementById('btn-deconnexion');
-        const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalDeconnexion = document.getElementById('modal-deconnexion');
+            const btnDeconnexion = document.getElementById('btn-deconnexion');
+            const btnCancelDeconnexion = document.getElementById('cancel-deconnexion');
 
-        if (btnDeconnexion && modalDeconnexion && btnCancelDeconnexion) {
-            // Ouvrir le modal
-            btnDeconnexion.addEventListener('click', function(e) {
-                e.preventDefault();
-                modalDeconnexion.classList.remove('hidden');
-            });
+            if (btnDeconnexion && modalDeconnexion && btnCancelDeconnexion) {
+                // Ouvrir le modal
+                btnDeconnexion.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modalDeconnexion.classList.remove('hidden');
+                });
 
-            // Fermer le modal
-            btnCancelDeconnexion.addEventListener('click', function() {
-                modalDeconnexion.classList.add('hidden');
-            });
-
-            // Fermer en cliquant en dehors
-            modalDeconnexion.addEventListener('click', function(e) {
-                if (e.target === modalDeconnexion) {
+                // Fermer le modal
+                btnCancelDeconnexion.addEventListener('click', function() {
                     modalDeconnexion.classList.add('hidden');
-                }
-            });
-        }
-    });
+                });
+
+                // Fermer en cliquant en dehors
+                modalDeconnexion.addEventListener('click', function(e) {
+                    if (e.target === modalDeconnexion) {
+                        modalDeconnexion.classList.add('hidden');
+                    }
+                });
+            }
+        });
     </script>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
