@@ -108,7 +108,7 @@ include './includes/_header.php';
 
   <div class="section-container relative px-4">
     <div class="flex items-center justify-between mb-4 mt-12">
-      <h2 class="text-2xl font-normal">Touts pour votre sports</h2>
+      <h2 class="text-2xl font-normal">Découvrez nos univers sportifs</h2>
       <div class="scroll-buttons hidden sm:hidden md:flex gap-2">
         <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@ include './includes/_header.php';
 
   <div class="section-container relative px-4">
     <div class="flex items-center justify-between mb-4 mt-12">
-      <h2 class="text-2xl font-normal">Collections</h2>
+      <h2 class="text-2xl font-normal">Trouvez votre style parmi nos collections</h2>
       <div class="scroll-buttons hidden sm:hidden md:flex gap-2">
         <button class="scroll-left-btn w-10 h-10 flex items-center justify-center bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors duration-200">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
