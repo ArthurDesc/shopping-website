@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialisation des champs éditables
     document.querySelectorAll('.editable').forEach(el => {
+        let isEditing = false; // Variable pour suivre l'état d'édition
+
         // Wrapper l'élément éditable dans un conteneur
         const wrapper = document.createElement('div');
         wrapper.className = 'editable-container';
@@ -55,62 +57,34 @@ document.addEventListener('DOMContentLoaded', () => {
         // Gestion du clic pour l'édition
         el.addEventListener('click', function(e) {
             e.preventDefault();
+            if (isEditing) return; // Si déjà en édition, ne rien faire
+            
+            isEditing = true; // Marquer comme en édition
             this.classList.add('active');
             const currentValue = this.textContent.trim();
-            const isTextarea = this.dataset.type === 'textarea';
             
             // Création du champ d'édition
-            const input = isTextarea 
+            const input = this.dataset.type === 'textarea' 
                 ? document.createElement('textarea')
                 : document.createElement('input');
             
             input.value = currentValue;
             input.type = this.dataset.type || 'text';
             input.className = `w-full px-3 py-2 bg-white border border-transparent rounded-lg`;
-            
-            // Ajout du gestionnaire de clic extérieur
+
+            // Gestionnaire de clic extérieur modifié
             const handleClickOutside = (event) => {
+                if (!isEditing) return; // Ne rien faire si pas en mode édition
                 if (!el.contains(event.target)) {
                     el.innerHTML = currentValue;
                     el.classList.remove('active');
+                    isEditing = false; // Marquer comme non éditable
                     document.removeEventListener('click', handleClickOutside);
                 }
             };
 
-            // Ajout du listener après un court délai pour éviter le déclenchement immédiat
-            setTimeout(() => {
-                document.addEventListener('click', handleClickOutside);
-            }, 0);
-
-            // Création des boutons de validation/annulation
-            const buttonsDiv = document.createElement('div');
-            buttonsDiv.className = 'flex justify-end gap-2 mt-2';
-
-            // Ajout des boutons (uniquement le bouton de validation)
-            buttonsDiv.innerHTML = `
-                <button class="save-btn px-3 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
-                </button>
-            `;
-
-            // Création d'un conteneur pour l'input et les boutons
-            const container = document.createElement('div');
-            container.className = 'flex items-center gap-2';
-
-            // Ajout de l'input et des boutons dans le conteneur
-            container.appendChild(input);
-            container.appendChild(buttonsDiv);
-
-            // Remplacement du contenu
-            this.innerHTML = '';
-            this.appendChild(container);
-
-            input.focus();
-
             // Gestion de la sauvegarde
-            buttonsDiv.querySelector('.save-btn').addEventListener('click', async () => {
+            const handleSave = async () => {
                 const newValue = input.value.trim();
                 const fieldName = el.dataset.name;
                 
@@ -133,7 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
                     
                     if (data.success) {
+                        isEditing = false; // Marquer comme non éditable
+                        document.removeEventListener('click', handleClickOutside);
                         el.innerHTML = newValue || (fieldName === 'telephone' || fieldName === 'adresse' ? 'Non renseigné' : '');
+                        el.classList.remove('active');
                         showToast('Modification enregistrée', 'success');
                         
                         if (fieldName === 'nom' || fieldName === 'prenom') {
@@ -143,10 +120,36 @@ document.addEventListener('DOMContentLoaded', () => {
                         throw new Error(data.message);
                     }
                 } catch (error) {
-                    el.innerHTML = originalContent;
+                    el.innerHTML = currentValue;
                     showToast(error.message || 'Erreur lors de la sauvegarde', 'error');
                 }
-            });
+            };
+
+            // Création des boutons
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'flex justify-end gap-2 mt-2';
+            buttonsDiv.innerHTML = `
+                <button class="save-btn px-3 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                </button>
+            `;
+
+            // Ajout des gestionnaires d'événements
+            buttonsDiv.querySelector('.save-btn').addEventListener('click', handleSave);
+            setTimeout(() => {
+                document.addEventListener('click', handleClickOutside);
+            }, 0);
+
+            // Mise en place de l'interface d'édition
+            const container = document.createElement('div');
+            container.className = 'flex items-center gap-2';
+            container.appendChild(input);
+            container.appendChild(buttonsDiv);
+            this.innerHTML = '';
+            this.appendChild(container);
+            input.focus();
         });
     });
 
