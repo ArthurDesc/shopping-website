@@ -454,7 +454,7 @@ foreach ($produits as $produit) {
     <div class="modal-background bg-white w-full max-w-md m-auto flex-col flex rounded-lg shadow-lg">
         <div class="p-6">
             <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
-            <!-- Ajoutez cette ligne pour le message d'erreur -->
+            <!-- Message d'erreur -->
             <div id="sizeError" class="text-red-500 text-sm mb-2 hidden"></div>
             <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
                 <!-- Les options seront ajoutées dynamiquement -->
@@ -463,20 +463,22 @@ foreach ($produits as $produit) {
                 <button id="cancelBtn" class="button-shadow w-full sm:flex-1 px-4 py-2 bg-gray-200 text-gray-700 text-base font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 mt-2 sm:mt-0">
                     Annuler
                 </button>
-                <div class="cart-add-button button-shadow" id="addToCartBtn" data-tooltip="<?php echo number_format($produit->getPrix(), 2); ?>€">
+                <!-- Version mobile du bouton (simple) -->
+                <button id="addToCartBtn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md sm:hidden">
+                    <span>Ajouter au panier</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                    </svg>
+                </button>
+                <!-- Version desktop du bouton (style original) -->
+                <div class="cart-add-button button-shadow hidden sm:block" id="addToCartBtnDesktop" data-tooltip="<?php echo number_format($produit->getPrix(), 2); ?>€">
                     <div class="cart-add-button-wrapper">
                         <div class="cart-add-button-text">Ajouter au panier</div>
                         <span class="cart-add-button-icon">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-cart2"
-                                viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
                                 <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                             </svg>
-                        </div>
+                        </span>
                     </div>
                 </div>
             </div>

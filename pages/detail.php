@@ -134,24 +134,25 @@ $collection = $categoryManager->getCollection($id_produit);
         </div>
     <?php endif; ?>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="bg-white p-4 rounded-lg">
+    <div class="container mx-auto px-4 py-4 sm:py-8">
+        <div class="bg-white p-4 rounded-lg shadow-sm">
             <!-- Contenu principal -->
             <div class="flex flex-col md:flex-row">
                 <!-- Icône de retour (visible uniquement sur mobile) -->
-                <div class="md:hidden mb-4">
-                    <a href="produit.php" class="text-black hover:text-blue-500 transition-colors duration-300">
+                <div class="block md:hidden mb-4 px-2">
+                    <a href="produit.php" class="inline-flex items-center text-gray-600 hover:text-blue-500 transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 back-arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
+                        <span class="ml-2 text-sm">Retour aux produits</span>
                     </a>
                 </div>
 
                 <!-- Conteneur pour l'icône de retour et l'image -->
-                <div class="flex md:w-1/3">
+                <div class="flex w-full md:w-1/3">
                     <!-- Icône de retour (visible uniquement sur desktop) -->
                     <div class="hidden md:flex md:items-start md:pr-4">
-                        <a href="produit.php" class="text-black hover:text-blue-500 transition-colors duration-300">
+                        <a href="produit.php" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 back-arrow-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
@@ -159,7 +160,7 @@ $collection = $categoryManager->getCollection($id_produit);
                     </div>
 
                     <!-- Image du produit -->
-                    <div class="flex-grow">
+                    <div class="flex-grow px-4 sm:px-0">
                         <div class="image-container aspect-[3/4] overflow-hidden rounded-lg max-w-xs mx-auto relative">
                             <img src="<?php echo htmlspecialchars($image_url); ?>"
                                 alt="<?php echo htmlspecialchars($produit['nom']); ?>"
@@ -171,7 +172,7 @@ $collection = $categoryManager->getCollection($id_produit);
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="mr-2">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
                                         </svg>
-                                        Modifier l'image
+                                        <span class="text-sm">Modifier l'image</span>
                                     </label>
                                     <input
                                         type="file"
@@ -186,7 +187,7 @@ $collection = $categoryManager->getCollection($id_produit);
                 </div>
 
                 <!-- Détails du produit -->
-                <div class="md:w-2/3 md:pl-6 flex flex-col justify-between space-y-2" x-data="{ 
+                <div class="w-full md:w-2/3 md:pl-6 flex flex-col justify-between space-y-4 mt-6 md:mt-0" x-data="{ 
                     editingTitle: false, 
                     title: '<?php echo addslashes(htmlspecialchars($produit['nom'])); ?>',
                     editingDescription: false, 
@@ -198,21 +199,40 @@ $collection = $categoryManager->getCollection($id_produit);
                     editingCollection: false,
                     collection: '<?php echo addslashes(htmlspecialchars($produit['collection'])); ?>'
                 }">
-                    <!-- Titre et Avis -->
-                    <div class="flex flex-col space-y-2">
-                        <div class="flex items-center justify-between">
+                    <!-- Titre, Prix et Avis -->
+                    <div class="flex flex-col space-y-3">
+                        <!-- Titre et Prix sur mobile -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                             <!-- Titre -->
                             <div class="flex items-center">
-                                <h2 class="text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
+                                <h2 class="text-2xl sm:text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
                                 <input x-show="editingTitle"
                                     x-model="title"
                                     @keydown.enter="editingTitle = false; updateTitle(title)"
                                     @keydown.escape="editingTitle = false"
-                                    class="text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none"
+                                    class="text-2xl sm:text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none w-full"
                                     type="text">
                                 <?php if ($isEditMode): ?>
                                     <button @click="editingTitle = !editingTitle" class="ml-2 text-gray-600 hover:text-blue-500">
-                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg class="w-5 h-5" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Prix -->
+                            <div class="flex items-center">
+                                <p class="text-xl sm:text-2xl font-bold text-blue-600" x-show="!editingPrice" x-text="price + ' €'"></p>
+                                <input x-show="editingPrice"
+                                    x-model="price"
+                                    @keydown.enter="editingPrice = false; updatePrice(price)"
+                                    @keydown.escape="editingPrice = false"
+                                    class="text-xl sm:text-2xl font-bold text-blue-600 border-b-2 border-blue-500 focus:outline-none"
+                                    type="text">
+                                <?php if ($isEditMode): ?>
+                                    <button @click="editingPrice = !editingPrice" class="ml-2 text-gray-600 hover:text-blue-500">
+                                        <svg class="w-5 h-5" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </button>
@@ -220,35 +240,19 @@ $collection = $categoryManager->getCollection($id_produit);
                             </div>
                         </div>
 
-                        <!-- Description et Prix -->
-                        <div class="flex justify-between items-start mt-2">
-                            <div class="flex-grow">
-                                <p class="text-gray-600 text-sm" x-show="!editingDescription" x-text="description"></p>
+                        <!-- Description -->
+                        <div class="mt-4 sm:mt-6">
+                            <div class="prose max-w-none">
+                                <p class="text-gray-600 text-sm sm:text-base" x-show="!editingDescription" x-text="description"></p>
                                 <textarea x-show="editingDescription"
                                     x-model="description"
                                     @keydown.enter="editingDescription = false; updateDescription(description)"
                                     @keydown.escape="editingDescription = false"
-                                    class="text-sm text-gray-600 w-full border-b-2 border-blue-500 focus:outline-none"
+                                    class="w-full text-sm sm:text-base text-gray-600 border-b-2 border-blue-500 focus:outline-none min-h-[100px]"
                                     rows="3"></textarea>
                                 <?php if ($isEditMode): ?>
-                                    <button @click="editingDescription = !editingDescription" class="text-gray-600 hover:text-blue-500">
-                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </button>
-                                <?php endif; ?>
-                            </div>
-                            <div class="ml-4 flex-shrink-0">
-                                <p class="text-2xl font-bold " x-show="!editingPrice" x-text="price + ' €'"></p>
-                                <input x-show="editingPrice"
-                                    x-model="price"
-                                    @keydown.enter="editingPrice = false; updatePrice(price)"
-                                    @keydown.escape="editingPrice = false"
-                                    class="text-3xl font-bold text-blue-600 border-b-2 border-blue-500 focus:outline-none"
-                                    type="text">
-                                <?php if ($isEditMode): ?>
-                                    <button @click="editingPrice = !editingPrice" class="text-gray-600 hover:text-blue-500">
-                                        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <button @click="editingDescription = !editingDescription" class="mt-2 text-gray-600 hover:text-blue-500">
+                                        <svg class="w-5 h-5" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M8.70837 3.16668H3.16671C2.74678 3.16668 2.34405 3.3335 2.04712 3.63043C1.75019 3.92736 1.58337 4.33009 1.58337 4.75002V15.8333C1.58337 16.2533 1.75019 16.656 2.04712 16.9529C2.34405 17.2499 2.74678 17.4167 3.16671 17.4167H14.25C14.67 17.4167 15.0727 17.2499 15.3696 16.9529C15.6666 16.656 15.8334 16.2533 15.8334 15.8333V10.2917M14.6459 1.97918C14.9608 1.66424 15.388 1.4873 15.8334 1.4873C16.2788 1.4873 16.7059 1.66424 17.0209 1.97918C17.3358 2.29413 17.5128 2.72128 17.5128 3.16668C17.5128 3.61208 17.3358 4.03924 17.0209 4.35418L9.50004 11.875L6.33337 12.6667L7.12504 9.50002L14.6459 1.97918Z" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </button>
@@ -341,7 +345,7 @@ $collection = $categoryManager->getCollection($id_produit);
                                                 <?php endif; ?>
                                             </div>
                                         </div>
-                                        <div class="quantity-container mb-2 md:mb-0 w-auto flex items-center">
+                                        <div class="quantity-container flex justify-end md:justify-start mb-2 md:mb-0 w-full md:w-auto">
                                             <label for="quantite" class="quantity-label mr-3">Quantité</label>
                                             <select id="quantite" name="quantite" class="quantity-select" required>
                                                 <?php for ($i = 1; $i <= min($produit['stock'], 10); $i++): ?>
@@ -415,7 +419,7 @@ $collection = $categoryManager->getCollection($id_produit);
                         <div class="flex flex-col space-y-4">
                             <!-- Collection -->
                             <div class="flex items-center">
-                                <span class="font-semibold">Collection:</span>
+                                <span class="font-semibold text-blue-500">Collection:</span>
                                 <?php if ($isEditMode): ?>
                                     <div class="ml-2" x-data="{ 
                                         editingCollection: false,
@@ -462,7 +466,7 @@ $collection = $categoryManager->getCollection($id_produit);
 
                             <!-- Affichage des catégories -->
                             <div class="flex items-center">
-                                <span class="font-semibold">Catégories:</span>
+                                <span class="font-semibold text-blue-500">Catégories:</span>
                                 <?php if ($isEditMode): ?>
                                     <div id="edit-categories-container" class="ml-2 w-full"
                                         data-categories='<?php echo json_encode(array_map(function ($cat) {
