@@ -73,7 +73,13 @@
   width: 100%; /* L'animation s'étend jusqu'au bout de l'input */
 }
 
-
+  /* Ajoutez ce code après les styles existants des flèches */
+  @media (max-width: 640px) {
+    .swiper-button-next,
+    .swiper-button-prev {
+      display: none;
+    }
+  }
 
 
 
