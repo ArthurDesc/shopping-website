@@ -38,6 +38,8 @@
 <script src="<?php echo url('assets/js/toast.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/wishlist.js'); ?>" defer></script>
 <script src="https://kit.fontawesome.com/5ea815c1d0.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'detail.php') !== false): ?>
@@ -68,7 +70,6 @@
 <?php if (strpos($_SERVER['REQUEST_URI'], 'profil.php') !== false): ?>
   <script src="<?php echo BASE_URL; ?>assets/js/profil.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php endif; ?>
 
 </body>

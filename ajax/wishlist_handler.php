@@ -57,6 +57,14 @@ try {
             ]);
             break;
             
+        case 'clear_all':
+            $success = $wishlistManager->clearAllWishlists($id_utilisateur);
+            echo json_encode([
+                'success' => $success,
+                'message' => $success ? 'Liste de souhaits vidée avec succès' : 'Erreur lors de la suppression complète'
+            ]);
+            break;
+            
         default:
             throw new Exception('Action non reconnue');
     }

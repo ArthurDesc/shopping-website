@@ -114,4 +114,53 @@ function showToast(message, type = 'success') {
             toast.style.opacity = '0';
         }, 3000);
     }
+}
+
+function clearAllWishlists() {
+    Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: "Voulez-vous vider votre liste de favoris ?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, tout supprimer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/shopping-website/ajax/wishlist_handler.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'clear_all'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Liste de souhaits vidée avec succès', 'success');
+                    updateWishlistCount();
+                    // Animation de suppression
+                    const wishlistContainer = document.querySelector('.grid');
+                    if (wishlistContainer) {
+                        wishlistContainer.style.transition = 'all 0.5s ease';
+                        wishlistContainer.style.opacity = '0';
+                        wishlistContainer.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            location.reload();
+                        }, 500);
+                    }
+                } else {
+                    showToast(data.message || 'Erreur lors de la suppression', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                showToast('Une erreur est survenue', 'error');
+            });
+        }
+    });
 } 

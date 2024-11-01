@@ -38,4 +38,10 @@ class WishlistManager {
         $stmt->execute();
         return $stmt->get_result()->num_rows > 0;
     }
+
+    public function clearAllWishlists() {
+        $sql = "DELETE FROM wishlist";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute();
+    }
 }

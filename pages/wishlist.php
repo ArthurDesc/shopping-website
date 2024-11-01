@@ -71,7 +71,20 @@ while ($item = $wishlistItems->fetch_assoc()) {
 
     <!-- Le reste de votre contenu -->
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-6">Ma Liste de Souhaits</h1>
+        <!-- Header avec titre et bouton -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Ma Liste de Souhaits</h1>
+            <?php if (!empty($produits)): ?>
+                <button onclick="clearAllWishlists()" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                    Tout supprimer
+                </button>
+            <?php endif; ?>
+        </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($produits as $produit): ?>
@@ -149,6 +162,24 @@ while ($item = $wishlistItems->fetch_assoc()) {
                     body: JSON.stringify({
                         action: 'remove',
                         id_produit: id_produit
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                });
+        }
+
+        function clearAllWishlists() {
+            fetch('/shopping-website/ajax/wishlist_handler.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'clear'
                     })
                 })
                 .then(response => response.json())
