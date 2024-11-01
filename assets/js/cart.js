@@ -26,6 +26,45 @@ document.addEventListener('DOMContentLoaded', function() {
             await handleRemoveItem(productId, this);
         });
     });
+
+    // Animation d'apparition des éléments du panier
+    const cartItems = document.querySelectorAll('.cart-item');
+    cartItems.forEach((item, index) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            item.style.transition = 'all 0.5s ease-out';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+        }, index * 100); // Délai progressif pour chaque élément
+    });
+
+    // Animation du résumé du panier
+    const cartSummary = document.querySelector('.bg-gray-50');
+    if (cartSummary) {
+        cartSummary.style.opacity = '0';
+        cartSummary.style.transform = 'translateX(20px)';
+        
+        setTimeout(() => {
+            cartSummary.style.transition = 'all 0.5s ease-out';
+            cartSummary.style.opacity = '1';
+            cartSummary.style.transform = 'translateX(0)';
+        }, cartItems.length * 100); // Apparaît après les articles
+    }
+
+    // Animation pour le panier vide
+    const emptyCart = document.querySelector('.text-center');
+    if (emptyCart) {
+        emptyCart.style.opacity = '0';
+        emptyCart.style.transform = 'scale(0.9)';
+        
+        setTimeout(() => {
+            emptyCart.style.transition = 'all 0.5s ease-out';
+            emptyCart.style.opacity = '1';
+            emptyCart.style.transform = 'scale(1)';
+        }, 100);
+    }
 });
 
 async function handleQuantityChange(form, action) {
@@ -180,4 +219,6 @@ function updateCartUI(data) {
         location.reload(); // Recharger pour afficher le panier vide
     }
 }
+
+
 

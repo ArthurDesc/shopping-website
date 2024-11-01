@@ -41,10 +41,7 @@
 <script src="https://kit.fontawesome.com/5ea815c1d0.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-
-<?php if (strpos($_SERVER['REQUEST_URI'], 'detail.php') !== false): ?>
-  <!-- À ajouter dans la section head ou avant la fermeture du body -->
+<?php if (basename($_SERVER['PHP_SELF']) === 'detail.php'): ?>
   <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
   <script src="<?php echo url('assets/js/avis.js'); ?>" defer></script>
   <script type="module" src="<?php echo url('assets/js/comments.js'); ?>"></script>
@@ -53,9 +50,7 @@
   <script src="<?php echo url('assets/js/backoffice/categorySelector.js'); ?>" defer></script>
 <?php endif; ?>
 
-
-
-<?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
+<?php if (basename($_SERVER['PHP_SELF']) === 'produit.php'): ?>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/js/dropdown.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/js/productFilter.js"></script>
@@ -65,7 +60,7 @@
   <script src="<?php echo url('assets/js/productFilterMobile.js'); ?>" defer></script>
 <?php endif; ?>
 
-<?php if (strpos($_SERVER['REQUEST_URI'], 'profil.php') !== false): ?>
+<?php if (basename($_SERVER['PHP_SELF']) === 'profil.php'): ?>
   <script src="<?php echo BASE_URL; ?>assets/js/profil.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <?php endif; ?>

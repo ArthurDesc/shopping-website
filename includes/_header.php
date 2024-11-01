@@ -84,7 +84,6 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
   
 
   <!-- Scripts -->
-  <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/vanilla-editable@1.0.3/dist/vanilla-editable.min.js"></script>
 

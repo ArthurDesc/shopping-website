@@ -43,41 +43,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Gestionnaire pour le bouton Ajouter au panier
-    document.getElementById('addToCartBtn').addEventListener('click', function() {
-        const selectedSize = productSize.value;
-        
-        if (!selectedSize) {
-            sizeError.textContent = 'Veuillez choisir une taille';
-            sizeError.classList.remove('hidden');
-            return;
-        }
-
-        // Cacher le message d'erreur
-        sizeError.classList.add('hidden');
-
-        // Utiliser FormData pour la cohérence
-        const formData = new FormData();
-        formData.append('id_produit', currentProductId);
-        formData.append('taille', selectedSize);
-        formData.append('quantite', '1');
-
-        fetch('/shopping-website/ajax/add_to_cart.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                modal.classList.remove('active');
-                updateCartUI(data.cartCount);
-                showToast('Article ajouté au panier', 'success');
-            } else {
-                showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            showToast('Une erreur s\'est produite', 'error');
+    document.getElementById('addToCartBtn').addEventListener('click', (e) => {
+        handleAddToCart(e, {
+            productId: currentProductId,
+            size: productSize.value,
+            button: e.target,
+            onSuccess: () => modal.classList.remove('active')
         });
     });
 

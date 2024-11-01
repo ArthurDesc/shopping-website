@@ -11,6 +11,7 @@ include '../includes/_header.php';
 ?>
 
 <main class="flex-grow container mx-auto px-4 py-8 mt-16">
+    
     <?php
     $total = 0;
     $contenuPanier = $panier->getContenu();
@@ -142,7 +143,5 @@ include '../includes/_header.php';
 </main>
 
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="../assets/js/cart.js"></script>
 
 <?php include '../includes/_footer.php'; ?>
