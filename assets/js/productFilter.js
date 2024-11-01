@@ -6,22 +6,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleInitialVisibility() {
         if (!productContainer) return;
         
-        const hasFilters = urlParams.has('categories') || 
-                          urlParams.has('marques') || 
-                          urlParams.has('collections');
-                          
-        // Si des filtres sont présents, attendre leur application
-        if (hasFilters) {
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
             setTimeout(() => {
-                productContainer.style.opacity = '1';
-                applyFiltersFromURL();
-            }, 100);
-        } else {
-            // Sinon, afficher directement
-            setTimeout(() => {
-                productContainer.style.opacity = '1';
-            }, 50);
-        }
+                card.style.transition = 'all 0.5s ease-out';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
     }
 
     // Ajouter ces variables au début
@@ -69,7 +64,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function applyFilters() {
-            productContainer.style.opacity = '0';
+            const productCards = document.querySelectorAll('.product-card');
+            
+            // Animation de sortie
+            productCards.forEach(card => {
+                card.style.transition = 'all 0.3s ease-out';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+            });
             
             setTimeout(() => {
                 productList.filter(function(item) {
@@ -85,18 +87,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 checkVisibleProducts();
-                productContainer.style.opacity = '1';
-            }, 50);
+
+                // Animation d'entrée pour les produits visibles
+                const visibleCards = productList.visibleItems.map(item => item.elm);
+                visibleCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.5s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100); // Délai progressif pour chaque carte
+                });
+            }, 300);
         }
 
         function checkVisibleProducts() {
             const visibleProducts = productList.visibleItems.length;
             if (visibleProducts === 0) {
-                productContainer.classList.add('hidden');
-                noResults.classList.remove('hidden');
+                // Animation de sortie du container
+                productContainer.style.transition = 'all 0.3s ease-out';
+                productContainer.style.opacity = '0';
+                productContainer.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    productContainer.classList.add('hidden');
+                    noResults.classList.remove('hidden');
+                    // Animation d'entrée du message "pas de résultats"
+                    noResults.style.opacity = '0';
+                    noResults.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        noResults.style.transition = 'all 0.5s ease-out';
+                        noResults.style.opacity = '1';
+                        noResults.style.transform = 'translateY(0)';
+                    }, 100);
+                }, 300);
             } else {
                 productContainer.classList.remove('hidden');
                 noResults.classList.add('hidden');
+                
+                // Animation de réapparition du container
+                productContainer.style.transition = 'all 0.5s ease-out';
+                productContainer.style.opacity = '1';
+                productContainer.style.transform = 'translateY(0)';
             }
         }
 
@@ -302,10 +334,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Réinitialiser l'URL
             window.history.pushState({}, '', window.location.pathname);
+
+            // Animation de réinitialisation
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                card.style.transition = 'all 0.3s ease-out';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+            });
+
+            setTimeout(() => {
+                // ... réinitialisation des filtres ...
+
+                // Animation d'entrée des produits
+                productCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.5s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            }, 300);
         });
 
         // Ajouter la vérification après la recherche
-        productList.on('searchComplete', checkVisibleProducts);
+        productList.on('searchComplete', () => {
+            const visibleItems = productList.visibleItems.map(item => item.elm);
+            const hiddenItems = productList.matchingItems
+                .filter(item => !visibleItems.includes(item.elm))
+                .map(item => item.elm);
+
+            // Animation de sortie pour les éléments cachés
+            hiddenItems.forEach(item => {
+                item.style.transition = 'all 0.3s ease-out';
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+            });
+
+            // Animation d'entrée pour les éléments visibles
+            visibleItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease-out';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            checkVisibleProducts();
+        });
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de List.js:', error);
         // En cas d'erreur, afficher quand même les produits
