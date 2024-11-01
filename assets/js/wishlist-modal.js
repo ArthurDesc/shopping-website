@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 closeModal();
-                updateCartCount(data.count);
+                updateCartCount(data.cartCount);
                 showToast('Article ajouté au panier', 'success');
             } else {
                 showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
@@ -108,8 +108,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const cartCountElement = document.getElementById('cart-count');
         if (cartCountElement) {
             cartCountElement.textContent = count;
-            cartCountElement.classList.remove('bg-red-600');
-            cartCountElement.classList.add('bg-green-600');
+            
+            // Mise à jour de la couleur du badge
+            if (count > 0) {
+                cartCountElement.classList.remove('bg-red-600');
+                cartCountElement.classList.add('bg-green-600');
+            }
         }
     }
 
