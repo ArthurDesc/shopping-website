@@ -60,8 +60,6 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
 
   <!-- Ressources locales -->
   <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
-  <link rel="stylesheet" href="<?php echo url('assets/css/toast.css'); ?>">
-  <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
   <?php include __DIR__ . '/../includes/_fonts.php'; ?>
   
   <!-- CSS spécifiques aux pages -->
@@ -74,6 +72,9 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
   <?php endif; ?>
   <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/detail.css')); ?>">
+  <?php endif; ?>
+  <?php if (basename($_SERVER['PHP_SELF']) == 'wishlist.php'): ?>
+    <link rel="stylesheet" href="<?php echo url('assets/css/wishlist.css?v=' . filemtime(__DIR__ . '/../assets/css/wishlist.css')); ?>">
   <?php endif; ?>
   
   <!-- CSS principaux -->
