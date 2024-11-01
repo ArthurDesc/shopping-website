@@ -31,7 +31,7 @@ require_once '../includes/_header.php';
     <h2 class="text-2xl font-semibold text-gray-900 mb-6">Mes commandes</h2>
 
         <?php if (empty($commandes)): ?>
-            <div class="text-center p-6">
+            <div class="text-center p-6 min-h-[50vh] flex flex-col justify-center items-center">
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">Aucune commande</h2>
                 <p class="text-gray-700 mb-6">Vous n'avez pas encore passé de commande.</p>
                 <div class="flex flex-col items-center space-y-4">

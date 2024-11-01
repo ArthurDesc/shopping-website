@@ -22,6 +22,7 @@ function initWishlistButtons() {
 
 function handleWishlistToggle(checkbox, productId) {
     const action = checkbox.checked ? 'add' : 'remove';
+    const productCard = checkbox.closest('.product-card');
     
     fetch('/shopping-website/ajax/wishlist_handler.php', {
         method: 'POST',
@@ -38,8 +39,35 @@ function handleWishlistToggle(checkbox, productId) {
         if (data.success) {
             showToast(data.message, 'success');
             updateWishlistCount();
+            
+            // Si on est sur la page wishlist et qu'on retire un produit
+            if (action === 'remove' && window.location.pathname.includes('wishlist.php')) {
+                // Animation de suppression
+                productCard.style.transition = 'all 0.5s ease';
+                productCard.style.opacity = '0';
+                productCard.style.transform = 'translateX(100px)';
+                
+                setTimeout(() => {
+                    productCard.remove();
+                    
+                    // Vérifier si la liste est vide
+                    const remainingProducts = document.querySelectorAll('.product-card');
+                    if (remainingProducts.length === 0) {
+                        const mainContainer = document.querySelector('main .container');
+                        mainContainer.innerHTML = `
+                            <div class="text-center p-6">
+                                <h2 class="text-2xl font-bold mb-4 text-blue-400">Liste de favoris vide !</h2>
+                                <p class="text-gray-700 mb-6">Votre liste de favoris est actuellement vide.</p>
+                                <div class="flex flex-col items-center space-y-4">
+                                    <a href="produit.php" class="btn btn-small">Découvrir nos produits</a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }, 500);
+            }
         } else {
-            checkbox.checked = !checkbox.checked; // Rétablir l'état précédent
+            checkbox.checked = !checkbox.checked;
             if (data.redirect) {
                 window.location.href = data.redirect;
             } else {

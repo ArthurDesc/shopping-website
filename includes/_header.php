@@ -62,6 +62,10 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
   <link rel="icon" type="image/png" href="<?php echo url('assets/images/favicon.png'); ?>">
   <?php include __DIR__ . '/../includes/_fonts.php'; ?>
   
+  <!-- CSS principaux -->
+  <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
+  <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
+  
   <!-- CSS spécifiques aux pages -->
   <link rel="stylesheet" href="<?php echo url('assets/css/panier.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
   <?php if ($isProfilPage): ?>
@@ -77,9 +81,7 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
     <link rel="stylesheet" href="<?php echo url('assets/css/wishlist.css?v=' . filemtime(__DIR__ . '/../assets/css/wishlist.css')); ?>">
   <?php endif; ?>
   
-  <!-- CSS principaux -->
-  <link rel="stylesheet" href="<?php echo url('assets/css/main.css?v=' . filemtime(__DIR__ . '/../assets/css/main.css')); ?>">
-  <link rel="stylesheet" href="<?php echo url('assets/css/responsive.css?v=' . filemtime(__DIR__ . '/../assets/css/responsive.css')); ?>">
+  
 
   <!-- Scripts -->
   <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>

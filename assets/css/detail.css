@@ -1,3 +1,7 @@
+body {
+  background-color: #ffffff;
+}
+
 input[type="radio"]:checked + span {
   border-color: #3B82F6;
   background-color: #EFF6FF;
