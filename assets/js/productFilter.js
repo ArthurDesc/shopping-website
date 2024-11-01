@@ -7,16 +7,37 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!productContainer) return;
         
         const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
+        const hasFilters = window.location.search.includes('categories') || 
+                          window.location.search.includes('marques') || 
+                          window.location.search.includes('collections');
+
+        // Si des filtres sont présents, masquer d'abord tous les produits
+        if (hasFilters) {
+            productCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+            });
             
+            // Attendre que List.js ait appliqué les filtres
             setTimeout(() => {
-                card.style.transition = 'all 0.5s ease-out';
+                // Animer uniquement les produits visibles
+                productCards.forEach((card, index) => {
+                    if (card.style.display !== 'none') {
+                        setTimeout(() => {
+                            card.style.transition = 'all 0.5s ease-out';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            }, 300); // Attendre que les filtres soient appliqués
+        } else {
+            // Sans filtres, afficher directement
+            productCards.forEach(card => {
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
-            }, index * 100);
-        });
+            });
+        }
     }
 
     // Ajouter ces variables au début

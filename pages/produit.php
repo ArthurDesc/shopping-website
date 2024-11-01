@@ -403,22 +403,8 @@ foreach ($produits as $produit) {
                 </div>
 
                 <!-- Container pour les produits -->
-                <div class="list grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 opacity-0 transition-opacity duration-300"
-                     x-data="{ loaded: false }"
-                     x-init="() => {
-                         $nextTick(() => {
-                             // Si des filtres sont présents dans l'URL
-                             if (window.location.search.includes('categories') || 
-                                 window.location.search.includes('marques') || 
-                                 window.location.search.includes('collections')) {
-                                 // Attendre que les filtres soient appliqués
-                                 setTimeout(() => loaded = true, 100);
-                             } else {
-                                 // Sinon, afficher directement
-                                 loaded = true;
-                             }
-                         });
-                     }"
+                <div class="list grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-opacity duration-300"
+                     x-data="{ loaded: true }"
                      :class="{ 'opacity-100': loaded }">
                     <?php foreach ($produits as $produit): ?>
                         <div class="product-card list-item bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full"
