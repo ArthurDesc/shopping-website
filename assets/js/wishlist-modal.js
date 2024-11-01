@@ -37,9 +37,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Gestionnaire pour le bouton Ajouter au panier
-    document.getElementById('addToCartBtn').addEventListener('click', handleAddToCart);
-    document.getElementById('addToCartBtnMobile').addEventListener('click', handleAddToCart);
+    // Gestionnaire pour les boutons Ajouter au panier (desktop et mobile)
+    const addToCartBtnDesktop = document.getElementById('addToCartBtn');
+    const addToCartBtnMobile = document.getElementById('addToCartBtnMobile');
+
+    if (addToCartBtnDesktop) {
+        addToCartBtnDesktop.addEventListener('click', handleAddToCart);
+    }
+
+    if (addToCartBtnMobile) {
+        addToCartBtnMobile.addEventListener('click', handleAddToCart);
+    }
 
     function handleAddToCart() {
         const selectedSize = productSize.value;
@@ -52,18 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         sizeError.classList.add('hidden');
 
-        fetch('/shopping-website/ajax/cart_handler.php', {
+        const formData = new FormData();
+        formData.append('id_produit', currentProductId);
+        formData.append('taille', selectedSize);
+        formData.append('quantite', '1');
+
+        fetch('/shopping-website/ajax/add_to_cart.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'add',
-                id_produit: currentProductId,
-                taille: selectedSize,
-                quantite: 1,
-                prix: currentProductPrice
-            })
+            body: formData
         })
         .then(response => response.json())
         .then(data => {

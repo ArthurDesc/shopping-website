@@ -54,7 +54,7 @@ while ($item = $wishlistItems->fetch_assoc()) {
                         </svg>
                     </button>
                     <!-- Version desktop du bouton -->
-                    <div id="addToCartBtn" class="cart-add-button button-shadow hidden sm:block" data-tooltip="<?= $produit->formatPrix() ?>">
+                    <div id="addToCartBtn" class="cart-add-button button-shadow hidden sm:block" data-tooltip="">
                         <div class="cart-add-button-wrapper">
                             <div class="cart-add-button-text">Ajouter au panier</div>
                             <span class="cart-add-button-icon">
