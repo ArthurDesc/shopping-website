@@ -262,5 +262,24 @@ input:disabled {
     stroke: white;
   }
   
+  .tab-pane {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .tab-pane:not(.hidden) {
+    animation: slideIn 0.3s ease-in-out;
+  }
+
+  @keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+  }
+  
 
   

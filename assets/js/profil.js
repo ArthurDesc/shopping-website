@@ -274,24 +274,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Retirer la classe active de tous les boutons
+            const targetId = button.getAttribute('data-tab');
+            const targetPane = document.getElementById(targetId);
+            
+            // Animation de sortie pour le tab actif
+            tabPanes.forEach(pane => {
+                if (!pane.classList.contains('hidden')) {
+                    pane.style.transition = 'all 0.3s ease-in-out';
+                    pane.style.opacity = '0';
+                    pane.style.transform = 'translateX(-20px)';
+                    
+                    setTimeout(() => {
+                        pane.classList.add('hidden');
+                        
+                        // Animation d'entrée pour le nouveau tab
+                        targetPane.classList.remove('hidden');
+                        targetPane.style.opacity = '0';
+                        targetPane.style.transform = 'translateX(20px)';
+                        
+                        requestAnimationFrame(() => {
+                            targetPane.style.opacity = '1';
+                            targetPane.style.transform = 'translateX(0)';
+                        });
+                    }, 300);
+                }
+            });
+
+            // Mise à jour des classes des boutons
             tabButtons.forEach(btn => {
                 btn.classList.remove('active', 'text-blue-600', 'border-blue-600');
                 btn.classList.add('text-gray-500', 'border-transparent');
             });
-
-            // Ajouter la classe active au bouton cliqué
             button.classList.add('active', 'text-blue-600', 'border-blue-600');
             button.classList.remove('text-gray-500', 'border-transparent');
-
-            // Cacher tous les contenus
-            tabPanes.forEach(pane => {
-                pane.classList.add('hidden');
-            });
-
-            // Afficher le contenu correspondant
-            const tabId = button.getAttribute('data-tab');
-            document.getElementById(tabId).classList.remove('hidden');
         });
+    });
+
+    // Ajoutez ces styles par défaut aux tabs
+    document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.style.transition = 'all 0.3s ease-in-out';
+        if (!pane.classList.contains('hidden')) {
+            pane.style.opacity = '1';
+            pane.style.transform = 'translateX(0)';
+        }
     });
 });
