@@ -72,16 +72,15 @@
 
 /* Styles pour l'effet de survol des articles */
 .product-card {
-  transition: all 0.3s ease;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  will-change: opacity, transform;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
 .product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .product-card img {
@@ -913,6 +912,7 @@ input[type="radio"] + span {
 .list, .product-card {
     backface-visibility: hidden;
     transform: translateZ(0);
+    perspective: 1000px;
     -webkit-font-smoothing: antialiased;
 }
 

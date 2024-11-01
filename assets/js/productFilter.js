@@ -11,28 +11,24 @@ document.addEventListener('DOMContentLoaded', function() {
                           window.location.search.includes('marques') || 
                           window.location.search.includes('collections');
 
-        // Si des filtres sont présents, masquer d'abord tous les produits
         if (hasFilters) {
             productCards.forEach(card => {
                 card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
+                card.style.transform = 'translateY(30px)';
             });
             
-            // Attendre que List.js ait appliqué les filtres
             setTimeout(() => {
-                // Animer uniquement les produits visibles
                 productCards.forEach((card, index) => {
                     if (card.style.display !== 'none') {
                         setTimeout(() => {
-                            card.style.transition = 'all 0.5s ease-out';
+                            card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
                             card.style.opacity = '1';
                             card.style.transform = 'translateY(0)';
-                        }, index * 100);
+                        }, index * 80);
                     }
                 });
-            }, 300); // Attendre que les filtres soient appliqués
+            }, 300);
         } else {
-            // Sans filtres, afficher directement
             productCards.forEach(card => {
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
