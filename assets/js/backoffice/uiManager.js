@@ -49,9 +49,68 @@ let _UIManager = (function() {
         }
     }
 
+    function loadContent(section) {
+        // Sélectionner tous les liens
+        const allLinks = document.querySelectorAll('[id$="-link"], [id$="-link-desktop"]');
+        allLinks.forEach(link => link.classList.remove('active-tab'));
+
+        // Ajouter la classe active aux liens correspondants
+        document.querySelector(`#${section}-link}`)?.classList.add('active-tab');
+        document.querySelector(`#${section}-link-desktop}`)?.classList.add('active-tab');
+
+        // Récupérer le contenu actuel
+        const contentArea = document.getElementById('content-area');
+        const currentContent = contentArea.firstElementChild;
+
+        // Animer la sortie du contenu actuel
+        if (currentContent) {
+            currentContent.classList.add('leaving');
+            currentContent.classList.remove('active');
+        }
+
+        // Charger le nouveau contenu
+        fetch(`${BASE_URL}admin/content/${section}.php`)
+            .then(response => response.text())
+            .then(html => {
+                // Créer un conteneur pour le nouveau contenu
+                const newContent = document.createElement('div');
+                newContent.className = 'tab-content';
+                newContent.innerHTML = html;
+
+                // Si il y a un contenu actuel, le supprimer après l'animation
+                if (currentContent) {
+                    setTimeout(() => {
+                        currentContent.remove();
+                        // Ajouter et animer le nouveau contenu
+                        contentArea.appendChild(newContent);
+                        // Force un reflow
+                        newContent.offsetHeight;
+                        newContent.classList.add('active');
+                    }, 300);
+                } else {
+                    // Ajouter directement le nouveau contenu s'il n'y en a pas
+                    contentArea.appendChild(newContent);
+                    // Force un reflow
+                    newContent.offsetHeight;
+                    newContent.classList.add('active');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement du contenu:', error);
+                showToast('Erreur lors du chargement du contenu', 'error');
+            });
+    }
+
+    // Ajouter cette fonction pour initialiser le contenu par défaut
+    document.addEventListener('DOMContentLoaded', () => {
+        // Charger le contenu des articles par défaut
+        loadContent('articles');
+    });
+
     return {
         setupCategorySearch: setupCategorySearch,
-        setupDropdown: setupDropdown
+        setupDropdown: setupDropdown,
+        loadContent: loadContent
     };
 })();
 
@@ -61,6 +120,7 @@ window.UIManager = _UIManager;
 console.log("UIManager initialisé :", window.UIManager);
 console.log("setupCategorySearch disponible :", typeof window.UIManager.setupCategorySearch === 'function');
 console.log("setupDropdown disponible :", typeof window.UIManager.setupDropdown === 'function');
+console.log("loadContent disponible :", typeof window.UIManager.loadContent === 'function');
 
 /*
 window.UIManager = {

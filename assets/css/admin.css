@@ -81,3 +81,115 @@ select {
   select option {
     cursor: pointer;
   }
+
+/* Animation pour les liens de navigation */
+#articles-link-desktop,
+#categories-link-desktop,
+#articles-link,
+#categories-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Ligne d'indication sous le lien actif */
+#articles-link-desktop::after,
+#categories-link-desktop::after,
+#articles-link::after,
+#categories-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #3B82F6;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+/* Animation au hover */
+#articles-link-desktop:hover::after,
+#categories-link-desktop:hover::after,
+#articles-link:hover::after,
+#categories-link:hover::after {
+    width: 100%;
+}
+
+/* Style pour le tab actif */
+.active-tab {
+    background-color: #E5E7EB;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.active-tab::after {
+    width: 100% !important;
+}
+
+/* Animation du contenu */
+#content-area > div {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Styles pour l'animation des tabs */
+.tab-content {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease-out;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Animation pour le contenu qui sort */
+.tab-content.leaving {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+/* Style pour le conteneur principal */
+#content-area {
+    position: relative;
+    min-height: 400px; /* Ajustez selon vos besoins */
+}
+
+/* Animation pour les liens */
+#articles-link-desktop,
+#categories-link-desktop,
+#articles-link,
+#categories-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Indicateur actif */
+.active-tab {
+    background-color: #E5E7EB;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Ligne d'indication */
+.nav-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: #3B82F6;
+    transition: all 0.3s ease;
+}

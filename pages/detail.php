@@ -221,12 +221,12 @@ $collection = $categoryManager->getCollection($id_produit);
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                             <!-- Titre -->
                             <div class="flex items-center">
-                                <h2 class="text-2xl sm:text-3xl montserrat-bold" x-show="!editingTitle" x-text="title"></h2>
+                                <h2 class="text-2xl sm:text-3xl montserrat-bold text-blue-600" x-show="!editingTitle" x-text="title"></h2>
                                 <input x-show="editingTitle"
                                     x-model="title"
                                     @keydown.enter="editingTitle = false; updateTitle(title)"
                                     @keydown.escape="editingTitle = false"
-                                    class="text-2xl sm:text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none w-full"
+                                    class="text-2xl sm:text-3xl montserrat-bold border-b-2 border-blue-500 focus:outline-none w-full text-blue-600"
                                     type="text">
                                 <?php if ($isEditMode): ?>
                                     <button @click="editingTitle = !editingTitle" class="ml-2 text-gray-600 hover:text-blue-500">
