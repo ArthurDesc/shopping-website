@@ -64,9 +64,20 @@ include '../includes/_header.php';
                                 }
                     ?>
                                 <div class="cart-item flex items-center bg-white border border-gray-100 rounded-2xl h-32 shadow-md hover:shadow-lg transition-shadow duration-200">
-                                    <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="h-32 w-32 object-cover rounded-l-2xl">
+                                    <!-- Lien sur l'image -->
+                                    <a href="detail.php?id=<?= $product['id_produit'] ?>" class="h-32 w-32">
+                                        <img src="../assets/images/produits/<?= $img ?>" 
+                                             alt="<?= $nom ?>" 
+                                             class="h-full w-full object-cover rounded-l-2xl">
+                                    </a>
                                     <div class="flex-grow pl-6">
-                                        <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
+                                        <!-- Lien sur le nom -->
+                                        <a href="detail.php?id=<?= $product['id_produit'] ?>" 
+                                           class="inline-block">
+                                            <h3 class="font-semibold hover:text-blue-600 transition-colors duration-200">
+                                                <?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?>
+                                            </h3>
+                                        </a>
                                         <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
                                         <form method="post" action="panier.php" class="flex items-center mt-2" data-stock="<?= $product['stock'] ?>">
                                             <input type="hidden" name="id_produit" value="<?= $id ?>"> <?php if ($taille): ?>
@@ -79,7 +90,8 @@ include '../includes/_header.php';
                                             </div>
                                         </form>
                                     </div>
-                                    <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4 pr-6">
+                                    <a href="panier.php?del=<?= urlencode($key); ?>" 
+                                       class="text-red-500 hover:text-red-700 ml-4 pr-6">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
