@@ -175,7 +175,17 @@ foreach ($produits as $produit) {
 <main class="container mx-auto px-4 mt-2">
     <div class="flex flex-col md:flex-row relative">
         <!-- Filtres (optimisés pour la version mobile et desktop) -->
-        <div id="filterForm" x-data="{ openTab: null }" class="fixed md:static inset-0 bg-gradient-to-b from-blue-400 to-blue-600 z-[1000] transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:w-1/4 md:h-fit md:z-auto overflow-y-auto">
+        <div id="filterForm" 
+             x-data="{ openTab: null, isReady: false }" 
+             x-init="setTimeout(() => { isReady = true }, 50)"
+             :class="{ 'is-ready': isReady }"
+             class="fixed md:block inset-0 bg-gradient-to-b from-blue-400 to-blue-600 z-[1000] md:static md:relative md:w-1/4 md:h-fit md:z-auto overflow-y-auto"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform translate-y-full"
+             x-transition:enter-end="opacity-100 transform translate-y-0"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="opacity-100 transform translate-y-0"
+             x-transition:leave-end="opacity-0 transform translate-y-full">
             <div class="h-full p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="font-semibold text-lg">Filtres</h3>
@@ -199,7 +209,10 @@ foreach ($produits as $produit) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'categories'" x-collapse>
+                        <div x-show="openTab === 'categories'" 
+                             x-collapse 
+                             x-cloak 
+                             style="display: none;">
                             <div class="py-2 pl-4">
                                 <div class="search__container mb-2">
                                     <input class="search__input" type="text" id="categories-search" placeholder="Rechercher">
@@ -274,7 +287,10 @@ foreach ($produits as $produit) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'marques'" x-collapse>
+                        <div x-show="openTab === 'marques'" 
+                             x-collapse 
+                             x-cloak
+                             style="display: none;">
                             <div class="py-2 pl-4">
                                 <div class="search__container mb-2">
                                     <input class="search__input" type="text" id="marques-search" placeholder="Rechercher">
@@ -312,8 +328,10 @@ foreach ($produits as $produit) {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
-                        <div x-show="openTab === 'collections'" x-collapse>
-                            <div class="pl-4">
+                        <div x-show="openTab === 'collections'" 
+                             x-collapse 
+                             x-cloak
+                             style="display: none;">                            <div class="pl-4">
                                 <div class="space-y-2">
                                     <?php foreach ($collections as $collection): ?>
                                         <div class="flex items-center">

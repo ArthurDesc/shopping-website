@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
     // Ajouter ces variables au début
     const noResults = document.getElementById('no-results');
     const resetFilters = document.getElementById('reset-filters');
