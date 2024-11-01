@@ -1,9 +1,32 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de la visibilité initiale
+    const productContainer = document.querySelector('#products .list');
+    const urlParams = new URLSearchParams(window.location.search);
     
+    function handleInitialVisibility() {
+        if (!productContainer) return;
+        
+        const hasFilters = urlParams.has('categories') || 
+                          urlParams.has('marques') || 
+                          urlParams.has('collections');
+                          
+        // Si des filtres sont présents, attendre leur application
+        if (hasFilters) {
+            setTimeout(() => {
+                productContainer.style.opacity = '1';
+                applyFiltersFromURL();
+            }, 100);
+        } else {
+            // Sinon, afficher directement
+            setTimeout(() => {
+                productContainer.style.opacity = '1';
+            }, 50);
+        }
+    }
+
     // Ajouter ces variables au début
     const noResults = document.getElementById('no-results');
     const resetFilters = document.getElementById('reset-filters');
-    const productContainer = document.querySelector('#products .list');
 
     // Vérifier s'il y a des produits avant d'initialiser List.js
     if (!productContainer || !productContainer.children.length) {
@@ -26,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
         const productList = new List('products', options);
 
+        // Appeler la fonction de gestion de la visibilité
+        handleInitialVisibility();
+
         // Sélectionner toutes les checkboxes de filtre
         const filterCheckboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
         const activeFilters = {
@@ -43,20 +69,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function applyFilters() {
-            productList.filter(function(item) {
-                const element = item.elm;
-                const categoryMatch = activeFilters.categories.size === 0 || 
-                    [...activeFilters.categories].some(cat => element.dataset.category.includes(cat));
-                const brandMatch = activeFilters.brands.size === 0 || 
-                    activeFilters.brands.has(element.dataset.brand);
-                const collectionMatch = activeFilters.collections.size === 0 || 
-                    activeFilters.collections.has(element.dataset.collection);
+            productContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                productList.filter(function(item) {
+                    const element = item.elm;
+                    const categoryMatch = activeFilters.categories.size === 0 || 
+                        [...activeFilters.categories].some(cat => element.dataset.category.includes(cat));
+                    const brandMatch = activeFilters.brands.size === 0 || 
+                        activeFilters.brands.has(element.dataset.brand);
+                    const collectionMatch = activeFilters.collections.size === 0 || 
+                        activeFilters.collections.has(element.dataset.collection);
 
-                return categoryMatch && brandMatch && collectionMatch;
-            });
+                    return categoryMatch && brandMatch && collectionMatch;
+                });
 
-            // Ajouter cette vérification après le filtrage
-            checkVisibleProducts();
+                checkVisibleProducts();
+                productContainer.style.opacity = '1';
+            }, 50);
         }
 
         function checkVisibleProducts() {
@@ -278,5 +308,9 @@ document.addEventListener('DOMContentLoaded', function() {
         productList.on('searchComplete', checkVisibleProducts);
     } catch (error) {
         console.error('Erreur lors de l\'initialisation de List.js:', error);
+        // En cas d'erreur, afficher quand même les produits
+        if (productContainer) {
+            productContainer.style.opacity = '1';
+        }
     }
 }); 

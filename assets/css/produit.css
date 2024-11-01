@@ -873,3 +873,41 @@ input[type="radio"] + span {
 #reset-filters:active {
   transform: translateY(0);
 }
+
+/* Styles pour la transition des produits */
+.list {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.list.is-ready {
+    opacity: 1;
+}
+
+/* Style pour l'état de chargement initial */
+.loading-state {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+/* Optimisation des transitions pour les produits individuels */
+.product-card {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    will-change: opacity, transform;
+}
+
+/* Animation pour les filtres */
+.filter-transition {
+    transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+    will-change: opacity, transform;
+}
+
+/* Optimisation des performances */
+.list, .product-card {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+}
