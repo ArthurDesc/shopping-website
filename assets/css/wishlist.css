@@ -338,3 +338,10 @@
 .button-shadow:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
+
+.montserrat-bold {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700; /* Gras */
+    font-style: normal;
+  }

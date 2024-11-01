@@ -121,6 +121,12 @@ function updateWishlistCount() {
                 wishlistCounter.textContent = data.count;
                 wishlistCounter.style.display = data.count > 0 ? 'block' : 'none';
             }
+            
+            // Mettre à jour le compteur sur la page wishlist
+            const wishlistCount = document.getElementById('wishlistCount');
+            if (wishlistCount) {
+                wishlistCount.textContent = `${data.count} article${data.count > 1 ? 's' : ''}`;
+            }
         }
     })
     .catch(error => console.error('Erreur:', error));
