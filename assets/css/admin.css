@@ -193,3 +193,15 @@ select {
     background-color: #3B82F6;
     transition: all 0.3s ease;
 }
+
+#category-tab-content {
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+    transform: translateX(0);
+    min-height: 400px; /* Ajustez selon vos besoins */
+}
+
+.tab-container {
+    position: relative;
+    overflow: hidden;
+}

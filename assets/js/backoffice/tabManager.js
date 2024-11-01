@@ -30,6 +30,14 @@ clickedTab.classList.add(
 );
 
 const tabContent = document.getElementById("tab-content");
+
+// Ajouter l'animation de sortie
+tabContent.style.transition = 'all 0.3s ease-in-out';
+tabContent.style.opacity = '0';
+tabContent.style.transform = 'translateX(-20px)';
+
+// Attendre la fin de l'animation de sortie
+setTimeout(() => {
 switch (tabId) {
 case "modifier":
 ArticleManager.loadArticles();
@@ -105,6 +113,12 @@ break;
       const fileInput = document.getElementById('image');
       const fileChosen = document.getElementById('file-chosen');
 
+      requestAnimationFrame(() => {
+        tabContent.style.opacity = '1';
+        tabContent.style.transform = 'translateX(0)';
+      });
+
+
       fileInput.addEventListener('change', function() {
         if (this.files && this.files.length > 0) {
           fileChosen.textContent = this.files[0].name;
@@ -173,6 +187,12 @@ break;
     default:
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
   }
+
+  requestAnimationFrame(() => {
+    tabContent.style.opacity = '1';
+    tabContent.style.transform = 'translateX(0)';
+  });
+}, 300);
 }
 function switchCategoryTab(clickedTab, tabId) {
   document
@@ -205,6 +225,13 @@ function switchCategoryTab(clickedTab, tabId) {
   );
 
   const tabContent = document.getElementById("category-tab-content");
+    // Ajouter l'animation de sortie
+    tabContent.style.transition = 'all 0.3s ease-in-out';
+    tabContent.style.opacity = '0';
+    tabContent.style.transform = 'translateX(-20px)';
+  
+    // Attendre la fin de l'animation de sortie
+    setTimeout(() => {
   switch (tabId) {
     case "modifier":
       tabContent.innerHTML = `
@@ -280,6 +307,12 @@ function switchCategoryTab(clickedTab, tabId) {
     default:
       tabContent.innerHTML = "<p>Contenu non disponible</p>";
   }
+      // Animation d'entrée du nouveau contenu
+      requestAnimationFrame(() => {
+        tabContent.style.opacity = '1';
+        tabContent.style.transform = 'translateX(0)';
+      });
+    }, 300);
 }
 
 // Fonction setupAddCategoryForm
