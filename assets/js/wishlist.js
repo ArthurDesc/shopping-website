@@ -37,7 +37,7 @@ function handleWishlistToggle(checkbox, productId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showToast(data.message, 'success');
+            showWishlistToast(data.message, 'success');
             updateWishlistCount();
             
             // Si on est sur la page wishlist et qu'on retire un produit
@@ -126,23 +126,7 @@ function updateWishlistCount() {
     .catch(error => console.error('Erreur:', error));
 }
 
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    if (toast) {
-        toast.textContent = message;
-        toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg transition-opacity duration-300 z-50 ${
-            type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white`;
-        
-        // Afficher le toast
-        toast.style.opacity = '1';
-        
-        // Cacher le toast après 3 secondes
-        setTimeout(() => {
-            toast.style.opacity = '0';
-        }, 3000);
-    }
-}
+
 
 function clearAllWishlists() {
     Swal.fire({

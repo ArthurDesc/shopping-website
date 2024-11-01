@@ -540,6 +540,18 @@ foreach ($produits as $produit) {
     Article ajouté au panier
 </div>
 
+<!-- Toast pour les favoris -->
+<div id="wishlistToast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50 hover:bg-green-600 cursor-pointer">
+    <a href="/shopping-website/pages/wishlist.php" class="flex items-center text-white">
+        <span class="toast-message">Produit ajouté aux favoris</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+    </a>
+</div>
+
+
+
 <?php include '../includes/_footer.php'; ?>
 
 

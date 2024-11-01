@@ -121,20 +121,7 @@ function updateImage(file) {
 }
 
 // Fonction utilitaire pour afficher les notifications
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
 
-    toast.textContent = message;
-    toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg transition-opacity duration-300 z-50 ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    } text-white`;
-    
-    toast.style.opacity = '1';
-    setTimeout(() => {
-        toast.style.opacity = '0';
-    }, 3000);
-}
 
 
 // Initialisation des événements au chargement de la page

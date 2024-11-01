@@ -112,28 +112,4 @@ function updateCartUI(cartCount) {
     }
 }
 
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    if (toast) {
-        // Définir le contenu et le style
-        toast.textContent = message;
-        toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg z-50 ${
-            type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white opacity-0 transition-opacity duration-300`;
-        
-        // Afficher le toast
-        setTimeout(() => {
-            toast.style.opacity = '1';
-        }, 10);
-        
-        // Cacher le toast après 3 secondes
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            
-            // Supprimer complètement le toast après la fin de l'animation
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 300);
-        }, 3000);
-    }
-}
+

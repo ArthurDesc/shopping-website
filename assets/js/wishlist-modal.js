@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Gestionnaire pour les boutons d'ouverture du modal
     document.addEventListener('click', function(e) {
-        if (e.target.closest('.open-modal-btn')) {
+        const openModalBtn = e.target.closest('.open-modal-btn');
+        if (openModalBtn) {
             e.preventDefault();
             e.stopPropagation();
             
-            const button = e.target.closest('.open-modal-btn');
-            currentProductId = button.dataset.productId;
-            currentProductPrice = button.dataset.productPrice;
-            const productSizes = button.dataset.productSizes.split(',');
+            currentProductId = openModalBtn.dataset.productId;
+            currentProductPrice = openModalBtn.dataset.productPrice;
+            const productSizes = openModalBtn.dataset.productSizes.split(',');
             
             // Mettre à jour le prix dans le bouton d'ajout au panier
             const addToCartBtn = document.getElementById('addToCartBtn');
@@ -117,20 +117,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toast');
-        if (!toast) return;
 
-        toast.textContent = message;
-        toast.className = `fixed right-4 top-[70px] py-2 px-4 rounded shadow-lg z-50 ${
-            type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white opacity-0 transition-opacity duration-300`;
-        
-        setTimeout(() => toast.style.opacity = '1', 10);
-        
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => toast.style.display = 'none', 300);
-        }, 3000);
-    }
 });

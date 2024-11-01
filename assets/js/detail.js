@@ -191,12 +191,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour gérer l'affichage des avis
     function handleAvis() {
-        const productId = document.getElementById('id_produit').value;
-        if (!productId) {
-            console.error("ID du produit non trouvé");
+        const productIdElement = document.getElementById('id_produit');
+        if (!productIdElement) {
+            console.warn("ID du produit non trouvé");
             return;
         }
 
+        const productId = productIdElement.value;
         loadAvis(productId).then(data => {
             if (data && data.success) {
                 displayAvis(data.avis);
@@ -295,16 +296,6 @@ function updateCartCount(count) {
     }
 }
 
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    if (toast) {
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
-}
 
 // Ajoutez après la fonction handleTabs
 

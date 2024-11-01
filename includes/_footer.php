@@ -31,12 +31,13 @@
 
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+<script src="<?php echo url('assets/js/toast.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/navbar.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/header.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/autocomplete.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/toast.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/wishlist.js'); ?>" defer></script>
+<script src="<?php echo url('assets/js/wishlist-modal.js'); ?>" defer></script>
 <script src="https://kit.fontawesome.com/5ea815c1d0.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -53,9 +54,6 @@
 <?php endif; ?>
 
 
-<?php if (strpos($_SERVER['REQUEST_URI'], 'wishlist.php') !== false): ?>
-  <script src="<?php echo url('assets/js/wishlist-modal.js'); ?>" defer></script>
-<?php endif; ?>
 
 <?php if (strpos($_SERVER['REQUEST_URI'], 'produit.php') !== false): ?>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>

@@ -181,14 +181,3 @@ function updateCartUI(data) {
     }
 }
 
-function showToast(message, type = 'success') {
-    Swal.fire({
-        text: message,
-        icon: type,
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-}

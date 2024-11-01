@@ -172,25 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fonction pour afficher les toasts (à adapter selon votre système de notification)
-    function showToast(message, type = 'success') {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: type,
-                text: message,
-                toast: true,
-                position: 'bottom-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-        } else {
-            alert(message);
-        }
-    }
+
 
     // Gestion du modal de changement de mot de passe
     const modal = document.getElementById('password_modal');
