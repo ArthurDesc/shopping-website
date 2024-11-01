@@ -432,6 +432,21 @@ foreach ($produits as $produit) {
                                     <img src="<?= $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg') ?>" 
                                          alt="<?= htmlspecialchars($produit->getNom()) ?>" 
                                          class="absolute inset-0 w-full h-full object-cover object-top">
+                                    
+                                    <!-- Bouton Wishlist -->
+                                    <label class="wishlist-btn absolute top-2 right-2 z-10">
+                                        <input type="checkbox" 
+                                               class="wishlist-input"
+                                               data-product-id="<?= $produit->getId() ?>"
+                                        />
+                                        <div class="wishlist-heart">
+                                        <svg viewBox="0 0 256 256">
+                                        <rect fill="none" height="256" width="256"></rect>
+                                        <path d="M224.6,51.9a59.5,59.5,0,0,0-43-19.9,60.5,60.5,0,0,0-44,17.6L128,59.1l-7.5-7.4C97.2,28.3,59.2,26.3,35.9,47.4a59.9,59.9,0,0,0-2.3,87l83.1,83.1a15.9,15.9,0,0,0,22.6,0l81-81C243.7,113.2,245.6,75.2,224.6,51.9Z"
+                                            stroke-width="20px" stroke="#000" fill="none"></path>
+                                    </svg>
+                                        </div>
+                                    </label>
                                 </div>
                                 <div class="p-3">
                                     <h3 class="product-name text-sm font-semibold mb-1 truncate">
