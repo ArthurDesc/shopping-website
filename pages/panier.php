@@ -10,8 +10,8 @@ $panier = new Panier();
 include '../includes/_header.php';
 ?>
 
-<main class="flex-grow container mx-auto px-4 py-8 mt-16"> 
-    <?php 
+<main class="flex-grow container mx-auto px-4 py-8 mt-16">
+    <?php
     $total = 0;
     $contenuPanier = $panier->getContenu();
     ?>
@@ -33,7 +33,7 @@ include '../includes/_header.php';
                     </div>
                 </div>
             <?php else: ?>
-                <div class="cart-container">
+                <div class="cart-container rounded-3xl p-4 space-y-4">
                     <?php
                     $ids = array_map(function ($key) {
                         return explode('_', $key)[0];
@@ -63,13 +63,13 @@ include '../includes/_header.php';
                                     $img = htmlspecialchars($img ?? 'default-image.png', ENT_QUOTES, 'UTF-8');
                                 }
                     ?>
-                                <div class="cart-item flex items-center cart-item border-b border-gray-200 py-4">
-                                    <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="w-24 h-24 object-cover rounded mr-4">
-                                    <div class="flex-grow">
+                                <div class="cart-item flex items-center bg-white border border-gray-100 rounded-2xl h-32 shadow-md hover:shadow-lg transition-shadow duration-200">
+                                    <img src="../assets/images/produits/<?= $img ?>" alt="<?= $nom ?>" class="h-32 w-32 object-cover rounded-l-2xl">
+                                    <div class="flex-grow pl-6">
                                         <h3 class="font-semibold"><?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?></h3>
                                         <p class="text-gray-600"><?= number_format($product['prix'], 2); ?>€</p>
                                         <form method="post" action="panier.php" class="flex items-center mt-2" data-stock="<?= $product['stock'] ?>">
-                                        <input type="hidden" name="id_produit" value="<?= $id ?>">                                            <?php if ($taille): ?>
+                                            <input type="hidden" name="id_produit" value="<?= $id ?>"> <?php if ($taille): ?>
                                                 <input type="hidden" name="taille" value="<?= $taille ?>">
                                             <?php endif; ?>
                                             <div class="quantity-control">
@@ -79,7 +79,7 @@ include '../includes/_header.php';
                                             </div>
                                         </form>
                                     </div>
-                                    <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4">
+                                    <a href="panier.php?del=<?= urlencode($key); ?>" class="text-red-500 hover:text-red-700 ml-4 pr-6">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
@@ -95,36 +95,36 @@ include '../includes/_header.php';
         </div>
 
         <?php if (!empty($contenuPanier)): ?>
-        <!-- Résumé du panier -->
-        <div class="w-full lg:w-1/3">
-            <div class="bg-gray-50 rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Résumé du Panier</h2>
-                <div class="mb-4">
-                    <p class="text-lg">Total à payer :</p>
-                    <p class="text-2xl font-bold text-green-600" id="total-price"><?= number_format($total, 2); ?>€</p>
-                </div>
-                <div class="flex flex-col space-y-2">
-                    <?php if(isset($_SESSION['id_utilisateur'])): ?>
-                        <a href="process_paiement.php" class="button button-green">
-                            Procéder au paiement
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                            </svg>
+            <!-- Résumé du panier -->
+            <div class="w-full lg:w-1/3">
+                <div class="bg-gray-50 rounded-lg shadow-lg p-4 space-y-4">
+                    <h2 class="text-xl font-bold mb-4">Résumé du Panier</h2>
+                    <div class="mb-4">
+                        <p class="text-lg">Total à payer :</p>
+                        <p class="text-2xl font-bold text-green-600" id="total-price"><?= number_format($total, 2); ?>€</p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <?php if (isset($_SESSION['id_utilisateur'])): ?>
+                            <a href="process_paiement.php" class="button button-green">
+                                Procéder au paiement
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                </svg>
+                            </a>
+                        <?php else: ?>
+                            <a href="auth.php" class="button button-green">
+                                Se connecter pour payer
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                                </svg>
+                            </a>
+                        <?php endif; ?>
+                        <a href="produit.php" class="button">
+                            Continuer vos achats
                         </a>
-                    <?php else: ?>
-                        <a href="auth.php" class="button button-green">
-                            Se connecter pour payer
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                            </svg>
-                        </a>
-                    <?php endif; ?>
-                    <a href="produit.php" class="button">
-                        Continuer vos achats
-                    </a>
+                    </div>
                 </div>
             </div>
-        </div>
         <?php endif; ?>
     </div>
 </main>
@@ -134,4 +134,3 @@ include '../includes/_header.php';
 <script src="../assets/js/cart.js"></script>
 
 <?php include '../includes/_footer.php'; ?>
-
