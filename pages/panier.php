@@ -19,7 +19,7 @@ include '../includes/_header.php';
         <!-- Liste des produits -->
         <div class="w-full <?= !empty($contenuPanier) ? 'lg:w-2/3' : '' ?> mb-8 lg:mb-0">
             <?php if (empty($contenuPanier)): ?>
-                <div class="text-center p-6">
+                <div class="text-center p-6 min-h-[60vh] flex flex-col items-center justify-center">
                     <h2 class="text-2xl font-bold mb-4 text-blue-400">Panier vide !</h2>
                     <img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">
                     <p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>

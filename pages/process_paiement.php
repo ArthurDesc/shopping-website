@@ -151,8 +151,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> <!-- Ajout de Tailwind CSS -->
     <script src="https://js.stripe.com/v3/"></script> <!-- Ajout de Stripe.js -->
    <link rel="stylesheet" href="../assets/css/process_paiement.css">
+    <style>
+        body {
+            background-image: url('../assets/images/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            margin: 2rem auto;
+        }
+    </style>
 </head>
-<body class="flex items-center justify-center min-h-screen py-8">
+<body class="flex items-center justify-center min-h-screen py-8 relative">
+    <!-- Ajout du bouton retour -->
+    <a href="javascript:history.back()" 
+       class="absolute top-4 left-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="h-6 w-6 text-blue-600" 
+             fill="none" 
+             viewBox="0 0 24 24" 
+             stroke="currentColor">
+            <path stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2" 
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+    </a>
+
     <form id="payment-form" class="form-container">
         <h2 class="form-title">Paiement Sécurisé</h2>
         
@@ -191,20 +225,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="mb-6">
-            <label class="input-label mb-2">Informations de carte</label>
-            <div id="card-element" class="border p-4 rounded bg-gray-50"></div>
-            <div id="card-errors" class="error-message"></div>
+            <label class="block text-gray-700 text-sm font-semibold mb-2">Informations de carte</label>
+            <div id="card-element" class="form-input"></div>
+            <div id="card-errors" class="mt-2 text-sm text-red-600"></div>
         </div>
 
         <!-- Total de la commande -->
-        <div class="total-amount">
+        <div class="mb-6">
             <div class="flex justify-between items-center">
-                <span class="font-medium text-gray-700">Total à payer :</span>
-                <span class="font-bold text-lg"><?php echo number_format($total_amount, 2, ',', ' '); ?> €</span>
+                <span class="text-gray-700 text-sm font-semibold">Total à payer :</span>
+                <span class="font-bold text-lg text-blue-600"><?php echo number_format($total_amount, 2, ',', ' '); ?> €</span>
             </div>
         </div>
 
-        <button id="submit" class="submit-button">
+        <button id="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Procéder au paiement
         </button>
         

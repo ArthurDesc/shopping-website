@@ -36,7 +36,12 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
 
     <div class="container mx-auto px-4">
         <div class="mt-6 flex flex-col sm:flex-row justify-between items-center">
-            <h2 class="text-xl font-semibold text-center sm:text-left">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl sm:text-2xl montserrat-bold text-blue-600">Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h2>
+                <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+                    <?= $nombre_de_resultats ?> résultat<?= $nombre_de_resultats > 1 ? 's' : '' ?>
+                </span>
+            </div>
             <form method="get" action="" class="flex items-center mt-4 sm:mt-0">
                 <div class="wave-group">
                     <input required type="text" name="q" class="input" value="<?php echo htmlspecialchars($search); ?>">

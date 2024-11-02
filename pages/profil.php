@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once dirname(__FILE__) . '/../includes/_header.php';
 require_once dirname(__FILE__) . '/../includes/_db.php';
 
 // Vérification de connexion
@@ -8,6 +7,7 @@ if (!isset($_SESSION['id_utilisateur'])) {
     header('Location: connexion.php');
     exit();
 }
+require_once dirname(__FILE__) . '/../includes/_header.php';
 
 // Initialisation de l'AdminManager
 $adminManager = new AdminManager($conn);
