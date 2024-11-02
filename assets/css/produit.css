@@ -390,27 +390,6 @@
     align-items: center;
 }
 
-.product-cart-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.product-cart-icon {
-    width: 24px;
-    height: 24px;
-    color: #3B82F6; /* Couleur bleue de Tailwind */
-}
-
-.product-cart-button:hover .product-cart-icon {
-    color: #2563EB; /* Couleur bleue plus foncée au survol */
-}
 
 #categories-content, #marques-content {
     padding-top: 0.25rem;

@@ -35,29 +35,6 @@
     font-weight: bold;
 }
 
-/* Style du bouton panier */
-.product-cart-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.product-cart-icon {
-    width: 24px;
-    height: 24px;
-    color: var(--primary);
-}
-
-.product-cart-button:hover .product-cart-icon {
-    color: var(--primary-dark);
-}
-
 /* Style du bouton "Retirer des favoris" */
 .remove-wishlist-btn {
     width: 100%;
