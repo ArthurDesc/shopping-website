@@ -12,7 +12,6 @@ $adminManager = new AdminManager($conn);
 if (!isset($_SESSION['id_utilisateur'])) {
     // Redirection vers la page de connexion si non connecté
     echo "<script>
-            alert('Vous devez être connecté pour accéder à cette page.');
             window.location.href = '../pages/connexion.php';
           </script>";
     exit();
