@@ -633,3 +633,19 @@ footer.loading {
 .button-shadow:hover {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
+
+.swal2-popup {
+  font-family: 'Your-Font', sans-serif;
+}
+
+.swal2-title {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.swal2-html-container {
+  margin: 1em 0;
+}
+
+.swal2-actions {
+  margin-top: 1.5em;
+}

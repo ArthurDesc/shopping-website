@@ -141,14 +141,32 @@ function updateWishlistCount() {
 
 function clearAllWishlists() {
   Swal.fire({
-    title: "Êtes-vous sûr ?",
-    text: "Voulez-vous vider votre liste de favoris ?",
-    icon: "warning",
+    title: 'Vider la liste de favoris ?',
+    text: 'Cette action est irréversible',
+    icon: 'warning',
+    iconColor: '#EF4444',
     showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Oui, tout supprimer",
-    cancelButtonText: "Annuler",
+    confirmButtonText: 'Oui, tout supprimer',
+    cancelButtonText: 'Annuler',
+    reverseButtons: true,
+    customClass: {
+      container: 'font-sans',
+      popup: 'rounded-xl shadow-xl border-0',
+      title: 'text-xl font-medium text-gray-800',
+      htmlContainer: 'text-gray-600',
+      confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-md',
+      cancelButton: 'bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-sm',
+      actions: 'gap-3',
+      icon: 'border-red-500'
+    },
+    buttonsStyling: false,
+    showClass: {
+      popup: 'animate__animated animate__fadeIn animate__faster'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOut animate__faster'
+    },
+    background: '#ffffff'
   }).then((result) => {
     if (result.isConfirmed) {
       fetch("/shopping-website/ajax/wishlist_handler.php", {
@@ -160,30 +178,40 @@ function clearAllWishlists() {
           action: "clear_all",
         }),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            showToast("Liste de souhaits vidée avec succès", "success");
-            updateWishlistCount();
-            // Animation de suppression
-            const wishlistContainer = document.querySelector(".grid");
-            if (wishlistContainer) {
-              wishlistContainer.style.transition = "all 0.5s ease";
-              wishlistContainer.style.opacity = "0";
-              wishlistContainer.style.transform = "translateY(20px)";
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Animation de suppression
+          const wishlistContainer = document.querySelector(".grid");
+          if (wishlistContainer) {
+            wishlistContainer.style.transition = "all 0.5s ease";
+            wishlistContainer.style.opacity = "0";
+            wishlistContainer.style.transform = "translateY(20px)";
 
-              setTimeout(() => {
-                location.reload();
-              }, 500);
-            }
-          } else {
-            showToast(data.message || "Erreur lors de la suppression", "error");
+            // Afficher un message de succès avant le rechargement
+            Swal.fire({
+              title: 'Liste vidée !',
+              text: 'Votre liste de favoris a été vidée avec succès',
+              icon: 'success',
+              timer: 1500,
+              showConfirmButton: false,
+              customClass: {
+                popup: 'rounded-xl shadow-xl border-0',
+                title: 'text-xl font-medium text-gray-800',
+                htmlContainer: 'text-gray-600'
+              }
+            }).then(() => {
+              location.reload();
+            });
           }
-        })
-        .catch((error) => {
-          console.error("Erreur:", error);
-          showToast("Une erreur est survenue", "error");
-        });
+        } else {
+          showToast(data.message || "Erreur lors de la suppression", "error");
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur:", error);
+        showToast("Une erreur est survenue", "error");
+      });
     }
   });
 }

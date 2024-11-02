@@ -120,9 +120,29 @@ async function confirmRemoveItem(productId, element) {
         title: 'Supprimer l\'article ?',
         text: "Voulez-vous retirer cet article du panier ?",
         icon: 'warning',
+        iconColor: '#EF4444',
         showCancelButton: true,
         confirmButtonText: 'Oui, supprimer',
-        cancelButtonText: 'Annuler'
+        cancelButtonText: 'Annuler',
+        reverseButtons: true,
+        customClass: {
+            container: 'font-sans',
+            popup: 'rounded-xl shadow-xl border-0',
+            title: 'text-xl font-medium text-gray-800',
+            htmlContainer: 'text-gray-600',
+            confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-md',
+            cancelButton: 'bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-sm',
+            actions: 'gap-3',
+            icon: 'border-red-500'
+        },
+        buttonsStyling: false,
+        showClass: {
+            popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOut animate__faster'
+        },
+        background: '#ffffff'
     });
 
     if (result.isConfirmed) {
@@ -142,7 +162,21 @@ async function confirmRemoveItem(productId, element) {
                     setTimeout(() => {
                         cartItem.remove();
                         if (response.totalItems === 0) {
-                            location.reload(); // Recharger la page si le panier est vide
+                            // Message de succès avant le rechargement
+                            Swal.fire({
+                                title: 'Panier vidé !',
+                                text: 'Votre article a été supprimé avec succès',
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false,
+                                customClass: {
+                                    popup: 'rounded-xl shadow-xl border-0',
+                                    title: 'text-xl font-medium text-gray-800',
+                                    htmlContainer: 'text-gray-600'
+                                }
+                            }).then(() => {
+                                location.reload();
+                            });
                         }
                     }, 300);
                 }

@@ -7,17 +7,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const productElement = this.closest('.flex.items-center');
             
             Swal.fire({
-                title: 'Êtes-vous sûr ?',
+                title: 'Supprimer l\'article ?',
                 text: "Voulez-vous retirer cet article du panier ?",
                 icon: 'warning',
+                iconColor: '#EF4444',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
                 confirmButtonText: 'Oui, supprimer',
-                cancelButtonText: 'Annuler'
+                cancelButtonText: 'Annuler',
+                reverseButtons: true,
+                customClass: {
+                    container: 'font-sans',
+                    popup: 'rounded-xl shadow-xl border-0',
+                    title: 'text-xl font-medium text-gray-800',
+                    htmlContainer: 'text-gray-600',
+                    confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-md',
+                    cancelButton: 'bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-sm',
+                    actions: 'gap-3',
+                    icon: 'border-red-500'
+                },
+                buttonsStyling: false,
+                showClass: {
+                    popup: 'animate__animated animate__fadeIn animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOut animate__faster'
+                },
+                background: '#ffffff'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Utilisation de fetch avec XMLHttpRequest header
                     fetch(`panier.php?del=${productId}&ajax=1`, {
                         method: 'GET',
                         headers: {
@@ -27,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Animation de suppression
                             productElement.style.transition = 'all 0.5s ease';
                             productElement.style.opacity = '0';
                             productElement.style.transform = 'translateX(100px)';
@@ -35,10 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             setTimeout(() => {
                                 productElement.remove();
                                 
-                                // Vérifier si le panier est vide
                                 const remainingProducts = document.querySelectorAll('.flex.items-center');
                                 if (remainingProducts.length === 0) {
-                                    // Afficher le message de panier vide sans recharger
                                     const mainContainer = document.querySelector('main .container');
                                     mainContainer.innerHTML = `
                                         <div class="text-center p-6">
@@ -52,27 +66,58 @@ document.addEventListener('DOMContentLoaded', function() {
                                     `;
                                 }
 
-                                // Mettre à jour le total
                                 if (data.newTotal !== undefined) {
                                     updateTotalPrice(data.newTotal);
                                 }
-                            }, 500);
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Article supprimé !',
-                                showConfirmButton: false,
-                                timer: 1500,
-                                position: 'top-end',
-                                toast: true
-                            });
+                                Swal.fire({
+                                    title: 'Article supprimé !',
+                                    text: 'L\'article a été retiré de votre panier',
+                                    icon: 'success',
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                    customClass: {
+                                        container: 'font-sans',
+                                        popup: 'rounded-xl shadow-xl border-0',
+                                        title: 'text-xl font-medium text-gray-800',
+                                        htmlContainer: 'text-gray-600',
+                                        icon: 'border-green-500'
+                                    },
+                                    showClass: {
+                                        popup: 'animate__animated animate__fadeIn animate__faster'
+                                    },
+                                    hideClass: {
+                                        popup: 'animate__animated animate__fadeOut animate__faster'
+                                    },
+                                    background: '#ffffff'
+                                });
+                            }, 500);
                         }
                     })
                     .catch(error => {
                         Swal.fire({
-                            icon: 'error',
                             title: 'Erreur',
-                            text: 'Une erreur est survenue lors de la suppression'
+                            text: 'Une erreur est survenue lors de la suppression',
+                            icon: 'error',
+                            iconColor: '#EF4444',
+                            showCancelButton: true,
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                container: 'font-sans',
+                                popup: 'rounded-xl shadow-xl border-0',
+                                title: 'text-xl font-medium text-gray-800',
+                                htmlContainer: 'text-gray-600',
+                                confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-md',
+                                icon: 'border-red-500'
+                            },
+                            buttonsStyling: false,
+                            showClass: {
+                                popup: 'animate__animated animate__fadeIn animate__faster'
+                            },
+                            hideClass: {
+                                popup: 'animate__animated animate__fadeOut animate__faster'
+                            },
+                            background: '#ffffff'
                         });
                     });
                 }
