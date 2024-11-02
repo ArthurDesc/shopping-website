@@ -538,6 +538,7 @@ foreach ($produits as $produit) {
 
 
 
+<?php include '../includes/_scripts.php'; ?>
 <?php include '../includes/_footer.php'; ?>
 
 

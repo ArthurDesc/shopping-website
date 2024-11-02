@@ -238,4 +238,6 @@ window.sauvegarderModification = function(idAvis) {
 };
 </script>
 
+<?php include '../includes/_scripts.php'; ?>
+
 <?php require_once '../includes/_footer.php'; ?>

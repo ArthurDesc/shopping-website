@@ -32,6 +32,10 @@ require_once '../includes/_header.php';
 
         <?php if (empty($commandes)): ?>
             <div class="text-center p-6 min-h-[50vh] flex flex-col justify-center items-center">
+                <img src="<?php echo url('assets/images/icons/blueBag.png'); ?>" 
+                     alt="Aucune commande" 
+                     class="w-48 h-48 mb-6 animate-float"
+                />
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">Aucune commande</h2>
                 <p class="text-gray-700 mb-6">Vous n'avez pas encore passé de commande.</p>
                 <div class="flex flex-col items-center space-y-4">
@@ -108,8 +112,10 @@ require_once '../includes/_header.php';
     </div>
 </main>
     <?php 
+    
     // Inclure le footer seulement si on n'est pas dans la page profil
     if (!isset($is_included_in_profile)) {
         require_once '../includes/_footer.php';
+        require_once '../includes/_scripts.php';
     }
     ?>

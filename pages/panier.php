@@ -143,5 +143,6 @@ include '../includes/_header.php';
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<?php include '../includes/_scripts.php'; ?>
 
 <?php include '../includes/_footer.php'; ?>

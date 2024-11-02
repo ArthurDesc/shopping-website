@@ -456,3 +456,54 @@ footer {
   select option {
     cursor: pointer;
   }
+
+  footer {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+    will-change: opacity;
+    transform: translateZ(0);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Ajouter une classe pour l'état initial */
+footer.loading {
+    opacity: 0;
+}
+
+.wishlist-btn {
+  background-color: white;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wishlist-heart {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.wishlist-heart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wishlist-input {
+  display: none;
+}
+
+.wishlist-input:checked ~ .wishlist-heart svg path {
+  fill: #ff4141;
+  stroke: #ff4141;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}

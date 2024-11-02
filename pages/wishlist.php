@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../includes/_db.php';
-require_once '../includes/_header.php';
 require_once '../classe/WishlistManager.php';
 require_once '../classe/Produit.php';
 
@@ -10,6 +9,7 @@ if (!isset($_SESSION['id_utilisateur'])) {
     exit;
 }
 
+    require_once '../includes/_header.php';
 $wishlistManager = new WishlistManager($conn);
 $wishlistItems = $wishlistManager->getWishlist($_SESSION['id_utilisateur']);
 
@@ -37,9 +37,9 @@ while ($item = $wishlistItems->fetch_assoc()) {
     <!-- Le reste de votre contenu -->
     <div class="container mx-auto px-4 py-8">
         <!-- Header avec titre et bouton -->
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex items-center gap-4">
-                <h1 class="text-2xl montserrat-bold text-blue-600">Ma Liste de Souhaits</h1>
+        <div class="flex flex-col min-[500px]:flex-row justify-between items-start min-[500px]:items-center mb-6 gap-4">
+            <div class="flex flex-col min-[500px]:flex-row items-start min-[500px]:items-center gap-4">
+                <h1 class="text-xl sm:text-2xl montserrat-bold text-blue-600">Ma Liste de Souhaits</h1>
                 <!-- Compteur d'articles -->
                 <span id="wishlistCount" class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
                     <?= count($produits) ?> article<?= count($produits) > 1 ? 's' : '' ?>
@@ -47,10 +47,10 @@ while ($item = $wishlistItems->fetch_assoc()) {
             </div>
             <?php if (!empty($produits)): ?>
                 <button onclick="clearAllWishlists()"
-                    class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 flex items-center gap-2">
-                    Tout supprimer
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    class="w-full min-[500px]:w-auto px-4 py-2 bg-red-600 text-white rounded-full hover:bg-white hover:text-red-600 transition-all duration-300 flex items-center justify-center min-[500px]:justify-start gap-2 shadow-lg transform hover:scale-105">
+                    <span class="whitespace-nowrap">Tout supprimer</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                 </button>
             <?php endif; ?>
@@ -113,12 +113,11 @@ while ($item = $wishlistItems->fetch_assoc()) {
 
         <?php if (empty($produits)): ?>
             <div class="text-center p-6 min-h-[50vh] flex flex-col justify-center items-center">
-                <h2 class="text-2xl font-bold mb-4 text-blue-400">Aucun favoris</h2>
-                <p class="text-gray-700 mb-6">Vous n'avez pas encore ajouté de favoris.</p>
+                <img src="<?= BASE_URL ?>assets/images/icons/blueHeart.png" alt="Coeur bleu" class="w-24 h-24 mb-4 mx-auto">
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">Liste de favoris vide !</h2>
+                <p class="text-gray-700 mb-6">Votre liste de favoris est actuellement vide.</p>
                 <div class="flex flex-col items-center space-y-4">
-                    <a href="produit.php" class="btn btn-small">
-                        Découvrir nos produits
-                    </a>
+                    <a href="produit.php" class="btn btn-small">Découvrir nos produits</a>
                 </div>
             </div>
         <?php endif; ?>
@@ -131,7 +130,7 @@ while ($item = $wishlistItems->fetch_assoc()) {
             <h2 class="text-xl font-semibold mb-4">Choisissez une taille</h2>
             <!-- Message d'erreur -->
             <div id="sizeError" class="text-red-500 text-sm mb-2 hidden"></div>
-            <select id="productSize" class="w-full px-3 py-2 border rounded-md mb-4">
+            <select id="productSize" class="w-full px-3 py-2 border border-blue-300 rounded-md mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-blue-900 bg-blue-50">
                 <!-- Les options seront ajoutées dynamiquement -->
             </select>
             <div class="flex flex-col-reverse sm:flex-row sm:space-x-4">
@@ -198,5 +197,6 @@ while ($item = $wishlistItems->fetch_assoc()) {
             });
     }
 </script>
+<?php include '../includes/_scripts.php'; ?>
 
 <?php require_once '../includes/_footer.php'; ?>

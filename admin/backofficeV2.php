@@ -158,6 +158,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/tabManager.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/accordion.js"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/backoffice/adminMain.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM chargé');

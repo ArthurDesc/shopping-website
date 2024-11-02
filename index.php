@@ -221,6 +221,8 @@ include './includes/_header.php';
  
 </main class="mb-8">
 
+<?php include './includes/_scripts.php'; ?>
+
 <?php include './includes/_footer.php'; ?>
 
 <script>

@@ -695,6 +695,7 @@ $collection = $categoryManager->getCollection($id_produit);
                 Article ajouté au panier
             </div>
 </main>
+<?php include '../includes/_scripts.php'; ?>
 
 <?php include '../includes/_footer.php'; ?>
 

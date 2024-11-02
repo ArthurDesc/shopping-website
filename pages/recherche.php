@@ -2,7 +2,10 @@
 ob_start(); // Démarre la mise en mémoire tampon de sortie
 require_once '../includes/_db.php';
 require_once '../includes/_header.php';
+require_once '../classe/WishlistManager.php'; // Ajoutez cette ligne
 
+// Initialiser le WishlistManager
+$wishlistManager = new WishlistManager($conn);
 
 // Vérifier si une session est déjà active
 if (session_status() === PHP_SESSION_NONE) {
@@ -73,15 +76,33 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
                     }
             ?>
                     <div class="bg-white rounded-lg shadow-md overflow-hidden product-card flex flex-col h-full">
-                        <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block flex-grow flex flex-col">
-                            <div class="relative pb-[90%] flex-grow">
-                                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="absolute inset-0 w-full h-full object-cover object-center">
-                            </div>
-                            <div class="p-3 flex-shrink-0">
-                                <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($row['nom']); ?></h3>
-                                <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($row['marque']); ?></p>
-                            </div>
-                        </a>
+                        <div class="relative">
+                            <a href="<?php echo BASE_URL; ?>pages/detail.php?id=<?php echo $row['id_produit']; ?>" class="block">
+                                <div class="relative pb-[90%]">
+                                    <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($row['nom']); ?>" class="absolute inset-0 w-full h-full object-cover object-center">
+                                </div>
+                            </a>
+                            
+                            <!-- Bouton Wishlist -->
+                            <label class="wishlist-btn absolute top-2 right-2 z-10">
+                                <input type="checkbox" 
+                                       class="wishlist-input" 
+                                       data-product-id="<?php echo $row['id_produit']; ?>"
+                                       <?php echo (isset($_SESSION['id_utilisateur']) && $wishlistManager->isInWishlist($_SESSION['id_utilisateur'], $row['id_produit'])) ? 'checked' : ''; ?> />
+                                <div class="wishlist-heart">
+                                    <svg viewBox="0 0 256 256">
+                                        <rect fill="none" height="256" width="256"></rect>
+                                        <path d="M224.6,51.9a59.5,59.5,0,0,0-43-19.9,60.5,60.5,0,0,0-44,17.6L128,59.1l-7.5-7.4C97.2,28.3,59.2,26.3,35.9,47.4a59.9,59.9,0,0,0-2.3,87l83.1,83.1a15.9,15.9,0,0,0,22.6,0l81-81C243.7,113.2,245.6,75.2,224.6,51.9Z" 
+                                              stroke-width="20px" stroke="#000" fill="none">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="p-3 flex-shrink-0">
+                            <h3 class="text-sm font-semibold mb-1 truncate"><?php echo htmlspecialchars($row['nom']); ?></h3>
+                            <p class="text-xs text-gray-600 mb-1"><?php echo htmlspecialchars($row['marque']); ?></p>
+                        </div>
                         <div class="product-price-cart-container px-3 pb-3 mt-auto flex justify-between items-center">
                             <p class="product-price text-sm text-blue-600 font-bold"><?php echo number_format($row['prix'], 2); ?> €</p>
                             <button type="button" class="product-cart-button open-modal-btn flex items-center justify-center" data-product-id="<?php echo $row['id_produit']; ?>" data-product-price="<?php echo $row['prix']; ?>" onclick="ouvrirModalTaille(<?php echo $row['id_produit']; ?>, <?php echo $row['prix']; ?>)">
@@ -102,12 +123,9 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
     </div>
 </main>
 
+<?php include '../includes/_scripts.php'; ?>
 
 <?php require_once '../includes/_footer.php'; ?>
-
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/js/scripts.js" defer></script>
-<script src="<?php echo BASE_URL; ?>assets/js/navbar.js" defer></script>
 
 <!-- Ajoutez ce modal à la fin de votre fichier, juste avant la fermeture de la balise body -->
 <div id="modal-taille" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0 hidden">
@@ -135,6 +153,17 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
             </div>
         </div>
     </div>
+</div>
+
+<!-- Toast pour les favoris -->
+<div id="wishlistToast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50 hover:bg-green-600 cursor-pointer">
+    <a href="wishlist.php" class="flex items-center text-white">
+        <span class="toast-message">Produit ajouté aux favoris</span>
+    </a>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
 </div>
 
 </script>

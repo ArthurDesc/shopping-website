@@ -204,4 +204,8 @@ document.addEventListener('DOMContentLoaded', function() {
       timeout = setTimeout(later, wait);
     };
   }
+  const footer = document.querySelector('footer');
+  if (footer) {
+    footer.classList.remove('loading');
+  }
 });
