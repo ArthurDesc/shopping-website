@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 closeModal();
                 updateCartCount(data.cartCount);
-                showToast('Article ajouté au panier', 'success');
+                showCartToast('Article ajouté au panier', 'success');
             } else {
                 showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
             }

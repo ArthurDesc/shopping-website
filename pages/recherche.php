@@ -136,9 +136,6 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
     </div>
 </main>
 
-<?php include '../includes/_scripts.php'; ?>
-
-<?php require_once '../includes/_footer.php'; ?>
 
 <!-- Remplacer le modal existant par celui-ci -->
 <div id="modal-container" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center p-4 sm:p-0 hidden">
@@ -194,6 +191,9 @@ $nombre_de_resultats = $result->num_rows; // Compte le nombre de résultats
 <div id="toast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50">
 </div>
 
+        <?php include '../includes/_scripts.php'; ?>
+        
+        <?php require_once '../includes/_footer.php'; ?>
 
 
 

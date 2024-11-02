@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const addToCartBtnMobile = document.getElementById('addToCartBtnMobile');
 
     if (addToCartBtnDesktop) {
-        addToCartBtnDesktop.addEventListener('click', handleAddToCart);
+        addToCartBtnDesktop.addEventListener('click', handleAddToCartClick);
     }
 
     if (addToCartBtnMobile) {
-        addToCartBtnMobile.addEventListener('click', handleAddToCart);
+        addToCartBtnMobile.addEventListener('click', handleAddToCartClick);
     }
 
-    function handleAddToCart() {
+    function handleAddToCartClick() {
         const selectedSize = productSize.value;
         
         if (!selectedSize) {
@@ -57,8 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
             sizeError.classList.remove('hidden');
             return;
         }
-
-        sizeError.classList.add('hidden');
 
         const formData = new FormData();
         formData.append('id_produit', currentProductId);
@@ -74,14 +72,31 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 closeModal();
                 updateCartCount(data.cartCount);
-                showToast('Article ajouté au panier', 'success');
+                // Utiliser directement showCartToast
+                if (typeof showCartToast === 'function') {
+                    showCartToast('Article ajouté au panier', 'success');
+                } else if (typeof showToast === 'function') {
+                    showToast('Article ajouté au panier', 'success');
+                } else {
+                    console.warn('Aucune fonction toast disponible');
+                    alert('Article ajouté au panier');
+                }
             } else {
-                showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
+                if (typeof showToast === 'function') {
+                    showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
+                } else {
+                    console.warn('Fonction showToast non disponible');
+                    alert(data.message || 'Erreur lors de l\'ajout au panier');
+                }
             }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            showToast('Une erreur s\'est produite', 'error');
+            if (typeof showToast === 'function') {
+                showToast('Une erreur s\'est produite', 'error');
+            } else {
+                alert('Une erreur s\'est produite');
+            }
         });
     }
 

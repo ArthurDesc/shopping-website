@@ -35,7 +35,7 @@ function handleAddToCart(event, options = {}) {
     .then(data => {
         if (data.success) {
             updateCartCount(data.cartCount);
-            showToast('Article ajouté au panier', 'success');
+            showCartToast('Article ajouté au panier', 'success');
             if (onSuccess) onSuccess(data);
         } else {
             showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');

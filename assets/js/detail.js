@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fonction pour gérer le bouton d'ajout au panier
-    function handleAddToCart() {
+    function handleAddToCartSubmit() {
         const form = document.getElementById('add-to-cart-form');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
         const tailleError = document.getElementById('taille-error');
@@ -63,29 +63,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        let isSubmitting = false;
-
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            if (isSubmitting) return;
-
-            // Vérifier si une taille est sélectionnée
-            const tailleSelectionnee = form.querySelector('input[name="taille"]:checked');
-            if (!tailleSelectionnee) {
+            
+            const selectedSize = form.querySelector('input[name="taille"]:checked')?.value;
+            if (!selectedSize) {
                 tailleError.classList.remove('hidden');
                 return;
             }
 
-            // Cacher le message d'erreur si une taille est sélectionnée
-            tailleError.classList.add('hidden');
-            
-            isSubmitting = true;
-            addToCartBtn.disabled = true;
-            const originalText = addToCartBtn.querySelector('.add-to-cart-text').textContent;
-            addToCartBtn.querySelector('.add-to-cart-text').textContent = 'Ajout en cours...';
-
             const formData = new FormData(this);
-
+            
             fetch('/shopping-website/ajax/add_to_cart.php', {
                 method: 'POST',
                 body: formData
@@ -94,19 +82,29 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     updateCartCount(data.cartCount);
-                    showToast('Article ajouté au panier', 'success');
+                    if (typeof showCartToast === 'function') {
+                        showCartToast('Article ajouté au panier', 'success');
+                    } else if (typeof showToast === 'function') {
+                        showToast('Article ajouté au panier', 'success');
+                    } else {
+                        console.warn('Aucune fonction toast disponible');
+                    }
                 } else {
-                    showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
+                    if (typeof showToast === 'function') {
+                        showToast(data.message || 'Erreur lors de l\'ajout au panier', 'error');
+                    } else {
+                        console.warn('Fonction showToast non disponible');
+                        alert(data.message || 'Erreur lors de l\'ajout au panier');
+                    }
                 }
             })
             .catch(error => {
                 console.error('Erreur:', error);
-                showToast('Une erreur s\'est produite lors de l\'ajout au panier', 'error');
-            })
-            .finally(() => {
-                isSubmitting = false;
-                addToCartBtn.disabled = false;
-                addToCartBtn.querySelector('.add-to-cart-text').textContent = originalText;
+                if (typeof showToast === 'function') {
+                    showToast('Une erreur s\'est produite', 'error');
+                } else {
+                    alert('Une erreur s\'est produite');
+                }
             });
         });
 
@@ -209,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Appel de toutes les fonctions
     handleCommentForm();
-    handleAddToCart();
+    handleAddToCartSubmit();
     handleTabs();
     handleAvis();
 });
