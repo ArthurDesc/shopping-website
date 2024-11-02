@@ -10,11 +10,16 @@
 <script src="<?php echo url('assets/js/header.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/autocomplete.js'); ?>" defer></script>
 <script src="<?php echo url('assets/js/wishlist.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/wishlist-modal.js'); ?>" defer></script>
-<script src="<?php echo url('assets/js/search-modal.js'); ?>" defer></script>
+<?php if (basename($_SERVER['PHP_SELF']) !== 'recherche.php'): ?>
+  <script src="<?php echo url('assets/js/wishlist-modal.js'); ?>" defer></script>
+<?php endif; ?>
 <script src="<?php echo url('assets/js/cart.js'); ?>" defer></script>
 <script src="https://kit.fontawesome.com/5ea815c1d0.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (basename($_SERVER['PHP_SELF']) === 'recherche.php'): ?>
+  <script src="<?php echo url('assets/js/search-modal.js'); ?>" defer></script>
+<?php endif; ?>
 
 <?php if (basename($_SERVER['PHP_SELF']) === 'detail.php'): ?>
   <script src="<?php echo url('assets/js/detail.js'); ?>" defer></script>
