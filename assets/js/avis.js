@@ -291,27 +291,98 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour supprimer un avis
   window.supprimerAvis = function (idAvis) {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cet avis ?")) {
-      fetch("/shopping-website/ajax/delete_avis.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    Swal.fire({
+        title: 'Supprimer l\'avis ?',
+        text: "Cette action est irréversible !",
+        icon: 'warning',
+        iconColor: '#EF4444',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true,
+        customClass: {
+            container: 'font-sans',
+            popup: 'rounded-xl shadow-xl border-0',
+            title: 'text-xl font-medium text-gray-800',
+            htmlContainer: 'text-gray-600',
+            confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-md',
+            cancelButton: 'bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-sm',
+            actions: 'gap-3',
+            icon: 'border-red-500'
         },
-        body: JSON.stringify({ id_avis: idAvis }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            document.querySelector(`[data-avis-id="${idAvis}"]`).remove();
-          } else {
-            alert("Erreur lors de la suppression : " + data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Erreur:", error);
-          alert("Une erreur est survenue lors de la suppression");
-        });
-    }
+        buttonsStyling: false,
+        showClass: {
+            popup: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOut animate__faster'
+        },
+        background: '#ffffff'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch("/shopping-website/ajax/delete_avis.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id_avis: idAvis }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    document.querySelector(`[data-avis-id="${idAvis}"]`).remove();
+                    Swal.fire({
+                        title: 'Avis supprimé !',
+                        text: 'Votre avis a été supprimé avec succès',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        customClass: {
+                            container: 'font-sans',
+                            popup: 'rounded-xl shadow-xl border-0',
+                            title: 'text-xl font-medium text-gray-800',
+                            htmlContainer: 'text-gray-600',
+                            icon: 'border-green-500'
+                        },
+                        showClass: {
+                            popup: 'animate__animated animate__fadeIn animate__faster'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOut animate__faster'
+                        },
+                        background: '#ffffff'
+                    });
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch((error) => {
+                Swal.fire({
+                    title: 'Erreur',
+                    text: 'Une erreur est survenue lors de la suppression',
+                    icon: 'error',
+                    iconColor: '#EF4444',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        container: 'font-sans',
+                        popup: 'rounded-xl shadow-xl border-0',
+                        title: 'text-xl font-medium text-gray-800',
+                        htmlContainer: 'text-gray-600',
+                        confirmButton: 'bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-lg hover:shadow-md',
+                        icon: 'border-red-500'
+                    },
+                    buttonsStyling: false,
+                    showClass: {
+                        popup: 'animate__animated animate__fadeIn animate__faster'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOut animate__faster'
+                    },
+                    background: '#ffffff'
+                });
+            });
+        }
+    });
   };
 
   window.annulerModification = function (idAvis) {
