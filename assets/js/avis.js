@@ -149,31 +149,109 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour modifier un avis
     window.modifierAvis = function(idAvis) {
-        const commentElement = document.querySelector(`[data-avis-id="${idAvis}"]`);
-        const commentaireActuel = commentElement.querySelector('.commentaire-texte').textContent;
-        const noteActuelle = parseInt(commentElement.querySelector('.star-rating').getAttribute('data-note') || '0');
-
-        const form = document.createElement('div');
-        form.innerHTML = `
-            <div class="mt-4 space-y-4">
-                <textarea class="w-full px-3 py-2 border rounded-lg">${commentaireActuel}</textarea>
-                <div class="flex items-center space-x-2">
-                    ${createStarRating(noteActuelle, true)}
-                </div>
-                <div class="flex space-x-2">
-                    <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded" onclick="sauvegarderModification(${idAvis})">
-                        Sauvegarder
-                    </button>
-                    <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded" onclick="annulerModification(${idAvis})">
-                        Annuler
-                    </button>
-                </div>
-            </div>
+        const avisElement = document.querySelector(`[data-avis-id="${idAvis}"]`);
+        const commentaireElement = avisElement.querySelector('p');
+        const currentValue = commentaireElement.textContent.trim();
+        const noteActuelle = parseInt(avisElement.querySelector('.star-rating').getAttribute('data-note'));
+        
+        // Création du champ d'édition
+        const container = document.createElement('div');
+        container.className = 'flex flex-col gap-2';
+        
+        // Textarea pour le commentaire
+        const textarea = document.createElement('textarea');
+        textarea.value = currentValue;
+        textarea.className = 'w-full px-3 py-2 bg-white border border-transparent rounded-lg';
+        
+        // Système de notation
+        const ratingDiv = document.createElement('div');
+        ratingDiv.className = 'flex gap-2';
+        for (let i = 1; i <= 5; i++) {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `rating_${idAvis}`;
+            input.value = i;
+            input.checked = i === noteActuelle;
+            input.className = 'hidden peer';
+            input.id = `star${i}_${idAvis}`;
+            
+            const label = document.createElement('label');
+            label.htmlFor = `star${i}_${idAvis}`;
+            label.innerHTML = `<svg class="w-6 h-6 ${i <= noteActuelle ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>`;
+            
+            ratingDiv.appendChild(input);
+            ratingDiv.appendChild(label);
+        }
+        
+        // Boutons d'action
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.className = 'flex justify-end gap-2 mt-2';
+        buttonsDiv.innerHTML = `
+            <button class="save-btn px-3 py-1.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+            </button>
         `;
-
-        commentElement.querySelector('.commentaire-texte').style.display = 'none';
-        commentElement.appendChild(form);
+        
+        container.appendChild(textarea);
+        container.appendChild(ratingDiv);
+        container.appendChild(buttonsDiv);
+        
+        // Cacher le commentaire original et afficher le formulaire
+        commentaireElement.style.display = 'none';
+        commentaireElement.after(container);
+        
+        // Gestionnaire de sauvegarde
+        buttonsDiv.querySelector('.save-btn').addEventListener('click', async () => {
+            const newCommentaire = textarea.value.trim();
+            const newNote = container.querySelector('input[name^="rating"]:checked').value;
+            
+            try {
+                const response = await fetch('/shopping-website/ajax/update_avis.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_avis: idAvis,
+                        commentaire: newCommentaire,
+                        note: newNote
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    commentaireElement.textContent = newCommentaire;
+                    commentaireElement.style.display = 'block';
+                    container.remove();
+                    showBottomToast('Avis modifié avec succès', 'success');
+                    // Mettre à jour l'affichage des étoiles
+                    updateStarDisplay(avisElement, newNote);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                showBottomToast(error.message || 'Erreur lors de la modification', 'error');
+            }
+        });
     };
+
+    function updateStarDisplay(avisElement, newNote) {
+        const stars = avisElement.querySelectorAll('.star-rating svg');
+        stars.forEach((star, index) => {
+            if (index < newNote) {
+                star.classList.remove('text-gray-300');
+                star.classList.add('text-yellow-400');
+            } else {
+                star.classList.remove('text-yellow-400');
+                star.classList.add('text-gray-300');
+            }
+        });
+        avisElement.querySelector('.star-rating').setAttribute('data-note', newNote);
+    }
 
     // Fonction pour supprimer un avis
     window.supprimerAvis = function(idAvis) {
