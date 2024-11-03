@@ -83,7 +83,7 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
   <?php if (basename($_SERVER['PHP_SELF']) == 'produit.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/produit.css?v=' . filemtime(__DIR__ . '/../assets/css/produit.css')); ?>">
   <?php endif; ?>
-  <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
+  <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php' || basename($_SERVER['PHP_SELF']) == 'avis.php'): ?>
     <link rel="stylesheet" href="<?php echo url('assets/css/detail.css?v=' . filemtime(__DIR__ . '/../assets/css/detail.css')); ?>">
   <?php endif; ?>
   <?php if (basename($_SERVER['PHP_SELF']) == 'wishlist.php'): ?>
