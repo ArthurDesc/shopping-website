@@ -12,6 +12,22 @@ document.addEventListener('DOMContentLoaded', function() {
         noteInput.name = 'note';
         starRating.appendChild(noteInput);
 
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starLabel = star.nextElementSibling;
+                if (starLabel) {
+                    const starIcon = starLabel.querySelector('i.fas');
+                    if (starIcon) {
+                        if (star.value <= rating) {
+                            starIcon.style.color = '#FBBF24';
+                        } else {
+                            starIcon.style.color = '#D1D5DB';
+                        }
+                    }
+                }
+            });
+        }
+
         stars.forEach(star => {
             star.addEventListener('change', function() {
                 const rating = this.value;
@@ -19,30 +35,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 highlightStars(rating);
             });
 
-            star.nextElementSibling.addEventListener('mouseover', function() {
-                const rating = this.previousElementSibling.value;
-                highlightStars(rating);
-            });
+            const starLabel = star.nextElementSibling;
+            if (starLabel) {
+                starLabel.addEventListener('mouseover', function() {
+                    const rating = this.previousElementSibling.value;
+                    highlightStars(rating);
+                });
 
-            star.nextElementSibling.addEventListener('mouseout', function() {
-                const currentRating = noteInput.value || 0;
-                highlightStars(currentRating);
-            });
+                starLabel.addEventListener('mouseout', function() {
+                    const currentRating = noteInput.value || 0;
+                    highlightStars(currentRating);
+                });
+            }
         });
-
-        function highlightStars(rating) {
-            stars.forEach(star => {
-                const starLabel = star.nextElementSibling;
-                const starIcon = starLabel.querySelector('svg');
-                if (star.value <= rating) {
-                    starIcon.classList.remove('text-gray-300');
-                    starIcon.classList.add('text-yellow-400');
-                } else {
-                    starIcon.classList.remove('text-yellow-400');
-                    starIcon.classList.add('text-gray-300');
-                }
-            });
-        }
 
         starRating.addEventListener('submit', function(e) {
             if (!noteInput.value) {

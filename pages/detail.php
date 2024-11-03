@@ -168,11 +168,10 @@ $collection = $categoryManager->getCollection($id_produit);
 
                             <!-- Bouton Wishlist -->
                             <label class="wishlist-btn absolute bottom-4 right-4 z-10">
-                                <input type="checkbox" 
-                                       class="wishlist-input"
-                                       <?php echo (isset($isInWishlist) && $isInWishlist) ? 'checked="checked"' : ''; ?>
-                                       data-product-id="<?php echo $produit['id_produit']; ?>"
-                                />
+                                <input type="checkbox"
+                                    class="wishlist-input"
+                                    <?php echo (isset($isInWishlist) && $isInWishlist) ? 'checked="checked"' : ''; ?>
+                                    data-product-id="<?php echo $produit['id_produit']; ?>" />
                                 <div class="wishlist-heart">
                                     <svg viewBox="0 0 256 256">
                                         <rect fill="none" height="256" width="256"></rect>
@@ -374,13 +373,13 @@ $collection = $categoryManager->getCollection($id_produit);
                                                 <div class="add-to-cart-text">Ajouter au panier</div>
                                                 <span class="add-to-cart-icon">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
-                                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
                                                     </svg>
                                                 </span>
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                 </form>
                             <?php endif; ?>
                         </div>
@@ -553,27 +552,20 @@ $collection = $categoryManager->getCollection($id_produit);
                                                 <?php endif; ?>
                                             </div>
                                         </div>
-                                        <p class="text-gray-700 mt-4 editable" 
-                                           data-name="commentaire" 
-                                           data-type="textarea" 
-                                           data-avis-id="<?php echo $avis->getIdAvis(); ?>">
+                                        <p class="text-gray-700 mt-4 editable"
+                                            data-name="commentaire"
+                                            data-type="textarea"
+                                            data-avis-id="<?php echo $avis->getIdAvis(); ?>">
                                             <?php echo htmlspecialchars($avis->getCommentaire()); ?>
                                         </p>
 
                                         <!-- Ajouter un conteneur pour la note éditable -->
-                                        <div class="flex items-center star-rating editable" 
-                                             data-name="note" 
-                                             data-type="rating" 
-                                             data-avis-id="<?php echo $avis->getIdAvis(); ?>" 
-                                             data-note="<?php echo $avis->getNote(); ?>">
-                                            <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                <svg class="w-4 h-4 <?php echo $i <= $avis->getNote() ? 'text-yellow-400' : 'text-gray-300'; ?>" 
-                                                     fill="currentColor" 
-                                                     viewBox="0 0 20 20" 
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                                </svg>
-                                            <?php endfor; ?>
+                                        <div class="flex items-center star-rating editable"
+                                            data-name="note"
+                                            data-type="rating"
+                                            data-avis-id="<?php echo $avis->getIdAvis(); ?>"
+                                            data-note="<?php echo $avis->getNote(); ?>">
+                                          
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -623,7 +615,7 @@ $collection = $categoryManager->getCollection($id_produit);
                                                 <div class="flex items-center gap-2">
                                                     <span class="text-sm text-gray-700">Note* :</span>
                                                     <div class="star-wrapper">
-                                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                        <?php for ($i = 5; $i >= 1; $i--): ?> <!-- Changé de 1 à 5 en 5 à 1 -->
                                                             <input
                                                                 type="radio"
                                                                 id="star<?php echo $i; ?>"
