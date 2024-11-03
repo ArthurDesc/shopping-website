@@ -45,17 +45,6 @@ try {
         ];
     }
 
-    // Vérification des contraintes de la base de données
-    $stmt = $conn->prepare("SELECT COUNT(*) as count FROM avis WHERE id_produit = ? AND id_utilisateur = ?");
-    $stmt->bind_param("ii", $id_produit, $_SESSION['id_utilisateur']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $count = $result->fetch_assoc()['count'];
-
-    if ($count > 0) {
-        throw new Exception('Vous avez déjà donné votre avis sur ce produit');
-    }
-
     echo json_encode([
         'success' => true,
         'avis' => $avis_data

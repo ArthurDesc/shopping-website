@@ -546,7 +546,18 @@ $collection = $categoryManager->getCollection($id_produit);
                                         </p>
                                     </div>
                                 <?php endforeach; ?>
-                                <!-- Pagination inchangée -->
+                                
+                                <?php if (count($avis_produit) > 5): ?>
+                                    <div class="flex justify-center mt-6">
+                                        <a href="avis.php?id=<?php echo $id_produit; ?>" 
+                                           class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                                            <span>Voir tous les avis (<?php echo count($avis_produit); ?>)</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <p>Aucun avis pour ce produit pour le moment.</p>
                             <?php endif; ?>

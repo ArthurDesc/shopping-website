@@ -66,82 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  function createCommentElement(comment) {
-    if (!comment) {
-        console.error("Données de commentaire manquantes");
-        return null;
-    }
-
-    const div = document.createElement("div");
-    div.className = "mb-6 p-6 border rounded-xl shadow-lg bg-white";
-    div.setAttribute("data-avis-id", comment.id_avis);
-
-    const currentUserId = document.querySelector('input[name="id_utilisateur"]')?.value;
-    const nomUtilisateur = comment.nom_utilisateur ?? "Anonyme";
-    const note = comment.note ?? 0;
-    const commentaire = comment.commentaire ?? "Aucun commentaire";
-    const dateCreation = comment.date_creation ? formatDate(comment.date_creation) : "Date non disponible";
-
-    div.innerHTML = `
-    <div class="flex flex-col gap-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <span class="font-semibold">${nomUtilisateur}</span>
-                <div class="rateyo-readonly" data-rating="${note}"></div>
-            </div>
-            <div class="flex items-center gap-4">
-                <span class="text-sm text-gray-500">${dateCreation}</span>
-                ${currentUserId && currentUserId == comment.id_utilisateur ? `
-                    <div class="flex gap-2">
-                        <button onclick="modifierAvis(${comment.id_avis})" class="text-blue-600 hover:text-blue-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                            </svg>
-                        </button>
-                        <button onclick="supprimerAvis(${comment.id_avis})" class="text-red-600 hover:text-red-800">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                            </svg>
-                        </button>
-                    </div>
-                ` : ''}
-            </div>
-        </div>
-        <p class="commentaire-texte text-gray-700">${commentaire}</p>
-    </div>
-`;
-
-    // Initialiser RateYo
-    setTimeout(() => {
-        $(div.querySelector(".rateyo-readonly")).rateYo({
-            rating: note,
-            readOnly: true,
-            starWidth: "20px"
-        });
-    }, 0);
-
-    return div;
-  }
-
-  function formatDate(dateString) {
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return "Date non disponible";
-      }
-      return date.toLocaleDateString("fr-FR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch (e) {
-      console.error("Erreur de formatage de date:", e);
-      return "Date non disponible";
-    }
-  }
-
   // Fonction pour modifier un avis
   window.modifierAvis = function (idAvis) {
     // Vérifier si une édition est en cours
@@ -424,27 +348,45 @@ async function getAvis(productId) {
 
 // Modification de la fonction d'affichage
 function displayAvis(avis) {
-  const avisList = document.getElementById("comments-list");
-  if (!avisList) {
-    console.error("La liste des commentaires n'a pas été trouvée");
-    return;
-  }
+    const avisList = document.getElementById('comments-list');
+    if (!avisList) {
+        console.error("La liste des commentaires n'a pas été trouvée");
+        return;
+    }
 
-  avisList.innerHTML = "";
-  if (Array.isArray(avis)) {
-    avis.forEach((avis) => {
-      try {
+    avisList.innerHTML = '';
+    
+    // Trier les avis par date (du plus récent au plus ancien)
+    const sortedAvis = avis.sort((a, b) => new Date(b.date_creation) - new Date(a.date_creation));
+
+    // Vérifier si nous sommes sur la page avis.php
+    const isAvisPage = window.location.pathname.includes('avis.php');
+    
+    // Afficher tous les avis sur la page avis.php, sinon limiter à 5
+    const avisToShow = isAvisPage ? sortedAvis : sortedAvis.slice(0, 5);
+    
+    avisToShow.forEach(avis => {
         const avisElement = createCommentElement(avis);
         if (avisElement) {
-          avisList.appendChild(avisElement);
+            avisList.appendChild(avisElement);
         }
-      } catch (error) {
-        console.error("Erreur lors de la création d'un élément avis:", error);
-      }
     });
-  } else {
-    console.error("Les avis reçus ne sont pas dans un format valide");
-  }
+
+    // Ajouter le bouton "Voir tous les avis" seulement sur la page détail
+    if (!isAvisPage && sortedAvis.length > 5) {
+        const viewAllButton = document.createElement('div');
+        viewAllButton.className = 'flex justify-center mt-6';
+        viewAllButton.innerHTML = `
+            <a href="avis.php?id=${avis[0].id_produit}" 
+               class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
+                <span>Voir tous les avis (${sortedAvis.length})</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        `;
+        avisList.appendChild(viewAllButton);
+    }
 }
 
 function showBottomToast(message, type = "success") {
@@ -475,3 +417,81 @@ function showBottomToast(message, type = "success") {
 
 // Au début du fichier
 let isEditing = false;
+
+// Déplacer la fonction en dehors du DOMContentLoaded
+function createCommentElement(comment) {
+    if (!comment) {
+        console.error("Données de commentaire manquantes");
+        return null;
+    }
+
+    const div = document.createElement("div");
+    div.className = "mb-6 p-6 border rounded-xl shadow-lg bg-white";
+    div.setAttribute("data-avis-id", comment.id_avis);
+
+    const currentUserId = document.querySelector('input[name="id_utilisateur"]')?.value;
+    const nomUtilisateur = comment.nom_utilisateur ?? "Anonyme";
+    const note = comment.note ?? 0;
+    const commentaire = comment.commentaire ?? "Aucun commentaire";
+    const dateCreation = comment.date_creation ? formatDate(comment.date_creation) : "Date non disponible";
+
+    div.innerHTML = `
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span class="font-semibold">${nomUtilisateur}</span>
+                <div class="rateyo-readonly" data-rating="${note}"></div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-500">${dateCreation}</span>
+                ${currentUserId && currentUserId == comment.id_utilisateur ? `
+                    <div class="flex gap-2">
+                        <button onclick="modifierAvis(${comment.id_avis})" class="text-blue-600 hover:text-blue-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                            </svg>
+                        </button>
+                        <button onclick="supprimerAvis(${comment.id_avis})" class="text-red-600 hover:text-red-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                        </button>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+        <p class="commentaire-texte text-gray-700">${commentaire}</p>
+    </div>
+`;
+
+    // Initialiser RateYo
+    setTimeout(() => {
+        $(div.querySelector(".rateyo-readonly")).rateYo({
+            rating: note,
+            readOnly: true,
+            starWidth: "20px"
+        });
+    }, 0);
+
+    return div;
+}
+
+// Déplacer aussi la fonction formatDate en dehors
+function formatDate(dateString) {
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return "Date non disponible";
+        }
+        return date.toLocaleDateString("fr-FR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    } catch (e) {
+        console.error("Erreur de formatage de date:", e);
+        return "Date non disponible";
+    }
+}
