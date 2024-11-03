@@ -154,6 +154,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fonction pour modifier un avis
   window.modifierAvis = function (idAvis) {
+    // Vérifier si une édition est en cours
+    if (isEditing) {
+        showBottomToast('Une modification est déjà en cours', 'warning');
+        return;
+    }
+
+    isEditing = true;
+    const editButton = document.querySelector(`[data-avis-id="${idAvis}"] button[onclick*="modifierAvis"]`);
+    
+    if (editButton) {
+        editButton.disabled = true;
+        editButton.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+
     const avisElement = document.querySelector(`[data-avis-id="${idAvis}"]`);
     const commentaireElement = avisElement.querySelector("p");
     const currentValue = commentaireElement.textContent.trim();
@@ -213,46 +227,60 @@ document.addEventListener("DOMContentLoaded", function () {
     commentaireElement.after(container);
 
     // Gestionnaire de sauvegarde
-    buttonsDiv
-      .querySelector(".save-btn")
-      .addEventListener("click", async () => {
+    buttonsDiv.querySelector(".save-btn").addEventListener("click", async () => {
         const newCommentaire = textarea.value.trim();
         const newNote = $(`#rateYo-edit-${idAvis}`).rateYo("rating");
 
         try {
-          const response = await fetch(
-            "/shopping-website/ajax/update_avis.php",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                id_avis: idAvis,
-                commentaire: newCommentaire,
-                note: newNote,
-              }),
-            }
-          );
+            const response = await fetch("/shopping-website/ajax/update_avis.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id_avis: idAvis,
+                    commentaire: newCommentaire,
+                    note: newNote,
+                }),
+            });
 
-          const data = await response.json();
-          if (data.success) {
-            commentaireElement.textContent = newCommentaire;
-            commentaireElement.style.display = "block";
-            container.remove();
-            showBottomToast("Avis modifié avec succès", "success");
-            // Mettre à jour l'affichage des étoiles
-            updateStarDisplay(avisElement, newNote);
-          } else {
-            throw new Error(data.message);
-          }
+            const data = await response.json();
+            if (data.success) {
+                commentaireElement.textContent = newCommentaire;
+                commentaireElement.style.display = "block";
+                container.remove();
+                showBottomToast("Avis modifié avec succès", "success");
+                updateStarDisplay(avisElement, newNote);
+                
+                // Réactiver le bouton d'édition
+                if (editButton) {
+                    editButton.disabled = false;
+                    editButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+                isEditing = false;
+            } else {
+                throw new Error(data.message);
+            }
         } catch (error) {
-          showBottomToast(
-            error.message || "Erreur lors de la modification",
-            "error"
-          );
+            showBottomToast(error.message || "Erreur lors de la modification", "error");
+            // Réactiver le bouton en cas d'erreur aussi
+            if (editButton) {
+                editButton.disabled = false;
+                editButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            isEditing = false;
         }
-      });
+    });
+
+    // Initialiser RateYo pour le formulaire d'ajout d'avis
+    $("#rateYo").rateYo({
+        rating: 0,
+        fullStar: true,
+        starWidth: "25px",
+        onChange: function (rating) {
+            $("#rating-input").val(rating);
+        }
+    });
   };
 
   function updateStarDisplay(avisElement, newNote) {
@@ -383,3 +411,6 @@ function showBottomToast(message, type = "success") {
     }, 500);
   }, 3000);
 }
+
+// Au début du fichier
+let isEditing = false;

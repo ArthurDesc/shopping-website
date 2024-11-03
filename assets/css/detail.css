@@ -912,3 +912,25 @@ label[for="star5"]:hover ~ label .fas {
   transform: scale(1.1);
   cursor: pointer;
 }
+
+.jq-ry-container {
+  padding: 0;
+}
+
+.jq-ry-container .jq-ry-normal-group svg {
+  fill: #e4e4e4;  /* Couleur par défaut */
+  stroke: #d4d4d4; /* Bordure */
+  stroke-width: 1;
+}
+
+.jq-ry-container .jq-ry-rated-group svg {
+  fill: #ffd700;  /* Couleur des étoiles actives */
+  stroke: #daa520; /* Bordure des étoiles actives */
+  stroke-width: 1;
+}
+
+/* Animation au survol */
+.jq-ry-container:hover .jq-ry-normal-group svg {
+  transform: scale(1.1);
+  transition: transform 0.2s;
+}
