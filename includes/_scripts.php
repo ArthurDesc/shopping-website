@@ -2,7 +2,8 @@
   const BASE_URL = '<?php echo BASE_URL; ?>';
 </script>
 
-
+<!-- Ajouter dans le _header.php -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 <script src="<?php echo url('assets/js/toast.js'); ?>"></script>
 <script src="<?php echo url('assets/js/scripts.js'); ?>" defer></script>
