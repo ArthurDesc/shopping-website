@@ -429,7 +429,11 @@ function createCommentElement(comment) {
     div.className = "mb-6 p-6 border rounded-xl shadow-lg bg-white";
     div.setAttribute("data-avis-id", comment.id_avis);
 
-    const currentUserId = document.querySelector('input[name="id_utilisateur"]')?.value;
+    // Vérifier si CURRENT_USER_ID est défini, sinon essayer de le récupérer depuis un input caché
+    const currentUserId = typeof CURRENT_USER_ID !== 'undefined' ? 
+        CURRENT_USER_ID : 
+        document.querySelector('input[name="id_utilisateur"]')?.value;
+
     const nomUtilisateur = comment.nom_utilisateur ?? "Anonyme";
     const note = comment.note ?? 0;
     const commentaire = comment.commentaire ?? "Aucun commentaire";
@@ -462,7 +466,7 @@ function createCommentElement(comment) {
         </div>
         <p class="commentaire-texte text-gray-700">${commentaire}</p>
     </div>
-`;
+    `;
 
     // Initialiser RateYo
     setTimeout(() => {
