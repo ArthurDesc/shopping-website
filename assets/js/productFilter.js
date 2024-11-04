@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const noResults = document.getElementById('no-results');
     const resetFilters = document.getElementById('reset-filters');
     const productContainer = document.querySelector('#products .list');
+    const filterCheckboxes = document.querySelectorAll('input[type="checkbox"][data-category], input[type="checkbox"][data-brand], input[type="checkbox"][data-collection]');
 
     // Vérifier s'il y a des produits avant d'initialiser List.js
     if (!productContainer || !productContainer.children.length) {
