@@ -25,10 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
         const productList = new List('products', options);
 
-        // Sélectionner toutes les checkboxes de filtre
-        const filterCheckboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+        // Structure pour stocker les filtres actifs
         const activeFilters = {
-            categories: new Set(),
+            categories: new Set(),  // Utilisation de Set pour éviter les doublons
             brands: new Set(),
             collections: new Set()
         };
@@ -44,13 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
         function applyFilters() {
             productList.filter(function(item) {
                 const element = item.elm;
+                
+                // Vérification pour chaque type de filtre
                 const categoryMatch = activeFilters.categories.size === 0 || 
                     [...activeFilters.categories].some(cat => element.dataset.category.includes(cat));
+                    
                 const brandMatch = activeFilters.brands.size === 0 || 
                     activeFilters.brands.has(element.dataset.brand);
+                    
                 const collectionMatch = activeFilters.collections.size === 0 || 
                     activeFilters.collections.has(element.dataset.collection);
 
+                // Retourne true si tous les filtres correspondent
                 return categoryMatch && brandMatch && collectionMatch;
             });
 
