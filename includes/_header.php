@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (!defined('BASE_URL')) {
-  define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
+  define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
 }
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -672,7 +672,7 @@ $isProfilPage = basename($_SERVER['PHP_SELF']) === 'profil.php';
 
     <!-- Ajoutez ceci juste après l'ouverture du <body> -->
     <div id="full-page-loader" class="fixed inset-0 bg-white bg-opacity-90 z-[9999] justify-center items-center hidden">
-      <div class="spinnerContainer">
+      <div class="spinnerContainer">  
         <div class="spinner"></div>
         <div class="loader">
           <div class="words">

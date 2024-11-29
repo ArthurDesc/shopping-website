@@ -7,8 +7,8 @@ session_set_cookie_params(30 * 24 * 60 * 60);
 session_start();
 
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');
-}
+    define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
+  }
 
 // Initialize the cart session as an array if it doesn't exist
 if (!isset($_SESSION['panier']) || !is_array($_SESSION['panier'])) {

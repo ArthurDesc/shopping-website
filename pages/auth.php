@@ -1,8 +1,8 @@
 <?php
 require_once '../includes/session.php';
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-}
+    define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
+  }
 // Si l'utilisateur est déjà connecté, redirigez-le vers la page de profil
 if (is_logged_in()) {
     header("Location: " . BASE_URL . "pages/profil.php");

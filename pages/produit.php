@@ -123,7 +123,7 @@ if (isset($_GET['filtre']) && isset($_GET['valeur'])) {
     echo "<script>
         document.addEventListener('DOMContentLoaded', function() {
             // Trouver la checkbox correspondante
-            let checkbox = document.querySelector(`input[data-${type_filtre}=\"${valeur_filtre}\"]`);
+            let checkbox = document.querySelector(`input[data-{$type_filtre}=\"{$valeur_filtre}\"]`);
             if (checkbox) {
                 checkbox.checked = true;
                 // Déclencher l'événement change pour activer le filtre

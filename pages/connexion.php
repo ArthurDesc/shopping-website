@@ -7,8 +7,8 @@ include '../includes/session.php';
 
 // Définir BASE_URL seulement s'il n'est pas déjà défini
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');  // Ajustez selon le nom de votre dossier de projet
-}
+    define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
+  }
 
 $error_message = '';
 

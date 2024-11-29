@@ -62,8 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/shopping-website/');
-}
+    define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
+  }
 ?>
 
 <!DOCTYPE html>
