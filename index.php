@@ -3,7 +3,7 @@ include './includes/session.php';
 include './includes/_header.php';
 ?>
 
-<main class="flex-grow">
+<main class="flex-grow mb-8">
   <div class="swiper-container relative w-full mx-auto overflow-hidden h-[calc(100vh-55px)]">
     <div class="swiper-wrapper h-full">
       <div class="swiper-slide relative">
@@ -219,146 +219,95 @@ include './includes/_header.php';
   </div>
 
  
-</main class="mb-8">
+</main>
 
-<?php include './includes/_scripts.php'; ?>
+<!-- Styles -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.css">
 
-<?php include './includes/_footer.php'; ?>
+<!-- Scripts externes -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
 
+<!-- Scripts locaux -->
 <script>
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    // Le code de défilement
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
 
-        const targetId = this.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
 
-        if (targetElement) {
-            const headerOffset = 10; // Hauteur de votre header fixe
-            const carouselHeight = document.querySelector('.swiper-container').offsetHeight;
-            const windowHeight = window.innerHeight;
-            
-            // Calculer la position de défilement pour que le bord inférieur du carrousel soit au bord supérieur de l'écran
-            const scrollPosition = targetElement.offsetTop - windowHeight + carouselHeight + headerOffset;
+            if (targetElement) {
+                const headerOffset = 10;
+                const carouselHeight = document.querySelector('.swiper-container').offsetHeight;
+                const windowHeight = window.innerHeight;
+                
+                const scrollPosition = targetElement.offsetTop - windowHeight + carouselHeight + headerOffset;
 
-            gsap.to(window, {
-                duration: 1, 
-                scrollTo: {
-                    y: scrollPosition,
-                    autoKill: false
-                },
-                ease: "power2.inOut"
+                gsap.to(window, {
+                    duration: 1, 
+                    scrollTo: {
+                        y: scrollPosition,
+                        autoKill: false
+                    },
+                    ease: "power2.inOut"
+                });
+            }
+        });
+    });
+
+    // Le code de scroll horizontal
+    const scrollAmount = 300;
+
+    function checkScrollable(container, buttonsContainer) {
+        const isMobileView = window.innerWidth < 768;
+        const isScrollable = container.scrollWidth > container.clientWidth;
+        
+        buttonsContainer.style.display = (isMobileView || !isScrollable) ? 'none' : 'flex';
+    }
+
+    document.querySelectorAll('.section-container').forEach(section => {
+        const container = section.querySelector('.scroll-container');
+        const buttonsContainer = section.querySelector('.scroll-buttons');
+        
+        if (container && buttonsContainer) {
+            checkScrollable(container, buttonsContainer);
+
+            window.addEventListener('resize', () => {
+                checkScrollable(container, buttonsContainer);
             });
+
+            const leftBtn = buttonsContainer.querySelector('.scroll-left-btn');
+            const rightBtn = buttonsContainer.querySelector('.scroll-right-btn');
+
+            if (leftBtn) {
+                leftBtn.addEventListener('click', function() {
+                    container.scrollBy({
+                        left: -scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            if (rightBtn) {
+                rightBtn.addEventListener('click', function() {
+                    container.scrollBy({
+                        left: scrollAmount,
+                        behavior: 'smooth'
+                    });
+                });
+            }
         }
     });
 });
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
-
-<style>
-  .nouveautes-container {
-    position: relative;
-    overflow: visible !important;
-  }
-  
-  .nouveautes-container::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background-color: #3B82F6;
-    transform: translateY(-50%);
-    z-index: -1;
-  }
-  
-  .nouveautes-container .flex > div {
-    position: relative;
-  }
-  
-  .nouveautes-container .flex > div::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -6px;
-    width: 12px;
-    height: 12px;
-    background-color: #3B82F6;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    z-index: 1;
-  }
-  
-  .nouveautes-container .flex > div:first-child::before {
-    display: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const scrollAmount = 300;
-
-  // Fonction pour vérifier si le défilement est nécessaire
-  function checkScrollable(container, buttonsContainer) {
-    // Ajouter une vérification de la largeur d'écran (768px est la breakpoint md de Tailwind par défaut)
-    const isMobileView = window.innerWidth < 768;
-    const isScrollable = container.scrollWidth > container.clientWidth;
-    
-    // Cacher les boutons sur mobile ou si le contenu ne déborde pas
-    buttonsContainer.style.display = (isMobileView || !isScrollable) ? 'none' : 'flex';
-  }
-
-  // Pour chaque section
-  document.querySelectorAll('.section-container').forEach(section => {
-    const container = section.querySelector('.scroll-container');
-    const buttonsContainer = section.querySelector('.scroll-buttons');
-    
-    if (container && buttonsContainer) {
-      // Vérification initiale
-      checkScrollable(container, buttonsContainer);
-
-      // Vérification lors du redimensionnement
-      window.addEventListener('resize', () => {
-        checkScrollable(container, buttonsContainer);
-      });
-
-      // Gestionnaires de clics existants
-      const leftBtn = buttonsContainer.querySelector('.scroll-left-btn');
-      const rightBtn = buttonsContainer.querySelector('.scroll-right-btn');
-
-      if (leftBtn) {
-        leftBtn.addEventListener('click', function() {
-          container.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-          });
-        });
-      }
-
-      if (rightBtn) {
-        rightBtn.addEventListener('click', function() {
-          container.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-          });
-        });
-      }
-    }
-  });
-});
-</script>
+<?php include './includes/_scripts.php'; ?>
+<?php include './includes/_footer.php'; ?>
+</body>
+</html>
 
 
 
