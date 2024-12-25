@@ -1,5 +1,7 @@
 <?php
 function url($path = '') {
-    $base_url = '/php-vanilla/shopping-website/'; // Chemin depuis la racine web
-    return $base_url . ltrim($path, '/');
+    if (!defined('BASE_URL')) {
+        define('BASE_URL', '/shopping-website/');
+    }
+    return BASE_URL . ltrim($path, '/');
 }

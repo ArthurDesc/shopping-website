@@ -1,9 +1,9 @@
 <?php
 // db.php
 
-$servername = "mysql";
+$servername = "localhost";
 $username = "root";
-$password = "root";
+$password = "";
 $dbname = "boutique";
 
 // Créer la connexion

@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (!defined('BASE_URL')) {
-  define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
+  define('BASE_URL', '/shopping-website/');  // Chemin depuis la racine web
 }
 
 if (session_status() === PHP_SESSION_NONE) {
