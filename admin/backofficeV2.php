@@ -27,8 +27,8 @@ if (!$adminManager->isAdmin($_SESSION['id_utilisateur'])) {
     exit();
 }
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/php-vanilla/shopping-website/');  // Chemin depuis la racine web
-  } ?>
+    define('BASE_URL', '/shopping-website/');  // Chemin depuis la racine web
+} ?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_article') {
     header('Content-Type: application/json');
