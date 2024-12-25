@@ -1,17 +1,26 @@
 <?php
 session_start();
-require_once "../includes/_db.php";
-require_once "../classe/Panier.php";
-require_once "../classe/Produit.php";
-require_once "../classe/Filtre.php";
-require_once "../functions/url.php";
-require_once "../classe/CategoryManager.php";
-$categoryManager = new CategoryManager($conn);
 
+// Définir le chemin de base
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');
+}
+
+// Chemin absolu vers la racine du projet
+$root_path = __DIR__ . '/..';
+
+require_once $root_path . '/functions/url.php';
+require_once $root_path . '/includes/_db.php';
+require_once $root_path . '/classe/Panier.php';
+require_once $root_path . '/classe/Produit.php';
+require_once $root_path . '/classe/Filtre.php';
+require_once $root_path . '/classe/CategoryManager.php';
+
+$categoryManager = new CategoryManager($conn);
 $panier = new Panier();
 
-// Définir le chemin de base pour les images des produits
-$image_base_path = '../assets/images/produits/';
+// Définir le chemin de base pour les images des produits en utilisant url()
+$image_base_path = url('assets/images/produits/');
 
 // Récupérer toutes les catégories
 $categories = $categoryManager->getAllCategories();

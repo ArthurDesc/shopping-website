@@ -47,7 +47,7 @@ CREATE TABLE `categories` (
   `nom` varchar(100) DEFAULT NULL,
   `parent_id` int DEFAULT NULL,
   `description` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `categories`
@@ -87,7 +87,7 @@ CREATE TABLE `commandes` (
   `montant_total` decimal(10,2) DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL,
   `statut` enum('panier','validé','expédié','annulé') DEFAULT 'panier'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `commandes`
@@ -109,7 +109,7 @@ CREATE TABLE `commande_produit` (
   `id_produit` int NOT NULL,
   `quantite` int DEFAULT NULL,
   `prix_unitaire` decimal(10,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `commande_produit`
@@ -135,7 +135,7 @@ CREATE TABLE `paiements` (
   `transaction_id` varchar(100) DEFAULT NULL,
   `id_commande` int DEFAULT NULL,
   `id_utilisateur` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `paiements`
@@ -164,7 +164,7 @@ CREATE TABLE `produits` (
   `marque` varchar(100) DEFAULT NULL,
   `date_ajout` date DEFAULT NULL,
   `collection` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `produits`
@@ -190,7 +190,7 @@ INSERT INTO `produits` (`id_produit`, `nom`, `image_url`, `description`, `prix`,
 CREATE TABLE `produit_categorie` (
   `id_produit` int NOT NULL,
   `id_categorie` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `produit_categorie`
@@ -226,7 +226,7 @@ CREATE TABLE `utilisateurs` (
   `motdepasse` varchar(255) NOT NULL,
   `role` varchar(20) NOT NULL DEFAULT 'user',
   `telephone` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `utilisateurs`
