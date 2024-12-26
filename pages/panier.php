@@ -1,13 +1,20 @@
 <?php
 ob_start();
-include_once "../includes/_db.php";
-require_once "../includes/session.php";
-require_once "../classe/Panier.php";
+
+// Définir le chemin de base
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');
+}
+
+require_once __DIR__ . '/../functions/url.php';
+require_once __DIR__ . '/../includes/_db.php';
+require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../classe/Panier.php';
 
 $panier = new Panier();
 
 // Inclusion du header
-include '../includes/_header.php';
+require_once __DIR__ . '/../includes/_header.php';
 ?>
 
 <main class="flex-grow container mx-auto px-4 py-8 mt-16">
@@ -21,12 +28,12 @@ include '../includes/_header.php';
             <?php if (empty($contenuPanier)): ?>
                 <div class="text-center p-6 min-h-[60vh] flex flex-col items-center justify-center">
                     <h2 class="text-2xl font-bold mb-4 text-blue-400">Panier vide !</h2>
-                    <img src="../assets/images/panier.png" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">
+                    <img src="<?php echo url('assets/images/panier.png'); ?>" alt="Panier vide" class="w-32 h-32 mx-auto mb-6">
                     <p class="text-gray-700 mb-6">Votre panier est actuellement vide.</p>
                     <div class="flex flex-col items-center space-y-4">
-                        <a href="produit.php" class="btn btn-small">Continuer vos achats</a>
+                        <a href="<?php echo url('pages/produit.php'); ?>" class="btn btn-small">Continuer vos achats</a>
                         <?php if (!isset($_SESSION['id_utilisateur'])): ?>
-                            <a href="auth.php" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline">
+                            <a href="<?php echo url('pages/auth.php'); ?>" class="text-blue-600 underline text-sm px-6 py-3 rounded-full hover:no-underline">
                                 Connectez-vous pour récupérer votre panier
                             </a>
                         <?php endif; ?>
@@ -65,14 +72,14 @@ include '../includes/_header.php';
                     ?>
                                 <div class="cart-item flex items-center bg-white border border-gray-100 rounded-2xl h-32 shadow-md hover:shadow-lg transition-shadow duration-200">
                                     <!-- Lien sur l'image -->
-                                    <a href="detail.php?id=<?= $product['id_produit'] ?>" class="h-32 w-32">
-                                        <img src="../assets/images/produits/<?= $img ?>" 
+                                    <a href="<?php echo url('pages/detail.php?id=' . $product['id_produit']); ?>" class="h-32 w-32">
+                                        <img src="<?php echo url('assets/images/produits/' . $img); ?>" 
                                              alt="<?= $nom ?>" 
                                              class="h-full w-full object-cover rounded-l-2xl">
                                     </a>
                                     <div class="flex-grow pl-6">
                                         <!-- Lien sur le nom -->
-                                        <a href="detail.php?id=<?= $product['id_produit'] ?>" 
+                                        <a href="<?php echo url('pages/detail.php?id=' . $product['id_produit']); ?>" 
                                            class="inline-block">
                                             <h3 class="font-semibold hover:text-blue-600 transition-colors duration-200">
                                                 <?= $nom ?> <?= $taille ? "(Taille: $taille)" : '' ?>
@@ -117,21 +124,21 @@ include '../includes/_header.php';
                     </div>
                     <div class="flex flex-col space-y-2">
                         <?php if (isset($_SESSION['id_utilisateur'])): ?>
-                            <a href="process_paiement.php" class="button button-green">
+                            <a href="<?php echo url('pages/process_paiement.php'); ?>" class="button button-green">
                                 Procéder au paiement
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                 </svg>
                             </a>
                         <?php else: ?>
-                            <a href="auth.php" class="button button-green">
+                            <a href="<?php echo url('pages/auth.php'); ?>" class="button button-green">
                                 Se connecter pour payer
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                                 </svg>
                             </a>
                         <?php endif; ?>
-                        <a href="produit.php" class="button">
+                        <a href="<?php echo url('pages/produit.php'); ?>" class="button">
                             Continuer vos achats
                         </a>
                     </div>
