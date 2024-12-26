@@ -2,7 +2,14 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-require_once '../includes/_db.php';
+
+// Définir le chemin de base
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');
+}
+
+require_once __DIR__ . '/../functions/url.php';
+require_once __DIR__ . '/../includes/_db.php';
 
 // Redirection si l'utilisateur n'est pas connecté
 if (!isset($_SESSION['id_utilisateur'])) {
@@ -39,7 +46,7 @@ require_once '../includes/_header.php';
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">Aucune commande</h2>
                 <p class="text-gray-700 mb-6">Vous n'avez pas encore passé de commande.</p>
                 <div class="flex flex-col items-center space-y-4">
-                    <a href="produit.php" class="btn btn-small">
+                    <a href="<?php echo url('pages/produit.php'); ?>" class="btn btn-small">
                         Découvrir nos produits
                     </a>
                 </div>
@@ -75,7 +82,7 @@ require_once '../includes/_header.php';
                             <div class="space-y-4">
                                 <?php foreach ($produits as $produit): ?>
                                     <div class="flex items-center space-x-4">
-                                        <img src="../assets/images/produits/<?php echo htmlspecialchars($produit['image_url']); ?>"
+                                        <img src="<?php echo url('assets/images/produits/' . htmlspecialchars($produit['image_url'])); ?>"
                                             alt="<?php echo htmlspecialchars($produit['nom']); ?>"
                                             class="w-16 h-16 object-cover rounded">
                                         <div class="flex-1">

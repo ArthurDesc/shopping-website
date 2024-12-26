@@ -35,16 +35,42 @@ if ($result) {
     }
 }
 
-// Remplacer la requête des collections par un tableau statique (vers la ligne 30)
+// Remplacer la requête des collections par un tableau statique
 $collections = ['Homme', 'Femme', 'Enfant'];
 
-// Remplacer l'ancien code de récupération des produits par :
+// Construction de la requête avec les filtres
+$where_clauses = ["p.stock > 0"];
+$params = [];
+
+// Filtre par collection
+if (isset($_GET['collections'])) {
+    $collection = $_GET['collections'];
+    $where_clauses[] = "p.collection = ?";
+    $params[] = $collection;
+}
+
+// Filtre par catégorie
+if (isset($_GET['categories'])) {
+    $category_id = $_GET['categories'];
+    $where_clauses[] = "pc.id_categorie = ?";
+    $params[] = $category_id;
+}
+
+// Construire la requête finale
 $query = "SELECT p.*, GROUP_CONCAT(pc.id_categorie) as categories 
           FROM produits p 
           LEFT JOIN produit_categorie pc ON p.id_produit = pc.id_produit 
-          WHERE p.stock > 0 
+          WHERE " . implode(" AND ", $where_clauses) . "
           GROUP BY p.id_produit";
-$result = mysqli_query($conn, $query);
+
+// Préparer et exécuter la requête
+$stmt = mysqli_prepare($conn, $query);
+if ($params) {
+    $types = str_repeat('s', count($params));
+    mysqli_stmt_bind_param($stmt, $types, ...$params);
+}
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 $produits = [];
 while ($row = mysqli_fetch_assoc($result)) {
@@ -105,7 +131,6 @@ if (isset($_POST['ajouter_au_panier']) && isset($_POST['id_produit'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
-
 
 $query_categories_actives = "
     SELECT DISTINCT c.id_categorie, c.nom
@@ -176,10 +201,10 @@ foreach ($produits as $produit) {
 }
 ?>
 
-<?php require_once '../includes/_header.php'; ?>
+<?php require_once __DIR__ . '/../includes/_header.php'; ?>
 
 <!-- Ajoutez cette div pour créer l'espace supplémentaire -->
-<div class="mt-8"></div> <!-- Vous pouvez ajuster la valeur (16) selon vos besoins -->
+<div class="mt-8"></div>
 
 <main class="container mx-auto px-4 mt-2">
     <div class="flex flex-col md:flex-row relative">
@@ -389,7 +414,6 @@ foreach ($produits as $produit) {
                 <div id="activeFilters" class="flex flex-wrap gap-2 mb-4"></div>
             </div>
 
-
             <section id="products">
                 <div class="wave-group mb-8">
                     <input required="" type="text" class="input search" id="search-products">
@@ -424,7 +448,7 @@ foreach ($produits as $produit) {
                             <!-- Lien produit avec image -->
                             <a href="<?= url('pages/detail.php?id=' . $produit->getId()) ?>" class="product-link block flex-grow">
                                 <div class="relative pb-[125%]">
-                                    <img src="<?= $image_base_path . ($produit->getImageUrl() ?? 'default_product.jpg') ?>" 
+                                    <img src="<?= url('assets/images/produits/' . ($produit->getImageUrl() ?? 'default_product.jpg')) ?>" 
                                          alt="<?= htmlspecialchars($produit->getNom()) ?>" 
                                          class="absolute inset-0 w-full h-full object-cover object-top">
                                     
@@ -537,7 +561,7 @@ foreach ($produits as $produit) {
 
 <!-- Toast pour les favoris -->
 <div id="wishlistToast" class="fixed right-4 top-[70px] bg-green-500 text-white py-2 px-4 rounded shadow-lg transition-opacity duration-300 opacity-0 z-50 hover:bg-green-600 cursor-pointer">
-    <a href="/shopping-website/pages/wishlist.php" class="flex items-center text-white">
+    <a href="<?= url('pages/wishlist.php') ?>" class="flex items-center text-white">
         <span class="toast-message">Produit ajouté aux favoris</span>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -547,8 +571,8 @@ foreach ($produits as $produit) {
 
 
 
-<?php include '../includes/_scripts.php'; ?>
-<?php include '../includes/_footer.php'; ?>
+<?php include __DIR__ . '/../includes/_scripts.php'; ?>
+<?php include __DIR__ . '/../includes/_footer.php'; ?>
 
 
 </body>
