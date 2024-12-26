@@ -1,15 +1,23 @@
 <?php
 session_start();
-require_once '../includes/_db.php';
-require_once '../classe/WishlistManager.php';
-require_once '../classe/Produit.php';
+
+// Définir le chemin de base
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');
+}
+
+require_once __DIR__ . '/../functions/url.php';
+require_once __DIR__ . '/../includes/_db.php';
+require_once __DIR__ . '/../classe/WishlistManager.php';
+require_once __DIR__ . '/../classe/produit.php';
 
 if (!isset($_SESSION['id_utilisateur'])) {
-    header('Location: connexion.php');
+    header('Location: ' . url('pages/connexion.php'));
     exit;
 }
 
-    require_once '../includes/_header.php';
+require_once __DIR__ . '/../includes/_header.php';
+
 $wishlistManager = new WishlistManager($conn);
 $wishlistItems = $wishlistManager->getWishlist($_SESSION['id_utilisateur']);
 
@@ -62,7 +70,7 @@ while ($item = $wishlistItems->fetch_assoc()) {
                     <div class="relative">
                         <a href="<?= url('pages/detail.php?id=' . $produit->getId()) ?>" class="product-link block">
                             <div class="relative pb-[125%]">
-                                <img src="<?= BASE_URL ?>assets/images/produits/<?= $produit->getImageUrl() ?>"
+                                <img src="<?= url('assets/images/produits/' . $produit->getImageUrl()) ?>"
                                     alt="<?= htmlspecialchars($produit->getNom()) ?>"
                                     class="absolute inset-0 w-full h-full object-cover object-top">
                             </div>
@@ -113,11 +121,17 @@ while ($item = $wishlistItems->fetch_assoc()) {
 
         <?php if (empty($produits)): ?>
             <div class="text-center p-6 min-h-[50vh] flex flex-col justify-center items-center">
-                <img src="<?= BASE_URL ?>assets/images/icons/blueHeart.png" alt="Coeur bleu" class="w-24 h-24 mb-4 mx-auto">
+                <div class="w-24 h-24 mb-4 mx-auto text-blue-400">
+                    <svg viewBox="0 0 256 256" class="w-full h-full">
+                        <rect fill="none" height="256" width="256"></rect>
+                        <path d="M224.6,51.9a59.5,59.5,0,0,0-43-19.9,60.5,60.5,0,0,0-44,17.6L128,59.1l-7.5-7.4C97.2,28.3,59.2,26.3,35.9,47.4a59.9,59.9,0,0,0-2.3,87l83.1,83.1a15.9,15.9,0,0,0,22.6,0l81-81C243.7,113.2,245.6,75.2,224.6,51.9Z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">Liste de favoris vide !</h2>
                 <p class="text-gray-700 mb-6">Votre liste de favoris est actuellement vide.</p>
                 <div class="flex flex-col items-center space-y-4">
-                    <a href="produit.php" class="btn btn-small">Découvrir nos produits</a>
+                    <a href="<?= url('pages/produit.php') ?>" class="btn btn-small">Découvrir nos produits</a>
                 </div>
             </div>
         <?php endif; ?>
@@ -160,8 +174,10 @@ while ($item = $wishlistItems->fetch_assoc()) {
     </div>
 </div>
 <script>
+    const BASE_URL = '<?= url('') ?>';
+    
     function removeFromWishlist(id_produit) {
-        fetch('/shopping-website/ajax/wishlist_handler.php', {
+        fetch(BASE_URL + 'ajax/wishlist_handler.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -180,7 +196,7 @@ while ($item = $wishlistItems->fetch_assoc()) {
     }
 
     function clearAllWishlists() {
-        fetch('/shopping-website/ajax/wishlist_handler.php', {
+        fetch(BASE_URL + 'ajax/wishlist_handler.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

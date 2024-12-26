@@ -38,11 +38,12 @@ require_once '../includes/_header.php';
     <h2 class="text-2xl font-semibold text-gray-900 mb-6">Mes commandes</h2>
 
         <?php if (empty($commandes)): ?>
-            <div class="text-center p-6 min-h-[50vh] flex flex-col justify-center items-center">
-                <img src="<?php echo url('assets/images/icons/blueBag.png'); ?>" 
-                     alt="Aucune commande" 
-                     class="w-48 h-48 mb-6 animate-float"
-                />
+            <div class="text-center p-6 min-h-[50vh] flex flex-col items-center justify-center">
+                <div class="w-48 h-48 mb-6 mx-auto text-blue-400">
+                    <svg viewBox="0 0 24 24" class="w-full h-full">
+                        <path fill="currentColor" d="M7 22c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 5 20v-9c0-.55.196-1.02.588-1.413A1.926 1.926 0 0 1 7 9h2c0-1.383.488-2.563 1.463-3.538S12.617 4 14 4s2.563.487 3.537 1.462S19 7.617 19 9h2c.55 0 1.02.196 1.413.587c.391.392.587.863.587 1.413v9c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 21 22H7Zm0-2h14v-9H7v9Zm7-5c1.383 0 2.563-.488 3.537-1.463S19 11.383 19 10h-2c0 .833-.292 1.542-.875 2.125A2.893 2.893 0 0 1 14 13c-.833 0-1.542-.292-2.125-.875A2.893 2.893 0 0 1 11 10H9c0 1.383.488 2.563 1.463 3.537S12.617 15 14 15Zm0-8c.833 0 1.542.292 2.125.875S17 9.167 17 10h-6c0-.833.292-1.542.875-2.125A2.893 2.893 0 0 1 14 7Z"/>
+                    </svg>
+                </div>
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">Aucune commande</h2>
                 <p class="text-gray-700 mb-6">Vous n'avez pas encore passé de commande.</p>
                 <div class="flex flex-col items-center space-y-4">

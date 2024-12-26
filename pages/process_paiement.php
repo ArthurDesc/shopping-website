@@ -1,11 +1,20 @@
 <?php
-session_start(); // Assurez-vous que la session est démarrée
+
+// Définir le chemin de base
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/shopping-website/');
+}
+
+// Inclure la fonction url
+require_once __DIR__ . '/../functions/url.php';
+
+session_start();
 
 // Inclure l'autoloader de Composer
-require_once '../vendor/autoload.php'; // Inclure l'autoloader de Composer
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Inclure le fichier de connexion à la base de données
-require_once '../includes/_db.php'; // Assurez-vous que ce chemin est correct
+require_once __DIR__ . '/../includes/_db.php';
 
 // Configuration de Stripe
 \Stripe\Stripe::setApiKey('sk_test_51Q7Hl1P5XJmDt2UG2j3o2mIobvzMWo0XoZ8Md4YeqakLP682h9aEuYczQfUzjEMEdt6SyLUENnbgTmZPNotX2rEa00cMDNxsLs'); // Remplace par ta clé secrète
@@ -153,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    <link rel="stylesheet" href="../assets/css/process_paiement.css">
     <style>
         body {
-            background-image: url('../assets/images/background.png');
+            background-image: url('<?= url("assets/images/background.png") ?>');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -324,9 +333,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         } else {
                             document.getElementById('payment-result').innerText = 'Paiement réussi !';
                             // Vider le panier en appelant une page PHP
-                            await fetch('vider_panier.php');
+                            await fetch('<?= url("pages/vider_panier.php") ?>');
                             // Redirection vers la page de confirmation
-                            window.location.href = 'confirmation_paiement.php';
+                            window.location.href = '<?= url("pages/confirmation_paiement.php") ?>';
                         }
                     } else {
                         document.getElementById('payment-result').innerText = result.message || 'Erreur inconnue';
