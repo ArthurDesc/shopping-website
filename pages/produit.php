@@ -6,6 +6,12 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', '/shopping-website/');
 }
 
+// Vérifier si l'avertissement a été accepté
+if (!isset($_SESSION['warning_accepted'])) {
+    header('Location: ' . url('index.php'));
+    exit;
+}
+
 // Chemin absolu vers la racine du projet
 $root_path = __DIR__ . '/..';
 
