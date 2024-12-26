@@ -9,12 +9,12 @@ if (!defined('BASE_URL')) {
 // Chemin absolu vers la racine du projet
 $root_path = __DIR__ . '/..';
 
-require_once $root_path . '/functions/url.php';
-require_once $root_path . '/includes/_db.php';
-require_once $root_path . '/classe/Panier.php';
-require_once $root_path . '/classe/Produit.php';
-require_once $root_path . '/classe/Filtre.php';
-require_once $root_path . '/classe/CategoryManager.php';
+require_once __DIR__ . '/../functions/url.php';
+require_once __DIR__ . '/../includes/_db.php';
+require_once __DIR__ . '/../classe/Panier.php';
+require_once __DIR__ . '/../classe/produit.php';
+require_once __DIR__ . '/../classe/Filtre.php';
+require_once __DIR__ . '/../classe/CategoryManager.php';
 
 $categoryManager = new CategoryManager($conn);
 $panier = new Panier();
@@ -569,10 +569,8 @@ foreach ($produits as $produit) {
     </a>
 </div>
 
-
-
-<?php include __DIR__ . '/../includes/_scripts.php'; ?>
-<?php include __DIR__ . '/../includes/_footer.php'; ?>
+<?php require_once __DIR__ . '/../includes/_scripts.php'; ?>
+<?php require_once __DIR__ . '/../includes/_footer.php'; ?>
 
 
 </body>
